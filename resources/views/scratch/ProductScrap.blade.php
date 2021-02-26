@@ -555,7 +555,7 @@
                 alert("URL을 입력해주세요!");
                 return false;
             }
-            if(!scrapURL.includes("//detail.tmall.com") && !scrapURL.includes("//item.taobao.com") ){
+            if(!scrapURL.includes("detail.tmall.com") && !scrapURL.includes("item.taobao.com") ){
                 alert("URL을 다시 확인해주세요!");
                 return false;
             }
