@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
           integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
           crossorigin="anonymous"/>
-          
+    <link rel="icon" href="{{asset('assets/images/favicon.ico')}}" sizes="32x32" type="image/png">      
 
 
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
@@ -38,7 +38,26 @@
 
     @stack('page_css')
 </head>
-
+<style>
+    .overlay{
+        display: none;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 9999999;
+        background: rgba(255,255,255,0.8) url('{{asset('assets/images/system/loading.gif')}}') center no-repeat;
+    }
+    /* Turn off scrollbar when body element has the loading class */
+    body.loading{
+        overflow: hidden;   
+    }
+    /* Make spinner image visible when body element has the loading class */
+    body.loading .overlay{
+        display: block;
+    }
+</style>
 <body class="hold-transition sidebar-mini layout-fixed dark-mode text-sm">
 <div class="wrapper">
     <!-- Main Header -->
@@ -149,8 +168,13 @@
     @include('layouts.rightsidebar')
     <!-- /.control-sidebar -->
 </div>
-
-
+{{-- loading image --}}
+<div class="overlay dark">
+    <img style="display:none;" src="{{asset('assets/images/system/loading.gif')}}" alt="">
+</div>
+<script>
+    // $.widget.bridge('uibutton', $.ui.button);
+</script>
 
 
 

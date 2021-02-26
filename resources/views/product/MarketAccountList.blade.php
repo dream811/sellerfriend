@@ -127,7 +127,7 @@
                 });
                 if(account.length <= 0)
                 {
-                    alert("상품을 하나이상 선택해주세요!");
+                    alert("계정을 하나이상 선택해주세요!");
                     return false;
                 }
                 $( "#manageMarketAccount" ).submit();

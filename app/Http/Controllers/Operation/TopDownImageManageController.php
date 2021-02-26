@@ -3,13 +3,15 @@
 namespace App\Http\Controllers\Operation;
 
 use App\Http\Controllers\Controller;
+use App\Models\DocumentImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 use App\Models\Market;
 use App\Models\MarketAccount;
+use Yajra\DataTables\DataTables;
 
-class OpenMarketManageController extends Controller
+class TopDownImageManageController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -26,16 +28,34 @@ class OpenMarketManageController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
         
         $tr = new GoogleTranslate(); // Translates to 'en' from auto-detected language by default
 
-        $title = "오픈마켓계정관리";
-        $markets = Market::where('bIsDel', 0)
-               ->orderBy('strMarketCode')->paginate(15);
-        return view('operation.OpenMarketAccountManage', compact('title', 'markets'))
-           ->with('i', (request()->input('page', 1) - 1) * 15);
+        $title = "상하단 이미지관리";
+        if ($request->ajax()) {
+            $images = DocumentImage::where('bIsDel', 0)
+               ->where('nUserId', Auth::id());
+
+            return DataTables::of($images)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+                    $btn = '<button type="button" data-id="'.$row->nIdx.'" style="font-size:10px !important;" class="mr-1 btn btn-xs btn-primary btnEdit">수정</button>';
+                    $btn .= '<button type="button" data-id="'.$row->nIdx.'" style="font-size:10px !important;" class="btn btn-xs btn-danger btnDelete">삭제</button>';
+                    return $btn;
+                })
+                ->addColumn('image', function($row){
+                    $element = '<img alt="Avatar" style="width: 5rem;" class="table-product-image" src="'.$row->strImageURL.'">';
+                    return $element;
+                })
+                ->rawColumns(['image', 'action'])
+                ->make(true);
+        }
+        $images = DocumentImage::where('bIsDel', 0)
+               ->where('nUserId', Auth::id());
+
+        return view('operation.TopDownImageList', compact('title', 'images'));
     }
 
     /**

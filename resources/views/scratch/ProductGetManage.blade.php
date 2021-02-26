@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('content')
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
@@ -30,7 +29,7 @@
                             </div>
                             <div class="col-2">
                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-sm" id="id" placeholder="">
+                                    <input type="text" class="form-control form-control-sm" name="txtSearchWord" id="txtSearchWord" placeholder="">
                                 </div>
                             </div>
                             <div class="col-1">
@@ -40,9 +39,9 @@
                             <!-- select -->
                                 <div class="form-group">
                                     <select class="custom-select form-control-border custom-select-sm" name="selComeName" id="selComeName">
-                                        <option value="0">==출항코드==</option>
+                                        <option value="">==출항코드==</option>
                                         @foreach ($comes as $come)
-                                        <option value="{{$come->nIdx}}" >[{{$come->strComeCode}}] {{$come->strComeName}}</option>
+                                        <option value="{{$come->strComeCode}}" >[{{$come->strComeCode}}] {{$come->strComeName}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -57,9 +56,9 @@
                                     <div class="form-group">
                                         <div class="input-group">
                                             <select class="custom-select form-control-border custom-select-sm" name="selCategoryName1" id="selCategoryName1">
-                                                <option value="0">카테고리 1</option>
+                                                <option value="">카테고리 1</option>
                                                 @foreach ($categories_1 as $category_1)
-                                                <option value="{{$category_1->nIdx}}" >{{$category_1->strCategoryName}}</option>
+                                                <option value="{{$category_1->strCategoryTree}}" >{{$category_1->strCategoryName}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -69,9 +68,9 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <select class="custom-select form-control-border custom-select-sm" name="selCategoryName2" id="selCategoryName2">
-                                            <option value="0">카테고리 2</option>
+                                            <option value="">카테고리 2</option>
                                             @foreach ($categories_2 as $category_2)
-                                            <option value="{{$category_2->nIdx}}" >{{$category_2->strCategoryName}}</option>
+                                            <option value="{{$category_2->strCategoryTree}}" >{{$category_2->strCategoryName}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -81,9 +80,9 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <select class="custom-select form-control-border custom-select-sm" name="selCategoryName3" id="selCategoryName3">
-                                            <option value="0">카테고리 3</option>
+                                            <option value="">카테고리 3</option>
                                             @foreach ($categories_3 as $category_3)
-                                            <option value="{{$category_3->nIdx}}" >{{$category_3->strCategoryName}}</option>
+                                            <option value="{{$category_3->strCategoryTree}}" >{{$category_3->strCategoryName}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -93,9 +92,9 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <select class="custom-select form-control-border custom-select-sm" name="selCategoryName4" id="selCategoryName4">
-                                            <option value="0">카테고리 4</option>
+                                            <option value="">카테고리 4</option>
                                             @foreach ($categories_4 as $category_4)
-                                            <option value="{{$category_4->nIdx}}" >{{$category_4->strCategoryName}}</option>
+                                            <option value="{{$category_4->strCategoryTree}}" >{{$category_4->strCategoryName}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -118,7 +117,7 @@
                                         <i class="far fa-calendar-alt"></i>
                                     </span>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm float-right" id="reservation">
+                                    <input type="text" class="form-control form-control-sm float-right" id="txtDateRange">
                                 </div>
                             <!-- /.input group -->
                             </div>
@@ -139,20 +138,20 @@
                             </div>
                             <div class="form-group col-1">
                                 <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="customRadio1" name="customRadio">
-                                    <label for="customRadio1" class="custom-control-label">전체</label>
+                                    <input class="custom-control-input" type="radio" id="rdoShareType0" name="rdoShareType" value="-1" {{ ($shareType =="2")? "checked" : "" }}>
+                                    <label for="rdoShareType0" class="custom-control-label">전체</label>
                                 </div>
                             </div>
                             <div class="form-group col-1">
                                 <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio" checked>
-                                    <label for="customRadio2" class="custom-control-label">공개</label>
+                                    <input class="custom-control-input" type="radio" id="rdoShareType2" name="rdoShareType" value="1" {{ ($shareType =="1")? "checked" : "" }}>
+                                    <label for="rdoShareType2" class="custom-control-label">공개</label>
                                 </div>
                             </div>
                             <div class="form-group col-1">
                                 <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio" checked>
-                                    <label for="customRadio2" class="custom-control-label">비공개</label>
+                                    <input class="custom-control-input" type="radio" id="rdoShareType1" name="rdoShareType" value="0" {{ ($shareType =="0")? "checked" : "" }}>
+                                    <label for="rdoShareType1" class="custom-control-label">비공개</label>
                                 </div>
                             </div>
                             <div class="col-1">
@@ -161,13 +160,19 @@
                             <div class="col-sm-2">
                             <!-- select -->
                                 <div class="form-group">
-                                    <select class="custom-select form-control-border custom-select-sm" name="selComeName" id="selComeName">
-                                        <option value="0">==국가==</option>
-                                        @foreach ($comes as $come)
-                                        <option value="{{$come->nIdx}}" >[{{$come->strComeCode}}] {{$come->strComeName}}</option>
+                                    <select class="custom-select form-control-border custom-select-sm" name="selCountryName" id="selCountryName">
+                                        <option value="">==국가==</option>
+                                        @foreach ($countries as $country)
+                                        <option value="{{$country->strCountryCode}}" >{{$country->strCountryName}}</option>
                                         @endforeach
                                     </select>
                                 </div>
+                            </div>
+                            <div class="col">
+                                <a class="btn bg-info btn-sm float-right btnSearchData">
+                                    <i class="fas fa-search"></i>
+                                    Search
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -183,15 +188,16 @@
                             <div class="tab-pane fade show active" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
                                 <form>
                                     <div class="card-body table-responsive p-0" >
-                                        <table id="example" class="table table-striped projects" cellspacing="0" width="100%">
+                                        <table id="example" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
-                                                    <th><input type="checkbox" name="select_all" value="1" id="select-all"></th>
-                                                    <th>상품정보</th>
-                                                    <th></th>
-                                                    <th>등록마켓관리</th>
-                                                    <th>공급가/판매가</th>
-                                                    <th>마진</th>
+                                                    <th style="width:20px !important"><input type="checkbox" name="select_all" value="1" id="select-all"></th>
+                                                    <th style="width:50px !important">대표이미지</th>
+                                                    <th style="width:800px !important">상품정보</th>
+                                                    <th style="width:100px !important">등록마켓</th>
+                                                    <th style="width:40px !important">공급가/판매가</th>
+                                                    <th style="width:40px !important">마진</th>
+                                                    <th style="width:70px !important">Action</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -205,84 +211,10 @@
             </div>
         </div>
     </div>
-    <!-- //==Modal==// -->
-    <div class="modal fade"  id="modal-id_manage">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title text-sm" style="font-weight: 700">오픈마켓 아이디등록관리</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                <div>
-                <form id="manageMarketAccount" method="post" action="{{ route('operation.OpenMarketManageAccountSave', 1) }}"> 
-                    <div class="form-group row">
-                        <label for="txtAccountId" class="col-sm-2 col-form-label lb-sm" style="font-size:12px;">아이디</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control form-control-sm" name="txtAccountId" id="txtAccountId" placeholder="ID">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="txtAccountPwd" class="col-sm-2 col-form-label lb-sm" style="font-size:12px;">비밀번호</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control form-control-sm" name="txtAccountPwd" id="txtAccountPwd" placeholder="Password">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="txtAPIAccessKey" class="col-sm-2 col-form-label lb-sm" style="font-size:12px;">Access API Key</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control form-control-sm" name="txtAPIAccessKey" id="txtAPIAccessKey" placeholder="API Access Key">
-                        </div>
-                    </div>
-                    <div class="form-group row float-right">
-                        <div class="col-12 btn-group">
-                            <button type="button" class="btn btn-success btn-flat btn-xs btnChkUnregMarketAccount" >
-                            아이디 유효성검사
-                            </button>
-                            <button type="submit" class="btn btn-info btn-flat btn-xs btnAddMarketAccount">
-                            아이디등록
-                            </button>
-                            <button type="button" class="btn btn-primary btn-flat btn-xs btnChkRegMarketAccount">
-                            등록된 아이디 유효성검사
-                            </button>
-                        </div>
-                    </div>
-                </form>    
-                </div>
-                <br>
-                <hr>
-                <div>
-                    <table class="table table-bordered marketAccountsTable">
-                    <thead>
-                        <tr class="asd">
-                        <th style="width: 10px">#</th>
-                        <th>ID</th>
-                        <th>비밀번호</th>
-                        <th>Access API Key</th>
-                        <th>사용여부</th>
-                        <th style="width: 120px">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                    </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <div class="modal-footer ">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-      <!-- /.modal -->
     @section('script')
     <script>
+        var table = null;
+        tablTran  = $('#example');
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
@@ -290,7 +222,7 @@
                 }
             });
             //Date range picker
-            $('#reservation').daterangepicker({
+            $('#txtDateRange').daterangepicker({
                 locale: {
                     format: 'YYYY-MM-DD',
                     separator: " ~ "
@@ -318,7 +250,7 @@
                 },
                 function (start, end) {
                     //$('#reservation').val(start.format('YYYY-MM-DD') + ' ~ ' + end.format('YYYY-MM-DD'));
-                    $('#reservation').daterangepicker({
+                    $('#txtDateRange').daterangepicker({
                         locale: {
                             format: 'YYYY-MM-DD',
                             separator: " ~ "
@@ -329,43 +261,60 @@
                 }
             );
 
-            var table = $('#example').DataTable({
+            table = tablTran.DataTable({
                 processing: true,
                 serverSide: true,
+                searching: false,
                 scrollY: "400px",
                 //ajax: "{{ route('product.SellTargetManage') }}",
                 ajax: {
-                    url: "{{ route('product.SellTargetManage') }}",
+                    url: "{{ route('scratch.ProductGetManage') }}",
                     data: function ( d ) {
-                        d.daterange = $('#reservation').val();
-                        d.comecode = $('#reservation').val();
+                        d.searchWord = $('#txtSearchWord').val();
+                        d.daterange = $('#txtDateRange').val();
+                        d.selCome = $('#selComeName option:selected').val();
+                        d.category1 = $('#selCategoryName1 option:selected').val();
+                        d.category2 = $('#selCategoryName2 option:selected').val();
+                        d.category3 = $('#selCategoryName3 option:selected').val();
+                        d.category4 = $('#selCategoryName4 option:selected').val();
+                        d.categoryName = $('#txtCategoryName').val();
+                        d.shareType = $("input[name='rdoShareType']:checked").val();
+                        d.selCountry = $('#selCountryName option:selected').val();
                     }
                 },
                 columns: [
                     {data: 'check', name: 'check'},
                     {data: 'mainImage', name: 'mainImage'},
                     {data: 'productInfo', name: 'productInfo'},
-                    {data: 'marketInfo', name: 'marketInfo'},
-                    {data: 'priceInfo', name: 'priceInfo'},
-                    {data: 'marginInfo', name: 'marginInfo'},
+                    {data: 'marketInfo', name: 'marketInfo', className: "text-center"},
+                    {data: 'priceInfo', name: 'priceInfo', className: "text-right"},
+                    {data: 'marginInfo', name: 'marginInfo', className: "text-right"},
+                    {data: 'action', name: 'action', className: "text-center"},
                 ],
-                responsive: true, lengthChange: true, autoWidth: false,
+                responsive: true, lengthChange: true,
                 buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example_wrapper .col-md-6:eq(0)');
-
-            $('body').on('click', '.btnAddMarketProduct', function () {
-                var action = '/productSellTargetManageProducts/addMarketProduct';// $("#manageMarketAccount").attr("action");
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            $('body').on('click', '.btnSearchData', function (e) {
+                var table = $('#example').DataTable(); 
+                table.draw();
+                e.preventDefault();
+            });
+            $('#example').on('click', '.btnSellPrepare', function (e) {
+                var id = $(this).attr('data-id');
+                var action = '/scratchProductGetManage/' + id;// $("#manageMarketAccount").attr("action");
                 $.ajax({
                     url: action,
-                    type: "POST",
+                    type: "PUT",
                     dataType: 'json',
                     success: function ({status, data}) {
-                        
+                        var table = $('#example').DataTable(); 
+                        table.draw();
                     },
                     error: function (data) {
                     }
                 });
             });
+
         });	  
     </script>
     @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Operation;
 
 use App\Http\Controllers\Controller;
+use App\Models\AsManual;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Stichoza\GoogleTranslate\GoogleTranslate;
@@ -10,6 +11,8 @@ use App\Models\Market;
 use App\Models\MarketAccount;
 use App\Models\MarketSettingCoupang;
 use App\Models\DeliveryType;
+use App\Models\DeliveryCompany;
+use App\Models\DocumentImage;
 
 class BasicSettingManageController extends Controller
 {
@@ -62,19 +65,30 @@ class BasicSettingManageController extends Controller
             ->where('nIdx', $market_id)
             ->where('bIsUsed', 1)
             ->first();
-            if($market->strMarketCode == 'coupang'){
-                $marketSetting = MarketSettingCoupang::where('bIsDel', 0)
-                    ->where('nUserId', Auth::id())
-                    ->where('nIdx', $set_id)
-                    ->where('bIsUsed', 1)
-                    ->firstOrNew();
-                $deliveryTypes = DeliveryType::where('bIsDel', 0)
-                    ->where('nMarketIdx', $market->nIdx)
-                    ->get();
-            }
+        if($market->strMarketCode == 'coupang'){
+            $marketSetting = MarketSettingCoupang::where('bIsDel', 0)
+                ->where('nUserId', Auth::id())
+                ->where('nIdx', $set_id)
+                ->where('bIsUsed', 1)
+                ->firstOrNew();
+            $deliveryTypes = DeliveryType::where('bIsDel', 0)
+                ->where('nMarketIdx', $market->nIdx)
+                ->get();
+            $deliveryCompanies = DeliveryCompany::where('bIsDel', 0)
+                ->where('nMarketIdx', $market->nIdx)
+                ->get();
+            $asManuals = AsManual::where('bIsDel', 0)
+                ->get(); 
+            $documentImages = DocumentImage::where('bIsDel', 0)
+                ->where('nUserId', Auth::id())
+                ->get();
+            return view('operation.BasicSettingManageDetail', compact('marketAccounts', 'market', 'marketSetting', 'deliveryTypes', 'deliveryCompanies', 'set_id',  'asManuals', 'documentImages'));
+        }else{
+            echo "현재 쿠팡만 운영중입니다.";
+        }
         
-//dd($market);
-        return view('operation.BasicSettingManageDetail', compact('marketAccounts', 'market', 'marketSetting', 'deliveryTypes', 'set_id', ));
+        
+        
     }
 
     /**

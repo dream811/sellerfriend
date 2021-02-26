@@ -11,7 +11,7 @@ class ProductImage extends Model
     protected $table = 'tb_product_images';
     protected $primaryKey = 'nIdx';
     public $timestamps = false;
-    protected $fillable = ['nIdx', 'nProductIdx', 'strName', 'strURL', 'nHeight', 'nWidth', 'strNote', 'bIsDel'];
+    protected $fillable = ['nIdx', 'nProductIdx', 'nImageCode', 'strName', 'strURL', 'nHeight', 'nWidth', 'strNote', 'bIsDel'];
     public function product()
     {
         return $this->belongsTo(Product::class, 'nProductIdx', 'nIdx');

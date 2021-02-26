@@ -301,17 +301,17 @@
                                                 묶음배송여부
                                         </div>
                                         <div class="col">
-                                            <select class="custom-select custom-select-sm" name="selCategoryName2" id="selCategoryName2">
+                                            <select class="custom-select custom-select-sm" name="selUnionDeliveryType" id="selUnionDeliveryType">
                                                 <option value="">= 선택 =</option>
-                                                <option value="1">묶음배송</option>
-                                                <option value="2">묶음배송불가</option>
+                                                <option value="UNION_DELIVERY">묶음배송</option>
+                                                <option value="NOT_UNION_DELIVERY">묶음배송불가</option>
                                             </select>
                                         </div>
                                         <div class="col text-right mt-2 font-weight-bold" style="font-size:12px;">
                                             묶음배송수량
                                         </div>
                                         <div class="col">
-                                            <input type="text" class="form-control form-control-sm float-right" name="txtMaxQtyPerManQtyLimit" id="txtMaxQtyPerManQtyLimit">
+                                            <input type="text" class="form-control form-control-sm float-right" name="txtUnionDeliveryQty" id="txtUnionDeliveryQty">
                                         </div>
                                         <div class="col mt-2 font-weight-bold" style="font-size:12px;">
                                             개
@@ -324,12 +324,12 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">도서산간배송여부<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6 mt-1">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="customRadio1" name="customRadio">
-                                            <label for="customRadio1" class="custom-control-label pt-1" style="font-size:12px;">가능</label>
+                                            <input class="custom-control-input" type="radio" id="rdoRemoteAreaDeliveryType0" name="rdoRemoteAreaDeliveryType" value="1">
+                                            <label for="rdoRemoteAreaDeliveryType0" class="custom-control-label pt-1" style="font-size:12px;">가능</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio">
-                                            <label for="customRadio2" class="custom-control-label pt-1" style="font-size:12px;">불가</label>
+                                            <input class="custom-control-input" type="radio" id="rdoRemoteAreaDeliveryType1" name="rdoRemoteAreaDeliveryType" value="0">
+                                            <label for="rdoRemoteAreaDeliveryType1" class="custom-control-label pt-1" style="font-size:12px;">불가</label>
                                         </div>
                                     </div>
                                 </div>
@@ -337,7 +337,7 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">출고소요시간 <code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6">
                                         <div style="display:inline-block">
-                                            <input type="number" class="form-control form-control-sm text-right" id="txtTitle" name="txtTitle" value="{{ 3 }}" placeholder="날짜">
+                                            <input type="number" class="form-control form-control-sm text-right" id="txtOutboundDeliveryTime" name="txtOutboundDeliveryTime" value="{{ 3 }}" placeholder="날짜">
                                         </div>
                                         <div style="display:inline-block">일</div>
                                     </div>
@@ -346,10 +346,10 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">출고지<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6">
                                         <div style="display:inline-block">
-                                            <input type="number" class="form-control form-control-sm text-right" id="txtTitle" name="txtTitle" value="{{ 2342342 }}" placeholder="날짜">
+                                            <input type="text" class="form-control form-control-sm text-right" id="txtOutboundShippingPlaceCode" name="txtOutboundShippingPlaceCode" value="{{ 2342342 }}" placeholder="날짜" readonly>
                                         </div>
                                         <div style="display:inline-block">
-                                            <a href="javascript:void(0);" style="height:26px;" class="btn btn-primary btn-xs mt-0 btnManageMarketAccount">
+                                            <a href="javascript:void(0);" style="height:26px;" class="btn btn-primary btn-xs mt-0 btnSearchOutboundShippingPlace">
                                                 <span style="font-size:10px;">검 색</span>
                                             </a>
                                         </div>
@@ -358,21 +358,23 @@
                                 <div class="form-group row mb-0">
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">택배사<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-3">
-                                        <select class="custom-select custom-select-sm" name="selCategoryName2" id="selCategoryName2">
-                                            <option value="0">= 선택 =</option>
-                                            <option value="1">안녕하세요 선생이이이</option>
-                                            {{-- @foreach ($categories_2 as $category_2)
-                                            <option value="{{$category_2->nIdx}}" >{{$category_2->strCategoryName}}</option>
-                                            @endforeach --}}
+                                        <select class="custom-select custom-select-sm" name="selDeliveryCompanyCode" id="selDeliveryCompanyCode">
+                                            <option value="">= 선택 =</option>
+                                            @foreach ($deliveryCompanies as $company)
+                                            <option value="{{$company->strCompanyCode}}" >{{$company->strCompanyName}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">배송비 종류<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-3">
-                                        <select class="custom-select custom-select-sm" name="selCategoryName2" id="selCategoryName2">
-                                            <option value="0">= 선택 =</option>
-                                            <option value="1">안녕하세요 선생이이이</option>
+                                        <select class="custom-select custom-select-sm" name="selDeliveryChargeType" id="selDeliveryChargeType">
+                                            <option value="">= 선택 =</option>
+                                            <option value="FREE">무료배송</option>
+                                            <option value="NOT_FREE">유료배송</option>
+                                            <option value="CHARGE_RECEIVED">착불배송</option>
+                                            <option value="FREE_DELIVERY_OVER">조건부무료배송</option>
                                             {{-- @foreach ($categories_2 as $category_2)
                                             <option value="{{$category_2->nIdx}}" >{{$category_2->strCategoryName}}</option>
                                             @endforeach --}}
@@ -384,7 +386,7 @@
                                     <div class="bg-light col-sm-9 col-md-7 pt-2 mb-1 row">
                                         <dt class="col-sm-5 text-sm-right mt-1">기본배송비</dt>
                                         <dd class="col-sm-6" >
-                                            <input type="number" class="form-control form-control-sm text-right" id="txtTitle" name="txtTitle" value="{{ 1000 }}" placeholder="">
+                                            <input type="number" class="form-control form-control-sm text-right" id="txtBaseDeliveryTax" name="txtBaseDeliveryTax" value="{{ 1000 }}" placeholder="">
                                         </dd>
                                         <dd class="col-sm-1 mt-1" >
                                             <span >원</span>
@@ -392,14 +394,14 @@
                                     
                                         <dt class="col-sm-5 text-sm-right mt-1">조건부무료</dt>
                                         <dd class="col-sm-6" >
-                                            <input type="number" class="form-control form-control-sm text-right" id="txtTitle" name="txtTitle" value="{{ 1000 }}" placeholder="">
+                                            <input type="number" class="form-control form-control-sm text-right" id="txtConditionFreeTax" name="txtConditionFreeTax" value="{{ 1000 }}" placeholder="">
                                         </dd>
                                         <dd class="col-sm-1 mt-1" >
                                             <span >원</span>
                                         </dd>
                                         <dt class="col-sm-5 text-sm-right mt-1">초도반품배송비(편도)</dt>
                                         <dd class="col-6" >
-                                            <input type="number" class="form-control form-control-sm text-right" id="txtTitle" name="txtTitle" value="{{ 1000 }}" placeholder="">
+                                            <input type="number" class="form-control form-control-sm text-right" id="txtReturnAwayDeliveryTax" name="txtReturnAwayDeliveryTax" value="{{ 1000 }}" placeholder="">
                                         </dd>
                                         <dd class="col-sm-1 mt-1" >
                                             <span >원</span>
@@ -407,7 +409,7 @@
                                     
                                         <dt class="col-sm-5 text-sm-right mt-1">반품배송비(편도)</dt>
                                         <dd class="col-sm-6" >
-                                            <input type="number" class="form-control form-control-sm text-right" id="txtTitle" name="txtTitle" value="{{ 1000 }}" placeholder="">
+                                            <input type="number" class="form-control form-control-sm text-right" id="txtReturnDeliveryTax" name="txtReturnDeliveryTax" value="{{ 1000 }}" placeholder="">
                                         </dd>
                                         <dd class="col-sm-1 mt-1" >
                                             <span >원</span>
@@ -415,7 +417,7 @@
                                     
                                         <dt class="col-sm-5 text-sm-right mt-1">도서산간 추가배송비(제주지역)</dt>
                                         <dd class="col-sm-6" >
-                                            <input type="number" class="form-control form-control-sm text-right" id="txtTitle" name="txtTitle" value="{{ 1000 }}" placeholder="">
+                                            <input type="number" class="form-control form-control-sm text-right" id="txtDeliveryJejuAddTax" name="txtDeliveryJejuAddTax" value="{{ 1000 }}" placeholder="">
                                         </dd>
                                         <dd class="col-sm-1 mt-1" >
                                             <span >원</span>
@@ -423,7 +425,7 @@
                                    
                                         <dt class="col-sm-5 text-sm-right mt-1">도서산간 추가배송비(제주외지역)</dt>
                                         <dd class="col-sm-6" >
-                                            <input type="number" class="form-control form-control-sm text-right" id="txtTitle" name="txtTitle" value="{{ 1000 }}" placeholder="">
+                                            <input type="number" class="form-control form-control-sm text-right" id="txtDeliveryNotJejuTax" name="txtDeliveryNotJejuTax" value="{{ 1000 }}" placeholder="">
                                         </dd>
                                         <dd class="col-sm-1 mt-1" >
                                             <span >원</span>
@@ -444,32 +446,32 @@
                                     <div class="bg-light col-sm-9 col-md-7 pt-2 mb-1 row">
                                         <dt class="col-sm-5 text-sm-right mt-1">반품지</dt>
                                         <dd class="col-sm-6" >
-                                            <input type="number" class="form-control form-control-sm" id="txtTitle" name="txtTitle" value="{{ 1000 }}" placeholder="">
+                                            <input type="text" class="form-control form-control-sm" id="txtReturnCenterCode" name="txtReturnCenterCode" value="{{ 1000 }}" placeholder="" readonly>
                                         </dd>
                                         <dd class="col-sm-1 mt-1" >
-                                            <a href="javascript:void(0);" style="height:26px;" class="btn btn-primary btn-xs mt-0 btnManageMarketAccount">
+                                            <a href="javascript:void(0);" style="height:26px;" class="btn btn-primary btn-xs mt-0 btnSearchReturnCenter">
                                                 <span style="font-size:10px;">검 색</span>
                                             </a>
                                         </dd>
                                         <dt class="col-sm-5 text-sm-right mt-1">판매자명</dt>
                                         <dd class="col-sm-7" >
-                                            <input type="text" class="form-control form-control-sm" id="txtTitle" name="txtTitle" value="{{ '인천' }}" placeholder="">
+                                            <input type="text" class="form-control form-control-sm" id="txtReturnSellerName" name="txtReturnSellerName" value="{{ '인천' }}" placeholder="">
                                         </dd>
                                         <dt class="col-sm-5 text-sm-right mt-1">판매자전화</dt>
                                         <dd class="col-sm-7" >
-                                            <input type="text" class="form-control form-control-sm" id="txtTitle" name="txtTitle" value="{{ '010-8697-9962' }}" placeholder="">
+                                            <input type="text" class="form-control form-control-sm" id="txtCompanyContactNumber" name="txtCompanyContactNumber" value="{{ '010-8697-9962' }}" placeholder="">
                                         </dd>
                                         <dt class="col-sm-5 text-sm-right mt-1">우편번호</dt>
                                         <dd class="col-sm-7" >
-                                            <input type="text" class="form-control form-control-sm" id="txtTitle" name="txtTitle" value="{{ '21643' }}" placeholder="">
+                                            <input type="text" class="form-control form-control-sm" id="txtReturnZipCode" name="txtReturnZipCode" value="{{ '21643' }}" placeholder="">
                                         </dd>
                                         <dt class="col-sm-5 text-sm-right mt-1">주소</dt>
                                         <dd class="col-sm-7" >
-                                            <input type="text" class="form-control form-control-sm" id="txtTitle" name="txtTitle" value="{{ '인천광역시 남동구 은청로 60 (고잔동)' }}" placeholder="">
+                                            <input type="text" class="form-control form-control-sm" id="txtReturnAddress" name="txtReturnAddress" value="{{ '인천광역시 남동구 은청로 60 (고잔동)' }}" placeholder="">
                                         </dd>
                                         <dt class="col-sm-5 text-sm-right mt-1">상세주소</dt>
                                         <dd class="col-sm-7" >
-                                            <input type="text" class="form-control form-control-sm" id="txtTitle" name="txtTitle" value="{{ '한국금형부품' }}" placeholder="">
+                                            <input type="text" class="form-control form-control-sm" id="txtReturnAddressDetail" name="txtReturnAddressDetail" value="{{ '한국금형부품' }}" placeholder="">
                                         </dd>
                                         
                                     </div>
@@ -478,24 +480,24 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">교환방법<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6 mt-1">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="customRadio1" name="customRadio">
-                                            <label for="customRadio1" class="custom-control-label pt-1" style="font-size:12px;">선교환</label>
+                                            <input class="custom-control-input" type="radio" id="rdoExchangeType0" name="rdoExchangeType" value="A" checked>
+                                            <label for="rdoExchangeType0" class="custom-control-label pt-1" style="font-size:12px;">선교환</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio">
-                                            <label for="customRadio2" class="custom-control-label pt-1" style="font-size:12px;">후교환</label>
+                                            <input class="custom-control-input" type="radio" id="rdoExchangeType1" name="rdoExchangeType" value="B">
+                                            <label for="rdoExchangeType1" class="custom-control-label pt-1" style="font-size:12px;">후교환</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio">
-                                            <label for="customRadio2" class="custom-control-label pt-1" style="font-size:12px;">맞교환</label>
+                                            <input class="custom-control-input" type="radio" id="rdoExchangeType2" name="rdoExchangeType" value="C">
+                                            <label for="rdoExchangeType2" class="custom-control-label pt-1" style="font-size:12px;">맞교환</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio">
-                                            <label for="customRadio2" class="custom-control-label pt-1" style="font-size:12px;">후교환(업체직송)</label>
+                                            <input class="custom-control-input" type="radio" id="rdoExchangeType3" name="rdoExchangeType" value="D">
+                                            <label for="rdoExchangeType3" class="custom-control-label pt-1" style="font-size:12px;">후교환(업체직송)</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio">
-                                            <label for="customRadio2" class="custom-control-label pt-1" style="font-size:12px;">교환불가</label>
+                                            <input class="custom-control-input" type="radio" id="rdoExchangeType4" name="rdoExchangeType" value="X">
+                                            <label for="rdoExchangeType4" class="custom-control-label pt-1" style="font-size:12px;">교환불가</label>
                                         </div>
                                     </div>
                                 </div>
@@ -503,12 +505,12 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">착불여부<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6 mt-1">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="customRadio1" name="customRadio">
-                                            <label for="customRadio1" class="custom-control-label pt-1" style="font-size:12px;">선불</label>
+                                            <input class="custom-control-input" type="radio" id="rdoReturnChargeVendorType0" name="rdoReturnChargeVendorType" value="N">
+                                            <label for="rdoReturnChargeVendorType0" class="custom-control-label pt-1" style="font-size:12px;">선불</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio">
-                                            <label for="customRadio2" class="custom-control-label pt-1" style="font-size:12px;">착불</label>
+                                            <input class="custom-control-input" type="radio" id="rdoReturnChargeVendorType1" name="rdoReturnChargeVendorType" value="Y">
+                                            <label for="rdoReturnChargeVendorType1" class="custom-control-label pt-1" style="font-size:12px;">착불</label>
                                         </div>
                                     </div>
                                 </div>
@@ -516,22 +518,22 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">A/S안내<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6 mt-1">
                                         <div>
-                                            <select class="custom-select form-control-border custom-select-sm" name="selCategoryName2" id="selCategoryName2">
-                                                <option value="0">= 선택 =</option>
-                                                {{-- @foreach ($categories_2 as $category_2)
-                                                <option value="{{$category_2->nIdx}}" >{{$category_2->strCategoryName}}</option>
-                                                @endforeach --}}
+                                            <select class="custom-select form-control-border custom-select-sm" name="selAfterServiceGuideType" id="selAfterServiceGuideType">
+                                                <option value="">= 선택 =</option>
+                                                @foreach ($asManuals as $asManual)
+                                                <option value="{{$asManual->strAsCode}}" >{{$asManual->strAsContent}}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div>
-                                            <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                            <textarea class="form-control text-xs" rows="3" placeholder="" name="txtAfterServiceGuide" id="txtAfterServiceGuide"></textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">A/S전화번호<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6 mt-1">
-                                        <input type="text" class="form-control form-control-sm" id="txtTitle" name="txtTitle" value="{{ '8211312312311' }}" placeholder="전화번호">
+                                        <input type="text" class="form-control form-control-sm" id="txtAfterServiceContactNumber" name="txtAfterServiceContactNumber" value="{{ '8211312312311' }}" placeholder="전화번호">
                                     </div>
                                 </div>
                             </div>
@@ -551,56 +553,56 @@
                                     <div class="bg-light col-sm-9 col-md-7 pt-2 mb-1 row">
                                         <dt class="col-sm-5 text-sm-right mt-1">필수인증서류1</dt>
                                         <dd class="col-sm-7" >
-                                            <select class="custom-select form-control-border custom-select-sm" name="selCategoryName2" id="selCategoryName2">
-                                                <option value="0">= 선택 =</option>
-                                                {{-- @foreach ($categories_2 as $category_2)
-                                                <option value="{{$category_2->nIdx}}" >{{$category_2->strCategoryName}}</option>
-                                                @endforeach --}}
+                                            <select class="custom-select form-control-border custom-select-sm" name="selRequireDocument2" id="selCategoryName2">
+                                                <option value="">= 선택 =</option>
+                                                @foreach ($documentImages as $image)
+                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->nRequireDocument1 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
+                                                @endforeach
                                             </select>
                                         </dd>
                                         <dt class="col-sm-5 text-sm-right mt-1">필수인증서류2</dt>
                                         <dd class="col-sm-7" >
                                             <select class="custom-select form-control-border custom-select-sm" name="selCategoryName2" id="selCategoryName2">
-                                                <option value="0">= 선택 =</option>
-                                                {{-- @foreach ($categories_2 as $category_2)
-                                                <option value="{{$category_2->nIdx}}" >{{$category_2->strCategoryName}}</option>
-                                                @endforeach --}}
+                                                <option value="">= 선택 =</option>
+                                                @foreach ($documentImages as $image)
+                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->nRequireDocument2 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
+                                                @endforeach
                                             </select>
                                         </dd>
                                         <dt class="col-sm-5 text-sm-right mt-1">기타인증서류</dt>
                                         <dd class="col-sm-7" >
                                             <select class="custom-select form-control-border custom-select-sm" name="selCategoryName2" id="selCategoryName2">
-                                                <option value="0">= 선택 =</option>
-                                                {{-- @foreach ($categories_2 as $category_2)
-                                                <option value="{{$category_2->nIdx}}" >{{$category_2->strCategoryName}}</option>
-                                                @endforeach --}}
+                                                <option value="">= 선택 =</option>
+                                                @foreach ($documentImages as $image)
+                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->nRequireDocument3 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
+                                                @endforeach
                                             </select>
                                         </dd>
                                         <dt class="col-sm-5 text-sm-right mt-1">수입신고필증(병행수입시)</dt>
                                         <dd class="col-sm-7" >
                                             <select class="custom-select form-control-border custom-select-sm" name="selCategoryName2" id="selCategoryName2">
-                                                <option value="0">= 선택 =</option>
-                                                {{-- @foreach ($categories_2 as $category_2)
-                                                <option value="{{$category_2->nIdx}}" >{{$category_2->strCategoryName}}</option>
-                                                @endforeach --}}
+                                                <option value="">= 선택 =</option>
+                                                @foreach ($documentImages as $image)
+                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->nRequireDocument4 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
+                                                @endforeach
                                             </select>
                                         </dd>
                                         <dt class="col-sm-5 text-sm-right mt-1">인보이스영수증(해외구매대행시)</dt>
                                         <dd class="col-sm-7" >
                                             <select class="custom-select form-control-border custom-select-sm" name="selCategoryName2" id="selCategoryName2">
-                                                <option value="0">= 선택 =</option>
-                                                {{-- @foreach ($categories_2 as $category_2)
-                                                <option value="{{$category_2->nIdx}}" >{{$category_2->strCategoryName}}</option>
-                                                @endforeach --}}
+                                                <option value="">= 선택 =</option>
+                                                @foreach ($documentImages as $image)
+                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->nRequireDocument5 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
+                                                @endforeach
                                             </select>
                                         </dd>
                                         <dt class="col-sm-5 text-sm-right mt-1">국내제품정품인증서류<br>(고위험군카테고리)</dt>
                                         <dd class="col-sm-7" >
                                             <select class="custom-select form-control-border custom-select-sm" name="selCategoryName2" id="selCategoryName2">
-                                                <option value="0">= 선택 =</option>
-                                                {{-- @foreach ($categories_2 as $category_2)
-                                                <option value="{{$category_2->nIdx}}" >{{$category_2->strCategoryName}}</option>
-                                                @endforeach --}}
+                                                <option value="">= 선택 =</option>
+                                                @foreach ($documentImages as $image)
+                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->nRequireDocument6 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
+                                                @endforeach
                                             </select>
                                         </dd>
                                         <dd class="col-sm-12 mt-1" >
@@ -624,28 +626,32 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">상/하단 문구</label>
                                     <div class="bg-light col-sm-9 col-md-7 pt-2 mb-1 row">
                                         <dd class="col-sm-6" >
-                                            <select class="custom-select form-control-border custom-select-sm" name="selCategoryName2" id="selCategoryName2">
-                                                <option value="0">= 선택 =</option>
-                                                {{-- @foreach ($categories_2 as $category_2)
-                                                <option value="{{$category_2->nIdx}}" >{{$category_2->strCategoryName}}</option>
-                                                @endforeach --}}
+                                            <select class="custom-select form-control-border custom-select-sm" name="selTopImage" id="selTopImage">
+                                                <option value="">= 선택 =</option>
+                                                @foreach ($documentImages as $image)
+                                                    @if ($image->strImageType == "TOP")
+                                                        <option value="{{$image->nIdx}}" data-url="{{$image->strImageURL}}" @if($marketSetting->topImage && $marketSetting->nTopImageIdx == $image->nIdx) selected @endif>{{$image->strImageName}}</option>    
+                                                    @endif
+                                                @endforeach
                                             </select>
                                             <div>
-                                                <div class="bg-gray border border-danger" style="height: 200px;">
-
+                                                <div class="bg-gray border border-danger"  style="height: 200px;">
+                                                    <img @if($marketSetting->topImage) src="{{asset('')}}{{$marketSetting->topImage->strImageURL}}" @else src="https://via.placeholder.com/300/FFFFFF?text=No%20Image" @endif style="width:100%; height:100%;" alt="">
                                                 </div>
                                             </div>
                                         </dd>
                                         <dd class="col-sm-6">
-                                            <select class="custom-select form-control-border custom-select-sm" name="selCategoryName2" id="selCategoryName2">
-                                                <option value="0">= 선택 =</option>
-                                                {{-- @foreach ($categories_2 as $category_2)
-                                                <option value="{{$category_2->nIdx}}" >{{$category_2->strCategoryName}}</option>
-                                                @endforeach --}}
+                                            <select class="custom-select form-control-border custom-select-sm" name="selDownImage" id="selDownImage">
+                                                <option value="">= 선택 =</option>
+                                                @foreach ($documentImages as $image)
+                                                    @if ($image->strImageType == "DOWN")
+                                                        <option value="{{$image->nIdx}}" data-url="{{$image->strImageURL}}" @if($marketSetting->nDownImageIdx == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
+                                                    @endif
+                                                @endforeach
                                             </select>
                                             <div>
                                                 <div class="bg-gray border border-danger" style="height: 200px;">
-
+                                                    <img @if($marketSetting->downImage) src="{{$marketSetting->topImage->strImageURL}}" @else src="https://via.placeholder.com/300/FFFFFF?text=No%20Image" @endif style="width:100%; height:100%;" alt="">
                                                 </div>
                                             </div>
                                         </dd>
@@ -713,18 +719,19 @@
                 // Check/uncheck checkboxes for all rows in the table
                 //$('input[type="checkbox"]').prop('checked', this.checked);
             });
-            $('body').on('click', '.btnSubmitAccount', function () {
-                var account = [];
-                $.each($("input[name='chkAccount[]']:checked"), function(){
-                    account.push($(this).val());
-                });
-                if(account.length <= 0)
-                {
-                    alert("상품을 하나이상 선택해주세요!");
-                    return false;
-                }
-                $( "#manageMarketAccount" ).submit();
+            $('#selAfterServiceGuideType').change(function(){ 
+                var content = $('#selAfterServiceGuideType option:selected' ).text();
+                $( 'textarea#txtAfterServiceGuide' ).val(content);
             });
+            $('#selTopImage').change(function(){ 
+                var content = $('#selTopImage option:selected' ).text();
+                $('textarea#txtAfterServiceGuide' ).val(content);
+            });
+            $('#selDownImage').change(function(){ 
+                var content = $('#selAfterServiceGuideType option:selected' ).text();
+                $('textarea#txtAfterServiceGuide' ).val(content);
+            });
+            selTopImage
         });	  
     </script>
 </body>

@@ -10,7 +10,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">HOME</a></li>
-                <li class="breadcrumb-item"><a href="#">상품수집관리</a></li>
+                <li class="breadcrumb-item"><a href="#">운영관리</a></li>
                 <li class="breadcrumb-item active">상품스크랩</li>
                 </ol>
             </div><!-- /.col -->

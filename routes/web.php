@@ -19,11 +19,19 @@ Route::get('/', function () {
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 /** 수집관리 **/
+//1
 Route::get('/scratchProductScrap', [App\Http\Controllers\Scratch\ProductScrapController::class, 'index'])->name('scratch.ProductScrap');
 Route::post('/scratchProductScrap', [App\Http\Controllers\Scratch\ProductScrapController::class, 'save'])->name('scratch.ProductScrap');
+Route::get('/scratchProductScrap/scratch', [App\Http\Controllers\Scratch\ProductScrapController::class, 'scratch'])->name('scratch.ProductScrapScratch');
+//2
 Route::get('/scratchProductGetManage', [App\Http\Controllers\Scratch\ProductGetManageController::class, 'index'])->name('scratch.ProductGetManage');
+Route::put('/scratchProductGetManage/{productId}', [App\Http\Controllers\Scratch\ProductGetManageController::class, 'update'])->name('scratch.ProductGetManage.update');
+//3
 Route::get('/scratchSellPrepareCheck', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'index'])->name('scratch.SellPrepareCheck');
+Route::put('/scratchSellPrepareCheck/{productId}', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'update'])->name('scratch.SellPrepareCheck.update');
+//4
 Route::get('/scratchDesignCheck', [App\Http\Controllers\Scratch\DesignCheckController::class, 'index'])->name('scratch.DesignCheck');
+Route::put('/scratchDesignCheck/{productId}', [App\Http\Controllers\Scratch\DesignCheckController::class, 'update'])->name('scratch.DesignCheck.update');
 /** 상품관리 **/
 //1
 Route::get('/productSellTargetManage', [App\Http\Controllers\Product\SellTargetManageController::class, 'index'])->name('product.SellTargetManage');

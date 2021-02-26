@@ -26,29 +26,30 @@
                     <div class="card-header border-bottom-0">
                         <div class="row">
                             <!-- /.form group -->
-                            <div class="col-1">
+                            <div class="col-sm-1">
                                 <label class="float-right">등록일:</label>
                             </div>
-                            <div class="col-3 form-group">
+                            <div class="col-sm-2 form-group">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                     <span class="input-group-text">
                                         <i class="far fa-calendar-alt"></i>
                                     </span>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm float-right" id="reservation">
+                                    <input type="text" class="form-control form-control-sm float-right" id="txtDateRange">
                                 </div>
                             <!-- /.input group -->
                             </div>
                             <!-- Date and time range -->
-                            <div class="col-6 form-group">
+                            <div class="col-sm-1">
                                 <div class="input-group">
-                                    <button type="button" class="btn btn-sm btn-default float-right" id="daterange-btn">
-                                    <i class="far fa-calendar-alt"></i> 날짜검색
+                                    <button type="button" class="btn btn-sm btn-default" id="daterange-btn">
+                                    <i class="far fa-calendar-alt"></i><span class="text-xs font-weight-bold">날짜검색</span>
                                     <i class="fas fa-caret-down"></i>
                                     </button>
                                 </div>
                             </div>
+                            
                         </div>
                         <div class="row">
                             <div class="col-1">
@@ -58,11 +59,19 @@
                             <!-- select -->
                                 <div class="form-group">
                                     <select class="custom-select form-control-border custom-select-sm" name="selComeName" id="selComeName">
-                                        <option value="0">==출항코드==</option>
+                                        <option value="">==출항코드==</option>
                                         @foreach ($comes as $come)
-                                        <option value="{{$come->nIdx}}" >[{{$come->strComeCode}}] {{$come->strComeName}}</option>
+                                        <option value="{{$come->strComeCode}}" >[{{$come->strComeCode}}] {{$come->strComeName}}</option>
                                         @endforeach
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <label class="float-right">검색항목:</label>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -75,9 +84,9 @@
                                     <div class="form-group">
                                         <div class="input-group">
                                             <select class="custom-select form-control-border custom-select-sm" name="selCategoryName1" id="selCategoryName1">
-                                                <option value="0">카테고리 1</option>
+                                                <option value="">카테고리 1</option>
                                                 @foreach ($categories_1 as $category_1)
-                                                <option value="{{$category_1->nIdx}}" >{{$category_1->strCategoryName}}</option>
+                                                <option value="{{$category_1->strCategoryTree}}" >{{$category_1->strCategoryName}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -87,9 +96,9 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <select class="custom-select form-control-border custom-select-sm" name="selCategoryName2" id="selCategoryName2">
-                                            <option value="0">카테고리 2</option>
+                                            <option value="">카테고리 2</option>
                                             @foreach ($categories_2 as $category_2)
-                                            <option value="{{$category_2->nIdx}}" >{{$category_2->strCategoryName}}</option>
+                                            <option value="{{$category_2->strCategoryTree}}" >{{$category_2->strCategoryName}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -99,9 +108,9 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <select class="custom-select form-control-border custom-select-sm" name="selCategoryName3" id="selCategoryName3">
-                                            <option value="0">카테고리 3</option>
+                                            <option value="">카테고리 3</option>
                                             @foreach ($categories_3 as $category_3)
-                                            <option value="{{$category_3->nIdx}}" >{{$category_3->strCategoryName}}</option>
+                                            <option value="{{$category_3->strCategoryTree}}" >{{$category_3->strCategoryName}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -111,15 +120,15 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <select class="custom-select form-control-border custom-select-sm" name="selCategoryName4" id="selCategoryName4">
-                                            <option value="0">카테고리 4</option>
+                                            <option value="">카테고리 4</option>
                                             @foreach ($categories_4 as $category_4)
-                                            <option value="{{$category_4->nIdx}}" >{{$category_4->strCategoryName}}</option>
+                                            <option value="{{$category_4->strCategoryTree}}" >{{$category_4->strCategoryName}}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-1">
                                 <div class="form-group form-group form-group-sm">
                                     <input type="text" class="form-control form-control-sm" name="txtCategoryName" id="txtCategoryName" value="" placeholder="">
                                 </div>
@@ -130,22 +139,21 @@
                                 <label class="float-right">상품상태:</label>
                             </div>
                             <div class="form-group col-1">
-                                
                                 <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="customRadio1" name="customRadio">
-                                    <label for="customRadio1" class="custom-control-label">전체</label>
+                                    <input class="custom-control-input" type="radio" id="rdoProductState0" name="rdoProductState" value="-1" checked>
+                                    <label for="rdoProductState0" class="custom-control-label">전체</label>
                                 </div>
                             </div>
                             <div class="form-group col-1">
                                 <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio" checked>
-                                    <label for="customRadio2" class="custom-control-label">다운로드완료</label>
+                                    <input class="custom-control-input" type="radio" id="rdoProductState1" name="rdoProductState" value="1">
+                                    <label for="rdoProductState1" class="custom-control-label">다운로드완료</label>
                                 </div>
                             </div>
                             <div class="form-group col-1">
                                 <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio" checked>
-                                    <label for="customRadio2" class="custom-control-label">다운로드대기</label>
+                                    <input class="custom-control-input" type="radio" id="rdoProductState2" name="rdoProductState" value="0">
+                                    <label for="rdoProductState2" class="custom-control-label text-sm">다운로드대기</label>
                                 </div>
                             </div>
                         </div>
@@ -155,32 +163,32 @@
                             </div>
                             <div class="form-group col-1">
                                 <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="customRadio1" name="customRadio">
-                                    <label for="customRadio1" class="custom-control-label">전체</label>
+                                    <input class="custom-control-input" type="radio" id="rdoShareType0" name="rdoShareType" value="-1" checked>
+                                    <label for="rdoShareType0" class="custom-control-label">전체</label>
                                 </div>
                             </div>
                             <div class="form-group col-1">
                                 <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio" checked>
-                                    <label for="customRadio2" class="custom-control-label">공개</label>
+                                    <input class="custom-control-input" type="radio" id="rdoShareType2" name="rdoShareType" value="1" >
+                                    <label for="rdoShareType2" class="custom-control-label">공개</label>
                                 </div>
                             </div>
                             <div class="form-group col-1">
                                 <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio" checked>
-                                    <label for="customRadio2" class="custom-control-label">비공개</label>
+                                    <input class="custom-control-input" type="radio" id="rdoShareType1" name="rdoShareType" value="0">
+                                    <label for="rdoShareType1" class="custom-control-label">비공개</label>
                                 </div>
                             </div>
                             <div class="form-group col-1">
                                 <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio" checked>
-                                    <label for="customRadio2" class="custom-control-label">멤버공유</label>
+                                    <input class="custom-control-input" type="radio" id="rdoShareType3" name="rdoShareType" value="2">
+                                    <label for="rdoShareType3" class="custom-control-label">멤버공유</label>
                                 </div>
                             </div>
                             <div class="form-group col-1">
                                 <div class="custom-control custom-checkbox">
-                                    <input class="custom-control-input" type="checkbox" id="customCheckbox1" value="option1">
-                                    <label for="customCheckbox1" class="custom-control-label">내상품</label>
+                                    <input class="custom-control-input" type="checkbox" id="chkMyProduct" name="chkMyProduct" value="1">
+                                    <label for="chkMyProduct" class="custom-control-label">내상품</label>
                                 </div>
                             </div>
                         </div>
@@ -190,54 +198,44 @@
                             </div>
                             <div class="form-group col-1">
                                 <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="customRadio1" name="customRadio">
-                                    <label for="customRadio1" class="custom-control-label">전체</label>
+                                    <input class="custom-control-input" type="radio" id="rdoMarketRegProduct0" name="rdoMarketRegProduct" value="-1" checked>
+                                    <label for="rdoMarketRegProduct0" class="custom-control-label">전체</label>
                                 </div>
                             </div>
                             <div class="form-group col-1">
                                 <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio" checked>
-                                    <label for="customRadio2" class="custom-control-label">등록상품</label>
+                                    <input class="custom-control-input" type="radio" id="rdoMarketRegProduct1" name="rdoMarketRegProduct" value="1">
+                                    <label for="rdoMarketRegProduct1" class="custom-control-label">등록상품</label>
                                 </div>
                             </div>
                             <div class="form-group col-1">
                                 <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio" checked>
-                                    <label for="customRadio2" class="custom-control-label">미등록상품</label>
+                                    <input class="custom-control-input" type="radio" id="rdoMarketRegProduct2" name="rdoMarketRegProduct" value="0">
+                                    <label for="rdoMarketRegProduct2" class="custom-control-label">미등록상품</label>
                                 </div>
                             </div>
                             <div class="form-group col-1">
                                 <div class="input-group">
-                                    <select class="custom-select form-control-border custom-select-sm" name="selCategoryName4" id="selCategoryName4">
-                                        <option value="0">==쇼핑몰 선택==</option>
-                                        @foreach ($categories_4 as $category_4)
-                                        <option value="{{$category_4->nIdx}}" >{{$category_4->strCategoryName}}</option>
+                                    <select class="custom-select form-control-border custom-select-sm" name="selMarket" id="selCategoryName4">
+                                        <option value="">==마켓 선택==</option>
+                                        @foreach ($markets as $market)
+                                        <option value="{{$market->strMarketCode}}" >{{$market->strMarketName}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group col-1">
                                 <div class="input-group">
-                                    <select class="custom-select form-control-border custom-select-sm" name="selCategoryName4" id="selCategoryName4">
-                                        <option value="0">==쇼핑몰 아이디 선택==</option>
-                                        @foreach ($categories_4 as $category_4)
-                                        <option value="{{$category_4->nIdx}}" >{{$category_4->strCategoryName}}</option>
+                                    <select class="custom-select form-control-border custom-select-sm" name="selMarketAccount" id="selCategoryName4">
+                                        <option value="">==선택==</option>
+                                        @foreach ($marketAccounts as $account)
+                                        <option value="{{$account->nIdx}}" >{{$account->strAccountId}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-1">
-                                <label class="float-right">검색항목:</label>
-                            </div>
-                            <div class="col-sm-2">
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-sm-9">
-                                <a class="btn bg-info btn-sm float-right">
+                            <div class="col">
+                                <a class="btn bg-info btn-sm float-right btnSearchData">
                                     <i class="fas fa-search"></i>
                                     Search
                                 </a>
@@ -287,21 +285,19 @@
                             <div class="tab-pane fade show active" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
                                 <form id="divProductForm">
                                     <div class="card-body p-0" >
-                                        <table id="example" class="table table-striped projects dataTable no-footer dtr-inline" cellspacing="0" width="100%">
+                                        <table id="productTable" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
-                                                    <th><input type="checkbox" name="select_all" value="1" id="select_all"></th>
-                                                    <th>상품정보</th>
-                                                    <th></th>
-                                                    <th>등록마켓관리</th>
-                                                    <th>공급가/판매가</th>
-                                                    <th>마진</th>
+                                                    <th style="width:20px !important"><input type="checkbox" name="select_all" value="1" id="select_all"></th>
+                                                    <th style="width:50px !important">대표이미지</th>
+                                                    <th style="width:800px !important">상품정보</th>
+                                                    <th style="width:100px !important">등록마켓</th>
+                                                    <th style="width:40px !important">공급가/판매가</th>
+                                                    <th style="width:40px !important">마진</th>
                                                 </tr>
                                             </thead>
                                         </table>
                                     </div>
-
-                                    
                                 </form>
                             </div>
                         </div>
@@ -313,6 +309,8 @@
     </div>
     @section('script')
     <script>
+        var table = null;
+        tableTran  = $('#productTable');
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
@@ -320,7 +318,7 @@
                 }
             });
             //Date range picker
-            $('#reservation').daterangepicker({
+            $('#txtDateRange').daterangepicker({
                 locale: {
                     format: 'YYYY-MM-DD',
                     separator: " ~ "
@@ -347,8 +345,7 @@
                     endDate  : moment()
                 },
                 function (start, end) {
-                    //$('#reservation').val(start.format('YYYY-MM-DD') + ' ~ ' + end.format('YYYY-MM-DD'));
-                    $('#reservation').daterangepicker({
+                    $('#txtDateRange').daterangepicker({
                         locale: {
                             format: 'YYYY-MM-DD',
                             separator: " ~ "
@@ -359,29 +356,41 @@
                 }
             );
 
-            var table = $('#example').DataTable({
-                stateSave: true,
+            table = tableTran.DataTable({
                 processing: true,
                 serverSide: true,
+                searching: false,
                 scrollY: "400px",
-                //ajax: "{{ route('product.SellTargetManage') }}",
                 ajax: {
                     url: "{{ route('product.SellTargetManage') }}",
                     data: function ( d ) {
-                        d.daterange = $('#reservation').val();
-                        d.comecode = $('#reservation').val();
+                        d.searchWord = $('#txtSearchWord').val();
+                        d.daterange = $('#txtDateRange').val();
+                        d.selCome = $('#selComeName option:selected').val();
+                        d.category1 = $('#selCategoryName1 option:selected').val();
+                        d.category2 = $('#selCategoryName2 option:selected').val();
+                        d.category3 = $('#selCategoryName3 option:selected').val();
+                        d.category4 = $('#selCategoryName4 option:selected').val();
+                        d.categoryName = $('#txtCategoryName').val();
+                        d.productState = $("input[name='rdoProductState']:checked").val();
+                        d.shareType = $("input[name='rdoShareType']:checked").val();
+                        d.marketRegProduct = $("input[name='rdoMarketRegProduct']:checked").val();
+                        d.market = $('#selMarket option:selected').val();
+                        d.marketAccount = $('#selMarketAccount option:selected').val();
+                        d.myProduct = $("#chkMyProduct").attr("checked") ? 1 : 0;
                     }
                 },
                 columns: [
-                    {data: 'check', name: 'check', orderable: false},
+                    {data: 'check', name: 'check', orderable : false},
                     {data: 'mainImage', name: 'mainImage'},
                     {data: 'productInfo', name: 'productInfo'},
-                    {data: 'marketInfo', name: 'marketInfo'},
-                    {data: 'priceInfo', name: 'priceInfo'},
-                    {data: 'marginInfo', name: 'marginInfo'},
+                    {data: 'marketInfo', name: 'marketInfo', className: "text-center"},
+                    {data: 'priceInfo', name: 'priceInfo', className: "text-right"},
+                    {data: 'marginInfo', name: 'marginInfo', className: "text-right"},
                 ],
-                responsive: true, lengthChange: true, autoWidth: false
-            });
+                responsive: true, lengthChange: true,
+                buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#productTable_wrapper .col-md-6:eq(0)');
             
             //var allPages = table.allPages();
 
@@ -395,6 +404,7 @@
             // })
             // Handle click on "Select all" control
             $('#select_all').on('click', function(){
+                var table = $('#productTable').DataTable(); 
                 // Get all rows with search applied
                 var rows = table.rows({ 'search': 'applied' }).nodes();
                 // Check/uncheck checkboxes for all rows in the table
@@ -402,7 +412,7 @@
             });
 
             // Handle click on checkbox to set state of "Select all" control
-            $('#example tbody').on('change', 'input[type="checkbox"]', function(){
+            $('#productTable tbody').on('change', 'input[type="checkbox"]', function(){
                 // If checkbox is not checked
                 if(!this.checked){
                     var el = $('#select_all').get(0);
@@ -439,7 +449,7 @@
 
             $('body').on('click', '.btnAddMarketProduct', function () {
                 var form = $('#divProductForm');
-
+                var table = $('#productTable').DataTable(); 
                 // Iterate over all checkboxes in the table
                 table.$('input[type="checkbox"]').each(function(){
                     // If checkbox doesn't exist in DOM
@@ -479,6 +489,12 @@
                     }
                 });
                 
+            });
+            $('body').on('click', '.btnSearchData', function (e) {
+                //table.reload();
+                var table = $('#productTable').DataTable(); 
+                table.draw();
+                e.preventDefault();
             });
         });	  
     </script>

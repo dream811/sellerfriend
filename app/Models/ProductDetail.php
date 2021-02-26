@@ -11,7 +11,7 @@ class ProductDetail extends Model
     protected $table = 'tb_product_details';
     protected $primaryKey = 'nIdx';
     public $timestamps = false;
-    protected $fillable = ['nIdx', 'nProductIdx', 'nBasePriceType', 'nBasePrice', 'nCountryShippingCostType', 'nCountryShippingCost', 'nWorldShippingCostType', 'nWorldShippingCost', 'nWeightType', 'nWeight', 'bAdditionalOption1', 'bAdditionalOption2', 'bAdditionalOption3', 'bAdditionalOption4', 'nMultiPriceOptionType', 'blobNote', 'bIsDel'];
+    protected $fillable = ['nIdx', 'nProductIdx', 'strBasePriceType', 'nBasePrice', 'strCountryShippingCostType', 'nCountryShippingCost', 'strWorldShippingCostType', 'nWorldShippingCost', 'strWeightType', 'nWeight', 'bAdditionalOption1', 'bAdditionalOption2', 'bAdditionalOption3', 'bAdditionalOption4', 'nMultiPriceOptionType', 'nMarketPrice', 'nMarginPercent', 'nMarginPrice', 'bIsDel'];
     public function product()
     {
         return $this->belongsTo(Product::class, 'nProductIdx', 'nIdx');

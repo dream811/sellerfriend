@@ -33,17 +33,17 @@
                     <div class="card-body">
                         <div class="tab-content" id="custom-tabs-three-tabContent">
                             <div class="tab-pane fade show active" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
-                                <form method="POST" action="{{route('scratch.ProductScrap')}}">
+                                <form method="POST" id="frmScrap" action="{{route('scratch.ProductScrap')}}">
                                 @csrf
                                     <div class="form-group row col-12">
                                         <label for="txtScrapURL">대상URL</label>
                                         <div class="input-group input-group-sm">
-                                            <input type="url" class="form-control" name="txtScrapURL" id="txtScrapURL" value="http://www.tmall.asfasdfdasf" placeholder="1688, Taobao의 상품을 URL을 붙여넣기(Ctrl+V)해 주세요.">
+                                            <input type="url" class="form-control" name="txtScrapURL" id="txtScrapURL" value="" placeholder="Tmall, Taobao의 상품을 URL을 붙여넣기(Ctrl+V)해 주세요.">
                                             <span class="input-group-append">
-                                                <button type="button" class="btn btn-danger btn-flat">상품수집</button>
+                                                <button type="button" class="btn btn-danger btn-flat btnScrapProduct">상품수집</button>
                                             </span>
                                             <span class="input-group-append">
-                                                <button type="submit" class="btn btn-warning ">보관</button>
+                                                <div class="btn btn-warning btnSaveProduct">보관</div>
                                             </span>
                                         </div>
                                     </div>
@@ -55,7 +55,7 @@
                                                     <select class="custom-select form-control-border" name="selComeName" id="selComeName">
                                                         <option value="0">==출항코드==</option>
                                                         @foreach ($comes as $come)
-                                                        <option value="{{$come->nIdx}}" >[{{$come->strComeCode}}] {{$come->strComeName}}</option>
+                                                        <option value="{{$come->strComeCode}}" >[{{$come->strComeCode}}] {{$come->strComeName}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -103,7 +103,7 @@
                                                     <select class="custom-select form-control-border" name="selCategoryName1" id="selCategoryName1">
                                                         <option value="0">카테고리 1</option>
                                                         @foreach ($categories_1 as $category_1)
-                                                        <option value="{{$category_1->nIdx}}" >{{$category_1->strCategoryName}}</option>
+                                                        <option value="{{$category_1->strCategoryTree}}" >{{$category_1->strCategoryName}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -116,7 +116,7 @@
                                                     <select class="custom-select form-control-border" name="selCategoryName2" id="selCategoryName2">
                                                         <option value="0">카테고리 2</option>
                                                         @foreach ($categories_2 as $category_2)
-                                                        <option value="{{$category_2->nIdx}}" >{{$category_2->strCategoryName}}</option>
+                                                        <option value="{{$category_2->strCategoryTree}}" >{{$category_2->strCategoryName}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -129,7 +129,7 @@
                                                     <select class="custom-select form-control-border" name="selCategoryName3" id="selCategoryName3">
                                                         <option value="0">카테고리 3</option>
                                                         @foreach ($categories_3 as $category_3)
-                                                        <option value="{{$category_3->nIdx}}" >{{$category_3->strCategoryName}}</option>
+                                                        <option value="{{$category_3->strCategoryTree}}" >{{$category_3->strCategoryName}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -142,7 +142,7 @@
                                                     <select class="custom-select form-control-border" name="selCategoryName4" id="selCategoryName4">
                                                         <option value="0">카테고리 4</option>
                                                         @foreach ($categories_4 as $category_4)
-                                                        <option value="{{$category_4->nIdx}}" >{{$category_4->strCategoryName}}</option>
+                                                        <option value="{{$category_4->strCategoryTree}}" >{{$category_4->strCategoryName}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -174,11 +174,11 @@
                                     </div>
                                     <div class="form-group row col-12">
                                         <label for="txtChMainName">상품명(CN)</label>
-                                        <input type="text" class="form-control form-control-sm" name="txtChMainName" id="txtChMainName" placeholder="" value="{{$strChMainName}}">
+                                        <input type="text" class="form-control form-control-sm" name="txtChMainName" id="txtChMainName" placeholder="" value="">
                                     </div>
                                     <div class="form-group row col-12">
                                         <label for="txtKrMainName">상품명(KR)</label>
-                                        <input type="text" class="form-control form-control-sm" name="txtKrMainName" id="txtKrMainName" value="{{$strKrMainName}}" placeholder="">
+                                        <input type="text" class="form-control form-control-sm" name="txtKrMainName" id="txtKrMainName" value="" placeholder="">
                                     </div>
                                     <div class="row col-12">
                                         <label>금액</label>
@@ -190,8 +190,8 @@
                                                 <div class="input-group input-group-sm">
                                                     <select class="custom-select form-control-border" name="selBasePriceType" id="selBasePriceType">
                                                         <option value="0">통화</option>
-                                                        @foreach ($basePriceTypes as $basePriceType)
-                                                        <option value="{{$basePriceType}}" >{{$basePriceType}}</option>
+                                                        @foreach ($moneyTypes as $moneyType)
+                                                        <option value="{{$moneyType->strMoneyCode }}" >{{$moneyType->strMoneyName}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -200,7 +200,7 @@
                                         <div class="col-sm-1">
                                             <div class="form-group">
                                                 <code style=""><br></code>
-                                                <input type="number" class="form-control form-control-sm" id="txtBasePrice" name="txtBasePrice" placeholder="">
+                                                <input type="number" class="form-control form-control-sm" min="0" value="0" id="txtBasePrice" name="txtBasePrice" placeholder="">
                                             </div>
                                         </div>
                                         <div class="col-sm-1">
@@ -209,8 +209,8 @@
                                                 <div class="input-group input-group-sm">
                                                     <select class="custom-select form-control-border" name="selCountryShippingCostType" id="selCountryShippingCostType">
                                                         <option value="0">통화</option>
-                                                        @foreach ($countryShippingCostTypes as $countryShippingCostType)
-                                                        <option value="{{$countryShippingCostType}}" >{{$countryShippingCostType}}</option>
+                                                        @foreach ($moneyTypes as $moneyType)
+                                                        <option value="{{$moneyType->strMoneyCode }}" >{{$moneyType->strMoneyName}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -219,7 +219,7 @@
                                         <div class="col-sm-1">
                                             <div class="form-group">
                                                 <code style=""><br></code>
-                                                <input type="number" class="form-control form-control-sm" id="txtCountryShippingCost" name="txtCountryShippingCost" placeholder="">
+                                                <input type="number" class="form-control form-control-sm" min="0" value="0" id="txtCountryShippingCost" name="txtCountryShippingCost" placeholder="">
                                             </div>
                                         </div>
                                         <div class="col-sm-1">
@@ -228,8 +228,8 @@
                                                 <div class="input-group input-group-sm">
                                                     <select class="custom-select form-control-border" name="selWorldShippingCostType" id="selWorldShippingCostType">
                                                         <option value="0">통화</option>
-                                                        @foreach ($worldShippingCostTypes as $worldShippingCostType)
-                                                        <option value="{{$worldShippingCostType}}" >{{$worldShippingCostType}}</option>
+                                                        @foreach ($moneyTypes as $moneyType)
+                                                        <option value="{{$moneyType->strMoneyCode }}" >{{$moneyType->strMoneyName}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -238,7 +238,7 @@
                                         <div class="col-sm-1">
                                             <div class="form-group">
                                                 <code style=""><br></code>
-                                                <input type="number" class="form-control form-control-sm" name="txtWorldShippingCost" id="txtWorldShippingCost" placeholder="">
+                                                <input type="number" class="form-control form-control-sm" min="0" value="6000" name="txtWorldShippingCost" id="txtWorldShippingCost" placeholder="">
                                             </div>
                                         </div>
                                     </div>
@@ -246,7 +246,7 @@
                                         <div class="col-sm-1">
                                             <div class="form-group">
                                                 <label for="scrapURL">무게</label>
-                                                <input type="number" class="form-control form-control-sm" name="txtWeight" id="txtWeight" placeholder="">
+                                                <input type="number" class="form-control form-control-sm" min="0" value="0" step="0.1" name="txtWeight" id="txtWeight" placeholder="">
                                             </div>
                                         </div>
                                         <div class="col-sm-1">
@@ -256,7 +256,7 @@
                                                     <select class="custom-select form-control-border" name="selWeightType" id="selWeightType">
                                                         <option  value="0">무게</option>
                                                         @foreach ($weightTypes as $weightType)
-                                                        <option value="{{$weightType}}" >{{$weightType}}</option>
+                                                        <option value="{{$weightType->strWeightCode}}" >{{$weightType->strWeightName}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -303,7 +303,7 @@
                                     </div>
                                     <div class="form-group row col-12">
                                         <label for="txtKeyword">키워드</label>
-                                        <input type="text" class="form-control" name="txtKeyword" id="txtKeyword" placeholder="">
+                                        <input type="text" class="form-control" name="txtKeyword" id="txtKeyword" placeholder=",으로 구분하여 입력해주세요">
                                     </div>
                                     <div class="form-group row col-12">
                                         <div class="input-group">
@@ -312,13 +312,13 @@
                                                 <label for="rdoMultiPriceOptionType1" class="custom-control-label">다중가격사용안함</label>
                                             </div>
                                             <div class="custom-control custom-radio col-2">
-                                                <input class="custom-control-input" type="radio" id="rdoMultiPriceOptionType2" name="rdoMultiPriceOptionType" value="1">
+                                                <input class="custom-control-input" type="radio" id="rdoMultiPriceOptionType2" name="rdoMultiPriceOptionType" value="1" checked>
                                                 <label for="rdoMultiPriceOptionType2" class="custom-control-label">다중가격사용</label>
                                             </div>
-                                            <div class="custom-control custom-radio col-2">
+                                            {{-- <div class="custom-control custom-radio col-2">
                                                 <input class="custom-control-input" type="radio" id="rdoMultiPriceOptionType3" name="rdoMultiPriceOptionType" value="2" checked="">
                                                 <label for="rdoMultiPriceOptionType3" class="custom-control-label">멤버공유</label>
-                                            </div>
+                                            </div> --}}
                                             {{-- <div class="btn-group col-2">
                                                 <button type="button" class="btn btn-info btn-flat">
                                                 숫자
@@ -363,129 +363,69 @@
                                                 height: 50%;
                                             }
                                         </style>
-                                        <table class="table table-head-fixed table-bordered text-nowrap subItemsTable">
-                                            <thead>
-                                                <tr>
-                                                    <th>옵션사진</th>
-                                                    <th>컬러/패턴</th>
-                                                    <th>사이즈</th>
-                                                    <th style="width:20px;!important">옵션원가<br>(CNY)</th>
-                                                    <th style="width:20px;">상품원가</th>
-                                                    <th style="width:20px;">판매가</th>
-                                                    <th style="width:20px;">무게</th>
-                                                    <th style="width:20px;">삭제</th>
+                                        <table class="table table-bordered text-nowrap table-sm subItemsTable">
+                                            <thead class="thead-dark">
+                                                <tr class="thead-dark">
+                                                    <th style="width:20px !important; text-align:center; vertical-align:center;">옵션사진</th>
+                                                    <th style="text-align: center !important;">컬러/패턴</th>
+                                                    <th style="text-align: center !important;">사이즈</th>
+                                                    <th style="width:20px !important; text-align: center;">옵션원가<br>(CNY)</th>
+                                                    <th style="width:20px; text-align: center;">상품원가</th>
+                                                    <th style="width:20px ">판매가</th>
+                                                    <th style="width:20px ">무게</th>
+                                                    <th style="width:20px ">삭제</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr id="0">
-                                                    <td class="p-0 m-0" style="width: 3rem">
-                                                        <img style="width: 3rem;" class="table-product-image p-0 m-0" src="{{asset('assets/images/product/image.jpg')}}">
-                                                        <input class="p-0" name="txtSubItemImage[]" id="txtSubItemImage[]" type="hidden" value="{{asset('assets/images/product/image.jpg')}}">
-                                                    </td>
-                                                    <td>
-                                                        <input class="p-0" name="txtSubItemKrColorPattern[]" id="txtSubItemKrColorPattern" style="width:100%" type="text" value="네이비 블루">
-                                                        <br>
-                                                        <input class="p-0" name="txtSubItemChColorPattern[]" id="txtSubItemChColorPattern" style="width:100%" type="hidden" value="藏青色">
-                                                        <span name="spnSubItemChColorPattern" id="spnSubItemChColorPattern" >藏青色</span>
-                                                    </td>
-                                                    <td>
-                                                        <input class="p-0" name="txtSubItemKrSize[]" id="txtSubItemKrSize" style="width:100%" type="text" value="S">
-                                                        <br>
-                                                        <input class="p-0" name="txtSubItemChSize[]" id="txtSubItemChSize" style="width:100%" type="hidden" value="S">
-                                                        <span>S</span>
-                                                    </td>
-                                                    <td style="width:70px !important" >
-                                                        <input style="width:100% !important" name="txtSubItemOptionPrice[]" id="txtSubItemOptionPrice" class="p-0" type="text" value="497.50">
-                                                    </td>
-                                                    <td style="width:70px !important" >
-                                                        <input style="width:100% !important" name="txtSubItemBasePrice[]" id="txtSubItemBasePrice" class="p-0" type="text" value="95600">
-                                                    </td>
-                                                    <td style="width:70px !important" >
-                                                        <input style="width:100% !important" name="txtSubItemSalePrice[]" id="txtSubItemSalePrice" class="p-0" type="text" value="136600">
-                                                    </td>
-                                                    <td style="width:70px !important" >
-                                                        <input style="width:100% !important" name="txtSubItemWeight[]" id="txtSubItemWeight" class="p-0" type="text" value="1">
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <a href="javascript:void(0);"  data-id="0" class="btn btn-danger btn-sm btnDelItem">
-                                                            <i class="far fa-trash-alt"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <tr id="1">
-                                                    <td class="p-0 m-0" style="width: 3rem">
-                                                        <img style="width: 3rem;" class="table-product-image p-0 m-0" src="{{asset('assets/images/product/image.jpg')}}">
-                                                        <input class="p-0" name="txtSubItemImage[]" id="txtSubItemImage[]" type="hidden" value="{{asset('assets/images/product/image.jpg')}}">
-                                                    </td>
-                                                    <td>
-                                                        <input class="p-0" name="txtSubItemKrColorPattern[]" id="txtSubItemKrColorPattern" style="width:100%" type="text" value="네이비 블루">
-                                                        <br>
-                                                        <input class="p-0" name="txtSubItemChColorPattern[]" id="txtSubItemChColorPattern" style="width:100%" type="hidden" value="藏青色">
-                                                        <span name="spnSubItemChColorPattern" id="spnSubItemChColorPattern" >藏青色</span>
-                                                    </td>
-                                                    <td>
-                                                        <input class="p-0" name="txtSubItemKrSize[]" id="txtSubItemKrSize" style="width:100%" type="text" value="S">
-                                                        <br>
-                                                        <input class="p-0" name="txtSubItemChSize[]" id="txtSubItemChSize" style="width:100%" type="hidden" value="S">
-                                                        <span>S</span>
-                                                    </td>
-                                                    <td style="width:70px !important" >
-                                                        <input style="width:100% !important" name="txtSubItemOptionPrice[]" id="txtSubItemOptionPrice" class="p-0" type="text" value="497.50">
-                                                    </td>
-                                                    <td style="width:70px !important" >
-                                                        <input style="width:100% !important" name="txtSubItemBasePrice[]" id="txtSubItemBasePrice" class="p-0" type="text" value="95600">
-                                                    </td>
-                                                    <td style="width:70px !important" >
-                                                        <input style="width:100% !important" name="txtSubItemSalePrice[]" id="txtSubItemSalePrice" class="p-0" type="text" value="136600">
-                                                    </td>
-                                                    <td style="width:70px !important" >
-                                                        <input style="width:100% !important" name="txtSubItemWeight[]" id="txtSubItemWeight" class="p-0" type="text" value="1">
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <a href="javascript:void(0);" data-id="1" class="btn btn-danger btn-sm btnDelItem">
-                                                            <i class="far fa-trash-alt"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
+                                                
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="row">
-                                        <div class="col-12 product-image-thumbs">
-                                            <div class="product-image-thumb img-wrapper">
-                                                <img class="img-responsive" src="{{asset('assets/images/product/image.jpg')}}" alt="Product Image" />
-                                                <input type="hidden" name="txtImage[]" value="{{asset('assets/images/product/image.jpg')}}"/>
-                                                <div class="img-overlay">
-                                                    <button class="btn btn-xs btn-success"><span style="font-size:10px;">대표</span></button>
-                                                    <button class="btn btn-xs btn-success"><span style="font-size:10px;">첨부1</span></button>
-                                                    <button class="btn btn-xs btn-success"><span style="font-size:10px;">첨부2</span></button>
+                                        <div class="col-12 product-image-thumbs" id="divImageContainer">
+                                            <div class="p-0 product-image-thumb img-wrapper">
+                                                <img class="img-responsive" id="img_0" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image0" alt="Product Image" />
+                                                <input type="hidden" id="hid_0" name="txtImage[]" value=""/>
+                                                <div class="img-overlay mt-5">
+                                                    <div class="btn btn-xs btn-danger btnMainImage" data-id="0"><span style="font-size:10px;">대표</span></div>
+                                                    <div class="btn btn-xs btn-success btnSubImage1" data-id="0"><span style="font-size:10px;">첨부1</span></div>
+                                                    <div class="btn btn-xs btn-success btnSubImage2" data-id="0"><span style="font-size:10px;">첨부2</span></div>
                                                 </div>
                                             </div>
-                                            <div class="product-image-thumb img-wrapper">
-                                                <img class="img-responsive" src="{{asset('assets/images/product/image.jpg')}}" alt="Product Image" />
-                                                <input type="hidden" name="txtImage[]" value="{{asset('assets/images/product/image.jpg')}}"/>
-                                                <div class="img-overlay">
-                                                    <button class="btn btn-xs btn-success"><span style="font-size:10px;">대표</span></button>
-                                                    <button class="btn btn-xs btn-success"><span style="font-size:10px;">첨부1</span></button>
-                                                    <button class="btn btn-xs btn-success"><span style="font-size:10px;">첨부2</span></button>
+                                            <div class="p-0 product-image-thumb img-wrapper">
+                                                <img class="img-responsive" id="img_1" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt="Product Image" />
+                                                <input type="hidden" id="hid_1" name="txtImage[]" value=""/>
+                                                <div class="img-overlay mt-5">
+                                                    <div class="btn btn-xs btn-danger btnMainImage" data-id="1"><span style="font-size:10px;">대표</span></div>
+                                                    <div class="btn btn-xs btn-success btnSubImage1" data-id="1"><span style="font-size:10px;">첨부1</span></div>
+                                                    <div class="btn btn-xs btn-success btnSubImage2" data-id="1"><span style="font-size:10px;">첨부2</span></div>
                                                 </div>
                                             </div>
-                                            <div class="product-image-thumb img-wrapper">
-                                                <img class="img-responsive" src="{{asset('assets/images/product/image.jpg')}}" alt="Product Image" />
-                                                <input type="hidden" name="txtImage[]" value="{{asset('assets/images/product/image.jpg')}}"/>
-                                                <div class="img-overlay">
-                                                    <button class="btn btn-xs btn-success"><span style="font-size:10px;">대표</span></button>
-                                                    <button class="btn btn-xs btn-success"><span style="font-size:10px;">첨부1</span></button>
-                                                    <button class="btn btn-xs btn-success"><span style="font-size:10px;">첨부2</span></button>
+                                            <div class="p-0 product-image-thumb img-wrapper">
+                                                <img class="img-responsive" id="img_2" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image2" alt="Product Image" />
+                                                <input type="hidden" id="hid_2" name="txtImage[]" value=""/>
+                                                <div class="img-overlay mt-5">
+                                                    <div class="btn btn-xs btn-danger btnMainImage" data-id="2"><span style="font-size:10px;">대표</span></div>
+                                                    <div class="btn btn-xs btn-success btnSubImage1" data-id="2"><span style="font-size:10px;">첨부1</span></div>
+                                                    <div class="btn btn-xs btn-success btnSubImage2" data-id="2"><span style="font-size:10px;">첨부2</span></div>
                                                 </div>
                                             </div>
-                                            <div class="product-image-thumb img-wrapper">
-                                                <img class="img-responsive" src="{{asset('assets/images/product/image.jpg')}}" alt="Product Image" />
-                                                <input type="hidden" name="txtImage[]" value="{{asset('assets/images/product/image.jpg')}}"/>
-                                                <div class="img-overlay">
-                                                    <button class="btn btn-xs btn-success"><span style="font-size:10px;">대표</span></button>
-                                                    <button class="btn btn-xs btn-success"><span style="font-size:10px;">첨부1</span></button>
-                                                    <button class="btn btn-xs btn-success"><span style="font-size:10px;">첨부2</span></button>
+                                            <div class="p-0 product-image-thumb img-wrapper">
+                                                <img class="img-responsive" id="img_3" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image3" alt="Product Image" />
+                                                <input type="hidden" id="hid_3" name="txtImage[]" value=""/>
+                                                <div class="img-overlay mt-5">
+                                                    <div class="btn btn-xs btn-danger btnMainImage" data-id="3"><span style="font-size:10px;">대표</span></div>
+                                                    <div class="btn btn-xs btn-success btnSubImage1" data-id="3"><span style="font-size:10px;">첨부1</span></div>
+                                                    <div class="btn btn-xs btn-success btnSubImage2" data-id="3"><span style="font-size:10px;">첨부2</span></div>
+                                                </div>
+                                            </div>
+                                            <div class="p-0 product-image-thumb img-wrapper">
+                                                <img class="img-responsive" id="img_4" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image4" alt="Product Image" />
+                                                <input type="hidden" id="hid_4" name="txtImage[]" value=""/>
+                                                <div class="img-overlay mt-5">
+                                                    <div class="btn btn-xs btn-danger btnMainImage" data-id="4"><span style="font-size:10px;">대표</span></div>
+                                                    <div class="btn btn-xs btn-success btnSubImage1" data-id="4"><span style="font-size:10px;">첨부1</span></div>
+                                                    <div class="btn btn-xs btn-success btnSubImage2" data-id="4"><span style="font-size:10px;">첨부2</span></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -510,105 +450,193 @@
     
     @section('script')
     <script>
+    $(document).on({
+        ajaxStart: function(){
+            $("body").addClass("loading"); 
+        },
+        ajaxStop: function(){ 
+            $("body").removeClass("loading"); 
+        }    
+    });
     $(document).ready(function () {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        $( "#selBrandName" ).change(function() {
+            $('#txtBrandName').val($("#selBrandName  option:selected").html());
+        });
         $('#summernote').summernote({
             height: '300px',
         });
-        var html=`
-            <div style="text-align:center;"><div style="padding-bottom:20px;"><p>[조끼, S]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i1/1695868671/TB2Y.miaiGO.eBjSZFjXXcU9FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[조끼, M]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i1/1695868671/TB2Y.miaiGO.eBjSZFjXXcU9FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[조끼, L]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i1/1695868671/TB2Y.miaiGO.eBjSZFjXXcU9FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[조끼, XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i1/1695868671/TB2Y.miaiGO.eBjSZFjXXcU9FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[조끼, 2XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i1/1695868671/TB2Y.miaiGO.eBjSZFjXXcU9FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[조끼, 3XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i1/1695868671/TB2Y.miaiGO.eBjSZFjXXcU9FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠, S]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2D1IrX89J.eBjy0FoXXXyvpXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠, M]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2D1IrX89J.eBjy0FoXXXyvpXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠, L]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2D1IrX89J.eBjy0FoXXXyvpXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠, XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2D1IrX89J.eBjy0FoXXXyvpXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠, 2XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2D1IrX89J.eBjy0FoXXXyvpXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠, 3XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2D1IrX89J.eBjy0FoXXXyvpXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[소송, S]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2XUKkakWM.eBjSZFhXXbdWpXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[소송, M]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2XUKkakWM.eBjSZFhXXbdWpXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[소송, L]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2XUKkakWM.eBjSZFhXXbdWpXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[소송, XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2XUKkakWM.eBjSZFhXXbdWpXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[소송, 2XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2XUKkakWM.eBjSZFhXXbdWpXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[소송, 3XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2XUKkakWM.eBjSZFhXXbdWpXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[바지, S]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i1/1695868671/TB29pejaiGO.eBjSZFjXXcU9FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[바지, M]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i1/1695868671/TB29pejaiGO.eBjSZFjXXcU9FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[바지, L]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i1/1695868671/TB29pejaiGO.eBjSZFjXXcU9FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[바지, XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i1/1695868671/TB29pejaiGO.eBjSZFjXXcU9FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[바지, 2XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i1/1695868671/TB29pejaiGO.eBjSZFjXXcU9FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[바지, 3XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i1/1695868671/TB29pejaiGO.eBjSZFjXXcU9FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠 바지, S]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB21rSmaheK.eBjSZFuXXcT4FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠 바지, M]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB21rSmaheK.eBjSZFuXXcT4FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠 바지, L]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB21rSmaheK.eBjSZFuXXcT4FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠 바지, XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB21rSmaheK.eBjSZFuXXcT4FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠 바지, 2XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB21rSmaheK.eBjSZFuXXcT4FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠 바지, 3XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB21rSmaheK.eBjSZFuXXcT4FXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[조끼 바지, S]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2shClaX5N.eBjSZFvXXbvMFXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[조끼 바지, M]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2shClaX5N.eBjSZFvXXbvMFXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[조끼 바지, L]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2shClaX5N.eBjSZFvXXbvMFXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[조끼 바지, XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2shClaX5N.eBjSZFvXXbvMFXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[조끼 바지, 2XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2shClaX5N.eBjSZFvXXbvMFXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[조끼 바지, 3XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2shClaX5N.eBjSZFvXXbvMFXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠, 조끼 및 바지, S]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i3/1695868671/TB2vFynaoOO.eBjSZFLXXcxmXXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠, 조끼 및 바지, M]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i3/1695868671/TB2vFynaoOO.eBjSZFLXXcxmXXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠, 조끼 및 바지, L]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i3/1695868671/TB2vFynaoOO.eBjSZFLXXcxmXXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠, 조끼 및 바지, XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i3/1695868671/TB2vFynaoOO.eBjSZFLXXcxmXXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠, 조끼 및 바지, 2XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i3/1695868671/TB2vFynaoOO.eBjSZFLXXcxmXXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[셔츠, 조끼 및 바지, 3XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i3/1695868671/TB2vFynaoOO.eBjSZFLXXcxmXXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[정장 셔츠 조끼 바지, S]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i2/1695868671/TB2QXSmalyN.eBjSZFgXXXmGXXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[정장 셔츠 조끼 바지, M]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i2/1695868671/TB2QXSmalyN.eBjSZFgXXXmGXXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[정장 셔츠 조끼 바지, L]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i2/1695868671/TB2QXSmalyN.eBjSZFgXXXmGXXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[정장 셔츠 조끼 바지, XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i2/1695868671/TB2QXSmalyN.eBjSZFgXXXmGXXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[정장 셔츠 조끼 바지, 2XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i2/1695868671/TB2QXSmalyN.eBjSZFgXXXmGXXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[정장 셔츠 조끼 바지, 3XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i2/1695868671/TB2QXSmalyN.eBjSZFgXXXmGXXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[정장 조끼 셔츠 하프 스커트 바지, S]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2SLSgafOM.eBjSZFqXXculVXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[정장 조끼 셔츠 하프 스커트 바지, M]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2SLSgafOM.eBjSZFqXXculVXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[정장 조끼 셔츠 하프 스커트 바지, L]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2SLSgafOM.eBjSZFqXXculVXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[정장 조끼 셔츠 하프 스커트 바지, XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2SLSgafOM.eBjSZFqXXculVXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[정장 조끼 셔츠 하프 스커트 바지, 2XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2SLSgafOM.eBjSZFqXXculVXa_!!1695868671.jpg_600x600q90.jpg"></p></div><div style="padding-bottom:20px;"><p>[정장 조끼 셔츠 하프 스커트 바지, 3XL]</p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2SLSgafOM.eBjSZFqXXculVXa_!!1695868671.jpg_600x600q90.jpg"></p></div><p><img src="https://assets.alicdn.com/kissy/1.0.0/build/imglazyload/spaceball.gif"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i2/1695868671/TB23.IlXY1J.eBjSspnXXbUeXXa_!!1695868671.jpg"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i3/1695868671/TB26t.kX4aJ.eBjSsziXXaJ_XXa_!!1695868671.jpg"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2ykckX9iJ.eBjSszfXXa4bVXa_!!1695868671.jpg"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2OGakaiGO.eBjSZFjXXcU9FXa_!!1695868671.jpg"></p>
-            <p><img src="https://assets.alicdn.com/kissy/1.0.0/build/imglazyload/spaceball.gif"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i1/1695868671/TB2701.exTI8KJjSspiXXbM4FXa_!!1695868671.jpg"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i3/1695868671/TB2rJ9nafSM.eBjSZFNXXbgYpXa_!!1695868671.jpg"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i1/1695868671/TB2ji9pamiK.eBjSZFyXXaS4pXa_!!1695868671.jpg"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i3/1695868671/TB2SFWmakWM.eBjSZFhXXbdWpXa_!!1695868671.jpg"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i3/1695868671/TB2809nafSM.eBjSZFNXXbgYpXa_!!1695868671.jpg"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i2/1695868671/TB2rSuhahaK.eBjSZFwXXXjsFXa_!!1695868671.jpg"></p>
-            <p><img src="https://assets.alicdn.com/kissy/1.0.0/build/imglazyload/spaceball.gif"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i3/1695868671/TB2EQChajm2.eBjSZFtXXX56VXa_!!1695868671.jpg"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i1/1695868671/TB2rgqhafOM.eBjSZFqXXculVXa_!!1695868671.jpg"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i3/1695868671/TB2Kmuiak1M.eBjSZFFXXc3vVXa_!!1695868671.jpg"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i3/1695868671/TB2d6snX9qJ.eBjy1zbXXbx8FXa_!!1695868671.jpg"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i3/1695868671/TB2YpEnX9iJ.eBjSspiXXbqAFXa_!!1695868671.jpg"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2ZlgkX9iJ.eBjSszfXXa4bVXa_!!1695868671.jpg"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i2/1695868671/TB2.8kpX3SI.eBjy1XcXXc1jXXa_!!1695868671.jpg"></p>
-            <p><img src="https://assets.alicdn.com/kissy/1.0.0/build/imglazyload/spaceball.gif"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB2AGZmX4mJ.eBjy0FhXXbBdFXa_!!1695868671.jpg"></p>
-            <p><img src="https://img.alicdn.com/imgextra/i4/1695868671/TB22ywlXZeJ.eBjy0FiXXXqapXa_!!1695868671.jpg"></p></div>
-        `;
-        $('#summernote').summernote('code', html);
+        
+        $('#summernote').summernote('code', '');
         //delete account
         $('body').on('click', '.btnDelItem', function () {
-                var market_id = $(".subItemsTable tbody .selectedMarket").attr('id');
-                var account_id = $(this).attr('data-id');
-                $.get('operationOpenMarketManage/' + market_id +'/AccountDelete/' + account_id, function ({status, data}) {
-                    //$(".marketAccountsTable tbody tr").removeClass("selectedAccount");
-                    $(".subItemsTable tbody").find("#" + account_id).remove();
-                })
-            });	
+            var rowId = $(this).attr('data-id');
+
+            $(".subItemsTable tbody").find("#row_" + rowId).remove();
+        });
+        //	대표이미지 바꾸기
+        $('body').on('click', '.btnMainImage', function () {
+            var img_id = $(this).attr('data-id');
+            var oldMainImage = $('#img_0').attr('src');
+            $('#img_0').attr('src', $('#img_'+ img_id).attr('src'));
+            $('#hid_0').attr('src', $('#img_'+ img_id).attr('src'));
+            $('#img_' + img_id).attr('src', oldMainImage);
+            $('#hid_' + img_id).attr('src', oldMainImage);
+            return false;
+        });	
+        // 첨부이미지 1 바꾸기
+        $('body').on('click', '.btnSubImage1', function () {
+            var img_id = $(this).attr('data-id');
+            var oldSubImage = $('#img_1').attr('src');
+            $('#img_1').attr('src', $('#img_'+ img_id).attr('src'));
+            $('#hid_1').attr('src', $('#img_'+ img_id).attr('src'));
+            $('#img_' + img_id).attr('src', oldSubImage);
+            $('#hid_' + img_id).attr('src', oldSubImage);
+            return false;
+        });	
+        // 첨부이미지 2 바꾸기
+        $('body').on('click', '.btnSubImage2', function () {
+            var img_id = $(this).attr('data-id');
+            var oldSubImage = $('#img_2').attr('src');
+            $('#img_2').attr('src', $('#img_'+ img_id).attr('src'));
+            $('#hid_2').attr('src', $('#img_'+ img_id).attr('src'));
+            $('#img_' + img_id).attr('src', oldSubImage);
+            $('#hid_' + img_id).attr('src', oldSubImage);
+            return false;
+        });	
+        $('body').on('click', '.btnSaveProduct', function () {
+            var brandName1 = $('#selBrandName').val();
+            var brandName2 = $('#txtBrandName').val();
+            if($('#selComeName').val() == 0){
+                alert("집하지를 선택해주세요!");
+                return false;
+            }
+            if($('#selBrandName').val() == 0 && $('#txtBrandName').val().trim() == ""){
+                alert("브랜드를 입력해주세요!");
+                return false;
+            }
+            if($('#selCategoryName1').val() == 0 && $('#selCategoryName2').val() == 0 && $('#selCategoryName3').val() == 0 && $('#selCategoryName4').val() == 0 && $('#txtCategoryName').val().trim() == ""){
+                alert("카테고리를 입력해주세요!");
+                return false;
+            }
+            if($('#txtChMainName').val().trim() == ""){
+                alert("상품명(CN) 입력해주세요!");
+                return false;
+            }
+            if($('#txtKrMainName').val().trim() == ""){
+                alert("상품명(KR) 입력해주세요!");
+                return false;
+            }
+            if($('#txtBasePrice').val() == 0){
+                alert("상품원가를 입력해주세요!");
+                return false;
+            }
+            if($('#txtCountryShippingCost').val() == 0){
+                alert("내륙배송비를 입력해주세요!");
+                return false;
+            }
+            if($('#txtWorldShippingCost').val() == 0){
+                alert("국제배송비를 입력해주세요!");
+                return false;
+            }
+            if($('#txtWeight').val() == 0){
+                alert("무게를 입력해주세요!");
+                return false;
+            }
+            $('#frmScrap').submit();
+        });	
+        $('body').on('click', '.btnScrapProduct', function () {
+            var scrapURL = $("#txtScrapURL").val();
+            if(scrapURL == ""){
+                alert("URL을 입력해주세요!");
+                return false;
+            }
+            if(!scrapURL.includes("//detail.tmall.com") && !scrapURL.includes("//item.taobao.com") ){
+                alert("URL을 다시 확인해주세요!");
+                return false;
+            }
+            
+            var action = '/scratchProductScrap/scratch';// $("#manageMarketAccount").attr("action");
+                $.ajax({
+                    url: action,
+                    data: {scrapURL},
+                    type: "GET",
+                    dataType: 'json',
+                    success: function ({status, data}) {
+                        $("#txtBasePrice").val(data.price);
+                        $("#selBasePriceType").val('CNY');
+                        $("#selCountryShippingCostType").val('CNY');
+                        $("#selWorldShippingCostType").val('KRW');
+                        $("#selWeightType").val('kg');
+                        $("#txtChMainName").val(data.chMainName);
+                        $("#txtKrMainName").val(data.krMainName);
+                        $("#txtKeyword").val(data.keyword);
+                        $('.subItemsTable tbody').html('');
+                        data.items.forEach( (element, index) => {
+                            item =`<tr id="row_${index}">
+                                        <td class="p-0 m-0" style="width: 3rem">
+                                            <img style="width: 3rem;" class="table-product-image p-0 m-0" src="${element.image}">
+                                            <input class="p-0" name="txtSubItemImage[]" id="txtSubItemImage[]" type="hidden" value="${element.image}">
+                                        </td>
+                                        <td>
+                                            <input class="p-0" name="txtSubItemKrColorPattern[]" id="txtSubItemKrColorPattern_${index}" style="width:100%" type="text" value="${element.KrColorPattern}">
+                                            <br>
+                                            <input class="p-0" name="txtSubItemChColorPattern[]" id="txtSubItemChColorPattern_${index}" style="width:100%" type="hidden" value="${element.ChColorPattern}">
+                                            <span name="spnSubItemChColorPattern" id="spnSubItemChColorPattern_${index}">${element.ChColorPattern}</span>
+                                        </td>
+                                        <td>
+                                            <input class="p-0" name="txtSubItemKrSize[]" id="txtSubItemKrSize_${index}" style="width:100%" type="text" value="${element.KrSize}">
+                                            <br>
+                                            <input class="p-0" name="txtSubItemChSize[]" id="txtSubItemChSize_${index}" style="width:100%" type="hidden" value="${element.ChSize}">
+                                            <span>${element.KrSize}</span>
+                                        </td>
+                                        <td style="width:70px !important">
+                                            <input style="width:100% !important" name="txtSubItemOptionPrice[]" id="txtSubItemOptionPrice_${index}" class="p-0" type="text" value="${element.price}">
+                                        </td>
+                                        <td style="width:70px !important">
+                                            <input style="width:100% !important" name="txtSubItemBasePrice[]" id="txtSubItemBasePrice_${index}" class="p-0" type="text" value="${element.basePrice}">
+                                        </td>
+                                        <td style="width:70px !important">
+                                            <input style="width:100% !important" name="txtSubItemSalePrice[]" id="txtSubItemSalePrice_${index}" class="p-0" type="text" value="${element.salePrice}">
+                                        </td>
+                                        <td style="width:70px !important">
+                                            <input style="width:100% !important" name="txtSubItemWeight[]" id="txtSubItemWeight_${index}" class="p-0" type="text" value="${element.weight}">
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="javascript:void(0);" data-id="${index}" class="btn btn-danger btn-sm btnDelItem">
+                                                <i class="far fa-trash-alt"></i>
+                                            </a>
+                                        </td>
+                                    </tr>`;
+                            $('.subItemsTable tbody').append(item);
+                        });
+                        var imgItem = "";
+                        data.images.forEach( (element, index) => {
+                            imgItem +=`<div class="p-0 product-image-thumb img-wrapper">
+                                        <img class="img-responsive" src="${element}" id="img_${index}" alt="Product Image" />
+                                        <input type="hidden" name="txtImage[]" id="hid_${index}" value="${element}"/>
+                                        <div class="img-overlay mt-5">
+                                            <div class="btn btn-xs btn-danger btnMainImage" data-id="${index}"><span style="font-size:10px;">대표</span></div>
+                                            <div class="btn btn-xs btn-success btnSubImage1" data-id="${index}"><span style="font-size:10px;">첨부1</span></div>
+                                            <div class="btn btn-xs btn-success btnSubImage2" data-id="${index}"><span style="font-size:10px;">첨부2</span></div>
+                                        </div>
+                                    </div>`;
+                        });
+                        $('#divImageContainer').html(imgItem);
+                        $('#summernote').summernote('code', data.description);
+                    },
+                    error: function (data) {
+                        alert('스크래핑중 오류가 발생했습니다. 잠시후 다시 시도해주십시오.');
+                    }
+                });
+            });
     });
+    // Add remove loading class on body element based on Ajax request status
+    
     </script>        
     @endsection
 @endsection

@@ -32,4 +32,42 @@ class MarketSettingCoupang extends Model
         return $this->belongsTo(User::class, 'nUserId', 'id');
     }
 
+    public function topImage()
+    {
+        return $this->belongsTo(DocumentImage::class, 'nTopImageIdx', 'nIdx');
+    }
+
+    public function downImage()
+    {
+        return $this->belongsTo(DocumentImage::class, 'nDownImageIdx', 'nIdx');
+    }
+    public function requireDocument1()
+    {
+        return $this->belongsTo(DocumentImage::class, 'nRequireDocument1', 'nIdx');
+    }
+
+    public function requireDocument2()
+    {
+        return $this->belongsTo(DocumentImage::class, 'nRequireDocument2', 'nIdx');
+    }
+
+    public function requireDocument3()
+    {
+        return $this->belongsTo(DocumentImage::class, 'nRequireDocument3', 'nIdx');
+    }
+
+    public function requireDocument4()
+    {
+        return $this->belongsTo(DocumentImage::class, 'nRequireDocument4', 'nIdx');
+    }
+
+    public function requireDocument5()
+    {
+        return $this->belongsTo(DocumentImage::class, 'nRequireDocument5', 'nIdx');
+    }
+
+    public function requireDocument6()
+    {
+        return $this->belongsTo(DocumentImage::class, 'nRequireDocument6', 'nIdx');
+    }
 }

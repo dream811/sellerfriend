@@ -97,7 +97,7 @@ class PackingCompleteController extends Controller
                     ->addColumn('productInfo', function($row){
                         $element = '<ul class="list-inline" style="">';
                         $element .= '<li class="list-inline-item">
-                                    '.$row->nCategoryCode1.'>'.$row->nCategoryCode2.'>'.$row->nCategoryCode3.'>'.$row->nCategoryCode4.'
+                                    '.$row->strCategoryCode1.'>'.$row->strCategoryCode2.'>'.$row->strCategoryCode3.'>'.$row->strCategoryCode4.'
                                 </li><br>';
                         $element .= '<li class="list-inline-item">
                                     '.$row->strKrSubName.'

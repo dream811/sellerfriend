@@ -15,9 +15,10 @@ use App\Models\ProductDetail;
 use App\Models\Come;
 use App\Models\Brand;
 use App\Models\Category;
-use DataTables;
+use Yajra\DataTables\Facades\DataTables;
 use App\MyLibs\CoupangConnector;
 use DateTime;
+use PhpParser\Node\Stmt\Switch_;
 
 class SellTargetManageController extends Controller
 {
@@ -45,6 +46,11 @@ class SellTargetManageController extends Controller
                 ->orderBy('strComeCode')
                 ->get();
                 //dd($comes);
+        $markets = Market::where('bIsDel', 0)
+                ->get();
+        $marketAccounts = MarketAccount::where('bIsDel', 0)
+                ->where('nUserId', Auth::id())
+                ->get();
         $brands = Brand::where('bIsDel', 0)
                 ->orderBy('strBrandCode')
                 ->get();
@@ -56,7 +62,6 @@ class SellTargetManageController extends Controller
                 ->where('nCategoryType', 2)
                 ->orderBy('strCategoryName')
                 ->get();
-
         $categories_3 = Category::where('bIsDel', 0)
                 ->where('nCategoryType', 3)
                 ->orderBy('strCategoryName')
@@ -65,97 +70,202 @@ class SellTargetManageController extends Controller
                 ->where('nCategoryType', 4)
                 ->orderBy('strCategoryName')
                 ->get();
-        $shareType = "1";
-        $basePriceTypes= array('CNY', 'KRW', 'USD', 'JPY');
-        $countryShippingCostTypes= array('CNY', 'KRW', 'USD', 'JPY');
-        $worldShippingCostTypes= array('KRW');
-        $weightTypes= array('Kg');
+        
+        
 
         if ($request->ajax()) {
             $products = Product::where('bIsDel', 0)
                 ->where('nUserId', Auth::id())
-                ->where('nProductWorkProcess', 0)
+                ->where('nProductWorkProcess', 3)//디자인 검토 완료상품
                 ->orderBy('nIdx');
 
-            return Datatables::eloquent($products)
-                    ->addIndexColumn()
-                    ->addColumn('check', function($row){
-                        $check = '<input type="checkbox" name="chkProduct[]" onclick="" value="'.$row->nIdx.'">';
-                        return $check;
-                    })
-                    ->addColumn('action', function($row){
-                        $btn = '';
-                        return $btn;
-                    })
-                    ->addColumn('images', function($row){
-                        $btn = '<ul class="list-inline" style="width:100px;">';
-                        foreach ($row->productImages as $productImage) {
-                            $btn .= '<li class="list-inline-item">
-                                        <img alt="Avatar" class="table-avatar" src="'.$productImage->strURL.'">
-                                    </li>';
-                        }
-                        $btn .= '</ul>';
-                        return $btn;
-                    })
-                    ->addColumn('productInfo', function($row){
-                        $element = '<ul class="list-inline" style="">';
-                        $element .= '<li class="list-inline-item">
-                                    '.$row->nCategoryCode1.'>'.$row->nCategoryCode2.'>'.$row->nCategoryCode3.'>'.$row->nCategoryCode4.'
-                                </li><br>';
-                        $element .= '<li class="list-inline-item">
-                                    '.$row->strKrSubName.'
-                                </li>';
+            return Datatables::of($products)
+                ->addIndexColumn()
+                ->addColumn('check', function($row){
+                    $element = '<input type="checkbox" name="chkProduct[]" onclick="" value="'.$row->nIdx.'">';
+                    $shareTag = $row->nShareType != 2 ? '<span class="badge badge-danger">비공개</span>': '';
 
-                        $element .= '</ul>';
-                        return $element;
-                    })
-                    ->addColumn('priceInfo', function($row){
-                        $element = '<ul class="list-inline" style="width:100px;">';
-                        $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nBasePrice.'
+                    $element .= '<li class="font-weight-light list-inline-item">'.$shareTag.'</li><br>';
+                    return $element;
+                })
+                ->addColumn('images', function($row){
+                    $btn = '<ul class="list-inline" style="width:100px;">';
+                    foreach ($row->productImages as $productImage) {
+                        $btn .= '<li class="list-inline-item">
+                                    <img alt="Avatar" class="table-avatar" src="'.$productImage->strURL.'">
+                                </li>';
+                    }
+                    $btn .= '</ul>';
+                    return $btn;
+                })
+                ->addColumn('productInfo', function($row){
+                    $element = '<ul class="list-inline" style="">';
+                    $element .= '<li class="list-inline-item">'
+                                    .Category::where('strCategoryTree', $row->strCategoryCode1)->first()->strCategoryName.'>'
+                                    .Category::where('strCategoryTree', $row->strCategoryCode2)->first()->strCategoryName.'>'
+                                    .Category::where('strCategoryTree', $row->strCategoryCode3)->first()->strCategoryName.'>'
+                                    .Category::where('strCategoryTree', $row->strCategoryCode4)->first()->strCategoryName.
+                                '</li><br>';
+                    $element .= '<li class="font-weight-bold list-inline-item">
+                                    '.$row->strKrSubName.'
+                                </li><br>';
+                    $element .= '<li class="font-weight-light list-inline-item">
+                                    '.$row->strChSubName.'
+                                </li><br>';
+                    $productOptTag = $row->productDetail->nMultiPriceOptionType==1 ? '<span class="badge badge-danger mr-1">다중가격</span>': '';
+                    $productOptTag .= $row->productDetail->bAdditionalOption1==1 ? '<span class="badge badge-primary mr-1">돼지코</span>': '';
+                    $productOptTag .= $row->productDetail->bAdditionalOption2==1 ? '<span class="badge badge-primary mr-1">안전포장</span>': '';
+                    $productOptTag .= $row->productDetail->bAdditionalOption3==1 ? '<span class="badge badge-primary mr-1">사진요청</span>': '';
+                    $productOptTag .= $row->productDetail->bAdditionalOption4==1 ? '<span class="badge badge-primary mr-1">디테일검수</span>': '';
+                    $element .= '<li class="font-weight-light list-inline-item">
+                                '.$productOptTag.'
                             </li><br>';
-                        $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nBasePrice.'
-                            </li>';
-                                
-                        $element .= '</ul>';
-                        return $element;
-                    })
-                    ->addColumn('marginInfo', function($row){
-                        $element = '<ul class="list-inline" style="width:100px;">';
-                        $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nBasePrice.'
-                            </li><br>';
-                        $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nBasePrice.'
-                            </li>';
-                                
-                        $element .= '</ul>';
-                        return $element;
-                    })
-                    ->addColumn('marketInfo', function($row){
-                        $marketInfo = '
-                                <span style="width:20px;" class="badge badge-success">C</span>
-                                <span style="width:20px;" class="badge badge-success">11</span>
-                                <span style="width:20px;" class="badge badge-success">A</span>
-                                <span style="width:20px;" class="badge badge-success">G</span>
-                                <br/>
-                                <span style="width:20px;" class="badge badge-success">I</span>
-                                <span style="width:20px;" class="badge badge-success">S</span>
-                                <span style="width:20px;" class="badge badge-success">T</span>
-                                <span style="width:20px;" class="badge badge-success">W</span>
-                                ';
-                        return $marketInfo;
-                    })
-                    ->addColumn('mainImage', function($row){
-                        $btn = '<img alt="Avatar" style="width: 5rem;" class="table-product-image" src="'.asset('assets/images/product/image.jpg').'">';
-                        return $btn;
-                    })
-                    ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo'])
-                    ->make(true);
+                    $element .= '<li class="font-weight-light list-inline-item">
+                                    '.Auth::user()->name.'['.$row->created_at.']
+                                </li>';
+                    $element .= '</ul>';
+                    return $element;
+                })
+                ->addColumn('priceInfo', function($row){
+                    $element = '<ul class="list-inline" style="width:100px;">';
+                    $element .= '<li class="list-inline-item">
+                            '.$row->productDetail->nBasePrice.'
+                        </li><br>';
+                    $element .= '<li class="list-inline-item">
+                            '.$row->productDetail->nMarketPrice.'
+                        </li><br>';
+                            
+                    $element .= '</ul>';
+                    return $element;
+                })
+                ->addColumn('marginInfo', function($row) use ($request){
                     
+                    $element = '<ul class="list-inline" style="width:100px;">';
+                    $element .= '<li class="list-inline-item">
+                            '.$row->productDetail->nMarginPrice.'
+                        </li><br>';
+                    $element .= '<li class="list-inline-item">
+                        '.$row->productDetail->nMarginPercent.'%
+                    </li><br>';
+                      
+                    $element .= '</ul>';
+                    return $element;
+                })
+                ->addColumn('marketInfo', function($row){
+                    $_11thhouseTag = $row->bReg11thhouse == 0 ? 'badge-secondary' : 'badge-success';
+                    $autionTag = $row->bRegAuction == 0 ? 'badge-secondary' : 'badge-success';
+                    $coupangTag = $row->bRegCoupang == 0 ? 'badge-secondary' : 'badge-success';
+                    $gmarketTag = $row->bRegGmarket == 0 ? 'badge-secondary' : 'badge-success';
+                    $interparkTag = $row->bRegInterpark == 0 ? 'badge-secondary' : 'badge-success';
+                    $lotteonTag = $row->bRegLotteon == 0 ? 'badge-secondary' : 'badge-success';
+                    $smartstoreTag = $row->bRegSmartstore == 0 ? 'badge-secondary' : 'badge-success';
+                    $tmonTag = $row->bRegTmon == 0 ? 'badge-secondary' : 'badge-success';
+                    $wemakepriceTag = $row->bRegWemakeprice == 0 ? 'badge-secondary' : 'badge-success';
+                    
+                    $marketInfo = '
+                            <span style="width:20px;" class="badge '.$coupangTag.'">C</span>
+                            <span style="width:20px;" class="badge '.$_11thhouseTag.'">11</span>
+                            <span style="width:20px;" class="badge '.$autionTag.'">A</span>
+                            <span style="width:20px;" class="badge '.$gmarketTag.'">G</span>
+                            <br/>
+                            <span style="width:20px;" class="badge '.$interparkTag.'">I</span>
+                            <span style="width:20px;" class="badge '.$smartstoreTag.'">S</span>
+                            <span style="width:20px;" class="badge '.$tmonTag.'">T</span>
+                            <span style="width:20px;" class="badge '.$wemakepriceTag.'">W</span>
+                            ';
+                    return $marketInfo;
+                })
+                ->addColumn('mainImage', function($row){
+                    $main = $row->productImages->where('nImageCode', '0')->first();
+                    $btn = '<img alt="Avatar" style="width: 5rem;" class="table-product-image" src="'.$main->strURL.'">';
+                    return $btn;
+                })
+                ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo', 'action'])
+                ->filter(function($query) use ($request){
+                    if ($request->get('selCome') != "") {
+                        $query->where('strComeCode', "=", "{$request->get('selCome')}");
+                    }
+                    //상품상태
+                    // if ($request->get('productState') != "") {
+                    //     $query->where('strComeCode', "=", "{$request->get('selCome')}");
+                    // }
+                    // 마켓등록상품
+                    // if ($request->get('marketRegProduct') != "") {
+                    //     $query->where('strComeCode', "=", "{$request->get('marketRegProduct')}");
+                    // }
+                    // 내상품
+                    // if ($request->get('myProduct') != "") {
+                    //     $query->where('strComeCode', "=", "{$request->get('myProduct')}");
+                    // }
+                    //마켓
+                    if($request->get('market') != ""){
+                        switch ($request->get('market')) {
+                            case '11thhouse':
+                                $query->where('bReg11thhouse', 1);
+                                break;
+                            case 'auction':
+                                $query->where('bRegAuction', 1);
+                                break;
+                            case 'coupang':
+                                $query->where('bRegCoupang', 1);
+                                break;
+                            case 'gmarket':
+                                $query->where('bRegGmarket', 1);
+                                break;
+                            case 'interpark':
+                                $query->where('bRegInterpark', 1);
+                                break;
+                            case 'lotteon':
+                                $query->where('bRegLotteon', 1);
+                                break;
+                            case 'smartstore':
+                                $query->where('bRegSmartstore', 1);
+                                break;
+                            case 'tmon':
+                                $query->where('bRegTmon', 1);
+                                break;
+                            case 'wemakeprice':
+                                $query->where('bRegWemakeprice', 1);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    //마켓계정
+                    if($request->get('market') != ""){
+                        //$query->where('bRegTmon', 1);
+                    }
+                    //
+                    if($request->get('daterange')){
+                        $dates = explode(' ~ ', $request->get('daterange'));
+                        $query->whereBetween('created_at', [$dates[0], $dates[1]]);
+                    }
+                    if($request->get('category1') != ""){
+                        $query->where('strCategoryCode1', '=', "{$request->get('category1')}");
+                    }
+                    if($request->get('category2') != ""){
+                        $query->where('strCategoryCode2', '=', "{$request->get('category2')}");
+                    }
+                    if($request->get('category3') != ""){
+                        $query->where('strCategoryCode3', '=', "{$request->get('category3')}");
+                    }
+                    if($request->get('category4') != ""){
+                        $query->where('strCategoryCode4', '=', "{$request->get('category4')}");
+                    }
+                    if($request->get('shareType') != -1){
+                        $query->where('nShareType', '=', "{$request->get('shareType')}");
+                    }
+                    if($request->get('shareType') != -1){
+                        $query->where('nShareType', '=', "{$request->get('shareType')}");
+                    }
+                    if ($request->get('searchWord') != "") {
+                        $query->where('strKrSubName', 'like', "%{$request->get('searchWord')}%")
+                            ->orWhere('strChSubName', 'like', "%{$request->get('searchWord')}%");
+                    }
+                })
+                ->make(true);
         }
-        return view('product.SellTargetManage', compact('title', 'brands', 'comes', 'categories_1', 'categories_2', 'categories_3', 'categories_4', 'shareType', 'basePriceTypes', 'countryShippingCostTypes', 'worldShippingCostTypes', 'weightTypes'));
+        return view('product.SellTargetManage', compact('title', 'brands', 'markets', 'marketAccounts', 'comes', 'categories_1', 'categories_2', 'categories_3', 'categories_4'));
     }
 
     /**
@@ -184,11 +294,6 @@ class SellTargetManageController extends Controller
     //상품등록을 위한 마켓계정 리스트(get)
     public function marketAccountList()
     {
-        // $request->session()->put('key', 'value');
-        // $request->session()->push('user.teams', 'developers');
-        // $value = $request->session()->pull('key', 'default');
-        // $request->session()->forget('key');
-        // $request->session()->flush();
         $marketAccounts = MarketAccount::where('nUserId', Auth::id())
                                         ->get();
 
@@ -198,10 +303,11 @@ class SellTargetManageController extends Controller
     public function marketAccountSave(Request $request)
     {
         $chkAccount = $request->post('chkAccount');
-        
+        //print_r($chkAccount);
         $marketAccounts = MarketAccount::where('nUserId', Auth::id())
                                         ->join('tb_markets', 'tb_market_accounts.nMarketIdx', '=', 'tb_markets.nIdx')
                                         ->where('tb_markets.strMarketCode', 'coupang')
+                                        ->whereIn('tb_market_accounts.nIdx', $chkAccount)
                                         ->get();
 
         $markets = Market::where('strMarketCode', 'coupang');
