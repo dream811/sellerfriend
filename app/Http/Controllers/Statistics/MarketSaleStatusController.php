@@ -13,8 +13,9 @@ use App\Models\ProductDetail;
 use App\Models\Come;
 use App\Models\Brand;
 use App\Models\Category;
-use DataTables;
 use App\MyLibs\CoupangConnector;
+use DateTime;
+use Yajra\DataTables\DataTables;
 
 class SellTargetManageController extends Controller
 {
@@ -74,7 +75,7 @@ class SellTargetManageController extends Controller
                 ->where('nProductWorkProcess', 0)
                 ->orderBy('nIdx');
 
-            return Datatables::eloquent($products)
+            return DataTables::eloquent($products)
                     ->addIndexColumn()
                     ->addColumn('check', function($row){
                         $check = '<input type="checkbox" name="chkProduct[]" onclick="" value="'.$row->nIdx.'">';
@@ -162,8 +163,8 @@ class SellTargetManageController extends Controller
      */
     public function marketProductAdd(Request $request)
     {
-        $marketAccounts = MarketAccount::where('nUserId', Auth::id())
-                                        ->get();
+        // $marketAccounts = MarketAccount::where('nUserId', Auth::id())
+        //                                 ->get();
         //dd($marketAccounts);
         $chkProduct = $request->post('chkProduct');
         //print_r($chkProduct);
@@ -176,7 +177,7 @@ class SellTargetManageController extends Controller
             session()->put('post_products', $chkProduct);
         }
         
-        return response()->json(["status" => "success", "data" => $marketAccounts]);
+        // return response()->json(["status" => "success", "data" => $marketAccounts]);
     }
     //상품등록을 위한 마켓계정 리스트(get)
     public function marketAccountList()
@@ -186,8 +187,8 @@ class SellTargetManageController extends Controller
         // $value = $request->session()->pull('key', 'default');
         // $request->session()->forget('key');
         // $request->session()->flush();
-        $marketAccounts = MarketAccount::where('nUserId', Auth::id())
-                                        ->get();
+        // $marketAccounts = MarketAccount::where('nUserId', Auth::id())
+        //                                 ->get();
 
         return view('product.MarketAccountList', compact('marketAccounts'));
     }
@@ -196,12 +197,12 @@ class SellTargetManageController extends Controller
     {
         $chkAccount = $request->post('chkAccount');
         
-        $marketAccounts = MarketAccount::where('nUserId', Auth::id())
-                                        ->join('tb_markets', 'tb_market_accounts.nMarketIdx', '=', 'tb_markets.nIdx')
-                                        ->where('tb_markets.strMarketCode', 'coupang')
-                                        ->get();
+        // $marketAccounts = MarketAccount::where('nUserId', Auth::id())
+        //                                 ->join('tb_markets', 'tb_market_accounts.nMarketIdx', '=', 'tb_markets.nIdx')
+        //                                 ->where('tb_markets.strMarketCode', 'coupang')
+        //                                 ->get();
 
-        $markets = Market::where('strMarketCode', 'coupang');
+        // $markets = Market::where('strMarketCode', 'coupang');
         if($request->has('select_all')){
             session()->put('post_marketId_select_all', '1');
             session()->put('post_marketIds', $chkAccount);
@@ -247,11 +248,11 @@ class SellTargetManageController extends Controller
         $arrCategoryCode = $request->post('txtCategoryCode');
         $arrCategoryName = $request->post('txtCategoryName');
         
-        $CoupangcategoryCode = $arrCategoryCode["coupang"];
-        $CoupangcategoryName = $arrCategoryName["coupang"];
+        $CoupangCategoryCode = $arrCategoryCode["coupang"];
+        $CoupangCategoryName = $arrCategoryName["coupang"];
         $coupang = new CoupangConnector();
         
-        $cateMetaInfo = (object)json_decode($coupang->getCategoryMetaInfo($categoryCode), true);
+        $cateMetaInfo = (object)json_decode($coupang->getCategoryMetaInfo($CoupangCategoryCode), true);
         $place_codes= '3244320';
         $outboundInfo = (object)json_decode($coupang->getOutboundShippingCenterInfo("", $place_codes), true);
         $outboundInfo = (object)json_decode($coupang->getOutboundShippingCenterInfo("", $place_codes), true);
@@ -269,11 +270,11 @@ class SellTargetManageController extends Controller
                 ->whereIn('nIdx', $product_selected)
                 ->orderBy('nIdx');
         }
-        $today = new DateTime;
+        $today = new DateTime('Now');
         foreach ($products as $key => $product) {
-            $categoryNameList = mb_split(" > ", $CoupangcategoryName);
+            $categoryNameList = mb_split(" > ", $CoupangCategoryName);
             $objProduct = array(
-                "displayCategoryCode" => $categoryCode, //쿠팡카테고리 코드
+                "displayCategoryCode" => $CoupangCategoryCode, //쿠팡카테고리 코드
                 "sellerProductName" => $product->strMainName,
                 "vendorId" => $this->VENDOR_ID,
                 "saleStartedAt" => $today->format('Y-m-d\TH:i:s'),

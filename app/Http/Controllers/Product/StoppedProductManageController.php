@@ -13,8 +13,8 @@ use App\Models\ProductDetail;
 use App\Models\Come;
 use App\Models\Brand;
 use App\Models\Category;
-use DataTables;
 use App\MyLibs\CoupangConnector;
+use Yajra\DataTables\Facades\DataTables;
 
 class StoppedProductManageController extends Controller
 {
@@ -71,7 +71,7 @@ class StoppedProductManageController extends Controller
                 ->where('nUserId', Auth::id())
                 ->orderBy('nIdx');
 
-            return Datatables::eloquent($products)
+            return DataTables::eloquent($products)
                     ->addIndexColumn()
                     ->addColumn('check', function($row){
                         $check = '<input type="checkbox" name="chkProduct[]" onclick="" value="'.$row->nIdx.'">';

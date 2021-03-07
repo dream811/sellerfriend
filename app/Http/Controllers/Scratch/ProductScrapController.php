@@ -82,7 +82,6 @@ class ProductScrapController extends Controller
         set_time_limit(400);
         $scrapURL = $request->get('scrapURL');
         $cURLConnection = curl_init();
-        //$scrapURL = 'https://item.taobao.com/item.htm?spm=2013.1.0.0.5c77577bM4iKJj&id=604441926066&scm=1007.12144.95220.42296_0_0&pvid=38083436-f8a4-412c-ba84-e54b99d0f8d7&utparam=%7B"x_hestia_source"%3A"42296"%2C"x_object_type"%3A"item"%2C"x_hestia_subsource"%3A"default"%2C"x_mt"%3A0%2C"x_src"%3A"42296"%2C"x_pos"%3A1%2C"wh_pid"%3A-1%2C"x_pvid"%3A"38083436-f8a4-412c-ba84-e54b99d0f8d7"%2C"scm"%3A"1007.12144.95220.42296_0_0"%2C"x_object_id"%3A604441926066%7D';
         curl_setopt($cURLConnection, CURLOPT_URL, 'http://localhost:8004/url='.$scrapURL);
         curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($cURLConnection, CURLOPT_CONNECTTIMEOUT, 0); 
@@ -93,8 +92,9 @@ class ProductScrapController extends Controller
         $tr->setSource('zh-cn');
         $tr->setTarget('ko');
         
+        if (str_contains($result, 'failed')) return;
+
         $arrResponse = (array)json_decode($result, true);
-                
         if(str_contains($scrapURL, "detail.tmall.com")){
             $tranArr = $arrResponse['valItemInfo']['skuList'];
             foreach ($tranArr as $key => $value) {
@@ -102,15 +102,22 @@ class ProductScrapController extends Controller
                 unset($value['skuId']);
                 $tranArr[$key] = $value;  
             }
-            $transData = json_encode($tranArr, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
-            $trnasResult = (array)json_decode($tr->translate($transData), true);
-            //
-            //print_r($trnasResult);
+            $stackCount = count($tranArr);
+            $transResult = array();
+            $i=0;
+            while ($i < $stackCount) { 
+                
+                $transStack = array_slice($tranArr, $i, min(10, count($tranArr) - $i));
+                $transData = json_encode($transStack, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+                $trnasResStack = (array)json_decode($tr->translate($transData), true);
+                $transResult = array_merge($transResult, $trnasResStack);
+                $i += 10;
+            }
             $descData = "";
             foreach ($arrResponse['valItemInfo']['skuList'] as $key => $value) {
                 $price = $arrResponse['valItemInfo']['skuMap'][';'.$arrResponse['valItemInfo']['skuList'][$key]['pvs'].';']['price'];
                 $ChSize = explode(" ", array_values($arrResponse['valItemInfo']['skuList'][$key])[0], 2);
-                $KrSize = explode(" ", array_values($trnasResult[$key])[0], 2);
+                $KrSize = explode(" ", array_values($transResult[$key])[0], 2);
                 $arrResponse['valItemInfo']['skuList'][$key]['price'] = $price;
                 $arrResponse['valItemInfo']['skuList'][$key]['basePrice'] = number_format($price * 170, 2, '.', '');
                 $arrResponse['valItemInfo']['skuList'][$key]['salePrice'] = number_format(($price + $price * 0.3) * 170, 2, '.', '');
@@ -120,7 +127,7 @@ class ProductScrapController extends Controller
                 $arrResponse['valItemInfo']['skuList'][$key]['ChColorPattern'] = $ChSize[1];
                 $arrResponse['valItemInfo']['skuList'][$key]['image'] = $arrResponse['propertyPics'][';'.explode(";", $arrResponse['valItemInfo']['skuList'][$key]['pvs'])[1].';'][0];
                 $arrResponse['valItemInfo']['skuList'][$key]['weight'] = 0;
-                $descData .= '<div style="pdding-botton:10px; text-align: center;"><p>['.$arrResponse['valItemInfo']['skuList'][$key]['KrColorPattern'].', '.$arrResponse['valItemInfo']['skuList'][$key]['KrSize'].']</p><p><img src="'.$arrResponse['valItemInfo']['skuList'][$key]['image'].'"></p></div>';
+                $descData .= '<div style="text-align: center;"><p>['.$arrResponse['valItemInfo']['skuList'][$key]['KrColorPattern'].', '.$arrResponse['valItemInfo']['skuList'][$key]['KrSize'].']</p><p><img src="'.$arrResponse['valItemInfo']['skuList'][$key]['image'].'"></p></div>';
             }
             //상세이미지 얻는 요청
             $descURL = "http:".$arrResponse['api']['descUrl'];
@@ -146,9 +153,7 @@ class ProductScrapController extends Controller
             );
             //print_r($resDetailTmall);
             return response()->json(["status" => "success", "data" => $resDetailTmall]);
-        }
-        else if(str_contains($scrapURL, "item.taobao.com"))
-        {
+        }else if(str_contains($scrapURL, "item.taobao.com")){
             //print_r($arrResponse);
             $descData = "";
             $krTitle = $tr->translate($arrResponse['title']);
@@ -170,6 +175,7 @@ class ProductScrapController extends Controller
                 unset($transResArr[$idx]);
                 $idx++;
             }
+            //print_r($arrResponse);
             $price = 0;
             foreach ($arrResponse['skuMap'] as $key => $value) {
                 // $price = $arrResponse['valItemInfo']['skuMap'][';'.$arrResponse['valItemInfo']['skuList'][$key]['pvs'].';']['price'];
@@ -181,13 +187,13 @@ class ProductScrapController extends Controller
                 $val = array(
                     "pvs" => $key,
                     "price" => $value['price'],
-                    "basePrice" => number_format($value['price'] * 170, 2, ',', ''),
+                    "basePrice" => number_format($value['price'] * 170, 2, '.', ''),
                     "salePrice" => number_format(($value['price'] + $value['price'] * 0.3) * 170, 2, '.', ''),
-                    "ChSize" => $arrResponse['sizes'][explode(';', $key)[1]],
-                    "KrSize" => $arrResponse['sizes'][explode(';', $key)[1]],
-                    "ChColorPattern" => $arrResponse['colors'][explode(';', $key)[2]],
-                    "KrColorPattern" => $transResArr[explode(';', $key)[2]],
-                    "image" => $arrResponse['colorImages'][explode(';', $key)[2]],
+                    "ChSize" => !isset($arrResponse['sizes']) ? "" : $arrResponse['sizes'][explode(';', $key)[1]],
+                    "KrSize" => !isset($arrResponse['sizes']) ? "" : $arrResponse['sizes'][explode(';', $key)[1]],
+                    "ChColorPattern" => !isset($arrResponse['colors']) ? "" : (!isset($arrResponse['sizes']) ? $arrResponse['colors'][explode(';', $key)[1]] : $arrResponse['colors'][explode(';', $key)[2]]),
+                    "KrColorPattern" => !isset($arrResponse['colors']) ? "" : (!isset($arrResponse['sizes']) ? $arrResponse['colors'][explode(';', $key)[1]] :$transResArr[explode(';', $key)[2]]),
+                    "image" => !isset($arrResponse['sizes']) ? $arrResponse['colorImages'][explode(';', $key)[1]] :$arrResponse['colorImages'][explode(';', $key)[2]],
                     "weight" => 0
                 );
                 $resDetailTaobao['items'][] = $val;
@@ -198,6 +204,117 @@ class ProductScrapController extends Controller
             $resDetailTaobao['images'] = $arrResponse['auctionImages'];
             $resDetailTaobao['price'] = $price;
             return response()->json(["status" => "success", "data" => $resDetailTaobao]);
+        }else if(str_contains($scrapURL, "detail.1688.com")){
+            //print_r($arrResponse);
+            $krTitle = $tr->translate($arrResponse['title']);
+
+            $descData = "";
+            $krTitle = $tr->translate($arrResponse['title']);
+            $resDetail1688 = array(
+                "id" => $arrResponse['id'],
+                "chMainName" => $arrResponse['title'],
+                "krMainName" => $krTitle,
+                'keyword' => str_replace(' ', ',', $krTitle),
+                "skuList" => array(),
+                "images" => array()
+            );
+            // //컬러 패턴 번역
+            // $transData = json_encode(array_values($arrResponse['colors']), JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+            // $trnasResult = $tr->translate($transData);
+            // $transResArr = json_decode($trnasResult);
+            // $idx=0;
+            foreach ($arrResponse['images'] as $key => $value) {
+                $arrResponse['images'][$key] = $value['original'];
+            }
+            //print_r($arrResponse['images']);
+            //print_r($arrResponse);
+            $resTransArr = array_keys($arrResponse['detailData']['sku']['skuMap']);
+            $transData = implode('||||', array_values($resTransArr));
+            $transData = str_replace("&gt;","***", $transData);
+
+            $trnasResult = $tr->translate($transData);
+            $transResult = preg_replace('/\s+/', '', str_replace(' ', '', $trnasResult));
+
+            $skuProp = explode('||||', $transResult);
+            //echo $transData;
+            //print_r($skuProp);
+            $idx = 0;
+            foreach ($arrResponse['detailData']['sku']['skuMap'] as $key => $value) {
+                
+                $Cn_Size_Color = explode('&gt;', $key);
+                $itemCnColor = $Cn_Size_Color[0];
+                $itemCnSize = $Cn_Size_Color[1];
+                //
+                $Ko_Size_Color = explode('***', $skuProp[$idx]);
+                
+                $idx++;
+                $itemKoColor = $Ko_Size_Color[0];
+                $itemKoSize = $Ko_Size_Color[1];
+                $val = array(
+                    "price" => $value['price'],
+                    "basePrice" => number_format($value['price'] * 170, 2, '.', ''),
+                    "salePrice" => number_format(($value['price'] + $value['price'] * 0.3) * 170, 2, '.', ''),
+                    "ChSize" => $itemCnSize,
+                    "KrSize" => $itemKoSize,
+                    "ChColorPattern" => $itemCnColor,
+                    "KrColorPattern" => $itemKoColor,
+                    "image" => $arrResponse['colors'][$itemCnColor]['original'],
+                    "weight" => 0
+                );
+                $resDetail1688['items'][] = $val;
+                $descData .= '<div style="pdding-botton:10px; text-align: center;"><p>['.$val['KrColorPattern'].", ".$val['KrSize'].']</p><p><img src="'.$val['image'].'"></p></div>';
+            }
+            
+            $resDetail1688['description'] = $descData;
+            $resDetail1688['images'] = $arrResponse['images'];
+            $resDetail1688['price'] = $arrResponse['price'];;
+            return response()->json(["status" => "success", "data" => $resDetail1688]);
+        }else if(str_contains($scrapURL, "www.vvic.com")){
+            $krTitle = $tr->translate($arrResponse['title']);
+
+            $descData = "";
+            $krTitle = $tr->translate($arrResponse['title']);
+            $resDetailVvic = array(
+                "id" => $arrResponse['id'],
+                "chMainName" => $arrResponse['title'],
+                "krMainName" => $krTitle,
+                'keyword' => str_replace(' ', ',', $krTitle),
+                "skuList" => array(),
+                "images" => array()
+            );
+            // //컬러 패턴 번역
+            $images = explode(',', $arrResponse['images']);
+            
+            $transData = "";
+            foreach ($arrResponse['skuMap'] as $key => $value) {
+                $transData .= ($value['color_name']."||||");
+            }
+
+            $trnasResult = $tr->translate($transData);
+            $transResult = preg_replace('/\s+/', '', str_replace(' ', '', $trnasResult));
+            $skuProp = explode('||||', $transResult);
+
+            $idx = 0;
+            foreach ($arrResponse['skuMap'] as $key => $value) {
+                $val = array(
+                    "price" => $value['price'],
+                    "basePrice" => number_format($value['price'] * 170, 2, '.', ''),
+                    "salePrice" => number_format(($value['price'] + $value['price'] * 0.3) * 170, 2, '.', ''),
+                    "ChSize" => $value['size_name'],
+                    "KrSize" => $value['size_name'],
+                    "ChColorPattern" => $value['color_name'],
+                    "KrColorPattern" => $skuProp[$key],
+                    "image" => $value['color_pic'],
+                    "weight" => number_format($value['weight']/1000, 2, '.', '')
+                );
+                $resDetailVvic['items'][] = $val;
+                $descData .= '<div style="pdding-botton:10px; text-align: center;"><p>['.$val['KrColorPattern'].", ".$val['KrSize'].']</p><p><img src="'.$val['image'].'"></p></div>';
+            }
+            $description = str_replace('|', '"', $arrResponse['description']);
+            $resDetailVvic['description'] = $descData.$description;
+            $resDetailVvic['images'] = $images;
+            $resDetailVvic['price'] = $arrResponse['price'];
+            return response()->json(["status" => "success", "data" => $resDetailVvic]);
         }
     }
     /**

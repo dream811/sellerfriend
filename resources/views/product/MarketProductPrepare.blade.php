@@ -73,12 +73,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($marketAccounts as $account)
-                                        <tr  class="text-center align-middle" id="{{ $account->nIdx }}">
+                                    @foreach ($settingCoupangs as $coupang)
+                                        <tr  class="text-center align-middle" id="{{ $coupang->nIdx }}">
                                             <td rowspan="4"  class="text-center align-middle">
-                                                {{ $account->Market->strMarketName }}
+                                                {{ $coupang->Market->strMarketName }}
                                                 &nbsp;<br>
-                                                {{ $account->strAccountId }}
+                                                {{ $coupang->strAccountId }}
                                             </td>
                                             <td >선택</td>
                                             <td>마켓ID</td>
@@ -89,8 +89,8 @@
                                             <td>
                                                 옵션
                                             </td>
-                                            <td >{{ $account->strAccountId}}</td>
-                                            <td>{{ $account->Market->strMarketName}}</td>
+                                            <td >{{ $coupang->marketAccount->strAccountId}}</td>
+                                            <td>{{ $coupang->strTitle}}</td>
                                             <td>
                                                 <a href="javascript:void(0)" class="btn btn-warning btn-xs" style="font-size:12px !important;">수정</a>
                                             </td>
@@ -100,24 +100,25 @@
                                                 카테고리 선택
                                             </td>
                                             <td colspan="2">
-                                                <input class="p-0 clsCategoryCode" name="txtCategoryCode[{{ $account->Market->strMarketCode}}]" id="cateCode_{{ $account->Market->strMarketCode}}" style="width:20%" type="text" value="78035" data-code="{{ $account->Market->strMarketCode}}">
-                                                <input class="p-0" name="txtCategoryName[{{ $account->Market->strMarketCode}}]" id="cateName_{{ $account->Market->strMarketCode}}" style="width:70%" type="text" value="" readonly>
+                                                <input class="p-0 clsCategoryCode" name="txtCategoryCode[{{ $coupang->Market->strMarketCode}}]" id="cateCode_{{ $coupang->Market->strMarketCode}}_{{$coupang->nIdx}}" style="width:20%" type="text" value="78035" data-code="{{ $coupang->Market->strMarketCode}}" data-id="{{ $coupang->nIdx}}">
+                                                <input class="p-0" name="txtCategoryName[{{ $coupang->Market->strMarketCode}}]" id="cateName_{{ $coupang->Market->strMarketCode}}_{{$coupang->nIdx}}" style="width:70%" type="text" value="" readonly>
                                                 <a href="javascript:void(0)" onclick="" class="btn btn-warning btn-xs" style="font-size:12px !important;">검색</a>
                                                 <br>
-                                                <span>추천검색어:</span><span>패션의류</span><span>잡화</span>
+                                                <div class="text-xs" style="text-align:left">
+                                                    <label style="font-size:12px;">추천검색어:</label><span class="badge badge-secondary mr-1">패션의류</span><span class="badge badge-secondary mr-1">잡화</span>
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr class="text-center align-middle">
-                                            @if ($account->Market->strMarketCode == 'coupang')
+                                            @if ($coupang->Market->strMarketCode == 'coupang')
                                                 <td colspan="2">
                                                     옵션매핑
                                                 </td>
                                                 <td>
-                                                    <div id="digOptionMappping_{{ $account->Market->strMarketCode}}" title="옵션설정"></div>
-                                                    <div id="hidOptMappingInfo_{{ $account->Market->strMarketCode}}" class="d-none"></div>
-                                                    <a href="javascript:void(0)" name="setOptionMapping[{{ $account->Market->strMarketCode}}]" id="setOptionMapping_{{ $account->Market->strMarketCode}}" data-code="{{ $account->Market->strMarketCode}}" class="btn btn-secondary btn-xs btnSetOptionMapping" style="font-size:12px !important;">수정</a>
-                                                    <input class="p-0" name="txtOptionMapping[]" id="txtOptionMapping_{{$account->Market->strMarketCode}}" style="width:70%" type="" value="">
-                                                    
+                                                    <div id="digOptionMappping_{{ $coupang->Market->strMarketCode}}_{{$coupang->nIdx}}" title="옵션설정"></div>
+                                                    <div id="hidOptMappingInfo_{{ $coupang->Market->strMarketCode}}_{{$coupang->nIdx}}" class="d-none"></div>
+                                                    <a href="javascript:void(0)" name="setOptionMapping[{{ $coupang->Market->strMarketCode}}]" id="setOptionMapping_{{ $coupang->Market->strMarketCode}}_{{$coupang->nIdx}}" data-code="{{ $coupang->Market->strMarketCode}}" data-id="{{ $coupang->nIdx }}" class="btn btn-secondary btn-xs btnSetOptionMapping" style="font-size:12px !important;">수정</a>
+                                                    <input class="p-0" name="txtOptionMapping[]" id="txtOptionMapping_{{$coupang->Market->strMarketCode}}_{{$coupang->nIdx}}" style="width:70%" type="" value="">
                                                 </td>
                                                 <td>
                                                 </td>
@@ -167,15 +168,15 @@
             });
             $( ".clsCategoryCode" ).focus(function() {
                 market_code = $(this).attr('data-code');
+                set_id = $(this).attr('data-id');
                 
-                window.open('/productSearchMarketCategory/' + market_code + '/category/0', '카테고리', 'scrollbars=1, resizable=1, width=1000, height=800');
+                window.open('/productSearchMarketCategory/' + market_code + '/category/0/setting/' + set_id, '카테고리', 'scrollbars=1, resizable=1, width=1000, height=800');
                 $(this).blur();
                 return false;
             });
-            $.SetCategoryInfo = function(market_code='coupang', category_code=0, category_tree=""){
-                console.log(market_code + category_code + category_tree);
-                $("#cateCode_" + market_code).val(category_code);
-                $("#cateName_" + market_code).val(category_tree);
+            $.SetCategoryInfo = function(market_code='coupang', category_code=0, category_tree="", set_id=0){
+                $("#cateCode_" + market_code + "_" + set_id).val(category_code);
+                $("#cateName_" + market_code + "_" + set_id).val(category_tree);
 
             }
             //옵션 다이얼로그 박스
@@ -184,10 +185,12 @@
                 //$(".ui-dialog-titlebar").hide();
                 
                 var market_code = $(this).attr('data-code');
-                var category_code = $("#cateCode_" + market_code).val();
+                var set_id = $(this).attr('data-id');
+                var category_code = $("#cateCode_" + market_code + "_" + set_id).val();
+                
                 var action = '/productSearchMarketOptionMapping/' + market_code + '/category/' + category_code;
 
-                $('#hidOptMappingInfo_' + market_code).html('');//숨김 옵션매팽 테블 삭제
+                $('#hidOptMappingInfo_' + market_code + '_' + set_id).html('');//숨김 옵션매팽 테블 삭제
                 $.ajax({
                     url: action,
                     data: {market_code, category_code},
@@ -208,24 +211,24 @@
                                 content +=  `<tr id="${index}">
                                                 <td>${element.attributeTypeName}</td>
                                                 <td>
-                                                    <label><input type="radio" name="mappingOpt[coupang][${index}]" value="${element.attributeTypeName}::사이즈"> 사이즈</label>
-                                                    <label><input type="radio" name="mappingOpt[coupang][${index}]" value="${element.attributeTypeName}::컬러"> 컬러</label>
+                                                    <label><input type="radio" name="mappingOpt[coupang][${set_id}][${index}]" value="${element.attributeTypeName}::사이즈"> 사이즈</label>
+                                                    <label><input type="radio" name="mappingOpt[coupang][${set_id}][${index}]" value="${element.attributeTypeName}::컬러"> 컬러</label>
                                                 </td>
                                             </tr>`;
                             });
                                                     
                             content +=  `   </tbody>
                                         </table>
-                                        <a href="javascript:void(0)" name="confirm" class="btn btn-warning btn-xs float-right btnSaveOptionMapping" data-code="${market_code}" style="font-size:10px !important;">확인</a>
+                                        <a href="javascript:void(0)" name="confirm" class="btn btn-warning btn-xs float-right btnSaveOptionMapping" data-code="${market_code}" data-id="${set_id}" style="font-size:10px !important;">확인</a>
                                         `;
-                            var $dialog = $('#digOptionMappping_' + market_code);
+                            var $dialog = $('#digOptionMappping_' + market_code + '_' + set_id);
                             $dialog.dialog({
                                 autoOpen: false,
                                 modal: false,
                                 position: {
                                     my: 'left top',      //The point on the dialog box
                                     at: 'right bottom',      //The point on the target element
-                                    of: $('#setOptionMapping_' + market_code)  //The target element
+                                    of: $('#setOptionMapping_' + market_code + '_' + set_id)  //The target element
                                 },
                                 //dialogClass: 'noTitleStuff',
                                 draggable: true,
@@ -245,25 +248,29 @@
             });
             $('body').on('click', '.btnSaveOptionMapping', function () {
                 var market_code = $(this).attr('data-code');
-                var $dialog = $('#digOptionMappping_' + market_code);
+                var set_id = $(this).attr('data-id');
+                var $dialog = $('#digOptionMappping_' + market_code + '_' + set_id);
                 var content = $dialog.html();
                 
                 ///
                 var strOptMapping = "";
                 $('#marketOptionMappingTable tbody tr').each(function( index, element ) {
-                    strOptMapping += $('input[name="mappingOpt['+ market_code +']['+ index +']"]:checked').val();
+                    var tag = 'input[name="mappingOpt['+ market_code +"]["+set_id+"]["+ index +']"]:checked';
+                    strOptMapping += $(tag).val() + ",";
                 });
-                $('#hidOptMappingInfo_' + market_code).html(content);
+                //$('#hidOptMappingInfo_' + market_code + '_' + set_id).html(content);
                 $dialog.html('');
-                $('#txtOptionMapping_' + market_code).val(strOptMapping);
+                if(strOptMapping != undefined){
+                    $('#txtOptionMapping_' + market_code + '_' + set_id).val(strOptMapping.slice(0, -1));
+                }
                 //창 닫기
                 $dialog.dialog('close');
             });
         });
         
 
-        function SetCategoryInfo(market_code='coupang', category_code=0, category_tree=""){
-            $.SetCategoryInfo(market_code, category_code, category_tree);
+        function SetCategoryInfo(market_code='coupang', category_code=0, category_tree="", set_id=0){
+            $.SetCategoryInfo(market_code, category_code, category_tree, set_id);
         }
     </script>
 </body>

@@ -4,16 +4,16 @@
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0" style="">상품수집관리</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">HOME</a></li>
-                <li class="breadcrumb-item"><a href="#">상품수집관리</a></li>
-                <li class="breadcrumb-item active">상품스크랩</li>
-                </ol>
-            </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <h1 class="m-0" style="">상품수집관리</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">HOME</a></li>
+                    <li class="breadcrumb-item"><a href="#">상품수집관리</a></li>
+                    <li class="breadcrumb-item active">상품스크랩</li>
+                    </ol>
+                </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
@@ -555,7 +555,12 @@
                 alert("URL을 입력해주세요!");
                 return false;
             }
-            if(!scrapURL.includes("detail.tmall.com") && !scrapURL.includes("item.taobao.com") ){
+            if(!scrapURL.includes("detail.tmall.com") && 
+                !scrapURL.includes("item.taobao.com") && 
+                !scrapURL.includes("detail.1688.com") && 
+                !scrapURL.includes("www.vvic.com")  
+                )
+            {
                 alert("URL을 다시 확인해주세요!");
                 return false;
             }
@@ -592,7 +597,7 @@
                                             <input class="p-0" name="txtSubItemKrSize[]" id="txtSubItemKrSize_${index}" style="width:100%" type="text" value="${element.KrSize}">
                                             <br>
                                             <input class="p-0" name="txtSubItemChSize[]" id="txtSubItemChSize_${index}" style="width:100%" type="hidden" value="${element.ChSize}">
-                                            <span>${element.KrSize}</span>
+                                            <span>${element.ChSize}</span>
                                         </td>
                                         <td style="width:70px !important">
                                             <input style="width:100% !important" name="txtSubItemOptionPrice[]" id="txtSubItemOptionPrice_${index}" class="p-0" type="text" value="${element.price}">

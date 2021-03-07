@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 use App\Models\Market;
 use App\Models\MarketAccount;
+use App\Models\MarketSettingCoupang;
 
 class OpenMarketManageController extends Controller
 {
@@ -113,6 +114,11 @@ class OpenMarketManageController extends Controller
     {
         //
         $marketAccount = MarketAccount::where('nIdx', $accountId)->delete();
+        if($marketId == 3){//쿠팡이면
+            $settingCoupang = MarketSettingCoupang::where('nUserId', Auth::id())
+                ->where('nMarketAccIdx', $accountId)
+                ->delete();
+        }
         return response()->json(["status" => "success", "data" => $marketAccount]);
     }
 

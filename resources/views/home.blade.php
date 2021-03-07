@@ -192,7 +192,6 @@
                         <span class="mr-2">
                           <i class="fas fa-square text-primary"></i> 매입금액
                         </span>
-      
                         <span>
                           <i class="fas fa-square text-gray"></i> 마진금액
                         </span>

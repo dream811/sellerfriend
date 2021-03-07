@@ -125,7 +125,7 @@
                              alt="User Image">
                         <p>
                             {{ Auth::user()->name }}
-                            <small>Member since {{ Auth::user()->created_at->format('M. Y') }}</small>
+                            <small>가입날짜: {{ Auth::user()->created_at->format('Y-m-d') }}</small>
                         </p>
                     </li>
                     <!-- Menu Footer-->
@@ -174,6 +174,26 @@
 </div>
 <script>
     // $.widget.bridge('uibutton', $.ui.button);
+    // $(document).ajaxError(function(event, jqxhr, settings, exception) {
+    // if (jqxhr.status == 401) {
+    //     // unauthorized
+    //     window.location.href = '/logon';
+    // }
+    // });
+
+    //401오류 인경우 로그인 페이지로 리디렉션
+    $.ajaxSetup({
+        statusCode: {
+            401: function(){
+                // Redirec the to the login page.
+                location.href = "/login";
+            },
+            419: function(){
+                // Redirec the to the login page.
+                location.href = "/login";
+            }
+        }
+    });
 </script>
 
 

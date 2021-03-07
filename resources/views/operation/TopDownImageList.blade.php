@@ -23,14 +23,7 @@
         <div class="row">
             <div class="col-12 col-sm-12">
                 <div class="card card-primary card-outline card-tabs">
-                        
                     <div class="card-header p-0 pt-1 border-bottom-0">
-                        <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="custom-tabs-three-home-tab" data-toggle="pill" href="#custom-tabs-three-home" role="tab" aria-controls="custom-tabs-three-home" aria-selected="true">목록스타일</a>
-                            </li>
-                            
-                        </ul>
                         <ul class="nav float-right">
                             <li class="pull-right float-right pr-2 pt-2" style="">
                                 <a href="javascript:void(0)" class="btn btn-success btn-sm btnAdd" >등록</a>
@@ -38,35 +31,85 @@
                         </ul>
                     </div>
                     <div class="card-body">
-                        <div class="tab-content" id="custom-tabs-three-tabContent">
-                            <div class="tab-pane fade show active" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
-                                <form id="divProductForm">
-                                    <div class="card-body p-0" >
-                                        <table id="productTable" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width:50px !important">No</th>
-                                                    <th>구분</th>
-                                                    <th>이미지</th>
-                                                    <th>이름</th>
-                                                    <th style="width:70px !important">Action</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                </form>
+                        <form id="divProductForm">
+                            <div class="card-body p-0" >
+                                <table id="imageTable" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:50px !important">No</th>
+                                            <th>구분</th>
+                                            <th>이미지</th>
+                                            <th>이름</th>
+                                            <th style="width:70px !important">Action</th>
+                                        </tr>
+                                    </thead>
+                                </table>
                             </div>
-                        </div>
+                        </form>
                     </div>
                     <!-- /.card -->
                 </div>
             </div>
         </div>
     </div>
+    <!-- //==Modal==// -->
+    <div class="modal fade"  id="modal-id_image">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title text-sm" style="font-weight: 700">오픈마켓 아이디등록관리</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form id="manageImage" method="post" action="{{ route('operation.TopDownImageManageStore') }}"> 
+                <div class="modal-body">
+                    <div id="divForm">
+                        <input type="hidden" name="hidImageId" id="hidImageId" value="0">
+                        <div class="form-group row">
+                            <label for="txtAccountPwd" class="col-sm-2 col-form-label lb-sm" style="font-size:12px;">구분</label>
+                            <div class="input-group col-sm-10">
+                                <select class="custom-select form-control-border custom-select-sm" name="selImageType" id="selImageType">
+                                    <option value="">=선택=</option>
+                                    <option value="TOP">상단</option>
+                                    <option value="DOWN">하단</option>
+                                    <option value="OTHER">기타</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" >
+                            <label for="txtAccountPwd" class="col-sm-2 col-form-label lb-sm" style="font-size:12px;">제목</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control form-control-sm" name="txtImageName" id="txtImageName" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group row" id="divVendorId">
+                            <label for="divPrevImage" class="col-sm-2 col-form-label lb-sm" style="font-size:12px;">이미지</label>
+                            <div class="col-sm-10">
+                                <div class="bg-gray border border-danger" style="height: 500px;" name="divPrevImage" id="divPrevImage">
+                                    <img name="imgPreview" id="imgPreview" src="https://via.placeholder.com/300/FFFFFF?text=%20" style="width:100%; height:100%;" alt="">
+                                    
+                                </div>
+                                <input type="file" name="fileImage" id="fileImage" style="opacity: 0;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer justify-content-between">
+                    <button type="sumbit" class="btn btn-primary btn-sm float-left btnSaveImage">보관</button>
+                    <button type="button" class="btn btn-default btn-sm float-right" data-dismiss="modal">취소</button>
+                </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
     @section('script')
     <script>
         var table = null;
-        tableTran  = $('#productTable');
+        tableTran  = $('#imageTable');
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
@@ -129,125 +172,134 @@
                 ],
                 responsive: true, lengthChange: true,
                 buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#productTable_wrapper .col-md-6:eq(0)');
+            }).buttons().container().appendTo('#imageTable_wrapper .col-md-6:eq(0)');
             
-            //var allPages = table.allPages();
-
-            // $('#select-all').click(function () {
-            //     if ($(this).hasClass('allChecked')) {
-            //         $(allPages).find('input[type="checkbox"]').prop('checked', false);
-            //     } else {
-            //         $(allPages).find('input[type="checkbox"]').prop('checked', true);
-            //     }
-            //     $(this).toggleClass('allChecked');
-            // })
             // Handle click on "Select all" control
             $('#select_all').on('click', function(){
-                var table = $('#productTable').DataTable(); 
+                var table = $('#imageTable').DataTable(); 
                 // Get all rows with search applied
                 var rows = table.rows({ 'search': 'applied' }).nodes();
                 // Check/uncheck checkboxes for all rows in the table
                 $('input[type="checkbox"]', rows).prop('checked', this.checked);
             });
-
-            // Handle click on checkbox to set state of "Select all" control
-            $('#productTable tbody').on('change', 'input[type="checkbox"]', function(){
-                // If checkbox is not checked
-                if(!this.checked){
-                    var el = $('#select_all').get(0);
-                    // If "Select all" control is checked and has 'indeterminate' property
-                    if(el && el.checked && ('indeterminate' in el)){
-                        // Set visual state of "Select all" control
-                        // as 'indeterminate'
-                        el.indeterminate = true;
+            
+            $('#divPrevImage').on('click', function (e) {
+                $('#fileImage').trigger('click'); 
+            });
+            
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#imgPreview').attr('src', e.target.result);
                     }
+                    reader.readAsDataURL(input.files[0]); // convert to base64 string
+                }
+            }
+
+            $("#fileImage").change(function() {
+                readURL(this);
+            });
+
+            $('body').on('click', '.btnAdd', function (e) {
+                $('#hidImageId').val("0");
+                $('#selImageType').val("");
+                $('#txtImageName').val("");
+                $('#fileImage').val(null);
+                $('#imgPreview').attr('src', "https://via.placeholder.com/300/FFFFFF?text=%20");
+                $('#modal-id_image').modal('show');
+                
+            });
+
+            $('#manageImage').submit(function(e) {
+                e.preventDefault();
+                var imageId = $('#hidImageId').val();
+                let formData = new FormData(this);
+                if($('#selImageType option:selected').val() == ""){
+                    alert('이미지타입을 선택해주세요');
+                    return false;
+                }
+                if($('#txtImageName').val() == ""){
+                    alert('이름을 입력해주세요');
+                    return false;
+                }
+                
+                if(imageId == 0){//추가
+                    if ($('#fileImage').get(0).files.length === 0) {
+                       alert('파일을 입력해주세요');
+                        return false;
+                    }
+                    var action = '/operationTopDownImageManage';
+                    $.ajax({
+                        url: action,
+                        data: formData,
+                        type: "POST",
+                        dataType: 'JSON',
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function ({status, data}) {
+                            $('#modal-id_image').modal('hide');
+                            var table = $('#imageTable').DataTable(); 
+                            table.draw();
+                        },
+                        error: function (data) {
+                        }
+                    });
+                }else{
+                    var action = '/operationTopDownImageManage/update';
+                    $.ajax({
+                        url: action,
+                        data: formData,
+                        type: "POST",
+                        dataType: 'JSON',
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function ({status, data}) {
+                            $('#modal-id_image').modal('hide');
+                            var table = $('#imageTable').DataTable(); 
+                            table.draw();
+                        },
+                        error: function (data) {
+                        }
+                    });
                 }
             });
 
-            // Handle form submission event
-            // $('#divProductForm').on('submit', function(e){
-            //     var form = this;
+            $('body').on('click', '.btnEdit', function (e) {
+                var image_id = $(this).attr('data-id');
+                $('#hidImageId').val(image_id);
+                $.get('operationTopDownImageManage/' + image_id +'/edit', function ({status, data}) {
+                    $('#selImageType').val(data.strImageType);
+                    $('#txtImageName').val(data.strImageName);
+                    $('#fileImage').val(null);
+                    $('#imgPreview').attr('src', data.strImageURL);
+                    $('#modal-id_image').modal('show');
+                    
+                })
+            });
 
-            //     // Iterate over all checkboxes in the table
-            //     table.$('input[type="checkbox"]').each(function(){
-            //         // If checkbox doesn't exist in DOM
-            //         if(!$.contains(document, this)){
-            //             // If checkbox is checked
-            //             if(this.checked){
-            //             // Create a hidden element
-            //             $(form).append(
-            //                 $('<input>')
-            //                     .attr('type', 'hidden')
-            //                     .attr('name', this.name)
-            //                     .val(this.value)
-            //             );
-            //             }
-            //         }
-            //     });
-            // });
-
-            $('body').on('click', '.btnAddMarketProduct', function () {
-                var form = $('#divProductForm');
-                var table = $('#productTable').DataTable(); 
-                // Iterate over all checkboxes in the table
-                table.$('input[type="checkbox"]').each(function(){
-                    // If checkbox doesn't exist in DOM
-                    if(!$.contains(document, this)){
-                        // If checkbox is checked
-                        if(this.checked){
-                        // Create a hidden element
-                        $(form).append(
-                            $('<input>')
-                                .attr('type', 'hidden')
-                                .attr('name', this.name)
-                                .val(this.value)
-                        );
-                        }
-                    }
-                });
-
-                var action = '/productSellTargetManageProducts/marketProductAdd';// $("#manageMarketAccount").attr("action");
-                var data = $('#divProductForm').serialize();
-                if(data.includes("chkProduct") <= 0)
-                {
-                    alert("상품을 하나이상 선택해주세요!");
+            $('body').on('click', '.btnDelete', function (e) {
+                if(!confirm("정말 삭제하시겠습니까?")){
                     return false;
                 }
+
+                var image_id = $(this).attr('data-id');
+
+                $('#hidImageId').val(image_id);
+
                 $.ajax({
-                    url: action,
-                    data: data,
-                    type: "POST",
-                    dataType: 'json',
+                    url: 'operationTopDownImageManage/' + image_id,
+                    type: "DELETE",
+                    dataType: 'JSON',
                     success: function ({status, data}) {
-                        if(status == "success"){
-                            window.open('/productSellTargetManageProducts/marketAccountList', '상품등록', 'scrollbars=1, resizable=1, width=1000, height=620');
-                            return false;
-                        }
+                        var table = $('#imageTable').DataTable(); 
+                        table.draw();
                     },
                     error: function (data) {
                     }
                 });
-                
-            });
-            $('body').on('click', '.btnAdd', function (e) {
-                // table.reload();
-                // var table = $('#productTable').DataTable(); 
-                // table.draw();
-                // e.preventDefault();
-                
-            });
-            $('body').on('click', '.btnEdit', function (e) {
-                // table.reload();
-                // var table = $('#productTable').DataTable(); 
-                // table.draw();
-                // e.preventDefault();
-                
-            });
-            $('body').on('click', '.btnDelete', function (e) {
-                // table.reload();
-                // var table = $('#productTable').DataTable(); 
-                // table.draw();
-                // e.preventDefault();
             });
         });	  
     </script>

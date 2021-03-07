@@ -11,10 +11,10 @@ class MarketSettingCoupang extends Model
     protected $table = 'tb_market_user_setting_coupang';
     protected $primaryKey = 'nIdx';
     protected $fillable = ['nMarketIdx', 'nUserId', 'nMarketAccIdx', 'strTitle', 'nSupportOption', 'nVersion', 'nSalesAgentRate', 'dtSalesPeriodStartDateTime', 'dtSalesPeriodEndDateTime', 'nUnitQuantity', 'nMaxQtyPerManDayLimit', 'nMaxQtyPerManQtyLimit', 'bParallelImport',
-                            'bOverSeaPurchaseAgent', 'bOnlyAdult', 'nImageProcessType', 'nDeliveryType', 'nPersonPassingCodeType', 'strUnionDeliveryType', 'nCountrysideDeliveryType', 'nOutboundDeliveryTime', 'nOutboundShippingPlaceCode', 'nDeliveryCompanyCode',
-                            'nDeliveryTaxType', 'nBaseDeliveryTax', 'nConditionFreeTax', 'nReturnAwayDeliveryTax', 'nDeliveryJejuAddTax', 'nDeliveryNotJejuTax', 'nReturnCenterCode', 'strReturnSellerName', 'strCompanyContactNumber', 'strReturnZipCode', 
-                            'strReturnAddress', 'strReturnAddressDetail', 'nExchangeType', 'nReturnChargeVendorType', 'nAterServiceGuideType', 'strAfterServiceGuide', 'strAfterServiceContactNumber', 'nRequireDocument1', 'nRequireDocument2', 'nRequireDocument3', 'nRequireDocument4', 'nRequireDocument5', 'nRequireDocument6',
-                            'nTopImage', 'nDownImage', 'created_at', 'updated_at', 'bIsDel'
+                            'bOverSeaPurchaseAgent', 'bOnlyAdult', 'nImageProcessType', 'nDeliveryType', 'nPersonPassingCodeType', 'strUnionDeliveryType', 'nUnionDeliveryQty', 'nRemoteAreaDeliveryType', 'nOutboundShippingTimeDay', 'strOutboundShippingPlaceCode', 'strDeliveryCompanyCode',
+                            'strDeliveryChargeType', 'nDeliveryCharge', 'nFreeShipOverAmount', 'nDeliveryChargeOnReturn', 'nReturnDeliveryCharge', 'nJejuDeliveryCharge', 'nNotJejuDeliveryCharge', 'strReturnCenterCode', 'strReturnSellerName', 'strCompanyContactNumber', 'strReturnZipCode', 
+                            'strReturnAddress', 'strReturnAddressDetail', 'strExchangeType', 'strReturnChargeVendorType', 'strAfterServiceGuideType', 'strAfterServiceGuide', 'strAfterServiceContactNumber', 'nRequireDocument1', 'nRequireDocument2', 'nRequireDocument3', 'nRequireDocument4', 'nRequireDocument5', 'nRequireDocument6',
+                            'nTopImageIdx', 'nDownImageIdx', 'created_at', 'updated_at', 'bIsUsed', 'bIsDel'
                         ];
     
     public function marketAccount()
@@ -69,5 +69,15 @@ class MarketSettingCoupang extends Model
     public function requireDocument6()
     {
         return $this->belongsTo(DocumentImage::class, 'nRequireDocument6', 'nIdx');
+    }
+
+    public function deliveryType()
+    {
+        return $this->belongsTo(DeliveryType::class, 'nDeliveryType', 'nIdx');
+    }
+
+    public function deliveryType1()
+    {
+        return $this->belongsTo(DeliveryType::class, 'nDeliveryType', 'nIdx');
     }
 }

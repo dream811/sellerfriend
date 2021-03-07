@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 use App\Models\Market;
 use App\Models\MarketAccount;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Console\Input\Input;
 use Yajra\DataTables\DataTables;
 
 class TopDownImageManageController extends Controller
@@ -46,7 +48,7 @@ class TopDownImageManageController extends Controller
                     return $btn;
                 })
                 ->addColumn('image', function($row){
-                    $element = '<img alt="Avatar" style="width: 5rem;" class="table-product-image" src="'.$row->strImageURL.'">';
+                    $element = '<img alt="Avatar" style="width: 5rem;" class="table-product-image" src="'.asset('storage/'. $row->strImageURL).'">';
                     return $element;
                 })
                 ->rawColumns(['image', 'action'])
@@ -58,69 +60,64 @@ class TopDownImageManageController extends Controller
         return view('operation.TopDownImageList', compact('title', 'images'));
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function accounts($marketId = 0)
-    {
-        
-        $tr = new GoogleTranslate(); // Translates to 'en' from auto-detected language by default
-
-        $title = "오픈마켓계정관리";
-       
-        $marketAccounts = MarketAccount::where('bIsDel', 0)
-                ->where('nMarketIdx', $marketId)
-                ->where('nUserId', Auth::id())
-                ->orderBy('nIdx')->get();
-        // return view('operation.OpenMarketAccountManage', compact('title', 'markets'))
-        //    ->with('i', (request()->input('page', 1) - 1) * 15);
-
-        return response()->json(["status" => "success", "data" => $marketAccounts]);
-    }
+    
 
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function accountSave($marketId=0, Request $request)
+    public function store(Request $request)
     {
-        $marketAccount = new MarketAccount([
-            'nMarketIdx' => $marketId,
+        $imageFile = $request->file('fileImage');
+        $new_name = rand() . '.' . $imageFile->getClientOriginalExtension();
+        $old_name = $imageFile->getClientOriginalName();
+        $path = $request->file('fileImage')->storeAs('uploads/document_images', $new_name, 'public');
+        $docImage = new DocumentImage([
             'nUserId' => Auth::id(),
-            'strAccountId' => $request->post('txtAccountId'),
-            'strAccountPwd'=> $request->post('txtAccountPwd'),
-            'strVendorId'=> $request->post('txtVendorId'),
-            'strAPIAccessKey'=> $request->post('txtAPIAccessKey'),
-            'strSecretKey'=> $request->post('txtSecretKey'),
-            'bIsUsed'=> 1,
+            'strImageType' => $request->post('selImageType'),
+            'strImageURL'=> $path,
+            'strImageName'=> $request->post('txtImageName'),
+            'strFileName'=> $old_name,
             'bIsDel'=> 0
         ]);
-		$marketAccount->save();    
-        return response()->json(["status" => "success", "data" => $marketAccount]);
+		$docImage->save();    
+        return response()->json(["status" => "success", "data" => $docImage]);
     }
     /**
      * Display the specified resource.
      *
      */
-    public function accountShow($marketId = 0, $accountId = 0)
+    public function edit($imageId = 0)
     {
         //
-        $marketAccount  = MarketAccount::where('nIdx', $accountId)->first();
-        return response()->json(["status" => "success", "data" => $marketAccount]);
+        $documentImage  = DocumentImage::where('nIdx', $imageId)->first();
+        $documentImage->strImageURL = asset('storage/'. $documentImage->strImageURL);
+        return response()->json(["status" => "success", "data" => $documentImage]);
     }
 
-    public function accountUpdate($marketId=0, $accountId=0, Request $request)
+    public function update(Request $request)
     {
-        $marketAccount = MarketAccount::find($accountId);
-        $marketAccount->strAccountId = $request->post('txtAccountId');
-        $marketAccount->strAccountPwd = $request->post('txtAccountPwd');
-        $marketAccount->strAPIAccessKey = $request->post('txtAPIAccessKey');
-        $marketAccount->strSecretKey = $request->post('txtSecretKey');
-        $marketAccount->update();
-        return response()->json(["status" => "success", "data" => $marketAccount]);
+        $image = DocumentImage::find($request->post('hidImageId'));
+        //if exist new file, delete old file
+        $imageFile = $request->file('fileImage');
+        if($imageFile != null){
+            Storage::delete('public/'.$image->strImageURL);
+            $new_name = rand() . '.' . $imageFile->getClientOriginalExtension();
+            $old_name = $imageFile->getClientOriginalName();
+            $path = $request->file('fileImage')->storeAs('uploads/document_images', $new_name, 'public');
+
+            //edit file info of db
+            $image->strImageURL = $path;
+            $image->strFileName = $old_name;
+        }
+        $image->strImageType = $request->get('selImageType');
+        $image->strImageName = $request->get('txtImageName');
+        $request->get('selImageType');
+        $request->get('txtImageName');
+
+        $image->update();
+        return response()->json(["status" => "success", "data" => $image]);
     }
 
     /**
@@ -129,11 +126,13 @@ class TopDownImageManageController extends Controller
      * @param  $accountId
      * @return \Illuminate\Http\Response
      */
-    public function accountDelete($marketId, $accountId)
+    public function delete($imageId)
     {
         //
-        $marketAccount = MarketAccount::where('nIdx', $accountId)->delete();
-        return response()->json(["status" => "success", "data" => $marketAccount]);
+        $image = DocumentImage::find($imageId);
+        Storage::delete('public/'.$image->strImageURL);
+        $image->delete();
+        return response()->json(["status" => "success", "data" => "Successfully removed!"]);
     }
 
 }

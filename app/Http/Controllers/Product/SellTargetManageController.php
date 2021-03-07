@@ -15,6 +15,7 @@ use App\Models\ProductDetail;
 use App\Models\Come;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\MarketSettingCoupang;
 use Yajra\DataTables\Facades\DataTables;
 use App\MyLibs\CoupangConnector;
 use DateTime;
@@ -275,11 +276,9 @@ class SellTargetManageController extends Controller
      */
     public function marketProductAdd(Request $request)
     {
-        $marketAccounts = MarketAccount::where('nUserId', Auth::id())
-                                        ->get();
+        
         //dd($marketAccounts);
         $chkProduct = $request->post('chkProduct');
-        //print_r($chkProduct);
         $select_all = $request->post('select_all');
         if($request->has('select_all')){
             session()->put('post_product_select_all', '1');
@@ -289,27 +288,34 @@ class SellTargetManageController extends Controller
             session()->put('post_products', $chkProduct);
         }
         
-        return response()->json(["status" => "success", "data" => $marketAccounts]);
+        return response()->json(["status" => "success", "data" => $chkProduct]);
     }
     //상품등록을 위한 마켓계정 리스트(get)
+    //쇼핑몰 아이디 선택
     public function marketAccountList()
     {
-        $marketAccounts = MarketAccount::where('nUserId', Auth::id())
+        // $marketAccounts = MarketAccount::where('nUserId', Auth::id())
+        //                                 ->get();
+        $settingCoupangs = MarketSettingCoupang::where('nUserId', Auth::id())
+                                        ->where('bIsDel', 0)
                                         ->get();
-
-        return view('product.MarketAccountList', compact('marketAccounts'));
+        return view('product.MarketAccountList', compact('settingCoupangs'));
     }
     //상품등록을 위한 마켓계정 선택(post)
+    //상품등록정보
     public function marketAccountSave(Request $request)
     {
         $chkAccount = $request->post('chkAccount');
-        //print_r($chkAccount);
-        $marketAccounts = MarketAccount::where('nUserId', Auth::id())
-                                        ->join('tb_markets', 'tb_market_accounts.nMarketIdx', '=', 'tb_markets.nIdx')
-                                        ->where('tb_markets.strMarketCode', 'coupang')
-                                        ->whereIn('tb_market_accounts.nIdx', $chkAccount)
+        // print_r($chkAccount);
+        // $marketAccounts = MarketAccount::where('nUserId', Auth::id())
+        //                                 ->join('tb_markets', 'tb_market_accounts.nMarketIdx', '=', 'tb_markets.nIdx')
+        //                                 ->where('tb_markets.strMarketCode', 'coupang')
+        //                                 ->whereIn('tb_market_accounts.nIdx', $chkAccount)
+        //                                 ->get();
+        $settingCoupangs = MarketSettingCoupang::where('nUserId', Auth::id())
+                                        ->whereIn('nIdx', $chkAccount)
                                         ->get();
-
+        
         $markets = Market::where('strMarketCode', 'coupang');
         if($request->has('select_all')){
             session()->put('post_marketId_select_all', '1');
@@ -318,16 +324,16 @@ class SellTargetManageController extends Controller
             session()->put('post_marketId_select_all', '0');
             session()->put('post_marketIds', $chkAccount);
         }
-        $product_select_all = session()->get('post_marketId_select_all', 0);
-        $product_selected = session()->get('post_marketIds', Array());
+        $market_select_all = session()->get('post_marketId_select_all', 0);
+        $market_selected = session()->get('post_marketIds', Array());
         $product_select_all = session()->get('post_product_select_all', 0);
         
-        return view('product.MarketProductPrepare', compact('marketAccounts', 'markets'));
+        return view('product.MarketProductPrepare', compact('settingCoupangs', 'markets'));
     }
     /**
      * 마켓 카테고리 탐색
      */
-    public function marketCategorySearch($marketCode = 'coupang', $categoryCode = 0, Request $request)
+    public function marketCategorySearch($marketCode = 'coupang', $categoryCode = 0, $setId=0, Request $request)
     {
         if($marketCode == 'coupang'){
             $coupang = new CoupangConnector();
@@ -345,7 +351,7 @@ class SellTargetManageController extends Controller
             return response()->json(["status" => "error", "data" => array()]);
         }
         
-        return view('product.MarketCategorySearch', compact('marketCode', 'categories_1'));
+        return view('product.MarketCategorySearch', compact('marketCode', 'categories_1', 'setId'));
     }
 
     /**
@@ -393,7 +399,6 @@ class SellTargetManageController extends Controller
      */
     public function marketAccountProduct(Request $request)
     {
-        $value = session()->get('post_products');
         //선택상품
         $product_select_all = session()->get('post_product_select_all', 0);
         $product_selected = session()->get('post_products', Array());
@@ -401,13 +406,13 @@ class SellTargetManageController extends Controller
         if($product_select_all == 1) {
             $products = Product::where('bIsDel', 0)
                 ->where('nUserId', Auth::id())
-                ->where('nProductWorkProcess', 0)
+                ->where('nProductWorkProcess', 3)
                 ->orderBy('nIdx')
                 ->get();
         }else{
             $products = Product::where('bIsDel', 0)
                 ->where('nUserId', Auth::id())
-                ->where('nProductWorkProcess', 0)
+                ->where('nProductWorkProcess', 3)
                 ->whereIn('nIdx', $product_selected)
                 ->orderBy('nIdx')
                 ->get();
@@ -416,12 +421,12 @@ class SellTargetManageController extends Controller
         $marketAcc_select_all = session()->get('post_marketId_select_all', 0);
         $marketAcc_selected = session()->get('post_marketIds', Array());
         if($marketAcc_select_all == 1) {
-            $accounts = MarketAccount::where('bIsDel', 0)
+            $settingCoupangs = MarketSettingCoupang::where('bIsDel', 0)
                 ->where('nUserId', Auth::id())
                 ->orderBy('nIdx')
                 ->get();
         }else{
-            $accounts = MarketAccount::where('bIsDel', 0)
+            $settingCoupangs = MarketSettingCoupang::where('bIsDel', 0)
                 ->where('nUserId', Auth::id())
                 ->whereIn('nIdx', $marketAcc_selected)
                 ->orderBy('nIdx')
@@ -433,12 +438,13 @@ class SellTargetManageController extends Controller
         $CoupangCategoryCode = $arrCategoryCode["coupang"];
         $CoupangCategoryName = $arrCategoryName["coupang"];
         $coupang = new CoupangConnector();
-        
         $cateMetaInfo = (object)json_decode($coupang->getCategoryMetaInfo($CoupangCategoryCode), true);
+        //print_r($cateMetaInfo);
         //print_r($cateMetaInfo->data['attributes']);
         //notice 배렬을 만든다
         $noticeArr = array();
         foreach ($cateMetaInfo->data['noticeCategories'][0]['noticeCategoryDetailNames'] as $key =>$value) {
+            if($key>0) break;
             $notice = array(
                 "noticeCategoryName"=> $cateMetaInfo->data['noticeCategories'][0]['noticeCategoryName'],
                 "noticeCategoryDetailName"=> $cateMetaInfo->data['noticeCategories'][0]['noticeCategoryDetailNames'][$key]['noticeCategoryDetailName'],
@@ -446,131 +452,142 @@ class SellTargetManageController extends Controller
             );
             array_push($noticeArr, $notice);
         }
+        print_r($noticeArr);
+        print_r($cateMetaInfo->data['noticeCategories']);
         //end of notice
         //attribute 배렬을 만든다
         $attrArr = array();
         foreach ($cateMetaInfo->data['attributes'] as $key =>$value) {
-            if($cateMetaInfo->data['attributes'][$key]['basicUnit'] != "없음"){
+            if($key>0) break;
+            if($cateMetaInfo->data['attributes'][$key]['required'] != "MANDATORY"){
                 $attr = array(
                     "attributeTypeName"=> $cateMetaInfo->data['attributes'][$key]['attributeTypeName'],
                     "attributeValueName"=> "1".$cateMetaInfo->data['attributes'][$key]['basicUnit']
                 );
                 array_push($attrArr, $attr);
             }
+            
         }
-        //end of attribute
-
         print_r($attrArr);
-        $place_codes= 3384548;
-        $outboundInfo = (object)json_decode($coupang->getOutboundShippingCenterInfo("", $place_codes), true);
-        $returnCenterInfo = (object)json_decode($coupang->getReturnShippingCenterInfo(1000742568), true);
-
-        $image="<img src='http://image11.coupangcdn.com/image/product/content/vendorItem/2018/06/26/196713/738d905f-ed80-4fd8-ad21-ed87b195a19e.jpg'>";
-        $today = new DateTime('Now');
-        foreach ($accounts as $key1 => $account) {
+        //end of attribute
+        
+        
+        foreach ($settingCoupangs as $key1 => $setting) {
+            $outboundInfo = (object)json_decode($coupang->getOutboundShippingCenterInfo("", $setting->strOutboundShippingPlaceCode), true);
+            $returnCenterInfo = (object)json_decode($coupang->getReturnShippingCenterInfo($setting->strReturnCenterCode), true);
             foreach ($products as $key2 => $product) {
+                
+                $start = new DateTime($setting->dtSalesPeriodStartDateTime);
+                $end = new DateTime($setting->dtSalesPeriodStartDateTime);
                 $categoryNameList = mb_split(" > ", $CoupangCategoryName);
+                //아이템배렬을 만든다
+                $productItems = $product->productItems;
+                $arrItems = Array();
+                foreach ($productItems as $key3 => $item) 
+                {
+                    if($key3 > 1) break;
+                    // $item = $productItems->first();
+                    //if()
+                    $arrItems[] = array(
+                        "itemName"=> $item->strSubItemKrColorPattern."_".$item->strSubItemKrSize."_".$key3,
+                        "originalPrice"=> $item->nSubItemBasePrice,
+                        "salePrice"=> $item->nSubItemSalePrice,
+                        "maximumBuyCount"=> $setting->nMaxQtyPerManDayLimit,
+                        "maximumBuyForPerson"=> "0",
+                        "outboundShippingTimeDay"=> $setting->nOutboundShippingTimeDay,
+                        "maximumBuyForPersonPeriod"=> $setting->nMaxQtyPerManQtyLimit,
+                        "unitCount"=> $setting->nUnitQuantity,
+                        "adultOnly"=> $setting->bOnlyAdult == 0 ? "AUDLT_ONLY" : "EVERYONE",
+                        "taxType"=> "TAX",
+                        "parallelImported"=> $setting->bParallelImport == 1 ? "PARALLEL_IMPORTED" : "NOT_PARALLEL_IMPORTED",
+                        "overseasPurchased"=> $setting->bOnlyAdult == 1 ? "OVERSEAS_PURCHASED" :"NOT_OVERSEAS_PURCHASED",
+                        "pccNeeded"=> $setting->nPersonPassingCodeType == 1 ? "true" : "false",
+                        "externalVendorSku"=> "0001",
+                        "barcode"=> "",
+                        "emptyBarcode"=> true,
+                        "emptyBarcodeReason"=> "상품확인불가_바코드없음사유",
+                        "modelNo"=> "1717171",
+                        "extraProperties"=> null,
+                        "certifications"=> $cateMetaInfo->data['certifications'],
+                        "searchTags"=> explode(",",$product->strKeyword),
+                        "images"=> array(
+                            array(
+                                "imageOrder"=> 0,
+                                "imageType"=> "REPRESENTATION",
+                                "vendorPath"=> "https:".$product->productImages->first()->strURL
+                            ),
+                            array(
+                                "imageOrder"=> 1,
+                                "imageType"=> "DETAIL",
+                                "vendorPath"=> "https:".$product->productImages->where('nImageCode', 1)->first()->strURL
+                            ),
+                            array(
+                                "imageOrder"=> 2,
+                                "imageType"=> "DETAIL",
+                                "vendorPath"=> "https:".$product->productImages->where('nImageCode', 2)->first()->strURL
+                            )
+                        ),
+                        "notices"=> $noticeArr,
+                        "attributes"=> $attrArr,
+                        "contents"=> array(
+                            array(
+                                "contentsType"=> "TEXT",
+                                "contentDetails"=> array(
+                                    array(
+                                        "content"=> $product->productDetail->blobNote,
+                                        "detailType"=> "TEXT"
+                                    )
+                                )
+                            )
+                        ),
+                        "offerCondition" => "NEW",
+                        "offerDescription" => ""
+                    );
+                }
+                //print_r($arrItems);
+                //기본 상품배렬을 만든다
                 $objProduct = array(
                     "displayCategoryCode" => $CoupangCategoryCode, //쿠팡카테고리 코드
                     "sellerProductName" => $product->strMainName,
-                    "vendorId" => $account->strVendorId,
-                    "saleStartedAt" => $today->format('Y-m-d\TH:i:s'),
-                    "saleEndedAt" => "2099-01-01T23:59:59",
-                    "displayProductName" => $product->strBrand.$product->strMainKrName,
+                    "vendorId" => $setting->marketAccount->strVendorId,
+                    "saleStartedAt" => $start->format('Y-m-d\TH:i:s'),
+                    "saleEndedAt" => $end->format('Y-m-d\TH:i:s'),
+                    "displayProductName" => $product->strBrand.$product->strKrMainName,
                     "brand" => $product->strBrand,
-                    "generalProductName" => $product->strMainKrName,
+                    "generalProductName" => $product->strKrMainName,
                     "productGroup" => $categoryNameList[count($categoryNameList)-1],
-                    "deliveryMethod" => "SEQUENCIAL",
-                    "deliveryCompanyCode" => $outboundInfo->content[0]['remoteInfos'][0]['deliveryCode'],
-                    "deliveryChargeType" => "FREE",
-                    "deliveryCharge" => 0,
-                    "freeShipOverAmount" => 0,
-                    "deliveryChargeOnReturn" => 2500,
-                    "remoteAreaDeliverable" => "N",
-                    "unionDeliveryType" => "UNION_DELIVERY",
-                    "returnCenterCode" => $returnCenterInfo->data[0]['returnCenterCode'],
-                    "returnChargeName" => $returnCenterInfo->data[0]['shippingPlaceName'],
-                    "companyContactNumber" => $returnCenterInfo->data[0]['placeAddresses'][0]['companyContactNumber'],
-                    "returnZipCode" => $returnCenterInfo->data[0]['placeAddresses'][0]['returnZipCode'],
-                    "returnAddress" => $returnCenterInfo->data[0]['placeAddresses'][0]['returnAddress'],
-                    "returnAddressDetail" => $returnCenterInfo->data[0]['placeAddresses'][0]['returnAddressDetail'],
-                    "returnCharge" => 2500,
-                    "returnChargeVendor" => "N",
-                    "afterServiceInformation" => "A/S안내 1544-1255",
-                    "afterServiceContactNumber" => "1544-1255",
-                    "outboundShippingPlaceCode" => $outboundInfo->content[0]['outboundShippingPlaceCode'],
-                    "vendorUserId" => $account->strAccountId,
+                    "deliveryMethod" => $setting->deliveryType->strDeliveryCode,
+                    "deliveryCompanyCode" => $setting->strDeliveryCompanyCode,
+                    "deliveryChargeType" => $setting->strDeliveryChargeType,
+                    "deliveryCharge" => $setting->nDeliveryCharge,
+                    "freeShipOverAmount" => $setting->nFreeShipOverAmount,
+                    "deliveryChargeOnReturn" => $setting->nDeliveryChargeOnReturn,
+                    "remoteAreaDeliverable" => $setting->nRemoteAreaDeliveryType == 1 ? "Y" : "N",
+                    "unionDeliveryType" => $setting->strUnionDeliveryType,
+                    "returnCenterCode" => $setting->strReturnCenterCode,
+                    "returnChargeName" => $setting->strReturnSellerName,
+                    "companyContactNumber" => $setting->strCompanyContactNumber,
+                    "returnZipCode" => $setting->strReturnZipCode,
+                    "returnAddress" => $setting->strReturnAddress,
+                    "returnAddressDetail" => $setting->strReturnAddressDetail,
+                    "returnCharge" => $setting->nReturnDeliveryCharge,
+                    "returnChargeVendor" => $setting->strReturnChargeVendorType,
+                    "afterServiceInformation" => $setting->strAfterServiceGuide,
+                    "afterServiceContactNumber" => $setting->strAfterServiceContactNumber,
+                    "outboundShippingPlaceCode" => $setting->strOutboundShippingPlaceCode,
+                    "vendorUserId" => $setting->marketAccount->strAccountId,
                     "requested" => false,
-                    "items" => array(
-                        array(
-                            "itemName"=> "200ml_1개",
-                            "originalPrice"=> 13000,
-                            "salePrice"=> 10000,
-                            "maximumBuyCount"=> "100",
-                            "maximumBuyForPerson"=> "0",
-                            "outboundShippingTimeDay"=> "1",
-                            "maximumBuyForPersonPeriod"=> "1",
-                            "unitCount"=> 1,
-                            "adultOnly"=> "EVERYONE",
-                            "taxType"=> "TAX",
-                            "parallelImported"=> "NOT_PARALLEL_IMPORTED",
-                            "overseasPurchased"=> "NOT_OVERSEAS_PURCHASED",
-                            "pccNeeded"=> "false",
-                            "externalVendorSku"=> "0001",
-                            "barcode"=> "",
-                            "emptyBarcode"=> true,
-                            "emptyBarcodeReason"=> "상품확인불가_바코드없음사유",
-                            "modelNo"=> "1717171",
-                            "extraProperties"=> null,
-                            "certifications"=> $cateMetaInfo->data['certifications'],
-                            "searchTags"=> array(
-                                "검색어1",
-                                "검색어2"
-                            ),
-                            "images"=> array(
-                                array(
-                                    "imageOrder"=> 0,
-                                    "imageType"=> "REPRESENTATION",
-                                    "vendorPath"=> "http://image11.coupangcdn.com/image/product/image/vendoritem/2018/06/25/3719529368/27a6b898-ff3b-4a27-b1e4-330a90c25e9c.jpg"
-                                ),
-                                array(
-                                    "imageOrder"=> 1,
-                                    "imageType"=> "DETAIL",
-                                    "vendorPath"=> "http://image11.coupangcdn.com/image/product/image/vendoritem/2017/02/21/3000169918/34b79649-d625-4f49-a260-b78bf7a573a8.jpg"
-                                ),
-                                array(
-                                    "imageOrder"=> 2,
-                                    "imageType"=> "DETAIL",
-                                    "vendorPath"=> "http://image11.coupangcdn.com/image/product/image/vendoritem/2018/06/28/3000169918/5716aa61-70bd-47cd-8f3d-f3d49e7f496d.jpg"
-                                )
-                            ),
-                            "notices"=> $noticeArr,
-                            "attributes"=> $attrArr,
-                            "contents"=> array(
-                                array(
-                                    "contentsType"=> "TEXT",
-                                    "contentDetails"=> array(
-                                        array(
-                                            "content"=> "'.$image.'",
-                                            "detailType"=> "TEXT"
-                                        )
-                                    )
-                                )
-                            ),
-                            "offerCondition" => "NEW",
-                            "offerDescription" => ""
-                        ),
-                    ),
+                    "items" => $arrItems,
                     "requiredDocuments"=> array(
                         array(
-                            "templateName"=> "기타인증서류",
-                            "vendorDocumentPath"=> "http://image11.coupangcdn.com/image/product/content/vendorItem/2018/07/02/41579010/eebc0c30-8f35-4a51-8ffd-808953414dc1.jpg"
+                            "templateName"=> $setting->requireDocument3->strImageName,
+                            "vendorDocumentPath"=> asset('storage/'. $setting->requireDocument3->strImageURL)
                         )
                     ),
                     "extraInfoMessage"=> "",
                     "manufacture"=> $product->strBrand
                 );
-                //echo json_encode($objProduct);
+                // echo json_encode($objProduct);
                 $coupang->addProduct(json_encode($objProduct));
             }
         }
@@ -621,7 +638,7 @@ class SellTargetManageController extends Controller
     {
         //
         // $marketAccount  = MarketAccount::where('nIdx', $accountId)->first();
-        return response()->json(["status" => "success", "data" => $marketAccount]);
+        // return response()->json(["status" => "success", "data" => $marketAccount]);
     }
 
     public function accountUpdate($marketId=0, $accountId=0, Request $request)
@@ -657,6 +674,6 @@ class SellTargetManageController extends Controller
     {
         //
         //$marketAccount = MarketAccount::where('nIdx', $accountId)->delete();
-        return response()->json(["status" => "success", "data" => $marketAccount]);
+        // return response()->json(["status" => "success", "data" => $marketAccount]);
     }
 }

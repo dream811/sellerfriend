@@ -875,10 +875,10 @@ class CoupangConnector {
         date_default_timezone_set("GMT+0");
 
 
-        echo $datetime = date("ymd").'T'.date("His").'Z';
+        $datetime = date("ymd").'T'.date("His").'Z';
         $method = "GET";
-        $path = "/v2/providers/marketplace_openapi/apis/api/v1/vendor/shipping-place/outbound?pageSize=".$page_size."&pageNum=".$page_number;
-        $query = "";
+        $path = "/v2/providers/marketplace_openapi/apis/api/v1/vendor/shipping-place/outbound";
+        $query = "pageSize=".$page_size."&pageNum=".$page_number;
 
         $message = $datetime.$method.$path.$query;
 
@@ -902,7 +902,7 @@ class CoupangConnector {
 
         //echo($httpcode);
 
-        //echo($result);
+        // echo($result);
         return $result;
     }
     /**
@@ -1019,7 +1019,7 @@ class CoupangConnector {
         date_default_timezone_set("GMT+0");
 
 
-        echo $datetime = date("ymd").'T'.date("His").'Z';
+        $datetime = date("ymd").'T'.date("His").'Z';
         $method = "GET";
         $path = "/v2/providers/openapi/apis/api/v4/vendors/{$this->VENDOR_ID}/returnShippingCenters";
         $query = "pageNum={$page_number}&pageSize={$page_size}";

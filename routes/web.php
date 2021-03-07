@@ -45,7 +45,7 @@ Route::post('/productSellTargetManageProducts/marketAccountList', [App\Http\Cont
 
 Route::post('/productSellTargetManageProducts/marketAccountSelect', [App\Http\Controllers\Product\SellTargetManageController::class, 'marketAccountSelect'])->name('product.MarketAccountSelect');
 Route::post('/productSellTargetManageProducts/marketAccountProduct', [App\Http\Controllers\Product\SellTargetManageController::class, 'marketAccountProduct'])->name('product.MarketAccountProduct');
-Route::get('/productSearchMarketCategory/{marketCode}/category/{categoryCode}', [App\Http\Controllers\Product\SellTargetManageController::class, 'marketCategorySearch'])->name('product.SearchMarketCategory');
+Route::get('/productSearchMarketCategory/{marketCode}/category/{categoryCode}/setting/{setId}', [App\Http\Controllers\Product\SellTargetManageController::class, 'marketCategorySearch'])->name('product.SearchMarketCategory');
 Route::get('/productSearchMarketOptionMapping/{marketCode}/category/{categoryCode}', [App\Http\Controllers\Product\SellTargetManageController::class, 'marketOptionMappingSearch'])->name('product.SearchMarketOptionMapping');
 //2
 Route::get('/productRegisteredProductManage', [App\Http\Controllers\Product\RegisteredProductManageController::class, 'index'])->name('product.RegisteredProductManage');
@@ -120,9 +120,18 @@ Route::get('/operationOpenMarketManage/{marketId}/AccountDelete/{accountId}', [A
 //기초설정관리
 Route::get('/operationBasicSettingManage', [App\Http\Controllers\Operation\BasicSettingManageController::class, 'index'])->name('operation.BasicSettingManage');
 Route::get('/operationBasicSettingManage/{market_code}/setting/{set_id}', [App\Http\Controllers\Operation\BasicSettingManageController::class, 'setting'])->name('operation.BasicSettingManageSetting');
-Route::post('/operationBasicSettingManage/settingSave', [App\Http\Controllers\Operation\BasicSettingManageController::class, 'settingSave'])->name('operation.BasicSettingManageSettingSave');
+//출고지 정보
+Route::get('/operationBasicSettingManage/SearchOutboundShippingPlace/{market_id}/account/{account_id}', [App\Http\Controllers\Operation\BasicSettingManageController::class, 'searchOutboundShippingPlace'])->name('operation.BasicSettingManageSetting.SearchOutboundShippingPlace');
+//반품지 정보
+Route::get('/operationBasicSettingManage/SearchReturnShippingCenter/{market_id}/account/{account_id}', [App\Http\Controllers\Operation\BasicSettingManageController::class, 'searchReturnShippingCenter'])->name('operation.BasicSettingManageSetting.SearchReturnShippingCenter');
+//기초설정보관
+Route::post('/operationBasicSettingManage/{market_code}/setting/{set_id}', [App\Http\Controllers\Operation\BasicSettingManageController::class, 'settingSave'])->name('operation.BasicSettingManageSettingSave');
 //상하단이미지관리
 Route::get('/operationTopDownImageManage', [App\Http\Controllers\Operation\TopDownImageManageController::class, 'index'])->name('operation.TopDownImageManage');
+Route::post('/operationTopDownImageManage', [App\Http\Controllers\Operation\TopDownImageManageController::class, 'store'])->name('operation.TopDownImageManageStore');
+Route::get('/operationTopDownImageManage/{imageId}/edit', [App\Http\Controllers\Operation\TopDownImageManageController::class, 'edit'])->name('operation.TopDownImageManageEdit');
+Route::post('/operationTopDownImageManage/update', [App\Http\Controllers\Operation\TopDownImageManageController::class, 'update'])->name('operation.TopDownImageManageUpdate');
+Route::delete('/operationTopDownImageManage/{imageId}', [App\Http\Controllers\Operation\TopDownImageManageController::class, 'delete'])->name('operation.TopDownImageManageDelete');
 //예치금관리
 Route::get('/operationDepositManage', [App\Http\Controllers\Operation\DepositManageManageController::class, 'index'])->name('operation.DepositManage');
 //카카오알림톡
