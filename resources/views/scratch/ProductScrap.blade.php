@@ -38,7 +38,7 @@
                                     <div class="form-group row col-12">
                                         <label for="txtScrapURL">대상URL</label>
                                         <div class="input-group input-group-sm">
-                                            <input type="url" class="form-control" name="txtScrapURL" id="txtScrapURL" value="" placeholder="Tmall, Taobao의 상품을 URL을 붙여넣기(Ctrl+V)해 주세요.">
+                                            <input type="url" class="form-control" name="txtScrapURL" id="txtScrapURL" value="" placeholder="Tmall, Taobao, 1688, vvic의 상품URL을 붙여넣기(Ctrl+V)해 주세요.">
                                             <span class="input-group-append">
                                                 <button type="button" class="btn btn-danger btn-flat btnScrapProduct">상품수집</button>
                                             </span>
@@ -363,7 +363,7 @@
                                                 height: 50%;
                                             }
                                         </style>
-                                        <table class="table table-bordered text-nowrap table-sm subItemsTable">
+                                        <table class="table table-fixed-header table-bordered text-nowrap table-sm subItemsTable">
                                             <thead class="thead-dark">
                                                 <tr class="thead-dark">
                                                     <th style="width:20px !important; text-align:center; vertical-align:center;">옵션사진</th>
@@ -640,7 +640,6 @@
                 });
             });
     });
-    // Add remove loading class on body element based on Ajax request status
     
     </script>        
     @endsection

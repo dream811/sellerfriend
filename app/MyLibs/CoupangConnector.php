@@ -235,9 +235,9 @@ class CoupangConnector {
         
         curl_close($curl);
         
-        echo($httpcode);
+        //return($httpcode);
         
-        echo($result);
+        return($result);
     }
     /**
      * 상품수정(put)

@@ -46,11 +46,11 @@
 <li class="nav-item">
     <a href="{{ route('home') }}" class="nav-link {{ (request()->is('home')) ? 'active' : '' }}">
         <i class="nav-icon fas fa-home"></i>
-        <p>Home</p>
+        <p>홈</p>
     </a>
 </li>
 <li class="nav-item {{ (request()->routeIs('scratch*')) ? 'menu-open' : '' }}">
-    <a href="#" class="nav-link">
+    <a href="#" class="nav-link {{ (request()->routeIs('scratch*')) ? 'active' : '' }}">
         <i class="nav-icon fas fa-copy"></i>
         <p>
         상품수집관리
@@ -86,7 +86,7 @@
     </ul>
 </li>
 <li class="nav-item {{ (request()->routeIs('product*')) ? 'menu-open' : '' }}">
-    <a href="#" class="nav-link">
+    <a href="#" class="nav-link {{ (request()->routeIs('product*')) ? 'active' : '' }}">
         <i class="nav-icon fas fa-copy"></i>
         <p>
         상품관리
@@ -122,7 +122,7 @@
     </ul>
 </li>
 <li class="nav-item {{ (request()->routeIs('order*')) ? 'menu-open' : '' }}">
-    <a href="{{ route('order.Waiting') }}" class="nav-link">
+    <a href="#" class="nav-link {{ (request()->routeIs('order*')) ? 'active' : '' }}">
         <i class="nav-icon fas fa-copy"></i>
         <p>
         주문관리
@@ -132,7 +132,7 @@
     </a>
     <ul class="nav nav-treeview">
         <li class="nav-item">
-        <a href="{{ route('order.SalesStatus') }}" class="nav-link">
+        <a href="{{ route('order.SalesStatus') }}" class="nav-link {{ (request()->is('orderSalesStatus')) ? 'active' : '' }}">
             <i class="fas fa-cart-plus nav-icon"></i>
             <p>판매현황</p>
         </a>

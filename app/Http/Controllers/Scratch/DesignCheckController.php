@@ -11,8 +11,8 @@ use App\Models\Come;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Country;
-use DataTables;
 use Exception;
+use Yajra\DataTables\DataTables;
 
 class DesignCheckController extends Controller
 {
@@ -76,7 +76,7 @@ class DesignCheckController extends Controller
                 ->where('nUserId', Auth::id())
                 ->where('nProductWorkProcess', 2)
                 ->orderBy('nIdx');
-            return Datatables::of($products)
+            return DataTables::of($products)
                 ->addIndexColumn()
                 ->addColumn('check', function($row){
                     $element = '<input type="checkbox" name="chkProduct[]" onclick="" value="'.$row->nIdx.'">';
@@ -188,7 +188,8 @@ class DesignCheckController extends Controller
                     }
                     if($request->get('daterange')){
                         $dates = explode(' ~ ', $request->get('daterange'));
-                        $query->whereBetween('created_at', [$dates[0], $dates[1]]);
+                        $endDate = date('Y-m-d H:i:s', strtotime($dates[1] . ' +1 day'));
+                        $query->whereBetween('created_at', [$dates[0], $endDate]);
                     }
                     if($request->get('category1') != ""){
                         $query->where('strCategoryCode1', '=', "{$request->get('category1')}");

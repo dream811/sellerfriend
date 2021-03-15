@@ -1,45 +1,12 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ config('app.name') }}</title>
-    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
-          integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
-          crossorigin="anonymous"/>
+@extends('layouts.window')
+@section('third_party_javascript')
+{{-- dialog --}}
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+@endsection
 
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-    <script src="{{ mix('js/app.js') }}"></script>
-    <link rel="stylesheet" href="{{asset('js/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
-    <link rel="stylesheet" href="{{asset('js/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
-    <link rel="stylesheet" href="{{asset('js/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
-    <!-- summernote -->
-    <link rel="stylesheet" href="{{asset('js/summernote/summernote-bs4.min.css')}}">
 
-    <!-- DataTables  & Plugins -->
-    <script src="{{asset('js/datatables/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('js/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
-    <script src="{{asset('js/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
-    <script src="{{asset('js/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
-    <script src="{{asset('js/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
-    <script src="{{asset('js/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
-    <!-- <script src="{{asset('js/jszip/jszip.min.js')}}"></script>
-    <script src="{{asset('js/pdfmake/pdfmake.min.js')}}"></script>
-    <script src="{{asset('js/pdfmake/vfs_fonts.js')}}"></script> -->
-    <script src="{{asset('js/datatables-buttons/js/buttons.html5.min.js')}}"></script>
-    <script src="{{asset('js/datatables-buttons/js/buttons.print.min.js')}}"></script>
-    <script src="{{asset('js/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
-    <!-- Summernote -->
-    <script src="{{asset('js/summernote/summernote-bs4.min.js')}}"></script>
-    {{-- dialog --}}
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    @yield('third_party_stylesheets')
-
-    @stack('page_css')
-</head>
-<body class="hold-transition sidebar-mini layout-fixed dark-mode text-sm">
+@section('content')
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -118,7 +85,7 @@
                                                     <div id="digOptionMappping_{{ $coupang->Market->strMarketCode}}_{{$coupang->nIdx}}" title="옵션설정"></div>
                                                     <div id="hidOptMappingInfo_{{ $coupang->Market->strMarketCode}}_{{$coupang->nIdx}}" class="d-none"></div>
                                                     <a href="javascript:void(0)" name="setOptionMapping[{{ $coupang->Market->strMarketCode}}]" id="setOptionMapping_{{ $coupang->Market->strMarketCode}}_{{$coupang->nIdx}}" data-code="{{ $coupang->Market->strMarketCode}}" data-id="{{ $coupang->nIdx }}" class="btn btn-secondary btn-xs btnSetOptionMapping" style="font-size:12px !important;">수정</a>
-                                                    <input class="p-0" name="txtOptionMapping[]" id="txtOptionMapping_{{$coupang->Market->strMarketCode}}_{{$coupang->nIdx}}" style="width:70%" type="" value="">
+                                                    <input class="p-0" name="txtOptionMapping_{{$coupang->Market->strMarketCode}}_{{$coupang->nIdx}}" id="txtOptionMapping_{{$coupang->Market->strMarketCode}}_{{$coupang->nIdx}}" style="width:70%" type="" value="">
                                                 </td>
                                                 <td>
                                                 </td>
@@ -149,7 +116,8 @@
             </div>
         </div>
     </div>
-    
+@endsection
+@section('script')
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
@@ -273,6 +241,4 @@
             $.SetCategoryInfo(market_code, category_code, category_tree, set_id);
         }
     </script>
-</body>
-</html>
-
+@endsection

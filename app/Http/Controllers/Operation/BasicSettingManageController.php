@@ -227,11 +227,13 @@ class BasicSettingManageController extends Controller
      * @param  $accountId
      * @return \Illuminate\Http\Response
      */
-    public function accountDelete($marketId, $accountId)
+    public function settingDelete($marketId, $setId)
     {
         //
-        $marketAccount = MarketAccount::where('nIdx', $accountId)->delete();
-        return response()->json(["status" => "success", "data" => $marketAccount]);
+        $market = Market::find($marketId);
+        if($market->strMarketCode == 'coupang'){
+            MarketSettingCoupang::find($setId)->delete();
+            return response()->json(["status" => "success", "data" => "Successfully removed!"]);
+        }
     }
-
 }

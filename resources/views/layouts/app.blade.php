@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="{{asset('js/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
     <!-- summernote -->
     <link rel="stylesheet" href="{{asset('js/summernote/summernote-bs4.min.css')}}">
+    <!-- image preview -->
+    <link rel="stylesheet" href="{{asset('js/image-preview/style.min.css')}}">
 
     <!-- DataTables  & Plugins -->
     <script src="{{asset('js/datatables/jquery.dataTables.min.js')}}"></script>
@@ -34,6 +36,9 @@
     <script src="{{asset('js/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
     <!-- Summernote -->
     <script src="{{asset('js/summernote/summernote-bs4.min.js')}}"></script>
+    <!-- image preview -->
+    <script src="{{asset('js/image-preview/imagepreview.js')}}"></script>
+
     @yield('third_party_stylesheets')
 
     @stack('page_css')

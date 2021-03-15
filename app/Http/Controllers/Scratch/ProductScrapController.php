@@ -91,16 +91,16 @@ class ProductScrapController extends Controller
         $tr = new GoogleTranslate('ko');
         $tr->setSource('zh-cn');
         $tr->setTarget('ko');
-        
         if (str_contains($result, 'failed')) return;
-
+        
         $arrResponse = (array)json_decode($result, true);
+
         if(str_contains($scrapURL, "detail.tmall.com")){
             $tranArr = $arrResponse['valItemInfo']['skuList'];
             foreach ($tranArr as $key => $value) {
                 unset($value['pvs']);
                 unset($value['skuId']);
-                $tranArr[$key] = $value;  
+                $tranArr[$key] = str_replace(' ', '@', $value);  
             }
             $stackCount = count($tranArr);
             $transResult = array();
@@ -109,23 +109,27 @@ class ProductScrapController extends Controller
                 
                 $transStack = array_slice($tranArr, $i, min(10, count($tranArr) - $i));
                 $transData = json_encode($transStack, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
-                $trnasResStack = (array)json_decode($tr->translate($transData), true);
+                $temp = $tr->translate($transData);
+                $trnasResStack = (array)json_decode($temp, true);
                 $transResult = array_merge($transResult, $trnasResStack);
                 $i += 10;
             }
+            
             $descData = "";
             foreach ($arrResponse['valItemInfo']['skuList'] as $key => $value) {
                 $price = $arrResponse['valItemInfo']['skuMap'][';'.$arrResponse['valItemInfo']['skuList'][$key]['pvs'].';']['price'];
                 $ChSize = explode(" ", array_values($arrResponse['valItemInfo']['skuList'][$key])[0], 2);
-                $KrSize = explode(" ", array_values($transResult[$key])[0], 2);
+                
+                $KrSize = explode("@", array_values($transResult[$key])[0], 2);
                 $arrResponse['valItemInfo']['skuList'][$key]['price'] = $price;
                 $arrResponse['valItemInfo']['skuList'][$key]['basePrice'] = number_format($price * 170, 2, '.', '');
-                $arrResponse['valItemInfo']['skuList'][$key]['salePrice'] = number_format(($price + $price * 0.3) * 170, 2, '.', '');
-                $arrResponse['valItemInfo']['skuList'][$key]['KrSize'] = $KrSize[0];//$tr->translate($ChSize[0]);
+                $arrResponse['valItemInfo']['skuList'][$key]['salePrice'] = number_format(round(($price + $price * 0.3) * 170, -1), 2, '.', '');
+                $arrResponse['valItemInfo']['skuList'][$key]['KrSize'] = str_replace('@', '', $KrSize[0]);//$tr->translate($ChSize[0]);
                 $arrResponse['valItemInfo']['skuList'][$key]['ChSize'] = $ChSize[0];
-                $arrResponse['valItemInfo']['skuList'][$key]['KrColorPattern'] = $KrSize[1];//$tr->translate($ChSize[1].$ChSize[2]);
+                $arrResponse['valItemInfo']['skuList'][$key]['KrColorPattern'] = str_replace('@', '', $KrSize[1]);//$tr->translate($ChSize[1].$ChSize[2]);
                 $arrResponse['valItemInfo']['skuList'][$key]['ChColorPattern'] = $ChSize[1];
-                $arrResponse['valItemInfo']['skuList'][$key]['image'] = $arrResponse['propertyPics'][';'.explode(";", $arrResponse['valItemInfo']['skuList'][$key]['pvs'])[1].';'][0];
+                $tmep = explode(";", $arrResponse['valItemInfo']['skuList'][$key]['pvs']);
+                $arrResponse['valItemInfo']['skuList'][$key]['image'] = count($tmep) < 2 ? $arrResponse['propertyPics'][';'.explode(";", $arrResponse['valItemInfo']['skuList'][$key]['pvs'])[0].';'][0] : $arrResponse['propertyPics'][';'.explode(";", $arrResponse['valItemInfo']['skuList'][$key]['pvs'])[1].';'][0];
                 $arrResponse['valItemInfo']['skuList'][$key]['weight'] = 0;
                 $descData .= '<div style="text-align: center;"><p>['.$arrResponse['valItemInfo']['skuList'][$key]['KrColorPattern'].', '.$arrResponse['valItemInfo']['skuList'][$key]['KrSize'].']</p><p><img src="'.$arrResponse['valItemInfo']['skuList'][$key]['image'].'"></p></div>';
             }
@@ -151,7 +155,7 @@ class ProductScrapController extends Controller
                 'images' => $arrResponse['propertyPics']['default'],
                 'description' => $descData
             );
-            //print_r($resDetailTmall);
+            
             return response()->json(["status" => "success", "data" => $resDetailTmall]);
         }else if(str_contains($scrapURL, "item.taobao.com")){
             //print_r($arrResponse);
@@ -188,7 +192,7 @@ class ProductScrapController extends Controller
                     "pvs" => $key,
                     "price" => $value['price'],
                     "basePrice" => number_format($value['price'] * 170, 2, '.', ''),
-                    "salePrice" => number_format(($value['price'] + $value['price'] * 0.3) * 170, 2, '.', ''),
+                    "salePrice" => number_format(round(($value['price'] + $value['price'] * 0.3) * 170, -1), 2, '.', ''),
                     "ChSize" => !isset($arrResponse['sizes']) ? "" : $arrResponse['sizes'][explode(';', $key)[1]],
                     "KrSize" => !isset($arrResponse['sizes']) ? "" : $arrResponse['sizes'][explode(';', $key)[1]],
                     "ChColorPattern" => !isset($arrResponse['colors']) ? "" : (!isset($arrResponse['sizes']) ? $arrResponse['colors'][explode(';', $key)[1]] : $arrResponse['colors'][explode(';', $key)[2]]),
@@ -253,7 +257,7 @@ class ProductScrapController extends Controller
                 $val = array(
                     "price" => $value['price'],
                     "basePrice" => number_format($value['price'] * 170, 2, '.', ''),
-                    "salePrice" => number_format(($value['price'] + $value['price'] * 0.3) * 170, 2, '.', ''),
+                    "salePrice" => number_format(round(($value['price'] + $value['price'] * 0.3) * 170, -1), 2, '.', ''),
                     "ChSize" => $itemCnSize,
                     "KrSize" => $itemKoSize,
                     "ChColorPattern" => $itemCnColor,
@@ -299,7 +303,7 @@ class ProductScrapController extends Controller
                 $val = array(
                     "price" => $value['price'],
                     "basePrice" => number_format($value['price'] * 170, 2, '.', ''),
-                    "salePrice" => number_format(($value['price'] + $value['price'] * 0.3) * 170, 2, '.', ''),
+                    "salePrice" => number_format(round(($value['price'] + $value['price'] * 0.3) * 170, -1), 2, '.', ''),
                     "ChSize" => $value['size_name'],
                     "KrSize" => $value['size_name'],
                     "ChColorPattern" => $value['color_name'],
@@ -346,6 +350,7 @@ class ProductScrapController extends Controller
             'strCategoryCode4' => $request->post('selCategoryName4'), 
             'strCategoryName' => $request->post('txtCategoryName'), 
             'nShareType' => $request->post('rdoShareType'),
+            'nProductWorkProcess' => 0,
             'bIsDel'=> 0
         ]);
         $product->save();
@@ -368,7 +373,7 @@ class ProductScrapController extends Controller
             'bAdditionalOption4' => number_format($request->post('chkAdditionalOption4')),
             'nMultiPriceOptionType' => number_format($request->post('rdoMultiPriceOptionType')),
             'nMarketPrice' => $nMarketPrice,
-            'nMarginPrice' => number_format($nMarketPrice / (100 - $nMarginPercent) /100 + $nMarketPrice, 2, '.', ''),
+            'nMarginPrice' => number_format(round($nMarketPrice / (100 - $nMarginPercent) /100 + $nMarketPrice, -1), 2, '.', ''),
             'nMarginPercent' => $nMarginPercent,
             'blobNote' => $request->post('summernote'),
             'bIsDel'=> 0
@@ -377,12 +382,17 @@ class ProductScrapController extends Controller
         //subitem data
         $countItem = count($request->post('txtSubItemImage'));
         
+        //만일 서브아이템이 10개 이상이라면 최대입력수를 늘인다
+        //if($countItem > 10)
+            ini_set('max_input_vars','10000' );
+
         $arrImage = $request->post('txtSubItemImage');
         $arrKrColorPattern = $request->post('txtSubItemKrColorPattern');
         $arrChColorPattern = $request->post('txtSubItemChColorPattern');
         $arrKrSize = $request->post('txtSubItemKrSize');
         $arrChSize = $request->post('txtSubItemChSize');
         $arrOptionPrice = $request->post('txtSubItemOptionPrice');
+        
         $arrBasePrice = $request->post('txtSubItemBasePrice');
         $arrSalePrice = $request->post('txtSubItemSalePrice');
         $arrWeight = $request->post('txtSubItemWeight');

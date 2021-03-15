@@ -23,9 +23,10 @@ use App\Models\Come;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Country;
-use DataTables;
 use App\MyLibs\CoupangConnector;
 use Exception;
+use Illuminate\Support\Facades\Date;
+use Yajra\DataTables\DataTables as DataTables;
 
 class ProductGetManageController extends Controller
 {
@@ -89,7 +90,7 @@ class ProductGetManageController extends Controller
                 ->where('nUserId', Auth::id())
                 ->where('nProductWorkProcess', 0)
                 ->orderBy('nIdx');
-            return Datatables::of($products)
+            return DataTables::of($products)
                 ->addIndexColumn()
                 ->addColumn('check', function($row){
                     $element = '<input type="checkbox" name="chkProduct[]" onclick="" value="'.$row->nIdx.'">';
@@ -201,7 +202,8 @@ class ProductGetManageController extends Controller
                     }
                     if($request->get('daterange')){
                         $dates = explode(' ~ ', $request->get('daterange'));
-                        $query->whereBetween('created_at', [$dates[0], $dates[1]]);
+                        $endDate = date('Y-m-d H:i:s', strtotime($dates[1] . ' +1 day'));
+                        $query->whereBetween('created_at', [$dates[0], $endDate]);
                     }
                     if($request->get('category1') != ""){
                         $query->where('strCategoryCode1', '=', "{$request->get('category1')}");
@@ -230,7 +232,6 @@ class ProductGetManageController extends Controller
         }
         return view('scratch.ProductGetManage', compact('title', 'brands', 'comes', 'countries', 'categories_1', 'categories_2', 'categories_3', 'categories_4', 'shareType', 'basePriceTypes', 'countryShippingCostTypes', 'worldShippingCostTypes', 'weightTypes'));
     }
-
     
     /**
      * Show the application dashboard.
@@ -248,52 +249,5 @@ class ProductGetManageController extends Controller
         {
             return response()->json(["status" => "error", "data" => "Resource update error."]);
         }
-        
-    }
-    /**
-     * Display the specified resource.
-     *
-     */
-    public function accountShow($marketId = 0, $accountId = 0)
-    {
-        //
-        // $marketAccount  = MarketAccount::where('nIdx', $accountId)->first();
-        //return response()->json(["status" => "success", "data" => $marketAccount]);
-    }
-
-    public function accountUpdate($marketId=0, $accountId=0, Request $request)
-    {
-        // $marketAccount = MarketAccount::find($accountId);
-        // $marketAccount->strAccountId = $request->post('txtAccountId');
-        // $marketAccount->strAccountPwd = $request->post('txtAccountPwd');
-        // $marketAccount->strAPIAccessKey = $request->post('txtAPIAccessKey');
-        // $marketAccount->update();
-        //return response()->json(["status" => "success", "data" => $marketAccount]);
-
-        // $tr = new GoogleTranslate(); // Translates to 'en' from auto-detected language by default
-
-        // $title = "오픈마켓계정관리";
-       
-        // $marketAccounts = MarketAccount::where('bIsDel', 0)
-        //         ->where('nMarketIdx', $id)
-        //         ->where('nUserId', Auth::id())
-        //         ->orderBy('nIdx')->paginate(15);
-              //dd($markets);
-        // return view('operation.OpenMarketAccountManage', compact('title', 'markets'))
-        //    ->with('i', (request()->input('page', 1) - 1) * 15);
-        //return response()->json(["status" => "success", "data" => $marketAccount]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  $accountId
-     * @return \Illuminate\Http\Response
-     */
-    public function accountDelete($marketId, $accountId)
-    {
-        //
-        //$marketAccount = MarketAccount::where('nIdx', $accountId)->delete();
-        //return response()->json(["status" => "success", "data" => $marketAccount]);
     }
 }

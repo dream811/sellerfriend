@@ -120,6 +120,7 @@ Route::get('/operationOpenMarketManage/{marketId}/AccountDelete/{accountId}', [A
 //기초설정관리
 Route::get('/operationBasicSettingManage', [App\Http\Controllers\Operation\BasicSettingManageController::class, 'index'])->name('operation.BasicSettingManage');
 Route::get('/operationBasicSettingManage/{market_code}/setting/{set_id}', [App\Http\Controllers\Operation\BasicSettingManageController::class, 'setting'])->name('operation.BasicSettingManageSetting');
+Route::get('/operationBasicSettingManage/{market_code}/settingDelete/{set_id}', [App\Http\Controllers\Operation\BasicSettingManageController::class, 'settingDelete'])->name('operation.BasicSettingManageSettingDelete');
 //출고지 정보
 Route::get('/operationBasicSettingManage/SearchOutboundShippingPlace/{market_id}/account/{account_id}', [App\Http\Controllers\Operation\BasicSettingManageController::class, 'searchOutboundShippingPlace'])->name('operation.BasicSettingManageSetting.SearchOutboundShippingPlace');
 //반품지 정보

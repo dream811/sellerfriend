@@ -7,8 +7,8 @@
     </a>
 
     <div class="sidebar">
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column text-sm nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+        <nav class="mt-2 text-xs">
+            <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
                 @include('layouts.lmenu')
             </ul>
         </nav>

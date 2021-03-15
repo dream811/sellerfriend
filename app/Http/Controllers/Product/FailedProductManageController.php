@@ -13,8 +13,8 @@ use App\Models\ProductDetail;
 use App\Models\Come;
 use App\Models\Brand;
 use App\Models\Category;
-use DataTables;
 use App\MyLibs\CoupangConnector;
+use Yajra\DataTables\DataTables as DataTables;
 
 class FailedProductManageController extends Controller
 {
@@ -72,7 +72,7 @@ class FailedProductManageController extends Controller
                 ->where('nUserId', Auth::id())
                 ->orderBy('nIdx');
 
-            return Datatables::eloquent($products)
+            return DataTables::eloquent($products)
                     ->addIndexColumn()
                     ->addColumn('check', function($row){
                         $check = '<input type="checkbox" name="chkProduct[]" onclick="" value="'.$row->nIdx.'">';
@@ -124,7 +124,6 @@ class FailedProductManageController extends Controller
                         $element .= '<li class="list-inline-item">
                                 '.$row->productDetail->nBasePrice.'
                             </li>';
-                                
                         $element .= '</ul>';
                         return $element;
                     })
@@ -153,59 +152,7 @@ class FailedProductManageController extends Controller
         return view('product.FailedProductManage', compact('title', 'brands', 'comes', 'categories_1', 'categories_2', 'categories_3', 'categories_4'));
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function marketProductAdd(Request $request)
-    {
-        $marketAccounts = MarketAccount::where('nUserId', Auth::id())
-                                        ->get();
-        //dd($marketAccounts);
-        $chkProduct = $request->post('chkProduct');
-
-        if($request->has('select_all')){
-            $request->session()->put('post_product_select_all', '1');
-        }else{
-            $request->session()->put('post_product_select_all', '0');
-            $request->session()->push('post_products', $chkProduct);
-        }
-        //return view('product.MarketAccountList', compact('marketAccounts'));
-        return response()->json(["status" => "success", "data" => $marketAccounts]);
-    }
-    //상품등록을 위한 마켓계정 리스트(get)
-    public function marketAccountList()
-    {
-        // $request->session()->put('key', 'value');
-        // $request->session()->push('user.teams', 'developers');
-        // $value = $request->session()->pull('key', 'default');
-        // $request->session()->forget('key');
-        // $request->session()->flush();
-        $marketAccounts = MarketAccount::where('nUserId', Auth::id())
-                                        ->get();
-
-        return view('product.MarketAccountList', compact('marketAccounts'));
-    }
-    //상품등록을 위한 마켓계정 선택(post)
-    public function marketAccountSelect(Request $request)
-    {
-        $chkAccount = $request->post('chkAccount');
-        $marketAccounts = MarketAccount::where('nUserId', Auth::id())
-                                        ->join('tb_markets', 'tb_market_accounts.nMarketIdx', '=', 'tb_markets.nIdx')
-                                        ->where('tb_markets.strMarketCode', 'coupang')
-                                        ->get();
-
-        $markets = Market::where('strMarketCode', 'coupang');
-        if($request->has('select_all')){
-            $request->session()->put('post_marketId_select_all', '1');
-        }else{
-            $request->session()->put('post_marketId_select_all', '0');
-            $request->session()->push('post_marketIds', $chkAccount);
-        }
-        
-        return view('product.MarketProductPrepare', compact('marketAccounts', 'markets'));
-    }
+    
     /**
      * 마켓 카테고리 탐색
      */
@@ -268,50 +215,5 @@ class FailedProductManageController extends Controller
         $coupang->addProduct();
         //return response()->json(["status" => "success", "data" => $marketAccount]);
     }
-    /**
-     * Display the specified resource.
-     *
-     */
-    public function accountShow($marketId = 0, $accountId = 0)
-    {
-        //
-        // $marketAccount  = MarketAccount::where('nIdx', $accountId)->first();
-        return response()->json(["status" => "success", "data" => $marketAccount]);
-    }
-
-    public function accountUpdate($marketId=0, $accountId=0, Request $request)
-    {
-        // $marketAccount = MarketAccount::find($accountId);
-        // $marketAccount->strAccountId = $request->post('txtAccountId');
-        // $marketAccount->strAccountPwd = $request->post('txtAccountPwd');
-        // $marketAccount->strAPIAccessKey = $request->post('txtAPIAccessKey');
-        // $marketAccount->update();
-        return response()->json(["status" => "success", "data" => $marketAccount]);
-
-        // $tr = new GoogleTranslate(); // Translates to 'en' from auto-detected language by default
-
-        // $title = "오픈마켓계정관리";
-       
-        // $marketAccounts = MarketAccount::where('bIsDel', 0)
-        //         ->where('nMarketIdx', $id)
-        //         ->where('nUserId', Auth::id())
-        //         ->orderBy('nIdx')->paginate(15);
-              //dd($markets);
-        // return view('operation.OpenMarketAccountManage', compact('title', 'markets'))
-        //    ->with('i', (request()->input('page', 1) - 1) * 15);
-        //return response()->json(["status" => "success", "data" => $marketAccount]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  $accountId
-     * @return \Illuminate\Http\Response
-     */
-    public function accountDelete($marketId, $accountId)
-    {
-        //
-        //$marketAccount = MarketAccount::where('nIdx', $accountId)->delete();
-        return response()->json(["status" => "success", "data" => $marketAccount]);
-    }
+    
 }

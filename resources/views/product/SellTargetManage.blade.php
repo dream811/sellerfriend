@@ -331,16 +331,18 @@
                 {
                     locale: {
                         format: 'YYYY-MM-DD',
-                        separator: " ~ "
+                        separator: " ~ ",
+                        customRangeLabel: "사용자지정",
                     },
                     ranges   : {
-                    'Today'       : [moment(), moment()],
-                    'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
-                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                    'This Month'  : [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    '오늘'       : [moment(), moment()],
+                    '어제'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    '지난 7일' : [moment().subtract(6, 'days'), moment()],
+                    '지난 30일': [moment().subtract(29, 'days'), moment()],
+                    '이달'  : [moment().startOf('month'), moment().endOf('month')],
+                    '지난 달'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                     },
+                    // showCustomRangeLabel: false,
                     startDate: moment().subtract(29, 'days'),
                     endDate  : moment()
                 },
@@ -392,16 +394,6 @@
                 buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#productTable_wrapper .col-md-6:eq(0)');
             
-            //var allPages = table.allPages();
-
-            // $('#select-all').click(function () {
-            //     if ($(this).hasClass('allChecked')) {
-            //         $(allPages).find('input[type="checkbox"]').prop('checked', false);
-            //     } else {
-            //         $(allPages).find('input[type="checkbox"]').prop('checked', true);
-            //     }
-            //     $(this).toggleClass('allChecked');
-            // })
             // Handle click on "Select all" control
             $('#select_all').on('click', function(){
                 var table = $('#productTable').DataTable(); 
@@ -424,28 +416,6 @@
                     }
                 }
             });
-
-            // Handle form submission event
-            // $('#divProductForm').on('submit', function(e){
-            //     var form = this;
-
-            //     // Iterate over all checkboxes in the table
-            //     table.$('input[type="checkbox"]').each(function(){
-            //         // If checkbox doesn't exist in DOM
-            //         if(!$.contains(document, this)){
-            //             // If checkbox is checked
-            //             if(this.checked){
-            //             // Create a hidden element
-            //             $(form).append(
-            //                 $('<input>')
-            //                     .attr('type', 'hidden')
-            //                     .attr('name', this.name)
-            //                     .val(this.value)
-            //             );
-            //             }
-            //         }
-            //     });
-            // });
 
             $('body').on('click', '.btnAddMarketProduct', function () {
                 var form = $('#divProductForm');
@@ -496,7 +466,40 @@
                 table.draw();
                 e.preventDefault();
             });
-        });	  
+
+            $('body').on('mousemove', '.preview', function (e) {
+                var offset = $(this).offset();
+                var imagUrl = $(this).attr('data');
+                const img = new Image();
+                img.src = imagUrl;
+                var xOffset = 80;
+                var yOffset = 700-50;
+                console.log(offset.top);
+                console.log(offset.left);
+                if($('#preview').length)
+                {
+                    $("#preview").css({
+                        "top": (offset.top - yOffset) + "px",
+                        "left": (offset.left + xOffset) + "px"
+                    }).fadeIn();
+                }
+                else
+                {
+                    this.t = this.title,
+                    this.title = "";
+                    var c = (this.t != "") ? "<br/>" + this.t : "";
+                    $("body").append("<p id='preview'><img style='height:700px;' src='" + imagUrl + "' alt='Image preview' />" + c + "</p>");
+                    $("#preview").css({
+                        "top": (offset.top - yOffset) + "px",
+                        "left": (offset.left + xOffset) + "px"
+                    }).fadeIn();
+                }
+            });
+            $('body').on('mouseout', '.preview', function (e) {
+                $("#preview").remove();
+            });
+        });
+        
     </script>
     @endsection
 @endsection

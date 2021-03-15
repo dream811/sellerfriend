@@ -33,6 +33,7 @@
     <!-- Summernote -->
     <script src="{{asset('js/summernote/summernote-bs4.min.js')}}"></script>
     @yield('third_party_stylesheets')
+    @yield('third_party_javascript')
 
     @stack('page_css')
 </head>

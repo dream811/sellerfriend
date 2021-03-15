@@ -92,8 +92,10 @@ class SellTargetManageController extends Controller
                 ->addColumn('images', function($row){
                     $btn = '<ul class="list-inline" style="width:100px;">';
                     foreach ($row->productImages as $productImage) {
-                        $btn .= '<li class="list-inline-item">
-                                    <img alt="Avatar" class="table-avatar" src="'.$productImage->strURL.'">
+                        $btn .= '<li class="list-inline-item" >
+                                    <a href="'.$productImage->strURL.'" class="preview">
+                                        <img alt="Avatar" class="table-avatar" src="'.$productImage->strURL.'">
+                                    </a>
                                 </li>';
                     }
                     $btn .= '</ul>';
@@ -178,8 +180,15 @@ class SellTargetManageController extends Controller
                 })
                 ->addColumn('mainImage', function($row){
                     $main = $row->productImages->where('nImageCode', '0')->first();
-                    $btn = '<img alt="Avatar" style="width: 5rem;" class="table-product-image" src="'.$main->strURL.'">';
-                    return $btn;
+                    // $btn = '<img alt="Avatar" style="width: 5rem;" class="table-product-image" src="'.$main->strURL.'">';
+                    $mainImage = '<li class="list-inline-item" >
+                                    <a href="'.$row->strURL.'" target="_blank">
+                                        <span data="'.$main->strURL.'" class="preview">
+                                            <img alt="gallery thumbnail" style="width: 5rem;" src="'.$main->strURL.'">
+                                        </span>
+                                    </a>
+                                </li>';
+                    return $mainImage;
                 })
                 ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo', 'action'])
                 ->filter(function($query) use ($request){
@@ -239,7 +248,8 @@ class SellTargetManageController extends Controller
                     //
                     if($request->get('daterange')){
                         $dates = explode(' ~ ', $request->get('daterange'));
-                        $query->whereBetween('created_at', [$dates[0], $dates[1]]);
+                        $endDate = date('Y-m-d H:i:s', strtotime($dates[1] . ' +1 day'));
+                        $query->whereBetween('created_at', [$dates[0], $endDate]);
                     }
                     if($request->get('category1') != ""){
                         $query->where('strCategoryCode1', '=', "{$request->get('category1')}");
@@ -306,12 +316,6 @@ class SellTargetManageController extends Controller
     public function marketAccountSave(Request $request)
     {
         $chkAccount = $request->post('chkAccount');
-        // print_r($chkAccount);
-        // $marketAccounts = MarketAccount::where('nUserId', Auth::id())
-        //                                 ->join('tb_markets', 'tb_market_accounts.nMarketIdx', '=', 'tb_markets.nIdx')
-        //                                 ->where('tb_markets.strMarketCode', 'coupang')
-        //                                 ->whereIn('tb_market_accounts.nIdx', $chkAccount)
-        //                                 ->get();
         $settingCoupangs = MarketSettingCoupang::where('nUserId', Auth::id())
                                         ->whereIn('nIdx', $chkAccount)
                                         ->get();
@@ -417,6 +421,10 @@ class SellTargetManageController extends Controller
                 ->orderBy('nIdx')
                 ->get();
         }
+        $productsCount = count($products);
+        $successCount = 0;
+        $failedCount = 0;
+
         //선택마켓계정
         $marketAcc_select_all = session()->get('post_marketId_select_all', 0);
         $marketAcc_selected = session()->get('post_marketIds', Array());
@@ -443,38 +451,39 @@ class SellTargetManageController extends Controller
         //print_r($cateMetaInfo->data['attributes']);
         //notice 배렬을 만든다
         $noticeArr = array();
-        foreach ($cateMetaInfo->data['noticeCategories'][0]['noticeCategoryDetailNames'] as $key =>$value) {
-            if($key>0) break;
-            $notice = array(
-                "noticeCategoryName"=> $cateMetaInfo->data['noticeCategories'][0]['noticeCategoryName'],
-                "noticeCategoryDetailName"=> $cateMetaInfo->data['noticeCategories'][0]['noticeCategoryDetailNames'][$key]['noticeCategoryDetailName'],
-                "content"=> "상세페이지 참조"
-            );
-            array_push($noticeArr, $notice);
-        }
-        print_r($noticeArr);
-        print_r($cateMetaInfo->data['noticeCategories']);
-        //end of notice
-        //attribute 배렬을 만든다
-        $attrArr = array();
-        foreach ($cateMetaInfo->data['attributes'] as $key =>$value) {
-            if($key>0) break;
-            if($cateMetaInfo->data['attributes'][$key]['required'] != "MANDATORY"){
-                $attr = array(
-                    "attributeTypeName"=> $cateMetaInfo->data['attributes'][$key]['attributeTypeName'],
-                    "attributeValueName"=> "1".$cateMetaInfo->data['attributes'][$key]['basicUnit']
+        if(count($cateMetaInfo->data['noticeCategories']) < 2){
+            foreach ($cateMetaInfo->data['noticeCategories'][0]['noticeCategoryDetailNames'] as $key =>$value) {
+                $notice = array(
+                    "noticeCategoryName"=> $cateMetaInfo->data['noticeCategories'][0]['noticeCategoryName'],
+                    "noticeCategoryDetailName"=> $cateMetaInfo->data['noticeCategories'][0]['noticeCategoryDetailNames'][$key]['noticeCategoryDetailName'],
+                    "content"=> "상세페이지 참조"
                 );
-                array_push($attrArr, $attr);
+                array_push($noticeArr, $notice);
             }
-            
+        }else{
+            foreach ($cateMetaInfo->data['noticeCategories'][1]['noticeCategoryDetailNames'] as $key =>$value) {
+                $notice = array(
+                    "noticeCategoryName"=> $cateMetaInfo->data['noticeCategories'][1]['noticeCategoryName'],
+                    "noticeCategoryDetailName"=> $cateMetaInfo->data['noticeCategories'][1]['noticeCategoryDetailNames'][$key]['noticeCategoryDetailName'],
+                    "content"=> "상세페이지 참조"
+                );
+                array_push($noticeArr, $notice);
+            }
         }
-        print_r($attrArr);
-        //end of attribute
-        
+        //print_r($cateMetaInfo->data['noticeCategories']);
+        //print_r($noticeArr);
+        //end of notice
         
         foreach ($settingCoupangs as $key1 => $setting) {
-            $outboundInfo = (object)json_decode($coupang->getOutboundShippingCenterInfo("", $setting->strOutboundShippingPlaceCode), true);
-            $returnCenterInfo = (object)json_decode($coupang->getReturnShippingCenterInfo($setting->strReturnCenterCode), true);
+            //$outboundInfo = (object)json_decode($coupang->getOutboundShippingCenterInfo("", $setting->strOutboundShippingPlaceCode), true);
+            //$returnCenterInfo = (object)json_decode($coupang->getReturnShippingCenterInfo($setting->strReturnCenterCode), true);
+            $optMappingData = $request->post('txtOptionMapping_coupang_'.$setting->nIdx);
+            $optMapping = mb_split(",", $optMappingData);
+            $arrOptMapping = array();
+            foreach ($optMapping as $key => $value) {
+                $key_val= mb_split("::", $value);
+                $arrOptMapping[$key_val[0]] = $key_val[1];
+            }
             foreach ($products as $key2 => $product) {
                 
                 $start = new DateTime($setting->dtSalesPeriodStartDateTime);
@@ -485,11 +494,29 @@ class SellTargetManageController extends Controller
                 $arrItems = Array();
                 foreach ($productItems as $key3 => $item) 
                 {
-                    if($key3 > 1) break;
-                    // $item = $productItems->first();
-                    //if()
+                    //attribute 배렬을 만든다
+                    //print_r($cateMetaInfo->data['attributes']);
+                    $attrArr = array();
+                    foreach ($cateMetaInfo->data['attributes'] as $key =>$value) {
+                        if($cateMetaInfo->data['attributes'][$key]['required'] == "MANDATORY"){
+                            $attributeValueName = "";
+                            if($arrOptMapping[$cateMetaInfo->data['attributes'][$key]['attributeTypeName']] == "사이즈")
+                                $attributeValueName = $item->strSubItemKrSize;
+                            if($arrOptMapping[$cateMetaInfo->data['attributes'][$key]['attributeTypeName']] == "컬러")
+                                $attributeValueName = $item->strSubItemKrColorPattern;
+                                
+                            $attr = array(
+                                "attributeTypeName"=> $cateMetaInfo->data['attributes'][$key]['attributeTypeName'],
+                                "attributeValueName"=> mb_substr($attributeValueName, 0, 30)
+                            );
+                            array_push($attrArr, $attr);
+                        }
+                        
+                    }
+                    //end of attribute
+
                     $arrItems[] = array(
-                        "itemName"=> $item->strSubItemKrColorPattern."_".$item->strSubItemKrSize."_".$key3,
+                        "itemName"=> $item->strSubItemKrColorPattern."_".$item->strSubItemKrSize,
                         "originalPrice"=> $item->nSubItemBasePrice,
                         "salePrice"=> $item->nSubItemSalePrice,
                         "maximumBuyCount"=> $setting->nMaxQtyPerManDayLimit,
@@ -500,7 +527,7 @@ class SellTargetManageController extends Controller
                         "adultOnly"=> $setting->bOnlyAdult == 0 ? "AUDLT_ONLY" : "EVERYONE",
                         "taxType"=> "TAX",
                         "parallelImported"=> $setting->bParallelImport == 1 ? "PARALLEL_IMPORTED" : "NOT_PARALLEL_IMPORTED",
-                        "overseasPurchased"=> $setting->bOnlyAdult == 1 ? "OVERSEAS_PURCHASED" :"NOT_OVERSEAS_PURCHASED",
+                        "overseasPurchased"=> $setting->bOverSeaPurchaseAgent == 1 ? "OVERSEAS_PURCHASED" :"NOT_OVERSEAS_PURCHASED",
                         "pccNeeded"=> $setting->nPersonPassingCodeType == 1 ? "true" : "false",
                         "externalVendorSku"=> "0001",
                         "barcode"=> "",
@@ -588,10 +615,20 @@ class SellTargetManageController extends Controller
                     "manufacture"=> $product->strBrand
                 );
                 // echo json_encode($objProduct);
-                $coupang->addProduct(json_encode($objProduct));
+                $result = $coupang->addProduct(json_encode($objProduct));
+                $response = (object)json_decode($result, true);
+                if($response->code=="SUCCESS")
+                {
+                    $successCount++;
+                    //return response()->json(["status" => "success", "data" => "Successfully uploaded products."]);
+                }
+                else{
+                    //return response()->json(["status" => "failed", "data" => "Failed to upload product."]);
+                    $failedCount++;
+                }
             }
         }
-        
+        return view('product.ProductUploadResult', compact('productsCount', 'successCount', 'failedCount'));
     }
     /**
      * Show the application dashboard.

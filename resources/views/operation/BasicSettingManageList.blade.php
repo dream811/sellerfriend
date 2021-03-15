@@ -52,7 +52,7 @@
                             <div class="tab-pane fade show active" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
                                 <form>
                                     <div class="card-body table-responsive p-0" style="height:500px;">
-                                        <table class="table table-head-fixed table-bordered table-sm marketsTable">
+                                        <table class="table table-head-fixed table-bordered table-sm marketSettingTable">
                                             <thead style="text-align: center;">
                                                 <tr style="text-align: center;">
                                                 <th style="width:10px;">No</th>
@@ -74,9 +74,12 @@
                                                     <td>{{ $setting->strTitle }}</td>
                                                     <td>@if( $setting->bIsUsed ) 사용 @else 미사용 @endif</td>
                                                     <td>{{ $setting->created_at }}</td>
-                                                    <td class="float-center" style="text-align: center;">
-                                                        <a href="javascript:void(0);" market-id="{{$setting->nMarketIdx}}" set-id="{{$setting->nIdx}}"  class="btn btn-primary btn-xs btnManageMarketAccount">
+                                                    <td class="float-center" style="width: 100px;">
+                                                        <a href="javascript:void(0);" market-id="{{$setting->nMarketIdx}}" set-id="{{$setting->nIdx}}"  class="btn btn-primary btn-xs btnEditMarketAccount">
                                                             <span style="font-size:10px;">수정</span>
+                                                        </a>
+                                                        <a href="javascript:void(0);" market-id="{{$setting->nMarketIdx}}" set-id="{{$setting->nIdx}}"  class="btn btn-danger btn-xs btnDeleteMarketAccount">
+                                                            <span style="font-size:10px;">삭제</span>
                                                         </a>
                                                     </td>
                                                     </tr>
@@ -117,7 +120,7 @@
             });
 
             //아이디 수정
-            $('body').on('click', '.btnManageMarketAccount', function () {
+            $('body').on('click', '.btnEditMarketAccount', function () {
                 var market_id = $(this).attr('market-id');
                 var set_id = $(this).attr('set-id');
                 window.open('/operationBasicSettingManage/' + market_id + '/setting/' + set_id, '기초설정', 'scrollbars=1, resizable=1, width=1076, height=1200');
@@ -126,6 +129,16 @@
                 // $.get('operationBasicSettingManage/' + market_code + '/Account/' + market_id, function ({status, data}) {
                     
                 // })
+            });
+
+            //아이디 삭제
+            $('body').on('click', '.btnDeleteMarketAccount', function () {
+                var market_id = $(this).attr('market-id');
+                var set_id = $(this).attr('set-id');
+                $.get('operationBasicSettingManage/' + market_id +'/settingDelete/' + set_id, function ({status, data}) {
+                    //$(".marketAccountsTable tbody tr").removeClass("selectedAccount");
+                    $(".marketSettingTable tbody").find("#" + set_id).remove();
+                })
             });
 
             $('body').on('click', '.btnEdit', function () {
