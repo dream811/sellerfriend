@@ -158,6 +158,7 @@ Route::get('/contactManual', [App\Http\Controllers\Contact\ManualController::cla
 Route::middleware('admin')->prefix('admin')->name('admin.')->group(
     function () {
     Route::get('roleManage', [App\Http\Controllers\Admin\RoleManageController::class, 'index'])->name('RoleManage');
+    Route::get('userManage', [App\Http\Controllers\Admin\UserManageController::class, 'index'])->name('UserManage');
 });
 
 Route::group(

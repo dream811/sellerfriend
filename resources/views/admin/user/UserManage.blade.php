@@ -6,13 +6,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0" style="">오픈마켓 계정관리</h1>
+                <h1 class="m-0" style="">계정관리</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">HOME</a></li>
-                <li class="breadcrumb-item"><a href="#">운영관리</a></li>
-                <li class="breadcrumb-item active">오픈마켓 계정관리</li>
+                <li class="breadcrumb-item"><a href="#">관리자</a></li>
+                <li class="breadcrumb-item"><a href="#">유저관리</a></li>
+                <li class="breadcrumb-item active">유저관리</li>
                 </ol>
             </div><!-- /.col -->
             </div><!-- /.row -->
@@ -38,18 +38,12 @@
                                         <table class="table table-head-fixed table-bordered table-sm marketsTable">
                                             <thead style="text-align: center;">
                                                 <tr style="text-align: center;">
-                                                <th rowspan="2">ID</th>
-                                                <th rowspan="2" style="font-size:12px; width:120px;">오픈마켓명</th>
-                                                <th rowspan="2" style="font-size:12px; width:100px;">판매자센터<br>바로가기</th>
-                                                <th rowspan="2" style="font-size:12px;">등록아이디</th>
-                                                <th colspan="4" style="font-size:12px;">기능</th>
-                                                <th rowspan="2" style="font-size:12px;">관리</th>
-                                                </tr>
-                                                <tr>
-                                                <th style="font-size:12px;">상품등록</th>
-                                                <th style="font-size:12px;">주문수집</th>
-                                                <th style="font-size:12px;">송장전송</th>
-                                                <th style="font-size:12px;">클레임</th>
+                                                <th style="font-size:12px;"></th>
+                                                <th style="font-size:12px;"></th>
+                                                <th style="font-size:12px;"></th>
+                                                <th style="font-size:12px;"></th>
+                                                <th style="font-size:12px;"></th>
+                                                <th style="font-size:12px;"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -473,7 +467,6 @@
                         //$('#modal-id_manage').modal('hide');
                     },
                     error: function (data) {
-
                     }
                 });
             }
@@ -513,8 +506,10 @@
                         account += '<td class="align-center"><a data-id="' + data.nIdx + '" class="btn btn-primary btn-xs btnEdit">수정</a>&nbsp;&nbsp;<a data-id="' + data.nIdx + '" class="btn btn-danger btn-xs btnDelete">삭제</a></td>';
                         account += '</tr>';   
                         //insert using class(selectedAccount)
+                        //$(account).insertBefore($(".marketAccountsTable tbody .selectedAccount"));
                         $('.marketAccountsTable tbody tr').eq(rowIdx).after(account);
                         $(".marketAccountsTable tbody .selectedAccount").remove();
+                        //$('.marketAccountsTable tbody').append(account);
                         $('#manageMarketAccount')[0].reset();
                     },
                     error: function (data) {

@@ -74,12 +74,12 @@
 
             $('body').on('click', '.btnSetOutboundShippingPlace', function () {
                     
-                    outboudCode = $(this).attr('data-code');
-                    if(outboudCode == "0"){
+                    outboundCode = $(this).attr('data-code');
+                    if(outboundCode == "0"){
                         return false;
                     }
                     
-                    opener.SetOutboundShippingPlace(outboudCode);
+                    opener.SetOutboundShippingPlace(outboundCode);
                     window.close();
                     return false;
                 });

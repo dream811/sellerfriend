@@ -18,8 +18,8 @@ use App\Models\Category;
 use App\Models\MarketSettingCoupang;
 use Yajra\DataTables\Facades\DataTables;
 use App\MyLibs\CoupangConnector;
+use App\MyLibs\ESMConnector;
 use DateTime;
-use PhpParser\Node\Stmt\Switch_;
 
 class SellTargetManageController extends Controller
 {
@@ -345,6 +345,9 @@ class SellTargetManageController extends Controller
             if($res->code = "SUCCESS"){
                 $categories_1 = $res->data->child;
             }
+        }
+        else if($marketCode == 'gmarket'){
+            $gmarket = new ESMConnector($market='gmarket' );
         }
         
         if ($request->ajax()) {
@@ -685,7 +688,7 @@ class SellTargetManageController extends Controller
         // $marketAccount->strAccountPwd = $request->post('txtAccountPwd');
         // $marketAccount->strAPIAccessKey = $request->post('txtAPIAccessKey');
         // $marketAccount->update();
-        return response()->json(["status" => "success", "data" => $marketAccount]);
+        // return response()->json(["status" => "success", "data" => $marketAccount]);
 
         // $tr = new GoogleTranslate(); // Translates to 'en' from auto-detected language by default
 

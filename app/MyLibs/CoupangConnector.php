@@ -744,7 +744,7 @@ class CoupangConnector {
         $signature = hash_hmac('sha256', $message, $this->SECRET_KEY);
 
         $authorization  = "CEA algorithm=HmacSHA256, access-key=".$this->ACCESS_KEY.", signed-date=".$datetime.", signature=".$signature;
-
+        $strjson="";
         $url = 'https://api-gateway.coupang.com'.$path.'?'.$query;
 
         $curl = curl_init();        
@@ -771,7 +771,7 @@ class CoupangConnector {
         $datetime = date("ymd").'T'.date("His").'Z';
         $method = "DELETE";
         $path = "/v2/providers/seller_api/apis/api/v1/marketplace/seller-products/2401";
-
+        $strjson="";
         $message = $datetime.$method.$path;
 
         $algorithm = "HmacSHA256";

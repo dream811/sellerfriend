@@ -20,6 +20,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'bIsAdmin',
+        'level',
+        'bIsDel',
     ];
 
     /**
@@ -29,6 +32,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
+        'bIsDel',
         'remember_token',
     ];
 
