@@ -157,8 +157,16 @@ Route::get('/contactManual', [App\Http\Controllers\Contact\ManualController::cla
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::middleware('admin')->prefix('admin')->name('admin.')->group(
     function () {
-    Route::get('roleManage', [App\Http\Controllers\Admin\RoleManageController::class, 'index'])->name('RoleManage');
-    Route::get('userManage', [App\Http\Controllers\Admin\UserManageController::class, 'index'])->name('UserManage');
+    Route::get('user/roleManage', [App\Http\Controllers\Admin\User\RoleManageController::class, 'index'])->name('user.RoleManage');
+    
+    Route::get('user/userManage', [App\Http\Controllers\Admin\User\UserManageController::class, 'index'])->name('user.UserManage');
+    Route::get('user/userManage/edit/{userId}', [App\Http\Controllers\Admin\User\UserManageController::class, 'edit'])->name('user.UserManage.Edit');
+    Route::get('user/userManage/checkIDEmail', [App\Http\Controllers\Admin\User\UserManageController::class, 'checkIDEmail'])->name('user.UserManage.CheckIDEmail');
+    Route::post('user/userManage', [App\Http\Controllers\Admin\User\UserManageController::class, 'save'])->name('user.UserManage.Save');
+    
+    Route::get('user/depositManage', [App\Http\Controllers\Admin\User\DepositManageController::class, 'index'])->name('user.DepositManage');
+    Route::get('product/productManage', [App\Http\Controllers\Admin\Product\ProductManageController::class, 'index'])->name('product.ProductManage');
+    Route::get('product/categoryManage', [App\Http\Controllers\Admin\Product\CategoryManageController::class, 'index'])->name('product.CategoryManage');
 });
 
 Route::group(

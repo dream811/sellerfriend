@@ -94,7 +94,6 @@ class ProductScrapController extends Controller
         if (str_contains($result, 'failed')) return;
         
         $arrResponse = (array)json_decode($result, true);
-print_r($arrResponse);
         if(str_contains($scrapURL, "detail.tmall.com")){
             $tranArr = $arrResponse['valItemInfo']['skuList'];
             foreach ($tranArr as $key => $value) {

@@ -36,10 +36,18 @@ class ESMConnector {
 
         $url = 'https://sa.esmplus.com/item/v1/categories/site-cats/{siteCatCode}'.$path.'?'.$query;
         
+        $credential=array();
+        $credential['username']='abc';
+        $credential['domainnew']='123';
+        $credential['updateme']='update';
+
+        $credential=json_encode($credential);
+
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type:  application/json;charset=UTF-8", "Authorization:".$authorization, "X-EXTENDED-TIMEOUT:90000"));
+        curl_setopt($curl, CURLOPT_POSTFIELDS, array("Content-Type:  application/json;charset=UTF-8", "Authorization:".$authorization, "X-EXTENDED-TIMEOUT:90000"));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1); // This will follow any redirects
         $result = curl_exec($curl);

@@ -18,10 +18,23 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'strID',
         'email',
+        'phone_number',
+        'image',
         'password',
         'bIsAdmin',
-        'level',
+        'role',
+        'money',
+        'business_name',
+        'business_number',
+        'business_phone',
+        'business_type',
+        'business_kind',
+        'business_zip',
+        'business_address1',
+        'business_address2',
+        'bIsUsed',
         'bIsDel',
     ];
 

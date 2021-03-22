@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Product;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ use App\Models\User;
 use App\MyLibs\CoupangConnector;
 use Yajra\DataTables\DataTables;
 
-class UserManageController extends Controller
+class ProductManageController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -37,19 +37,17 @@ class UserManageController extends Controller
      */
     public function index(Request $request)
     {
-
+        $title = "사용자관리";
         if ($request->ajax()) {
-            $users = User::where('bIsDel', 0)
-                ->orderBy('name');
+            $products = Product::where('bIsDel', 0);
 
-            return DataTables::of($users)
+            return DataTables::of($products)
                     ->addIndexColumn()
-                    
                     // ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo'])
                     ->make(true);
                     
         }
-        return view('product.SellTargetManage', compact('title', 'brands', 'comes', 'categories_1', 'categories_2', 'categories_3', 'categories_4', 'shareType', 'basePriceTypes', 'countryShippingCostTypes', 'worldShippingCostTypes', 'weightTypes'));
+        return view('admin.product.ProductManage', compact('title'));
     }
 
     //상품등록을 위한 마켓계정 선택(post)

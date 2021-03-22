@@ -337,6 +337,37 @@
                     }
                 });
             });
+            $('body').on('mousemove', '.preview', function (e) {
+                var offset = $(this).offset();
+                var imagUrl = $(this).attr('data');
+                const img = new Image();
+                img.src = imagUrl;
+                var xOffset = 80;
+                var yOffset = 700-50;
+                console.log(offset.top);
+                console.log(offset.left);
+                if($('#preview').length)
+                {
+                    $("#preview").css({
+                        "top": (offset.top - yOffset) + "px",
+                        "left": (offset.left + xOffset) + "px"
+                    }).fadeIn();
+                }
+                else
+                {
+                    this.t = this.title,
+                    this.title = "";
+                    var c = (this.t != "") ? "<br/>" + this.t : "";
+                    $("body").append("<p id='preview'><img style='height:700px;' src='" + imagUrl + "' alt='Image preview' />" + c + "</p>");
+                    $("#preview").css({
+                        "top": (offset.top - yOffset) + "px",
+                        "left": (offset.left + xOffset) + "px"
+                    }).fadeIn();
+                }
+            });
+            $('body').on('mouseout', '.preview', function (e) {
+                $("#preview").remove();
+            });
         });	
     </script>
     @endsection

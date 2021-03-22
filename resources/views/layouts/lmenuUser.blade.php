@@ -1,47 +1,3 @@
-@if (Auth::user()->isAdmin())
-<li class="nav-item">
-    <a href="{{ route('home') }}" class="nav-link {{ (request()->is('home')) ? 'active' : '' }}">
-        <i class="nav-icon fas fa-home"></i>
-        <p>Home</p>
-    </a>
-</li>
-<li class="nav-item">
-    <a href="#" class="nav-link">
-        <i class="nav-icon fas fa-copy"></i>
-        <p>
-        상품수집관리
-        <i class="fas fa-angle-left right"></i>
-        <span class="badge badge-info right">4</span>
-        </p>
-    </a>
-    <ul class="nav nav-treeview">
-        <li class="nav-item">
-        <a href="{{ route('scratch.ProductScrap') }}" class="nav-link {{ (request()->is('scratchProductScrap')) ? 'active' : '' }}">
-            <i class="fas fa-cart-plus nav-icon"></i>
-            <p>[1]상품스크랩</p>
-        </a>
-        </li>
-        <li class="nav-item">
-        <a href="{{ route('scratch.ProductGetManage') }}" class="nav-link {{ (request()->is('scratchProductGetManage')) ? 'active' : '' }}">
-            <i class="fas fa-briefcase nav-icon"></i>
-            <p>[2]상품수집관리</p>
-        </a>
-        </li>
-        <li class="nav-item">
-        <a href="{{ route('scratch.SellPrepareCheck') }}" class="nav-link {{ (request()->is('scratchSellPrepareCheck')) ? 'active' : '' }}">
-            <i class="fas fa-clipboard-list nav-icon"></i>
-            <p>[3]판매준비검토</p>
-        </a>
-        </li>
-        <li class="nav-item">
-        <a href="{{ route('scratch.DesignCheck') }}" class="nav-link {{ (request()->is('scratchDesignCheck')) ? 'active' : '' }}">
-            <i class="fas fa-crop-alt nav-icon"></i>
-            <p>[4]디자인검토</p>
-        </a>
-        </li>
-    </ul>
-</li>
-@else
 <!-- need to remove -->
 <li class="nav-item">
     <a href="{{ route('home') }}" class="nav-link {{ (request()->is('home')) ? 'active' : '' }}">
@@ -142,7 +98,7 @@
             <i class="fas fa-briefcase nav-icon"></i>
             <p>오픈마켓주문수집</p>
         </a>
-        </li>
+        {{-- </li>
         <li class="nav-item">
         <a href="{{ route('order.PaymentWaiting') }}" class="nav-link">
             <i class="fas fa-clipboard-list nav-icon"></i>
@@ -278,9 +234,10 @@
             <i class="fas fa-crop-alt nav-icon"></i>
             <p>[★]취소상품</p>
         </a>
-        </li>
+        </li> --}}
     </ul>
 </li>
+{{-- 
 <li class="nav-item {{ (request()->routeIs('tpl*')) ? 'menu-open' : '' }}">
     <a href="{{ route('tpl.Preparing') }}" class="nav-link">
         <i class="nav-icon fas fa-copy"></i>
@@ -554,5 +511,4 @@
         </a>
         </li>
     </ul>
-</li>
-@endif
+</li> --}}

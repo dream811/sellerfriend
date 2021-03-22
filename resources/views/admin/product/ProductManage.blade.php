@@ -32,8 +32,8 @@
                         </ul>
                     </div>
                     <div class="card-body" >
-                        <form id="divUserForm">
-                            <table id="userTable" class="table table-dark table-hover table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
+                        <form id="divForm">
+                            <table id="productTable" class="table table-dark table-hover table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
                                 
                             </table>
                         </form>
@@ -53,7 +53,7 @@
                 }
             });
         });	
-        var table = $('#userTable').DataTable({
+        var table = $('#productTable').DataTable({
             processing: true,
             serverSide: true,
             searching: false,
@@ -76,11 +76,11 @@
         }).buttons().container().appendTo('#productTable_wrapper .col-md-6:eq(0)');
         $('body').on('click', '.btnEdit', function () {
             var userId = $(this).attr('data-id');
-            window.open('/admin/user/userManage/edit/' + userId, '정보 수정', 'scrollbars=1, resizable=1, width=1000, height=620');
+            window.open('/admin/product/productManage/edit/' + userId, '정보 수정', 'scrollbars=1, resizable=1, width=1000, height=620');
             return false;
         });
         $('body').on('click', '.btnAdd', function () {
-            window.open('/admin/user/userManage/edit/0', '정보 추가', 'scrollbars=1, resizable=1, width=800, height=620');
+            window.open('/admin/product/productManage/edit/0', '정보 추가', 'scrollbars=1, resizable=1, width=800, height=620');
             return false;
         });
     </script>

@@ -103,14 +103,16 @@ class SellPrepareCheckController extends Controller
                     return $btn;
                 })
                 ->addColumn('images', function($row){
-                    $btn = '<ul class="list-inline" style="width:100px;">';
+                    $item = '<ul class="list-inline" style="width:100px;">';
                     foreach ($row->productImages as $productImage) {
-                        $btn .= '<li class="list-inline-item">
-                                    <img alt="Avatar" class="table-avatar" src="'.$productImage->strURL.'">
+                        $item .= '<li class="list-inline-item" >
+                                    <a href="'.$productImage->strURL.'" class="preview">
+                                        <img alt="Avatar" class="table-avatar" src="'.$productImage->strURL.'">
+                                    </a>
                                 </li>';
                     }
-                    $btn .= '</ul>';
-                    return $btn;
+                    $item .= '</ul>';
+                    return $item;
                 })
                 ->addColumn('productInfo', function($row){
                     $element = '<ul class="list-inline" style="">';
@@ -191,8 +193,15 @@ class SellPrepareCheckController extends Controller
                 })
                 ->addColumn('mainImage', function($row){
                     $main = $row->productImages->where('nImageCode', '0')->first();
-                    $btn = '<img alt="Avatar" style="width: 5rem;" class="table-product-image" src="'.$main->strURL.'">';
-                    return $btn;
+                    // $btn = '<img alt="Avatar" style="width: 5rem;" class="table-product-image" src="'.$main->strURL.'">';
+                    $mainImage = '<li class="list-inline-item" >
+                                    <a href="'.$row->strURL.'" target="_blank">
+                                        <span data="'.$main->strURL.'" class="preview">
+                                            <img alt="gallery thumbnail" style="width: 5rem;" src="'.$main->strURL.'">
+                                        </span>
+                                    </a>
+                                </li>';
+                    return $mainImage;
                 })
                 ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo', 'action'])
                 ->filter(function($query) use ($request){

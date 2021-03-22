@@ -90,16 +90,16 @@ class SellTargetManageController extends Controller
                     return $element;
                 })
                 ->addColumn('images', function($row){
-                    $btn = '<ul class="list-inline" style="width:100px;">';
+                    $item = '<ul class="list-inline" style="width:100px;">';
                     foreach ($row->productImages as $productImage) {
-                        $btn .= '<li class="list-inline-item" >
+                        $item .= '<li class="list-inline-item" >
                                     <a href="'.$productImage->strURL.'" class="preview">
                                         <img alt="Avatar" class="table-avatar" src="'.$productImage->strURL.'">
                                     </a>
                                 </li>';
                     }
-                    $btn .= '</ul>';
-                    return $btn;
+                    $item .= '</ul>';
+                    return $item;
                 })
                 ->addColumn('productInfo', function($row){
                     $element = '<ul class="list-inline" style="">';
