@@ -1086,4 +1086,106 @@ class CoupangConnector {
         //echo($result);
         return $result;
     }
+    /**
+     * 발주서목록 조회(일단위 페이징)
+     */
+    public function getOrderSheetsList($from="", $to="", $maxPerPage=2, $status="INSTRUCT", $nextToken="")
+    {
+        date_default_timezone_set("GMT+0");
+        
+        $datetime = date("ymd").'T'.date("His").'Z';
+        $method = "GET";
+        $path = "/v2/providers/openapi/apis/api/v4/vendors/".$this->VENDOR_ID."/ordersheets";
+        $query = "createdAtFrom={$from}&createdAtTo={$to}&maxPerPage={$maxPerPage}&status={$status}";
+
+        $message = $datetime.$method.$path.$query;
+
+        $algorithm = "HmacSHA256";
+
+        $signature = hash_hmac('sha256', $message, $this->SECRET_KEY);
+
+        $authorization  = "CEA algorithm=HmacSHA256, access-key=".$this->ACCESS_KEY.", signed-date=".$datetime.", signature=".$signature;
+
+        $url = 'https://api-gateway.coupang.com'.$path.'?'.$query;
+        
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type:  application/json;charset=UTF-8", "Authorization:".$authorization, "X-EXTENDED-TIMEOUT:90000"));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $result = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+        curl_close($curl);
+
+        return $result;
+    }
+    /**
+     * 발주서단건 조회(shipmentBoxId)
+     */
+    public function getOrderSheetsInfoViaShipmentBoxId($shipmentBoxId=102392001)
+    {
+        date_default_timezone_set("GMT+0");
+        
+        $datetime = date("ymd").'T'.date("His").'Z';
+        $method = "GET";
+        $path = "/v2/providers/openapi/apis/api/v4/vendors/".$this->VENDOR_ID."/ordersheets/".$shipmentBoxId;
+        $query = "";
+
+        $message = $datetime.$method.$path.$query;
+
+        $algorithm = "HmacSHA256";
+
+        $signature = hash_hmac('sha256', $message, $this->SECRET_KEY);
+
+        $authorization  = "CEA algorithm=HmacSHA256, access-key=".$this->ACCESS_KEY.", signed-date=".$datetime.", signature=".$signature;
+
+        $url = 'https://api-gateway.coupang.com'.$path.'?'.$query;
+        
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type:  application/json;charset=UTF-8", "Authorization:".$authorization, "X-EXTENDED-TIMEOUT:90000"));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $result = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+        curl_close($curl);
+
+        return $result;
+    }
+    /**
+     * 발주서단건 조회(orderId)
+     */
+    public function getOrderSheetsInfoViaOrderId($orderId=102392001)
+    {
+        date_default_timezone_set("GMT+0");
+        
+        $datetime = date("ymd").'T'.date("His").'Z';
+        $method = "GET";
+        $path = "/v2/providers/openapi/apis/api/v4/vendors/".$this->VENDOR_ID."/".$orderId."/ordersheets";
+        $query = "";
+
+        $message = $datetime.$method.$path.$query;
+
+        $algorithm = "HmacSHA256";
+
+        $signature = hash_hmac('sha256', $message, $this->SECRET_KEY);
+
+        $authorization  = "CEA algorithm=HmacSHA256, access-key=".$this->ACCESS_KEY.", signed-date=".$datetime.", signature=".$signature;
+
+        $url = 'https://api-gateway.coupang.com'.$path.'?'.$query;
+        
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type:  application/json;charset=UTF-8", "Authorization:".$authorization, "X-EXTENDED-TIMEOUT:90000"));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $result = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+        curl_close($curl);
+
+        return $result;
+    }
 }

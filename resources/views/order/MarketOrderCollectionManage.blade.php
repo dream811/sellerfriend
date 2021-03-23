@@ -98,10 +98,10 @@
                         </ul>
                         <ul class="nav float-right">
                             <li class="pull-right float-right pr-1 pt-1" style="">
-                                <a href="javascript:void(0)" class="btn btn-success btn-sm" >오픈마켓주문수집</a>
+                                <a href="javascript:void(0)" class="btn btn-success btn-sm btnGetNewOrderList" >오픈마켓주문수집</a>
                             </li>
                             <li class="pull-right float-right pr-1 pt-1" style="">
-                                <a href="javascript:void(0)" class="btn btn-success btn-sm" >삭제리스트로이동</a>
+                                <a href="javascript:void(0)" class="btn btn-danger btn-sm btnMoveDelList" >삭제리스트로이동</a>
                             </li>
                         </ul>
                     </div>
@@ -233,47 +233,9 @@
                 }
             });
 
-            $('body').on('click', '.btnAddMarketProduct', function () {
-                var form = $('#divProductForm');
-                var table = $('#productTable').DataTable(); 
-                // Iterate over all checkboxes in the table
-                table.$('input[type="checkbox"]').each(function(){
-                    // If checkbox doesn't exist in DOM
-                    if(!$.contains(document, this)){
-                        // If checkbox is checked
-                        if(this.checked){
-                        // Create a hidden element
-                        $(form).append(
-                            $('<input>')
-                                .attr('type', 'hidden')
-                                .attr('name', this.name)
-                                .val(this.value)
-                        );
-                        }
-                    }
-                });
-
-                var action = '/productSellTargetManageProducts/marketProductAdd';// $("#manageMarketAccount").attr("action");
-                var data = $('#divProductForm').serialize();
-                if(data.includes("chkProduct") <= 0)
-                {
-                    alert("상품을 하나이상 선택해주세요!");
-                    return false;
-                }
-                $.ajax({
-                    url: action,
-                    data: data,
-                    type: "POST",
-                    dataType: 'json',
-                    success: function ({status, data}) {
-                        if(status == "success"){
-                            window.open('/productSellTargetManageProducts/marketAccountList', '상품등록', 'scrollbars=1, resizable=1, width=1000, height=620');
-                            return false;
-                        }
-                    },
-                    error: function (data) {
-                    }
-                });
+            $('body').on('click', '.btnGetNewOrderList', function () {
+                window.open('/order/marketAccountList', '상품주문수집', 'scrollbars=1, resizable=1, width=1000, height=620');
+                return false;
                 
             });
             $('body').on('click', '.btnSearchData', function (e) {

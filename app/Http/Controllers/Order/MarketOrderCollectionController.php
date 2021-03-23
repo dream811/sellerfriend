@@ -46,7 +46,7 @@ class MarketOrderCollectionController extends Controller
                 ->get();
 
         if ($request->ajax()) {
-            $products = Product::where('bIsDel', 0)
+            $orders = Order::where('bIsDel', 0)
                 ->where('nUserId', Auth::id())
                 ->orderBy('nIdx');
 
@@ -121,16 +121,13 @@ class MarketOrderCollectionController extends Controller
         //return view('product.MarketAccountList', compact('marketAccounts'));
         return response()->json(["status" => "success", "data" => $marketAccounts]);
     }
-    //상품등록을 위한 마켓계정 리스트(get)
-    public function marketAccountList()
+    //발주서조회를 위한 마켓계정 리스트(get)
+    public function getMarketList()
     {
-        // $request->session()->put('key', 'value');
-        // $request->session()->push('user.teams', 'developers');
-        // $value = $request->session()->pull('key', 'default');
-        // $request->session()->forget('key');
-        // $request->session()->flush();
-        $marketAccounts = MarketAccount::where('nUserId', Auth::id())
-                                        ->get();
+        
+        $markets = Market::where('nUserId', Auth::id())
+                        ->where('nUserId')
+                        ->get();
 
         return view('product.MarketAccountList', compact('marketAccounts'));
     }
