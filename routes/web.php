@@ -56,7 +56,7 @@ Route::get('/productStoppedProductManage', [App\Http\Controllers\Product\Stopped
 /** 주문관리 **/
 Route::get('/orderWaiting', [App\Http\Controllers\Order\WaitingController::class, 'index'])->name('order.Waiting');
 Route::get('/orderSalesStatus', [App\Http\Controllers\Order\SalesStatusController::class, 'index'])->name('order.SalesStatus');
-Route::get('/orderPaymentWait', [App\Http\Controllers\Order\MarketOrderCollectionController::class, 'index'])->name('order.MarketOrderCollection');
+Route::get('/orderMarketOrderCollection', [App\Http\Controllers\Order\MarketOrderCollectionController::class, 'index'])->name('order.MarketOrderCollection');
 Route::get('/orderPaymentWaiting', [App\Http\Controllers\Order\PaymentWaitingController::class, 'index'])->name('order.PaymentWaiting');
 Route::get('/orderPassCodeCheck', [App\Http\Controllers\Order\PassCodeCheckController::class, 'index'])->name('order.PassCodeCheck');
 Route::get('/orderStockIssueCheck', [App\Http\Controllers\Order\StockIssueCheckController::class, 'index'])->name('order.StockIssueCheck');

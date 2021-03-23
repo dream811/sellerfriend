@@ -13,6 +13,7 @@ use App\Models\ProductDetail;
 use App\Models\Come;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Market;
 use DataTables;
 use App\MyLibs\CoupangConnector;
 
@@ -39,32 +40,10 @@ class MarketOrderCollectionController extends Controller
 
         $tr = new GoogleTranslate(); // Translates to 'en' from auto-detected language by default
 
-        $title = "판매중지 상품관리";
-        $comes = Come::where('bIsDel', 0)
-                ->orderBy('strComeCode')
+        $title = "마켓주문수집";
+        $markets = Market::where('bIsDel', 0)
+                ->where('bIsUsed', 1)
                 ->get();
-                //dd($comes);
-        $brands = Brand::where('bIsDel', 0)
-                ->orderBy('strBrandCode')
-                ->get();
-        $categories_1 = Category::where('bIsDel', 0)
-                ->where('nCategoryType', 1)
-                ->orderBy('strCategoryName')
-                ->get();
-        $categories_2 = Category::where('bIsDel', 0)
-                ->where('nCategoryType', 2)
-                ->orderBy('strCategoryName')
-                ->get();
-
-        $categories_3 = Category::where('bIsDel', 0)
-                ->where('nCategoryType', 3)
-                ->orderBy('strCategoryName')
-                ->get();
-        $categories_4 = Category::where('bIsDel', 0)
-                ->where('nCategoryType', 4)
-                ->orderBy('strCategoryName')
-                ->get();
-        $shareType = "1";
 
         if ($request->ajax()) {
             $products = Product::where('bIsDel', 0)
@@ -99,7 +78,6 @@ class MarketOrderCollectionController extends Controller
                         $element .= '<li class="list-inline-item">
                                     '.$row->strKrSubName.'
                                 </li>';
-
                         $element .= '</ul>';
                         return $element;
                     })
@@ -115,41 +93,11 @@ class MarketOrderCollectionController extends Controller
                         $element .= '</ul>';
                         return $element;
                     })
-                    ->addColumn('marginInfo', function($row){
-                        $element = '<ul class="list-inline" style="width:100px;">';
-                        $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nBasePrice.'
-                            </li><br>';
-                        $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nBasePrice.'
-                            </li>';
-                                
-                        $element .= '</ul>';
-                        return $element;
-                    })
-                    ->addColumn('marketInfo', function($row){
-                        $marketInfo = '
-                                <span style="width:20px;" class="badge badge-success">C</span>
-                                <span style="width:20px;" class="badge badge-success">11</span>
-                                <span style="width:20px;" class="badge badge-success">A</span>
-                                <span style="width:20px;" class="badge badge-success">G</span>
-                                <br/>
-                                <span style="width:20px;" class="badge badge-success">I</span>
-                                <span style="width:20px;" class="badge badge-success">S</span>
-                                <span style="width:20px;" class="badge badge-success">T</span>
-                                <span style="width:20px;" class="badge badge-success">W</span>
-                                ';
-                        return $marketInfo;
-                    })
-                    ->addColumn('mainImage', function($row){
-                        $btn = '<img alt="Avatar" style="width: 5rem;" class="table-product-image" src="'.asset('assets/images/product/image.jpg').'">';
-                        return $btn;
-                    })
                     ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo'])
                     ->make(true);
                     
         }
-        return view('product.StoppedProductManage', compact('title', 'brands', 'comes', 'categories_1', 'categories_2', 'categories_3', 'categories_4'));
+        return view('order.MarketOrderCollectionManage', compact('title', 'markets'));
     }
 
     /**

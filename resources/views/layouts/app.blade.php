@@ -38,7 +38,7 @@
     <script src="{{asset('js/summernote/summernote-bs4.min.js')}}"></script>
     <!-- image preview -->
     <script src="{{asset('js/image-preview/imagepreview.js')}}"></script>
-
+    
     @yield('third_party_stylesheets')
 
     @stack('page_css')

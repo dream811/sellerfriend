@@ -95,42 +95,69 @@ class ProductScrapController extends Controller
         
         $arrResponse = (array)json_decode($result, true);
         if(str_contains($scrapURL, "detail.tmall.com")){
-            $tranArr = $arrResponse['valItemInfo']['skuList'];
-            foreach ($tranArr as $key => $value) {
-                unset($value['pvs']);
-                unset($value['skuId']);
-                $tranArr[$key] = str_replace(' ', '@', $value);  
+            
+            // print_r($arrResponse['sizes']);
+            //size
+            $tranString = implode("|", $arrResponse['sizes']);
+            $tempString = $tr->translate($tranString);
+            $tempArr = explode("|",$tempString);
+            // print_r($tempArr);
+            $arrKrSize = array();
+            $i = 0;
+            foreach ($arrResponse['sizes'] as $key => $value) {
+                if (array_key_exists($i, $tempArr)) {
+                    $arrKrSize[$key] = $tempArr[$i];
+                }else{
+                    $arrKrSize[$key] = "";
+                }
+                $i++;
             }
-            $stackCount = count($tranArr);
-            $transResult = array();
-            $i=0;
-            while ($i < $stackCount) { 
-                
-                $transStack = array_slice($tranArr, $i, min(10, count($tranArr) - $i));
-                $transData = json_encode($transStack, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
-                $temp = $tr->translate($transData);
-                $trnasResStack = (array)json_decode($temp, true);
-                $transResult = array_merge($transResult, $trnasResStack);
-                $i += 10;
+            //color
+            $tranString = implode("|", $arrResponse['colors']);
+            $tempString = $tr->translate($tranString);
+            $tempArr = explode("|",$tempString);
+            $arrKrColor = array();
+            $i = 0;
+            foreach ($arrResponse['colors'] as $key => $value) {
+                if (array_key_exists($i, $tempArr)) {
+                    $arrKrColor[$key] = $tempArr[$i];
+                }else{
+                    $arrKrColor[$key] = "";
+                }
+                $i++;
             }
+            // $stackCount = count($tranArr);
+            // $transResult = array();
+            // $i=0;
+            // while ($i < $stackCount) {
+            //     $transStack = array_slice($tranArr, $i, min(10, count($tranArr) - $i));
+            //     $transData = json_encode($transStack, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+            //     $temp = $tr->translate($transData);
+            //     $trnasResStack = (array)json_decode($temp, true);
+            //     $transResult = array_merge($transResult, $trnasResStack);
+            //     $i += 10;
+            // }
             
             $descData = "";
             foreach ($arrResponse['valItemInfo']['skuList'] as $key => $value) {
                 $price = $arrResponse['valItemInfo']['skuMap'][';'.$arrResponse['valItemInfo']['skuList'][$key]['pvs'].';']['price'];
-                $ChSize = explode(" ", array_values($arrResponse['valItemInfo']['skuList'][$key])[0], 2);
+                $arrKey = explode(";",$value['pvs']);
+                $ChSize = $arrResponse['sizes'][$arrKey[0]];
+                $KrSize = $arrKrSize[$arrKey[0]];
+                $ChColor = count($arrKey) <= 1 ? "" : $arrResponse['colors'][$arrKey[1]]; 
+                $KrColor = count($arrKey) <= 1 ? "" : $arrKrColor[$arrKey[1]];
                 
-                $KrSize = explode("@", array_values($transResult[$key])[0], 2);
                 $arrResponse['valItemInfo']['skuList'][$key]['price'] = $price;
                 $arrResponse['valItemInfo']['skuList'][$key]['basePrice'] = number_format($price * 170, 2, '.', '');
                 $arrResponse['valItemInfo']['skuList'][$key]['salePrice'] = number_format(round(($price + $price * 0.3) * 170, -1), 2, '.', '');
-                $arrResponse['valItemInfo']['skuList'][$key]['KrSize'] = str_replace('@', '', $KrSize[0]);//$tr->translate($ChSize[0]);
-                $arrResponse['valItemInfo']['skuList'][$key]['ChSize'] = $ChSize[0];
-                $arrResponse['valItemInfo']['skuList'][$key]['KrColorPattern'] = str_replace('@', '', $KrSize[1]);//$tr->translate($ChSize[1].$ChSize[2]);
-                $arrResponse['valItemInfo']['skuList'][$key]['ChColorPattern'] = $ChSize[1];
-                $tmep = explode(";", $arrResponse['valItemInfo']['skuList'][$key]['pvs']);
-                $arrResponse['valItemInfo']['skuList'][$key]['image'] = count($tmep) < 2 ? $arrResponse['propertyPics'][';'.explode(";", $arrResponse['valItemInfo']['skuList'][$key]['pvs'])[0].';'][0] : $arrResponse['propertyPics'][';'.explode(";", $arrResponse['valItemInfo']['skuList'][$key]['pvs'])[1].';'][0];
+                $arrResponse['valItemInfo']['skuList'][$key]['KrSize'] = $KrSize;//$tr->translate($ChSize[0]);
+                $arrResponse['valItemInfo']['skuList'][$key]['ChSize'] = $ChSize;
+                $arrResponse['valItemInfo']['skuList'][$key]['KrColorPattern'] = $KrColor;//$tr->translate($ChSize[1].$ChSize[2]);
+                $arrResponse['valItemInfo']['skuList'][$key]['ChColorPattern'] = $ChColor;
+                $temp = explode(";", $arrResponse['valItemInfo']['skuList'][$key]['pvs']);
+                $arrResponse['valItemInfo']['skuList'][$key]['image'] = count($arrKey) <= 1 ? $arrResponse['propertyPics'][';'.$arrKey[0].';'][0] : $arrResponse['propertyPics'][';'.$arrKey[1].';'][0];
                 $arrResponse['valItemInfo']['skuList'][$key]['weight'] = 0;
-                $descData .= '<div style="text-align: center;"><p>['.$arrResponse['valItemInfo']['skuList'][$key]['KrColorPattern'].', '.$arrResponse['valItemInfo']['skuList'][$key]['KrSize'].']</p><p><img src="'.$arrResponse['valItemInfo']['skuList'][$key]['image'].'"></p></div>';
+                $descData .= '<div style="text-align: center;"><p>['.$KrColor.', '.$KrSize.']</p><p><img src="'.$arrResponse['valItemInfo']['skuList'][$key]['image'].'"></p></div>';
             }
             //상세이미지 얻는 요청
             $descURL = "http:".$arrResponse['api']['descUrl'];
@@ -169,16 +196,22 @@ class ProductScrapController extends Controller
                 "images" => array()
             );
             //컬러 패턴 번역
-            $transData = json_encode(array_values($arrResponse['colors']), JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
-            $trnasResult = $tr->translate($transData);
-            $transResArr = json_decode($trnasResult);
-            $idx=0;
+            //color
+            $tranString = implode("|", $arrResponse['colors']);
+            $tempString = $tr->translate($tranString);
+            $tempArr = explode("|",$tempString);
+            
+            $transResArr = array();
+            $i = 0;
             foreach ($arrResponse['colors'] as $key => $value) {
-                $transResArr[$key] = $transResArr[$idx];
-                unset($transResArr[$idx]);
-                $idx++;
+                if (array_key_exists($i, $tempArr)) {
+                    $transResArr[$key] = $tempArr[$i];
+                }else{
+                    $transResArr[$key] = "";
+                }
+                $i++;
             }
-            //print_r($arrResponse);
+            
             $price = 0;
             foreach ($arrResponse['skuMap'] as $key => $value) {
                 // $price = $arrResponse['valItemInfo']['skuMap'][';'.$arrResponse['valItemInfo']['skuList'][$key]['pvs'].';']['price'];
