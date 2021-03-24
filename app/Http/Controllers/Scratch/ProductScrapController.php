@@ -15,6 +15,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\WeightType;
 use App\Models\MoneyType;
+use Exception;
 
 class ProductScrapController extends Controller
 {
@@ -114,7 +115,7 @@ class ProductScrapController extends Controller
             }
             //color
             $tranString = implode("|", $arrResponse['colors']);
-            $tempString = $tr->translate($tranString);
+            echo $tempString = $tr->translate($tranString);
             $tempArr = explode("|",$tempString);
             $arrKrColor = array();
             $i = 0;
@@ -220,6 +221,18 @@ class ProductScrapController extends Controller
                 if($value['price'] > $price){
                     $price = $value['price'];
                 }
+                $ChColorSize="";
+                try{
+                    $ChColorSize = !isset($arrResponse['colors']) ? "" : (!isset($arrResponse['sizes']) ? $arrResponse['colors'][explode(';', $key)[1]] : $arrResponse['colors'][explode(';', $key)[2]]);
+                }catch(Exception $ex){
+                    $ChColorSize="";
+                }
+                $KrColorPattern="";
+                try{
+                    $KrColorPattern = !isset($arrResponse['colors']) ? "" : (!isset($arrResponse['sizes']) ? $arrResponse['colors'][explode(';', $key)[1]] :$transResArr[explode(';', $key)[2]]);
+                }catch(Exception $ex){
+                    $KrColorPattern="";
+                }
                 $val = array(
                     "pvs" => $key,
                     "price" => $value['price'],
@@ -227,8 +240,8 @@ class ProductScrapController extends Controller
                     "salePrice" => number_format(round(($value['price'] + $value['price'] * 0.3) * 170, -1), 2, '.', ''),
                     "ChSize" => !isset($arrResponse['sizes']) ? "" : $arrResponse['sizes'][explode(';', $key)[1]],
                     "KrSize" => !isset($arrResponse['sizes']) ? "" : $arrResponse['sizes'][explode(';', $key)[1]],
-                    "ChColorPattern" => !isset($arrResponse['colors']) ? "" : (!isset($arrResponse['sizes']) ? $arrResponse['colors'][explode(';', $key)[1]] : $arrResponse['colors'][explode(';', $key)[2]]),
-                    "KrColorPattern" => !isset($arrResponse['colors']) ? "" : (!isset($arrResponse['sizes']) ? $arrResponse['colors'][explode(';', $key)[1]] :$transResArr[explode(';', $key)[2]]),
+                    "ChColorPattern" => $ChColorSize,
+                    "KrColorPattern" => $KrColorPattern,
                     "image" => !isset($arrResponse['sizes']) ? $arrResponse['colorImages'][explode(';', $key)[1]] :$arrResponse['colorImages'][explode(';', $key)[2]],
                     "weight" => 0
                 );

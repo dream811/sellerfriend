@@ -14,8 +14,10 @@ use App\Models\Come;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Market;
-use DataTables;
+use App\Models\MarketAccount;
+use App\Models\Order;
 use App\MyLibs\CoupangConnector;
+use Yajra\DataTables\Facades\DataTables;
 
 class MarketOrderCollectionController extends Controller
 {
@@ -50,50 +52,46 @@ class MarketOrderCollectionController extends Controller
                 ->where('nUserId', Auth::id())
                 ->orderBy('nIdx');
 
-            return Datatables::eloquent($products)
+            return DataTables::eloquent($orders)
                     ->addIndexColumn()
-                    ->addColumn('check', function($row){
-                        $check = '<input type="checkbox" name="chkProduct[]" onclick="" value="'.$row->nIdx.'">';
-                        return $check;
+                    ->addColumn('market', function ( $row )
+                    {
+                        $element = "";
                     })
-                    ->addColumn('action', function($row){
-                        $btn = '';
-                        return $btn;
-                    })
-                    ->addColumn('images', function($row){
-                        $btn = '<ul class="list-inline" style="width:100px;">';
-                        foreach ($row->productImages as $productImage) {
-                            $btn .= '<li class="list-inline-item">
-                                        <img alt="Avatar" class="table-avatar" src="'.$productImage->strURL.'">
-                                    </li>';
-                        }
-                        $btn .= '</ul>';
-                        return $btn;
-                    })
-                    ->addColumn('productInfo', function($row){
-                        $element = '<ul class="list-inline" style="">';
-                        $element .= '<li class="list-inline-item">
-                                    '.$row->strCategoryCode1.'>'.$row->strCategoryCode2.'>'.$row->strCategoryCode3.'>'.$row->strCategoryCode4.'
-                                </li><br>';
-                        $element .= '<li class="list-inline-item">
-                                    '.$row->strKrSubName.'
-                                </li>';
-                        $element .= '</ul>';
-                        return $element;
-                    })
-                    ->addColumn('priceInfo', function($row){
-                        $element = '<ul class="list-inline" style="width:100px;">';
-                        $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nBasePrice.'
-                            </li><br>';
-                        $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nBasePrice.'
-                            </li>';
+                    // ->addColumn('images', function($row){
+                    //     $btn = '<ul class="list-inline" style="width:100px;">';
+                    //     foreach ($row->productImages as $productImage) {
+                    //         $btn .= '<li class="list-inline-item">
+                    //                     <img alt="Avatar" class="table-avatar" src="'.$productImage->strURL.'">
+                    //                 </li>';
+                    //     }
+                    //     $btn .= '</ul>';
+                    //     return $btn;
+                    // })
+                    // ->addColumn('productInfo', function($row){
+                    //     $element = '<ul class="list-inline" style="">';
+                    //     $element .= '<li class="list-inline-item">
+                    //                 '.$row->strCategoryCode1.'>'.$row->strCategoryCode2.'>'.$row->strCategoryCode3.'>'.$row->strCategoryCode4.'
+                    //             </li><br>';
+                    //     $element .= '<li class="list-inline-item">
+                    //                 '.$row->strKrSubName.'
+                    //             </li>';
+                    //     $element .= '</ul>';
+                    //     return $element;
+                    // })
+                    // ->addColumn('priceInfo', function($row){
+                    //     $element = '<ul class="list-inline" style="width:100px;">';
+                    //     $element .= '<li class="list-inline-item">
+                    //             '.$row->productDetail->nBasePrice.'
+                    //         </li><br>';
+                    //     $element .= '<li class="list-inline-item">
+                    //             '.$row->productDetail->nBasePrice.'
+                    //         </li>';
                                 
-                        $element .= '</ul>';
-                        return $element;
-                    })
-                    ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo'])
+                    //     $element .= '</ul>';
+                    //     return $element;
+                    // })
+                    //->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo'])
                     ->make(true);
                     
         }
@@ -122,14 +120,13 @@ class MarketOrderCollectionController extends Controller
         return response()->json(["status" => "success", "data" => $marketAccounts]);
     }
     //발주서조회를 위한 마켓계정 리스트(get)
-    public function getMarketList()
+    public function getMarketAccountList()
     {
         
-        $markets = Market::where('nUserId', Auth::id())
-                        ->where('nUserId')
-                        ->get();
+        $marketAccounts = MarketAccount::where('nUserId', Auth::id())
+                                        ->get();
 
-        return view('product.MarketAccountList', compact('marketAccounts'));
+        return view('order.MarketAccountList', compact('marketAccounts'));
     }
     //상품등록을 위한 마켓계정 선택(post)
     public function marketAccountSelect(Request $request)

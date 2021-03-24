@@ -114,11 +114,15 @@
                                         <table id="productTable" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
-                                                    <th style="width:50px !important">대표이미지</th>
-                                                    <th style="width:800px !important">상품정보</th>
-                                                    <th style="width:100px !important">등록마켓</th>
-                                                    <th style="width:40px !important">공급가/판매가</th>
-                                                    <th style="width:40px !important">마진</th>
+                                                    <th><input type="checkbox" name="select_all" value="1" id="select_all"></th>
+                                                    <th>마켓</th>
+                                                    <th>상품정보</th>
+                                                    <th>마켓상품번호<br>자사상품번호</th>
+                                                    <th>주문번호</th>
+                                                    <th>주문일자<br>결제일시</th>
+                                                    <th>구매수량</th>
+                                                    <th>주문자/배송정보</th>
+                                                    <th>조작</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -134,8 +138,6 @@
     </div>
     @section('script')
     <script>
-        var table = null;
-        tableTran  = $('#productTable');
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
@@ -183,13 +185,13 @@
                 }
             );
 
-            table = tableTran.DataTable({
+            var table = $('#productTable').DataTable({
                 processing: true,
                 serverSide: true,
                 searching: false,
                 scrollY: "400px",
                 ajax: {
-                    url: "{{ route('product.SellTargetManage') }}",
+                    url: "{{ route('order.MarketOrderCollection') }}",
                     data: function ( d ) {
                         d.searchWord = $('#txtSearchWord').val();
                         d.selSearchType = $('#selSearchType option:selected').val();
@@ -199,12 +201,15 @@
                     }
                 },
                 columns: [
-                    {data: 'check', name: 'check', orderable : false},
-                    {data: 'mainImage', name: 'mainImage'},
-                    {data: 'productInfo', name: 'productInfo'},
-                    {data: 'marketInfo', name: 'marketInfo', className: "text-center"},
-                    {data: 'priceInfo', name: 'priceInfo', className: "text-right"},
-                    {data: 'marginInfo', name: 'marginInfo', className: "text-right"},
+                    {data: 'DT_RowIndex', name: 'DT_RowIndex', 'render' : null, orderable  : false, 'searchable' : false, 'exportable' : false, 'printable'  : true},
+                    {data: 'strShipmentBoxId', name: 'strShipmentBoxId'},
+                    {data: 'strOrderId', name: 'strOrderId'},
+                    {data: 'dtOrderAt', name: 'dtOrderAt', className: "text-center"},
+                    {data: 'strOrdererName', name: 'strOrdererName'},
+                    {data: 'strOrdererEmail', name: 'strOrdererEmail'},
+                    {data: 'strOrdererEmail', name: 'strOrdererEmail'},
+                    {data: 'strOrdererEmail', name: 'strOrdererEmail'},
+                    {data: 'strOrdererEmail', name: 'strOrdererEmail'},
                 ],
                 responsive: true, lengthChange: true,
                 buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
@@ -234,7 +239,7 @@
             });
 
             $('body').on('click', '.btnGetNewOrderList', function () {
-                window.open('/order/marketAccountList', '상품주문수집', 'scrollbars=1, resizable=1, width=1000, height=620');
+                window.open('/orderMarketOrderCollection/getMarketAccountList', '상품주문수집', 'scrollbars=1, resizable=1, width=1000, height=620');
                 return false;
                 
             });
@@ -252,8 +257,6 @@
                 img.src = imagUrl;
                 var xOffset = 80;
                 var yOffset = 700-50;
-                console.log(offset.top);
-                console.log(offset.left);
                 if($('#preview').length)
                 {
                     $("#preview").css({
@@ -277,7 +280,9 @@
                 $("#preview").remove();
             });
         });
-        
+        function drawTable() {
+            
+        }
     </script>
     @endsection
 @endsection

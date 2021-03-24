@@ -58,7 +58,8 @@ Route::get('/orderWaiting', [App\Http\Controllers\Order\WaitingController::class
 
 Route::get('/orderSalesStatus', [App\Http\Controllers\Order\SalesStatusController::class, 'index'])->name('order.SalesStatus');
 Route::get('/orderMarketOrderCollection', [App\Http\Controllers\Order\MarketOrderCollectionController::class, 'index'])->name('order.MarketOrderCollection');
-Route::get('/orderMarketOrderCollection/getMarketList', [App\Http\Controllers\Order\MarketOrderCollectionController::class, 'getMarketList'])->name('order.MarketOrderCollection.GetMarketList');
+Route::get('/orderMarketOrderCollection/getMarketAccountList', [App\Http\Controllers\Order\MarketOrderCollectionController::class, 'getMarketAccountList'])->name('order.MarketOrderCollection.GetMarketAccountList');
+Route::post('/orderMarketOrderCollection/GetMarketOrderList', [App\Http\Controllers\Order\MarketOrderCollectionController::class, 'getMarketOrderList'])->name('order.MarketOrderCollection.GetMarketOrderList');
 
 
 Route::get('/orderPaymentWaiting', [App\Http\Controllers\Order\PaymentWaitingController::class, 'index'])->name('order.PaymentWaiting');
