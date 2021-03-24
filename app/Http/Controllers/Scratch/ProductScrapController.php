@@ -115,7 +115,7 @@ class ProductScrapController extends Controller
             }
             //color
             $tranString = implode("|", $arrResponse['colors']);
-            echo $tempString = $tr->translate($tranString);
+            $tempString = $tr->translate($tranString);
             $tempArr = explode("|",$tempString);
             $arrKrColor = array();
             $i = 0;
