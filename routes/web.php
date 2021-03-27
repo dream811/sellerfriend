@@ -16,13 +16,19 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/resizeImage', [App\Http\Controllers\ImageController::class, 'resizeImage']);
+Route::post('/resizeImagePost', [App\Http\Controllers\ImageController::class, 'resizeImagePost'])->name('resizeImagePost');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 /** 수집관리 **/
 //1
-Route::get('/scratchProductScrap', [App\Http\Controllers\Scratch\ProductScrapController::class, 'index'])->name('scratch.ProductScrap');
-Route::post('/scratchProductScrap', [App\Http\Controllers\Scratch\ProductScrapController::class, 'save'])->name('scratch.ProductScrap');
-Route::get('/scratchProductScrap/scratch', [App\Http\Controllers\Scratch\ProductScrapController::class, 'scratch'])->name('scratch.ProductScrapScratch');
+Route::get('/scratchProductScrap', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'index'])->name('scratch.ProductScrap');
+Route::post('/scratchProductScrap', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'save'])->name('scratch.ProductScrap');
+Route::get('/scratchProductScrap/scratch', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'scratch'])->name('scratch.ProductScrapScratch');
+
+// Route::get('/scratchProductScrap', [App\Http\Controllers\Scratch\ProductScrapController::class, 'index'])->name('scratch.ProductScrap');
+// Route::post('/scratchProductScrap', [App\Http\Controllers\Scratch\ProductScrapController::class, 'save'])->name('scratch.ProductScrap');
+// Route::get('/scratchProductScrap/scratch', [App\Http\Controllers\Scratch\ProductScrapController::class, 'scratch'])->name('scratch.ProductScrapScratch');
 //2
 Route::get('/scratchProductGetManage', [App\Http\Controllers\Scratch\ProductGetManageController::class, 'index'])->name('scratch.ProductGetManage');
 Route::put('/scratchProductGetManage/{productId}', [App\Http\Controllers\Scratch\ProductGetManageController::class, 'update'])->name('scratch.ProductGetManage.update');

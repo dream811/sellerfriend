@@ -124,7 +124,9 @@ class DesignCheckController extends Controller
                                 '.$productOptTag.'
                             </li><br>';
                     $element .= '<li class="font-weight-light list-inline-item">
-                                    '.Auth::user()->name.'['.$row->created_at.']
+                                <span data-id="'.$row->nIdx.'" style="font-size:10px !important;" class="btn btn-sm badge badge-info">상세편집</span>
+                                <span data-id="'.$row->nIdx.'" style="font-size:10px !important;" class="btn btn-sm badge badge-info">정보수정</span>'
+                                .Auth::user()->name.'['.$row->created_at.']
                                 </li>';
                     $element .= '</ul>';
                     return $element;
