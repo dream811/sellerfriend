@@ -180,6 +180,17 @@ class ProductScrapperController extends Controller
                 'price' => $arrResponse['itemDO']['reservePrice'],
                 'items' => $arrResponse['valItemInfo']['skuList'],
                 'images' => $arrResponse['propertyPics']['default'],
+                'options' => array(
+                    array(
+                        $arrResponse['colors'],
+                        $arrKrColor
+                    )
+                    ,array(
+                        $arrResponse['sizes'],
+                        $arrKrSize
+                    )
+
+                ),
                 'description' => $descData
             );
             

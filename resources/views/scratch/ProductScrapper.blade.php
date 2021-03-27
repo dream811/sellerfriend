@@ -782,7 +782,7 @@
                                                 <span class="text-success"> jpg, png, 2MB 이하 파일 업로드 가능, 본 기능이 ON 이지만 이미지가 없을 시 자동 비적용 됩니다.</span>
                                             </div>
 
-                                                <div class="col-sm-10">
+                                                <div class="col-sm-12">
                                                     <div class="card bg-secondary-light">
                                                         <div class="card-body">
                                                             <label class="form-label font-weight-bold">옵션 1</label>
@@ -835,11 +835,12 @@
                                                                         <button class="btn btn-info p-1"><label for="inputFileOpt01"><i class="fas fa-file-upload fa-lg"></i></label></button>
                                                                         <input type="file" id="inputFileOpt01" hidden="" _bl_86b8e158-2648-446a-97db-03609da33643="">
                                                                     </fieldset>
-                                                                    <input type="text" class="form-control col-md-6">
-                                                                        <input type="text" class="form-control col-md-3">
-                                                                            <input type="text" class="form-control col-md-1" readonly="">
-                                                                        <input type="text" class="form-control col-md-1" readonly="">
-                                                                            <input type="text" class="form-control col-md-1">
+                                                                    <input type="text" class="form-control col-md-3">
+                                                                    <input type="text" class="form-control col-md-3">
+                                                                    <input type="text" class="form-control col-md-3">
+                                                                    <input type="text" class="form-control col-md-1" readonly="">
+                                                                    <input type="text" class="form-control col-md-1" readonly="">
+                                                                    <input type="text" class="form-control col-md-1">
                                                                     <div class="input-group-append">
                                                                             <button class="btn btn-info border-secondary">이동</button>
                                                                         <button class="btn btn-primary"><i class="fas fa-plus"></i></button>
@@ -851,7 +852,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-10">
+                                                <div class="col-sm-12">
                                                     <div class="card bg-secondary-light">
                                                         <div class="card-body">
                                                             <label class="form-label font-weight-bold">옵션 2</label>
@@ -869,7 +870,7 @@
                                                                 <div class="col-sm-11 row">
                                                                     <div class="col-sm-6 row">
                                                                         <div class="col-sm-3 p-0 text-center">
-                                                                                <span class="badge badge-success">기준</span>
+                                                                            <span class="badge badge-success">기준</span>
                                                                             <label class="col-form-label pl-0 pr-0 text-center font-weight-bold">이미지</label>
                                                                         </div>
                                                                         <div class="col-sm-9 p-0">
@@ -884,10 +885,10 @@
                                                                         <div class="input-group input-group-sm col-sm-7 pl-0">
                                                                             <input type="text" class="form-control">
                                                                             <span class="input-group-append mb-1">
-                                                                                <button class="btn btn-dark" type="button">+</button>
+                                                                            <button class="btn btn-dark" type="button">+</button>
                                                                             </span>
                                                                             <span class="input-group-append mb-1">
-                                                                                <button class="btn btn-dark" type="button">-</button>
+                                                                            <button class="btn btn-dark" type="button">-</button>
                                                                             </span>
                                                                         </div>
                                                                     </div>
@@ -907,11 +908,12 @@
                                                                         <button class="btn btn-info p-1"><label for="inputFileOpt11"><i class="fas fa-file-upload fa-lg"></i></label></button>
                                                                         <input type="file" id="inputFileOpt11" hidden="" _bl_a4fe7226-dc05-4134-b89b-66818883ea5d="">
                                                                     </fieldset>
-                                                                    <input type="text" class="form-control col-md-6">
-                                                                        <input type="text" class="form-control col-md-3">
-                                                                            <input type="text" class="form-control col-md-1" readonly="">
-                                                                        <input type="text" class="form-control col-md-1" readonly="">
-                                                                            <input type="text" class="form-control col-md-1">
+                                                                    <input type="text" class="form-control col-md-3">
+                                                                    <input type="text" class="form-control col-md-3">
+                                                                    <input type="text" class="form-control col-md-3">
+                                                                    <input type="text" class="form-control col-md-1" readonly="">
+                                                                    <input type="text" class="form-control col-md-1" readonly="">
+                                                                    <input type="text" class="form-control col-md-1">
                                                                     <div class="input-group-append">
                                                                             <button class="btn btn-info border-secondary">이동</button>
                                                                         <button class="btn btn-primary"><i class="fas fa-plus"></i></button>
@@ -923,7 +925,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-10">
+                                                <div class="col-sm-12">
                                                     <button class="btn btn-success btn-block"><i class="fas fa-plus"></i> 새 옵션명 추가</button>
                                                 </div>
                                         </div>
