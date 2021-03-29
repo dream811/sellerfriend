@@ -1270,10 +1270,11 @@
                             </div>`;
                         data.items.forEach((element, index)=>{
                             var combination = '';
+
                             element.options.forEach((el, idx) =>{
                                 combination +='<input type="text" value="'+ el +'" class="form-control col-md-3" readonly="">'; 
                             });
-                            
+                            console.log(combination);
                             optCombination += `<div class="input-group">
                                 `+ combination +`
                                 <input type="text" value="` + element.price + `" class="form-control col-md-2" readonly="">
