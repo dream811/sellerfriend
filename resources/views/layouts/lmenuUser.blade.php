@@ -458,6 +458,7 @@
         </li>
     </ul>
 </li>
+ --}}
 <li class="nav-item {{ (request()->routeIs('operation*')) ? 'menu-open' : '' }}">
     <a href="{{ route('operation.OpenMarketManage') }}" class="nav-link">
         <i class="nav-icon fas fa-copy"></i>
@@ -486,7 +487,7 @@
             <p>상하단이미지관리</p>
         </a>
         </li>
-        <li class="nav-item">
+        {{-- <li class="nav-item">
         <a href="{{ route('operation.DepositManage') }}" class="nav-link">
             <i class="fas fa-crop-alt nav-icon"></i>
             <p>예치금관리</p>
@@ -508,7 +509,7 @@
         <a href="{{ route('operation.MyInfoMange') }}" class="nav-link">
             <i class="fas fa-crop-alt nav-icon"></i>
             <p>내정보</p>
-        </a>
+        </a> --}}
         </li>
     </ul>
-</li> --}}
+</li>

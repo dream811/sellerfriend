@@ -25,6 +25,19 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/scratchProductScrap', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'index'])->name('scratch.ProductScrap');
 Route::post('/scratchProductScrap', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'save'])->name('scratch.ProductScrap');
 Route::get('/scratchProductScrap/scratch', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'scratch'])->name('scratch.ProductScrapScratch');
+Route::get('/scratchProductScrap/category/search/{cateId}', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'categorySearch'])->name('scratch.ProductScrapScratch.categorySearch');
+Route::get('/scratchProductScrap/category/listCoupang', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'categoryListCoupang'])->name('scratch.ProductScrapScratch.categoryList.Coupang');
+Route::get('/scratchProductScrap/category/listAuction', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'categoryListAuction'])->name('scratch.ProductScrapScratch.categoryList.Auction');
+Route::get('/scratchProductScrap/category/list11thGlobal', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'categoryList11thGlobal'])->name('scratch.ProductScrapScratch.categoryList.11thGlobal');
+Route::get('/scratchProductScrap/category/list11thNormal', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'categoryList11thNormal'])->name('scratch.ProductScrapScratch.categoryList.11thNormal');
+Route::get('/scratchProductScrap/category/listGmarket', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'categoryListGmarket'])->name('scratch.ProductScrapScratch.categoryList.Gmarket');
+Route::get('/scratchProductScrap/category/listInterPark', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'categoryListInterPark'])->name('scratch.ProductScrapScratch.categoryList.InterPark');
+Route::get('/scratchProductScrap/category/listSmartStore', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'categoryListSmartStore'])->name('scratch.ProductScrapScratch.categoryList.SmartStore');
+Route::get('/scratchProductScrap/category/listWeMakePrice', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'categoryListWeMakePrice'])->name('scratch.ProductScrapScratch.categoryList.WeMakePrice');
+
+Route::get('/scratchProductScrap/category/listSolution', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'categoryListSolution'])->name('scratch.ProductScrapScratch.categoryList.Solution');
+Route::get('/scratchProductScrap/category/select/{cateId}', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'categorySelect'])->name('scratch.ProductScrapScratch.categoryList.Select');
+
 
 // Route::get('/scratchProductScrap', [App\Http\Controllers\Scratch\ProductScrapController::class, 'index'])->name('scratch.ProductScrap');
 // Route::post('/scratchProductScrap', [App\Http\Controllers\Scratch\ProductScrapController::class, 'save'])->name('scratch.ProductScrap');

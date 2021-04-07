@@ -20,10 +20,11 @@
     <!-- /.content-header -->
     <div class="container-fluid">
         <div class="row">
-            <div class="col-12">
+            <form method="POST" id="frmScrap" action="{{route('scratch.ProductScrap')}}">
+            <div class="col-9">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title mb-0">Step 1. 상품수집</h5>
+                        <h5 class="card-title mb-0" style="font-weight: bold;">Step 1. 상품수집</h5>
                     </div>
                     <div class="card-body">
                         <div class="form-group row">
@@ -55,7 +56,7 @@
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title mb-0">Step 2. 카테고리</h5>
+                        <h5 class="card-title mb-0" style="font-weight: bold;">Step 2. 카테고리</h5>
                     </div>
                     <div class="card-body">
                         <fieldset>
@@ -87,9 +88,9 @@
                                 <label class="col-form-label col-sm-2 text-sm-right">카테고리 통합검색</label>
                                 <div class="col-sm-8">
                                     <div class="input-group input-group-sm">
-                                        <input type="text" class="form-control" placeholder="통합검색">
+                                        <input type="text" name="txtCategoryName[]" cate-id="0" class="form-control" placeholder="통합검색">
                                         <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button" id="button-search"><i class="fas fa-search"></i> 검색</button>
+                                            <button class="btn btn-primary btnSearchCategory" type="button"><i class="fas fa-search"></i> 검색</button>
                                         </div>
                                     </div>
                                     <div class="list-group">
@@ -98,151 +99,151 @@
                                     </div>
 
                                 </div>
-                                <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('/ctg_n.html','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                                <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('{{route('scratch.ProductScrapScratch.categoryList.Solution')}}','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-sm-2 text-sm-right"></label>
                                 <span class="text-success"> 어린이제품, 식품, 북마켓 등 일부마켓 특수권한 필요 카테고리 주의</span>
                             </div>
 
-                                <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 text-sm-right">스마트스토어</label>
-                                    <div class="col-sm-8">
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control text-sm" placeholder="미설정">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-success" type="button" id="button-search"><i class="fas fa-search"></i> 검색</button>
-                                            </div>
-                                        </div>
-                                        <div class="list-group">
-                                            <small>
-                                            </small>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-2 text-sm-right">스마트스토어</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" name="txtCategoryName[]" cate-id="1" class="form-control text-sm" placeholder="미설정">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-success btnSearchCategory" type="button"><i class="fas fa-search"></i> 검색</button>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('/ctg_n.html','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                                    <div class="list-group">
+                                        <small>
+                                        </small>
+                                    </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 text-sm-right">쿠팡</label>
-                                    <div class="col-sm-8">
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control text-sm" placeholder="미설정">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-success" type="button" id="button-search"><i class="fas fa-search"></i> 검색</button>
-                                            </div>
-                                        </div>
-                                        <div class="list-group">
-                                            <small>
-                                            </small>
+                                <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('{{route('scratch.ProductScrapScratch.categoryList.SmartStore')}}','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-2 text-sm-right">쿠팡</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" name="txtCategoryName[]" cate-id="2" class="form-control text-sm" placeholder="미설정">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-success btnSearchCategory" type="button"><i class="fas fa-search"></i> 검색</button>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('/ctg_c.html','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                                    <div class="list-group">
+                                        <small>
+                                        </small>
+                                    </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 text-sm-right">11번가 글로벌</label>
-                                    <div class="col-sm-8">
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control text-sm" placeholder="미설정">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-success" type="button" id="button-search"><i class="fas fa-search"></i> 검색</button>
-                                            </div>
-                                        </div>
-                                        <div class="list-group">
-                                            <small>
-                                            </small>
+                                <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('{{route('scratch.ProductScrapScratch.categoryList.Coupang')}}','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-2 text-sm-right">11번가 글로벌</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" name="txtCategoryName[]" cate-id="3" class="form-control text-sm" placeholder="미설정">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-success btnSearchCategory" type="button"><i class="fas fa-search"></i> 검색</button>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('/ctg_1.html','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                                    <div class="list-group">
+                                        <small>
+                                        </small>
+                                    </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 text-sm-right">11번가 일반</label>
-                                    <div class="col-sm-8">
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control text-sm" placeholder="미설정">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-success" type="button" id="button-search"><i class="fas fa-search"></i> 검색</button>
-                                            </div>
-                                        </div>
-                                        <div class="list-group">
-                                            <small>
-                                            </small>
+                                <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('{{route('scratch.ProductScrapScratch.categoryList.11thGlobal')}}','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-2 text-sm-right">11번가 일반</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" name="txtCategoryName[]" cate-id="4" class="form-control text-sm" placeholder="미설정">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-success btnSearchCategory" type="button"><i class="fas fa-search"></i> 검색</button>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('/ctg_1r.html','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                                    <div class="list-group">
+                                        <small>
+                                        </small>
+                                    </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 text-sm-right">옥션</label>
-                                    <div class="col-sm-8">
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control text-sm" placeholder="미설정">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-success" type="button" id="button-search"><i class="fas fa-search"></i> 검색</button>
-                                            </div>
-                                        </div>
-                                        <div class="list-group">
-                                            <small>
-                                            </small>
+                                <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('{{route('scratch.ProductScrapScratch.categoryList.11thNormal')}}','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-2 text-sm-right">옥션</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" name="txtCategoryName[]" cate-id="5" class="form-control text-sm" placeholder="미설정">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-success btnSearchCategory" type="button"><i class="fas fa-search"></i> 검색</button>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('/ctg_a.html','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                                    <div class="list-group">
+                                        <small>
+                                        </small>
+                                    </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 text-sm-right">G마켓</label>
-                                    <div class="col-sm-8">
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control text-sm" placeholder="미설정">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-success" type="button" id="button-search"><i class="fas fa-search"></i> 검색</button>
-                                            </div>
-                                        </div>
-                                        <div class="list-group">
-                                            <small>
-                                            </small>
+                                <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('{{route('scratch.ProductScrapScratch.categoryList.Auction')}}','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-2 text-sm-right">G마켓</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" name="txtCategoryName[]" cate-id="6" class="form-control text-sm" placeholder="미설정">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-success btnSearchCategory" type="button"><i class="fas fa-search"></i> 검색</button>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('/ctg_g.html','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                                    <div class="list-group">
+                                        <small>
+                                        </small>
+                                    </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 text-sm-right">인터파크</label>
-                                    <div class="col-sm-8">
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control text-sm" placeholder="미설정">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-success" type="button" id="button-search"><i class="fas fa-search"></i> 검색</button>
-                                            </div>
-                                        </div>
-                                        <div class="list-group">
-                                            <small>
-                                            </small>
+                                <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('{{route('scratch.ProductScrapScratch.categoryList.Gmarket')}}','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-2 text-sm-right">인터파크</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" name="txtCategoryName[]" cate-id="7" class="form-control text-sm" placeholder="미설정">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-success btnSearchCategory" type="button"><i class="fas fa-search"></i> 검색</button>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('/ctg_i.html','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                                    <div class="list-group">
+                                        <small>
+                                        </small>
+                                    </div>
                                 </div>
-                                <div class="form-group row mb-0">
-                                    <label class="col-form-label col-sm-2 text-sm-right">위메프</label>
-                                    <div class="col-sm-8">
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control text-sm" placeholder="미설정">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-success" type="button" id="button-search"><i class="fas fa-search"></i> 검색</button>
-                                            </div>
-                                        </div>
-                                        <div class="list-group">
-                                            <small>
-                                            </small>
+                                <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('{{route('scratch.ProductScrapScratch.categoryList.InterPark')}}','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                            </div>
+                            <div class="form-group row mb-0">
+                                <label class="col-form-label col-sm-2 text-sm-right">위메프</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" name="txtCategoryName[]" cate-id="8" class="form-control text-sm" placeholder="미설정">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-success btnSearchCategory" type="button"><i class="fas fa-search"></i> 검색</button>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('/ctg_w.html','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                                    <div class="list-group">
+                                        <small>
+                                        </small>
+                                    </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 text-sm-right"></label>
-                                    <span class="text-success">검색 후 리스트 선택하셔야 정상동작합니다</span>
-                                </div>
+                                <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('{{route('scratch.ProductScrapScratch.categoryList.WeMakePrice')}}','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-2 text-sm-right"></label>
+                                <span class="text-success">검색 후 리스트 선택하셔야 정상동작합니다</span>
+                            </div>
                         </fieldset>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title mb-0">Step 3. 상품 기본정보</h5>
+                        <h5 class="card-title mb-0" style="font-weight: bold;">Step 3. 상품 기본정보</h5>
                     </div>
                     <div class="card-body">
                         <fieldset >
@@ -262,7 +263,7 @@
                                 <label class="col-form-label col-sm-2 text-sm-right">상품명(KO)</label>
                                 <div class="col-sm-8">
                                     <input type="text" name="txtKrMainName" id="txtKrMainName" class="form-control form-control-sm" placeholder="상품명">
-                                        <span class="text-success"> 93 / 100 byte </span>
+                                        <span class="text-success" id="titleSizeInfo">  </span>
                                     <span class="text-success"> (특수문자 사용불가)</span>
                                 </div>
                             </div>
@@ -273,161 +274,7 @@
                                     <input type="text" name="txtKrSubName" id="txtKrSubName" class="form-control form-control-sm" placeholder="50byte 상품명">
                                 </div>
                             </div>
-                            <hr>
-                            <fieldset style="color:">
-                                <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 text-sm-right">대표이미지</label>
-                                    <div class="col-sm-9 row mb-0">
-                                        <label class="col-form-label col-sm-12 text-sm-left text-success">jpg,png만 등록가능, 1000x1000 권장, 600x600 이상, 5000x5000 이하, 2MB이하(인터파크1MB)</label>
-                                        <div class="col-sm-4">
-                                            <span class="badge badge-primary">적합 - 800x800, 232KB</span>
-                                            <div class="card text-white bg-warning">
-                                                <img class="card-img-top blur" id="mainImage" src="https://via.placeholder.com/300/FFFFFF?text=Main Image" alt="Unsplash">
-                                                <div class="card-body">
-                                                    <p class="card-text">대표이미지</p>
-                                                    <hr>
-                                                    <fieldset>
-                                                        <button class="btn btn-success btn-sm mb-2">권장사이즈 리사이징</button>
-                                                    </fieldset>
-                                                    <br>
-                                                    <span><i class="fas fa-file-upload text-danger fa-lg"></i> 이미지파일 업로드</span>
-                                                    <input type="file" _bl_1b3118da-5512-4ddc-a786-9e8765f0c0a6="">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <span class="badge badge-primary">적합 - 800x800, 188KB</span>
-                                            <div class="card text-white bg-secondary">
-                                                <img class="card-img-top opacity" id="subImage1" src="https://via.placeholder.com/300/FFFFFF?text=Sub Image1" alt="Unsplash" style="filter:none">
-                                                <div class="card-body">
-                                                    <p class="card-text">
-                                                        추가이미지 1
-                                                        <div class="custom-control custom-switch float-right">
-                                                                <fieldset>
-                                                                    <input type="checkbox" class="custom-control-input" id="customSwitchFrontImage1">
-                                                                    <label class="custom-control-label" for="customSwitchFrontImage1">사용</label>
-                                                                </fieldset>
-                                                        </div>
-                                                    </p>
-                                                    <hr>
-                                                    <fieldset>
-                                                        <button class="btn btn-success btn-sm mb-2">권장사이즈 리사이징</button>
-                                                    </fieldset>
-                                                    <br>
-                                                    <span><i class="fas fa-file-upload text-danger fa-lg"></i> 이미지파일 업로드</span>
-                                                        <input type="file" _bl_31553d72-6893-4655-9b47-d8c306bbc156="">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <span class="badge badge-primary">적합 - 800x800, 252KB</span>
-                                            <div class="card text-white bg-secondary">
-                                                <img class="card-img-top opacity" id="subImage2" src="https://via.placeholder.com/300/FFFFFF?text=Sub Image2" alt="Unsplash" style="filter:none">
-                                                <div class="card-body">
-                                                    <p class="card-text">
-                                                        추가이미지 2
-                                                        <div class="custom-control custom-switch float-right">
-                                                                <fieldset>
-                                                                    <input type="checkbox" class="custom-control-input" id="customSwitchFrontImage2">
-                                                                    <label class="custom-control-label" for="customSwitchFrontImage2">사용</label>
-                                                                </fieldset>
-                                                        </div>
-                                                    </p>
-                                                    <hr>
-                                                    <fieldset>
-                                                        <button class="btn btn-success btn-sm mb-2">권장사이즈 리사이징</button>
-                                                    </fieldset>
-                                                    <br>
-                                                    <span><i class="fas fa-file-upload text-danger fa-lg"></i> 이미지파일 업로드</span>
-                                                        <input type="file" _bl_4c09d0e2-faa7-45d8-8667-5b60e07517fd="">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
-                                    <label class="col-form-label col-sm-2 text-sm-right"></label>
-                                    <div class="col-sm-9 row mb-0" id="imageContainer">
-                                        <div class="col-sm-2 pl-1 pr-0">
-                                            <span class="badge badge-primary">적합 - 800x800, 127KB</span>
-                                            <div class="card">
-                                                <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
-                                                <div class="card-body p-0">
-                                                    <div class="text-center">
-                                                        <div class="btn-group btn-block">
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">대표</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가1</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가2</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="col-sm-2 pl-1 pr-0">
-                                                    <span class="badge badge-primary">적합 - 800x800, 145KB</span>
-                                            <div class="card">
-                                                <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
-                                                <div class="card-body p-0">
-                                                    <div class="text-center">
-                                                        <div class="btn-group btn-block">
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">대표</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가1</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가2</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="col-sm-2 pl-1 pr-0">
-                                            <span class="badge badge-primary">적합 - 800x800, 99KB</span>
-                                            <div class="card">
-                                                <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
-                                                <div class="card-body p-0">
-                                                    <div class="text-center">
-                                                        <div class="btn-group btn-block">
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">대표</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가1</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가2</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2 pl-1 pr-0">
-                                            <span class="badge badge-primary">적합 - 800x800, 122KB</span>
-                                            <div class="card">
-                                                <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
-                                                <div class="card-body p-0">
-                                                    <div class="text-center">
-                                                        <div class="btn-group btn-block">
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">대표</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가1</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가2</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="col-sm-2 pl-1 pr-0">
-                                            <span class="badge badge-primary">적합 - 800x800, 178KB</span>
-                                            <div class="card">
-                                                <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
-                                                <div class="card-body p-0">
-                                                    <div class="text-center">
-                                                        <div class="btn-group btn-block">
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">대표</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가1</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가2</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </fieldset>
+                            
                         </fieldset>
                     </div>
                 </div>
@@ -751,13 +598,13 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-12 form-group row mb-0">
-                                                    <div class="form-group col-md-3 mb-0 ml-0">
+                                                    <div class="form-group col-md-4 mb-0 ml-0">
                                                             <div class="btn-group btn-group-sm" role="group">
                                                                     <button class="btn btn-success" type="button">옵션원가 적용</button>
                                                                     <button class="btn btn-outline-success" type="button">&nbsp;할인가 적용&nbsp;</button>
                                                             </div>
                                                     </div>
-                                                <div class="input-group input-group-sm input-group-sm col-md-3">
+                                                <div class="input-group input-group-sm input-group-sm col-md-4">
                                                     <input type="text" class="form-control">
                                                     <div class="input-group-append">
                                                         <button class="btn btn-success" type="button"> 옵션마진 재계산</button>
@@ -781,7 +628,7 @@
                                                 <span class="text-success"> jpg, png, 2MB 이하 파일 업로드 가능, 본 기능이 ON 이지만 이미지가 없을 시 자동 비적용 됩니다.</span>
                                             </div>
                                             <div id="divOptionField">
-                                                {{-- <div class="col-sm-12">
+                                                <div class="col-sm-12">
                                                     <div class="card bg-secondary-light">
                                                         <div class="card-body">
                                                             <label class="form-label font-weight-bold">옵션 1</label>
@@ -827,23 +674,43 @@
                                                             </div>
                                                             <div id="divOptionContainer_0">
                                                                 <div class="input-group">
-                                                                    <a href="img/no-image.png" target="_blank">
-                                                                        <img class="rounded" src="img/no-image.png" width="40" height="40">
+                                                                    <a href="" target="_blank">
+                                                                        <img class="rounded" src="" width="40" height="40">
                                                                     </a>
                                                                     <fieldset>
                                                                         <button class="btn btn-info p-1"><label for="inputFileOpt01"><i class="fas fa-file-upload fa-lg"></i></label></button>
                                                                         <input type="file" id="inputFileOpt01" hidden="" _bl_86b8e158-2648-446a-97db-03609da33643="">
                                                                     </fieldset>
-                                                                    <input type="text" class="form-control col-md-3">
+                                                                    <input type="text" value="123" class="form-control col-md-3">
                                                                     <input type="text" class="form-control col-md-3">
                                                                     <input type="text" class="form-control col-md-3">
                                                                     <input type="text" class="form-control col-md-1" readonly="">
                                                                     <input type="text" class="form-control col-md-1" readonly="">
                                                                     <input type="text" class="form-control col-md-1">
                                                                     <div class="input-group-append">
-                                                                            <button class="btn btn-info border-secondary">이동</button>
-                                                                        <button class="btn btn-primary"><i class="fas fa-plus"></i></button>
-                                                                        <button class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                                                                        <button class="btn btn-info border-secondary btnMoveOptRow ">이동</button>
+                                                                        <button class="btn btn-primary btnInsertOptRow"><i class="fas fa-plus"></i></button>
+                                                                        <button class="btn btn-danger btnDelOptRow"><i class="far fa-trash-alt"></i></button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="input-group">
+                                                                    <a href="" target="_blank">
+                                                                        <img class="rounded" src="" width="40" height="40">
+                                                                    </a>
+                                                                    <fieldset>
+                                                                        <button class="btn btn-info p-1"><label for="inputFileOpt01"><i class="fas fa-file-upload fa-lg"></i></label></button>
+                                                                        <input type="file" id="inputFileOpt01" hidden="" _bl_86b8e158-2648-446a-97db-03609da33643="">
+                                                                    </fieldset>
+                                                                    <input type="text" value="234" class="form-control col-md-3">
+                                                                    <input type="text" class="form-control col-md-3">
+                                                                    <input type="text" class="form-control col-md-3">
+                                                                    <input type="text" class="form-control col-md-1" readonly="">
+                                                                    <input type="text" class="form-control col-md-1" readonly="">
+                                                                    <input type="text" class="form-control col-md-1">
+                                                                    <div class="input-group-append">
+                                                                        <button class="btn btn-info border-secondary btnMoveOptRow ">이동</button>
+                                                                        <button class="btn btn-primary btnInsertOptRow"><i class="fas fa-plus"></i></button>
+                                                                        <button class="btn btn-danger btnDelOptRow"><i class="far fa-trash-alt"></i></button>
                                                                     </div>
                                                                 </div>
                                                             </div> 
@@ -914,20 +781,20 @@
                                                                     <input type="text" class="form-control col-md-1" readonly="">
                                                                     <input type="text" class="form-control col-md-1">
                                                                     <div class="input-group-append">
-                                                                            <button class="btn btn-info border-secondary">이동</button>
-                                                                        <button class="btn btn-primary"><i class="fas fa-plus"></i></button>
-                                                                        <button class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                                                                        <button class="btn btn-info border-secondary btnMoveOptRow ">이동</button>
+                                                                        <button class="btn btn-primary btnInsertOptRow"><i class="fas fa-plus"></i></button>
+                                                                        <button class="btn btn-danger btnDelOptRow"><i class="far fa-trash-alt"></i></button>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <button class="btn btn-success btn-block"><i class="fas fa-plus"></i> 추가</button>
                                                         </div>
                                                     </div>
-                                                </div> --}}
+                                                </div>
                                             </div>
-                                            <div class="col-sm-12">
+                                            {{-- <div class="col-sm-12">
                                                 <button class="btn btn-success btn-block"><i class="fas fa-plus"></i> 새 옵션명 추가</button>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
                                 </fieldset>
@@ -935,15 +802,15 @@
                             </div>
                             <hr>
                             <div class="form-group row">
-                                {{-- <div class="col-sm-12">
+                                <div class="col-sm-12">
                                     <div class="alert bg-light">
                                         <div class="alert-message">
-                                            <button type="button" class="btn btn-info">
+                                            <button type="button" class="btn btn-info btnRematchOptComb">
                                                 <i class="fas fa-th"></i> 옵션조합보기 &amp; 옵션별 재고입력 (비필수)
                                             </button>
                                         </div>
                                     </div>
-                                </div> --}}
+                                </div>
                                 <div class="col-sm-2">
                                 </div>
                                 <div class="col-sm-10">
@@ -979,9 +846,163 @@
                 <fieldset >
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Step 5. 상품 상세설명</h5>
+                            <h5 class="card-title mb-0" style="font-weight: bold;">Step 5. 상품 대표이미지 및 상세설명</h5>
                         </div>
                         <div class="card-body">
+                            <fieldset style="color:">
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-2 text-sm-right">대표이미지</label>
+                                    <div class="col-sm-9 row mb-0">
+                                        <label class="col-form-label col-sm-12 text-sm-left text-success">jpg,png만 등록가능, 1000x1000 권장, 600x600 이상, 5000x5000 이하, 2MB이하(인터파크1MB)</label>
+                                        <div class="col-sm-4">
+                                            <span class="badge badge-primary" id="spanBaseImageInfo_0">적합 - 800x800, 232KB</span>
+                                            <div class="card text-white bg-warning">
+                                                <img class="card-img-top blur baseImage" id="mainImage" data-id="0" src="https://via.placeholder.com/300/FFFFFF?text=Main Image" alt="Unsplash">
+                                                <div class="card-body">
+                                                    <p class="card-text">대표이미지</p>
+                                                    <hr>
+                                                    <fieldset>
+                                                        <button class="btn btn-success btn-sm mb-2">권장사이즈 리사이징</button>
+                                                    </fieldset>
+                                                    <br>
+                                                    <span><i class="fas fa-file-upload text-danger fa-lg"></i> 이미지파일 업로드</span>
+                                                    <input type="file">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <span class="badge badge-primary" id="spanBaseImageInfo_1">적합 - 800x800, 188KB</span>
+                                            <div class="card text-white bg-secondary">
+                                                <img class="card-img-top opacity baseImage" id="subImage1" data-id="1" src="https://via.placeholder.com/300/FFFFFF?text=Sub Image1" alt="Unsplash" style="filter:none">
+                                                <div class="card-body">
+                                                    <p class="card-text">
+                                                        추가이미지 1
+                                                        <div class="custom-control custom-switch float-right">
+                                                                <fieldset>
+                                                                    <input type="checkbox" class="custom-control-input" id="customSwitchFrontImage1">
+                                                                    <label class="custom-control-label" for="customSwitchFrontImage1">사용</label>
+                                                                </fieldset>
+                                                        </div>
+                                                    </p>
+                                                    <hr>
+                                                    <fieldset>
+                                                        <button class="btn btn-success btn-sm mb-2">권장사이즈 리사이징</button>
+                                                    </fieldset>
+                                                    <br>
+                                                    <span><i class="fas fa-file-upload text-danger fa-lg"></i> 이미지파일 업로드</span>
+                                                        <input type="file">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <span class="badge badge-primary" id="spanBaseImageInfo_2">적합 - 800x800, 252KB</span>
+                                            <div class="card text-white bg-secondary">
+                                                <img class="card-img-top opacity baseImage" id="subImage2" data-id="2" src="https://via.placeholder.com/300/FFFFFF?text=Sub Image2" alt="Unsplash" style="filter:none">
+                                                <div class="card-body">
+                                                    <p class="card-text">
+                                                        추가이미지 2
+                                                        <div class="custom-control custom-switch float-right">
+                                                                <fieldset>
+                                                                    <input type="checkbox" class="custom-control-input" id="customSwitchFrontImage2">
+                                                                    <label class="custom-control-label" for="customSwitchFrontImage2">사용</label>
+                                                                </fieldset>
+                                                        </div>
+                                                    </p>
+                                                    <hr>
+                                                    <fieldset>
+                                                        <button class="btn btn-success btn-sm mb-2">권장사이즈 리사이징</button>
+                                                    </fieldset>
+                                                    <br>
+                                                    <span><i class="fas fa-file-upload text-danger fa-lg"></i> 이미지파일 업로드</span>
+                                                        <input type="file">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <label class="col-form-label col-sm-2 text-sm-right"></label>
+                                    <div class="col-sm-9 row mb-0" id="imageContainer">
+                                        <div class="col-sm-2 pl-1 pr-0">
+                                            <span class="badge badge-primary">적합 - 800x800, 127KB</span>
+                                            <div class="card">
+                                                <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
+                                                <div class="card-body p-0">
+                                                    <div class="text-center">
+                                                        <div class="btn-group btn-block">
+                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">대표</button>
+                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가1</button>
+                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가2</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-sm-2 pl-1 pr-0">
+                                                    <span class="badge badge-primary">적합 - 800x800, 145KB</span>
+                                            <div class="card">
+                                                <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
+                                                <div class="card-body p-0">
+                                                    <div class="text-center">
+                                                        <div class="btn-group btn-block">
+                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">대표</button>
+                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가1</button>
+                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가2</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-sm-2 pl-1 pr-0">
+                                            <span class="badge badge-primary">적합 - 800x800, 99KB</span>
+                                            <div class="card">
+                                                <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
+                                                <div class="card-body p-0">
+                                                    <div class="text-center">
+                                                        <div class="btn-group btn-block">
+                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">대표</button>
+                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가1</button>
+                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가2</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2 pl-1 pr-0">
+                                            <span class="badge badge-primary">적합 - 800x800, 122KB</span>
+                                            <div class="card">
+                                                <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
+                                                <div class="card-body p-0">
+                                                    <div class="text-center">
+                                                        <div class="btn-group btn-block">
+                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">대표</button>
+                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가1</button>
+                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가2</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-sm-2 pl-1 pr-0">
+                                            <span class="badge badge-primary">적합 - 800x800, 178KB</span>
+                                            <div class="card">
+                                                <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
+                                                <div class="card-body p-0">
+                                                    <div class="text-center">
+                                                        <div class="btn-group btn-block">
+                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">대표</button>
+                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가1</button>
+                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가2</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
                                 {{-- <div class="form-group row ml-3">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="customSwitchTr1">
@@ -993,14 +1014,14 @@
                                         <label class="custom-control-label" for="customSwitchTr2">옵션이미지</label>
                                     </div>
                                 </div> --}}
-
+                            <hr>
                             <span class="text-success"> 마켓별 글자수 제한 글자잘림 유의. 공통 30000 byte 이내 권장.</span>
 
                             <div class="alert alert-secondary mb-0 mt-2">
                                 <div class="alert-message pb-0">
                                     <div class="form-group ml-3">
                                         <span><i class="fas fa-file-upload text-primary fa-lg"></i> 내 이미지파일 삽입(최대2MB) &nbsp;</span>
-                                        <input type="file" multiple="" _bl_2ccc0c2d-aaa9-4aea-a408-da28302f0ea7="">
+                                        <input type="file" multiple="">
                                     </div>
                                 </div>
                             </div>
@@ -1013,20 +1034,21 @@
                             {{-- 
                             <iframe id="ifSN" width="100%" height="800" src="sn.html" frameborder="0" allowfullscreen=""></iframe>
                                     <button class="btn btn-primary btn-lg btn-block" disabled="">잠시 기다려주세요</button> --}}
-                                    <button class="btn btn-primary btn-lg btn-block"><!--!--><i class="fas fa-check"></i> 상품등록</button>
+                                    <button type="button" class="btn btn-primary btn-lg btn-block btnSaveProduct"><!--!--><i class="fas fa-check"></i> 상품등록</button>
                         </div>
                     </div>
                 </fieldset>
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-12 col-lg-2">
                         <button class="btn btn-outline-success btn-block"><i class="far fa-save"></i> 임시저장</button>
                     </div>
                     <div class="col-12 col-lg-2">
                         <button class="btn btn-outline-success btn-block"><i class="far fa-share-square"></i> 임시저장 불러오기</button>
                     </div>
-                </div>
+                </div> --}}
                 <input type="text" id="hdDescription" class="form-control" hidden="">
             </div>
+            </form>
         </div>
     </div>
     
@@ -1060,39 +1082,98 @@
 
             $(".subItemsTable tbody").find("#row_" + rowId).remove();
         });
-        //	대표이미지 바꾸기
+        //대표이미지 바꾸기
         $('body').on('click', '.btnMainImage', function () {
             var img_src = $(this).attr('data-src');
             $('#mainImage').attr('src', img_src);
+            $('#mainImage').one('load', function() {
+                var width= this.naturalWidth;
+                var height = this.naturalHeight;
+                var blob = null;
+                var xhr = new XMLHttpRequest(); 
+                xhr.open('GET', $(this).attr('src'), true); 
+                xhr.responseType = 'blob';
+                //$('#spanImageInfo_' + index).html('적합 - '+width+'x'+height+', ' + 'KB');
+                xhr.onload = function() 
+                {
+                    blob = xhr.response;
+                    $('#spanBaseImageInfo_0').html('적합 - '+width+'x'+height+', ' + Math.round(blob.size/1024) + 'KB');
+                }
+                xhr.send();
+            }).each(function() {
+                if(this.complete) $(this).load();
+            });
             return false;
         });	
         // 첨부이미지 1 바꾸기
         $('body').on('click', '.btnSubImage1', function () {
             var img_src = $(this).attr('data-src');
             $('#subImage1').attr('src', img_src);
+            $('#subImage1').one('load', function() {
+                var width= this.naturalWidth;
+                var height = this.naturalHeight;
+                var blob = null;
+                var xhr = new XMLHttpRequest(); 
+                xhr.open('GET', $(this).attr('src'), true); 
+                xhr.responseType = 'blob';
+                //$('#spanImageInfo_' + index).html('적합 - '+width+'x'+height+', ' + 'KB');
+                xhr.onload = function() 
+                {
+                    blob = xhr.response;
+                    console.log(width);
+                    console.log(height);
+                    console.log(blob.size);
+                    console.log($(this).attr("data-id"));
+                    $('#spanBaseImageInfo_1').html('적합 - '+width+'x'+height+', ' + Math.round(blob.size/1024) + 'KB');
+                }
+                xhr.send();
+            }).each(function() {
+                if(this.complete) $(this).load();
+            });
             return false;
         });	
         // 첨부이미지 2 바꾸기
         $('body').on('click', '.btnSubImage2', function () {
             var img_src = $(this).attr('data-src');
             $('#subImage2').attr('src', img_src);
+            $('#subImage2').one('load', function() {
+                var width= this.naturalWidth;
+                var height = this.naturalHeight;
+                var blob = null;
+                var xhr = new XMLHttpRequest(); 
+                xhr.open('GET', $(this).attr('src'), true); 
+                xhr.responseType = 'blob';
+                //$('#spanImageInfo_' + index).html('적합 - '+width+'x'+height+', ' + 'KB');
+                xhr.onload = function() 
+                {
+                    blob = xhr.response;
+                    console.log(width);
+                    console.log(height);
+                    console.log(blob.size);
+                    console.log($(this).attr("data-id"));
+                    $('#spanBaseImageInfo_2').html('적합 - '+width+'x'+height+', ' + Math.round(blob.size/1024) + 'KB');
+                }
+                xhr.send();
+            }).each(function() {
+                if(this.complete) $(this).load();
+            });
             return false;
         });	
         $('body').on('click', '.btnSaveProduct', function () {
-            var brandName1 = $('#selBrandName').val();
-            var brandName2 = $('#txtBrandName').val();
-            if($('#selComeName').val() == 0){
-                alert("집하지를 선택해주세요!");
-                return false;
-            }
-            if($('#selBrandName').val() == 0 && $('#txtBrandName').val().trim() == ""){
-                alert("브랜드를 입력해주세요!");
-                return false;
-            }
-            if($('#selCategoryName1').val() == 0 && $('#selCategoryName2').val() == 0 && $('#selCategoryName3').val() == 0 && $('#selCategoryName4').val() == 0 && $('#txtCategoryName').val().trim() == ""){
-                alert("카테고리를 입력해주세요!");
-                return false;
-            }
+            // var brandName1 = $('#selBrandName').val();
+            // var brandName2 = $('#txtBrandName').val();
+            // if($('#selComeName').val() == 0){
+            //     alert("집하지를 선택해주세요!");
+            //     return false;
+            // }
+            // if($('#selBrandName').val() == 0 && $('#txtBrandName').val().trim() == ""){
+            //     alert("브랜드를 입력해주세요!");
+            //     return false;
+            // }
+            // if($('#selCategoryName1').val() == 0 && $('#selCategoryName2').val() == 0 && $('#selCategoryName3').val() == 0 && $('#selCategoryName4').val() == 0 && $('#txtCategoryName').val().trim() == ""){
+            //     alert("카테고리를 입력해주세요!");
+            //     return false;
+            // }
             $('#frmScrap').submit();
         });	
         $('body').on('click', '.btnScrapProduct', function () {
@@ -1112,187 +1193,634 @@
             }
             
             var action = '/scratchProductScrap/scratch';// $("#manageMarketAccount").attr("action");
-                $.ajax({
-                    url: action,
-                    data: {scrapURL},
-                    type: "GET",
-                    dataType: 'json',
-                    success: function ({status, data}) {
-                        
-                        
-                        $("#txtBasePrice").val(data.price);
-                        $("#txtDiscountPrice").val(data.price);
-                        $("#txtBasePrice").val(data.price);
-                        var 환율 = 173;
-                        var 원가 = data.price;
-                        var 마진율 = 0.1;
-                        var 판매수수료 = 0.3;
-                        var 구매수수료 = 0.05;
-                        var 해외배송비 = 6000;
-                        var productPrice = eval($('#txtFunction').val());
-                        $("#txtProductPrice").val(Math.round(productPrice / 10) * 10);
+            $.ajax({
+                url: action,
+                data: {scrapURL},
+                type: "GET",
+                dataType: 'json',
+                success: function ({status, data}) {
+                    $("#txtBasePrice").val(data.price);
+                    $("#txtDiscountPrice").val(data.price/2);
+                    $("#txtBasePrice").val(data.price);
+                    var 환율 = 173;
+                    var 원가 = data.price;
+                    var 마진율 = 0.1;
+                    var 판매수수료 = 0.3;
+                    var 구매수수료 = 0.05;
+                    var 해외배송비 = 6000;
+                    var productPrice = eval($('#txtFunction').val());
+                    $("#txtProductPrice").val(Math.round(productPrice / 10) * 10);
 
-                        var 마진율 = 0;
-                        var 판매수수료 = 0;
-                        var 구매수수료 = 0;
-                        var productPrice = eval($('#txtFunction').val());
-                        $("#txtExpectedRevenue").val($("#txtProductPrice").val() - Math.round(productPrice / 10) * 10);
-                        //$("#selBasePriceType").val('CNY');
-                        //$("#selCountryShippingCostType").val('CNY');
-                        //$("#selWorldShippingCostType").val('KRW');
-                        //$("#selWeightType").val('kg');
-                        $("#txtChMainName").val(data.chMainName);
-                        var re = new RegExp('.{1,' + 100 + '}', 'g');
-                        //console.log(C_getByteLength(data.krMainName));
-                        $("#txtKrMainName").val(data.krMainName.match(re));
-                        re = new RegExp('.{1,' + 50 + '}', 'g');
-                        $("#txtKrSubName").val(data.krMainName.match(re));
-                        //$("#txtKeyword").val(data.keyword);
-                        //$('.subItemsTable tbody').html('');
-                        var item = "";
-                        var optionTags = "";
-                        data.options.forEach( (element, index) => {
-                            var num = index+1;
-                            optionTags += `<input type="text" class="form-control col-md-3 text-center font-weight-bold" value="`+element.optKoName+`" readonly="">`;
-                            item +=`<div class="col-sm-12">
-                                        <div class="card bg-secondary-light">
-                                            <div class="card-body">
-                                                <label class="form-label font-weight-bold">옵션 `+num+`</label>
-                                                <button type="button" class="close text-danger">
-                                                    <span aria-hidden="true">×</span>
-                                                </button>
-                                                <br>
-                                                <div class="form-group row">
-                                                    <div class="input-group input-group-sm m-3">
-                                                        <input type="text" class="form-control text-center col-md-3 font-weight-bold" value="옵션명" readonly="">
-                                                        <input type="text" name="txtOptionName[]" id="txtOptionName_`+index+`" value=`+ element.optKoName +` class="form-control text-center">
+                    var 마진율 = 0;
+                    var 판매수수료 = 0;
+                    var 구매수수료 = 0;
+                    var productPrice = eval($('#txtFunction').val());
+                    $("#txtExpectedRevenue").val($("#txtProductPrice").val() - Math.round(productPrice / 10) * 10);
+                    $("#txtChMainName").val(data.chMainName);
+                    
+                    var re = new RegExp('.{1,' + 100 + '}', 'g');
+                    $("#txtKrMainName").val(data.krMainName.match(re));
+                    var titleLength = string_byte_length(data.krMainName);
+                    $("#titleSizeInfo").html(string_byte_length(data.krMainName) + ' / 100 byte');
+                    if(titleLength > 100){
+                        $("#titleSizeInfo").addClass('text-danger');
+                        $("#titleSizeInfo").removeClass('text-info');
+                        
+                    }
+
+                    $("#txtKrSubName").val(substr_utf8_bytes(data.krMainName, 0, 50));
+                    var item = "";
+                    var optionTags = "";
+                    data.options.forEach( (element, index) => {
+                        var num = index+1;
+                        optionTags += `<input type="text" class="form-control col text-center font-weight-bold" value="`+element.optKoName+`" readonly="">`;
+                        item +=`<div class="col-sm-12">
+                                    <div class="card bg-secondary-light">
+                                        <div class="card-body">
+                                            <label class="form-label font-weight-bold">옵션 `+num+`</label>
+                                            <button type="button" class="close text-danger">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <br>
+                                            <div class="form-group row">
+                                                <div class="input-group input-group-sm m-3">
+                                                    <input type="text" class="form-control text-center col-md-3 font-weight-bold" value="옵션명" readonly="">
+                                                    <input type="text" name="txtOptionName[]" id="txtOptionName_`+index+`" value=`+ element.optKoName +` class="form-control text-center">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 row">
+                                                    <div class="col-sm-6 row">
+                                                        <div class="col-sm-3 p-0 text-center">
+                                                            <label class="col-form-label pl-0 pr-0 text-center font-weight-bold">이미지</label>
+                                                        </div>
+                                                        <div class="col-sm-9 p-0">
+                                                            <label class="col-form-label col-sm-4 pl-0 pr-0 text-center font-weight-bold">옵션값</label>
+                                                            <button class="btn btn-sm btn-dark"><i class="fas fa-sort-numeric-down"></i></button>
+                                                            <button class="btn btn-sm btn-dark"><i class="fas fa-sort-alpha-down"></i></button>
+                                                            <button class="btn btn-sm btn-dark text-sm"><i class="fas fa-eraser"></i>특수문자</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3 row pl-0">
+                                                        <label class="col-form-label col-sm-5 pl-0 pr-1 text-right font-weight-bold">옵션추가금</label>
+                                                        <div class="input-group input-group-sm col-sm-7 pl-0">
+                                                            <input type="text" id="txtOptionPriceVal_${index}" class="form-control txtOptionPriceVal">
+                                                            <div class="input-group-append mb-1">
+                                                                <button class="btn btn-sm btn-dark btnAddOptionMoney" data-id="${index}" type="button">+</button>
+                                                                <button class="btn btn-sm btn-dark btnSubtractOptionMoney" data-id="${index}" type="button">-</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                            <div id="divOptionContainer_${index}" class="divOptionContainer">`;
+                                    var subItem="";
+                                    element.optItems.forEach((el, idx) => {
+                                        var chkLength = "is-valid";
+                                        if(string_byte_length(el[1]) > 30){
+                                            chkLength="is-invalid";
+                                        }
+                                        subItem += `<div class="input-group">
+                                                    <a href="javascript:void(0)" target="_blank">
+                                                        <img class="rounded" src="`+ el[3] +`" width="40" height="40">
+                                                    </a>
+                                                    <fieldset>
+                                                        <button class="btn btn-info p-1"><label for="inputFileOpt_0_"><i class="fas fa-file-upload fa-lg"></i></label></button>
+                                                        <input type="file" id="inputFileOpt_`+ index +`_`+ idx +`" hidden="">
+                                                    </fieldset>
+                                                    <input type="text" value="`+ el[2] +`" name="txtCnOptionName_${index}[]" id="txtCnOptionName_${index}_${idx}" data-id="${el[0]}" opt-id="${index}" item-id="${idx}" class="form-control  col-md-3">
+                                                    <input type="text" value="`+ el[1] +`" name="txtKoOptionName_${index}[]"  id="txtKoOptionName_${index}_${idx}" data-id="${el[0]}" opt-id="${index}" item-id="${idx}" class="form-control ${chkLength} col-md-3">
+                                                    <input type="text" value="0" name="txtAddOptionPrice_${index}" id="txtAddOptionPrice_${index}_${idx}" data-id="${el[0]}" opt-id="${index}" item-id="${idx}" class="form-control col-md-3">
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-info border-secondary btnMoveOptRow" >이동</button>
+                                                        <button type="button" class="btn btn-primary btnInsertOptRow"><i class="fas fa-plus"></i></button>
+                                                        <button type="button" class="btn btn-danger btnDelOptRow"><i class="far fa-trash-alt"></i></button>
+                                                    </div>
+                                                </div>`;
+                                    });
+                                    item +=  subItem + `</div> 
+                                            <button type="button" class="btn btn-success btn-block btnAddOptRow" opt-id="${index}"><i class="fas fa-plus"></i> 추가</button>
+                                        </div>
+                                    </div>
+                                </div>`;
+                        
+                    });
+
+                    $('#divOptionField').html(item);
+                    var imgItem = "";
+                    data.images.forEach( (element, index) => {
+                        if(index == 0){
+                            $('#mainImage').attr('src', element);
+                        }
+                        if(index == 1){
+                            $('#subImage1').attr('src', element);
+                        }
+                        if(index == 2){
+                            $('#subImage2').attr('src', element);
+                        }
+                        var img = new Image();
+                        var width = 0;
+                        var height = 0;
+                        var size = 0;
+                        
+                        img.src = element;
+                        imgItem +=`<div class="col-sm-2 pl-1 pr-0">
+                                        <span class="badge badge-primary" id="spanImageInfo_${index}" >적합 - `+width+`x`+height+`, `+size+`KB</span>
+                                        <div class="card">
+                                            <img class="card-img-top blur productImage" src="${element}" data-id="${index}" id="img_${index}" alt="Product Image" />
+                                            <input type="hidden" name="txtImage[]" id="hid_${index}" value="${element}"/>
+                                            <div class="card-body p-0">
+                                                <div class="text-center">
+                                                    <div class="btn-group btn-block">
+                                                        <button class="btn btn-secondary btn-sm pl-0 pr-0 btnMainImage" data-src="${element}">대표</button>
+                                                        <button class="btn btn-secondary btn-sm pl-0 pr-0 btnSubImage1" data-src="${element}">추가1</button>
+                                                        <button class="btn btn-secondary btn-sm pl-0 pr-0 btnSubImage2" data-src="${element}">추가2</button>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-sm-11 row">
-                                                        <div class="col-sm-6 row">
-                                                            <div class="col-sm-3 p-0 text-center">
-                                                                <label class="col-form-label pl-0 pr-0 text-center font-weight-bold">이미지</label>
-                                                            </div>
-                                                            <div class="col-sm-9 p-0">
-                                                                <label class="col-form-label col-sm-4 pl-0 pr-0 text-center font-weight-bold">옵션값</label>
-                                                                <button class="btn btn-sm btn-dark"><i class="fas fa-sort-numeric-down"></i></button>
-                                                                <button class="btn btn-sm btn-dark"><i class="fas fa-sort-alpha-down"></i></button>
-                                                                <button class="btn btn-sm btn-dark text-sm"><i class="fas fa-eraser"></i>특수문자</button>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-3 row pl-0">
-                                                            <label class="col-form-label col-sm-5 pl-0 pr-1 text-right font-weight-bold">옵션추가금</label>
-                                                            <div class="input-group input-group-sm col-sm-7 pl-0">
-                                                                <input type="text" class="form-control">
-                                                                <div class="input-group-append mb-1">
-                                                                    <button class="btn btn-sm btn-dark" type="button">+</button>
-                                                                    <button class="btn btn-sm btn-dark" type="button">-</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                            <div class="col-sm-3 row">
-                                                                <label class="col-form-label col-sm-5 text-left font-weight-bold pl-0 pr-0">추가(현)</label>
-                                                                <label class="col-form-label col-sm-3 text-center font-weight-bold pl-0 pr-0">원가</label>
-                                                                <label class="col-form-label col-sm-4 text-right font-weight-bold pl-0 pr-0">할인가</label>
-                                                            </div>
-                                                    </div>
-                                                </div>
-                                                <div id="divOptionContainer_0">`;
-                                        console.log(element.optItems);
-                                        var subItem="";
-                                        element.optItems.forEach((el, idx) => {
-                                            subItem += `<div class="input-group">
-                                                        <a href="javascript:void(0)" target="_blank">
-                                                            <img class="rounded" src="`+ el[3] +`" width="40" height="40">
-                                                        </a>
-                                                        <fieldset>
-                                                            <button class="btn btn-info p-1"><label for="inputFileOpt_0_"><i class="fas fa-file-upload fa-lg"></i></label></button>
-                                                            <input type="file" id="inputFileOpt_`+ index +`_`+ idx +`" hidden="">
-                                                        </fieldset>
-                                                        <input type="text" value="`+ el[2] +`" class="form-control col-md-3">
-                                                        <input type="text" value="`+ el[1] +`" class="form-control col-md-3">
-                                                        <input type="text" value="0" class="form-control col-md-3">
-                                                        <input type="text" value="0" class="form-control col-md-1" readonly="">
-                                                        <input type="text" value="0" class="form-control col-md-1" readonly="">
-                                                        <input type="text" value="0" class="form-control col-md-1">
-                                                        <div class="input-group-append">
-                                                            <!--<button class="btn btn-info border-secondary">이동</button>
-                                                            <button class="btn btn-primary"><i class="fas fa-plus"></i></button>--!>
-                                                            <button class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
-                                                        </div>
-                                                    </div>`;
-                                        });
-                                        item +=  subItem + `</div> 
-                                                <button class="btn btn-success btn-block"><i class="fas fa-plus"></i> 추가</button>
                                             </div>
                                         </div>
                                     </div>`;
+                    });
+                    var optCombination= `<div class="input-group">
+                            `+ optionTags +`
+                            <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="원가" readonly="">
+                            <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="할인가" readonly="">
+                            <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="판매가" readonly="">
+                            <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="옵션추가금" readonly="">
+                            <input type="text" class="form-control col-md-1 text-center font-weight-bold" value="재고" readonly="">
+                            <div class="input-group-append">
+                                <button class="btn invisible">품절</button>
+                            </div>
+                        </div>`;
+                    window.scrapItems = data.items;
+                    data.items.forEach((element, index)=>{
+                        var combination = '';
+                        element.options.forEach((el, idx) =>{
+                            combination +='<input type="text" value="'+ el +'" class="form-control col" readonly="">'; 
+                        });
+
+                        var 환율 = $('#txtExchangeRate').val();
+                        var 원가 = element.price;
+                        var 마진율 = $('#txtMarginRate').val()/100;
+                        var 판매수수료 = $('#txtSellerMarketCharge').val()/100;
+                        var 구매수수료 = $('#txtBuyerMarketCharge').val()/100;
+                        var 해외배송비 = $('#txtOverSeaCharge').val();
+                        var productPrice = eval($('#txtFunction').val());
+                        var sumPrice = (Math.round(productPrice / 10) * 10);
+                        var sumOptPrice = 0;
+
+                        optCombination += `<div class="input-group">
+                            `+ combination +`
+                            <input type="text" value="` + element.price + `" class="form-control col-md-2 optBasePrice" readonly="">
+                            <input type="text" value="` + element.price/2 + `" class="form-control col-md-2 optDiscountPrice" readonly="">
+                            <input type="text" value="` + sumPrice + `" class="form-control col-md-2 optSellPrice" readonly="">
+                            <input type="text" value="` + sumOptPrice + `" class="form-control col-md-2 optAddPrice" readonly="">
+                            <input type="text" value="` + element.stock + `" class="form-control col-md-1 optComStock">
+                            <div class="input-group-append">
+                                <button class="btn btn-danger">품절</button>
+                            </div>
+                        </div>`;
+                    });
+                    $('#divOptionCombinationBox').html(optCombination);
+                    $('#imageContainer').html(imgItem);
+                    $('#summernote').summernote('code', data.description);
+                    UpdateImageInfo();
+                },
+                error: function (data) {
+                    alert('스크래핑중 오류가 발생했습니다. 잠시후 다시 시도해주십시오.');
+                }
+
+            });
+        });
+        var UpdateImageInfo = function () {
+       
+            $('.productImage').one('load', function() {
+                var width= this.naturalWidth;
+                var height = this.naturalHeight;
+                var index = $(this).attr("data-id");
+                var blob = null;
+                var xhr = new XMLHttpRequest(); 
+                xhr.open('GET', $(this).attr('src'), true); 
+                xhr.responseType = 'blob';
+                //$('#spanImageInfo_' + index).html('적합 - '+width+'x'+height+', ' + 'KB');
+                xhr.onload = function() 
+                {
+                    blob = xhr.response;
+                    console.log(index);
+                    console.log(width);
+                    console.log(height);
+                    console.log(blob.size);
+                    console.log($(this).attr("data-id"));
+                    $('#spanImageInfo_' + index).html('적합 - '+width+'x'+height+', ' + Math.round(blob.size/1024) + 'KB');
+                }
+                xhr.send();
+            }).each(function() {
+                if(this.complete) $(this).load();
+            });
+            $('.baseImage').one('load', function() {
+                var width= this.naturalWidth;
+                var height = this.naturalHeight;
+                var index = $(this).attr("data-id");
+                var blob = null;
+                var xhr = new XMLHttpRequest(); 
+                xhr.open('GET', $(this).attr('src'), true); 
+                xhr.responseType = 'blob';
+                
+                xhr.onload = function() 
+                {
+                    blob = xhr.response;
+                    console.log(blob.size);
+                    console.log($(this).attr("data-id"));
+                    $('#spanBaseImageInfo_' + index).html('적합 - '+width+'x'+height+', ' + Math.round(blob.size/1024) + 'KB');
+                }
+                xhr.send();
+            }).each(function() {
+                if(this.complete) $(this).load();
+            });
+        };
+        $('body').on('click', '.btnAddOptionMoney', function () {
+            
+            var index = $(this).attr('data-id');
+            var value = $('#txtOptionPriceVal_'+index).val();
+            var optTags = $('#divOptionContainer_'+index);
+            // $("input[name='txtAddOptionPrice_"+index+"']").each( function() {
+            //     $(this).val(parseInt($(this).val()) + parseInt(value));
+            // });
+            optTags.children().each(function(idx, el){
+                
+                var optPrice = $(el).find('input:nth-child(5)').val();
+                $(el).find('input:nth-child(5)').val(optPrice*1 + parseInt(value));
+                //console.log(optName + optPrice);
+            });
+        });
+        $('body').on('click', '.btnSubtractOptionMoney', function () {
+            var index = $(this).attr('data-id');
+            var optTags = $('#divOptionContainer_'+index);
+            // $("input[name='txtAddOptionPrice_"+index+"']").each( function() {
+            //     $(this).val(parseInt($(this).val()) + parseInt(value));
+            // });
+            optTags.children().each(function(idx, el){
+                
+                var optPrice = $(el).find('input:nth-child(5)').val();
+                $(el).find('input:nth-child(5)').val(optPrice*1 - parseInt(value));
+                //console.log(optName + optPrice);
+            });
+        });
+        $('body').on('click', '.btnDelOptRow', function () {
+            var index = $(this).parent().parent().remove();
+        });
+        $('body').on('click', '.btnInsertOptRow', function () {
+            var element = $(this).parent().parent();
+            var content=`<div class="input-group">
+                            <a href="img/no-image.png" target="_blank">
+                                <img class="rounded" src="img/no-image.png" width="40" height="40">
+                            </a>
+                            <fieldset>
+                                <button class="btn btn-info p-1"><label for="inputFileOpt01"><i class="fas fa-file-upload fa-lg"></i></label></button>
+                                <input type="file" hidden="">
+                            </fieldset>
+                            <input type="text" class="form-control col-md-3">
+                            <input type="text" class="form-control col-md-3">
+                            <input type="text" class="form-control col-md-3">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-info border-secondary btnMoveOptRow ">이동</button>
+                                <button type="button" class="btn btn-primary btnInsertOptRow"><i class="fas fa-plus"></i></button>
+                                <button type="button" class="btn btn-danger btnDelOptRow"><i class="far fa-trash-alt"></i></button>
+                            </div>
+                        </div>`;
+            $(content).insertBefore(element);
+        });
+        $('body').on('click', '.btnMoveOptRow', function () {
+            var element = $(this).parent().parent();
+            if($(this).html() == "이동"){
+                console.log($(this).html());
+                
+                //$(this).removeClass('btnMoveFromOptRow');
+                //$(this).addClass('btnMovePosOptRow');
+                element.parent().find('button.border-secondary').each(function () {
+                    $(this).html('↑삽입');
+                });
+                $(this).parent().parent().addClass('divMoveRow');
+            }
+            else if($(this).html() == "↑삽입"){
+                var copyRow = $(this).parent().parent().parent().find('.divMoveRow').first();
+                element.parent().find('button.border-secondary').each(function () {
+                    $(this).html('이동');
+                });
+                
+                //$('<div class="input-group"></div>').prepend(element);
+                //copyRow.contents().appendTo(element);
+                element.before(copyRow);
+                copyRow.removeClass('divMoveRow');
+                //copyRow.remove();
+            }
+            
+        });
+        $('body').on('click', '.btnAddOptRow', function () {
+            var element = $(this).prev();
+            var content=`<div class="input-group">
+                            <a href="img/no-image.png" target="_blank">
+                                <img class="rounded" src="img/no-image.png" width="40" height="40">
+                            </a>
+                            <fieldset>
+                                <button class="btn btn-info p-1"><label for="inputFileOpt01"><i class="fas fa-file-upload fa-lg"></i></label></button>
+                                <input type="file" hidden="">
+                            </fieldset>
+                            <input type="text" class="form-control col-md-3">
+                            <input type="text" class="form-control col-md-3">
+                            <input type="text" class="form-control col-md-3">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-info border-secondary btnMoveOptRow ">이동</button>
+                                <button type="button" class="btn btn-primary btnInsertOptRow"><i class="fas fa-plus"></i></button>
+                                <button type="button" class="btn btn-danger btnDelOptRow"><i class="far fa-trash-alt"></i></button>
+                            </div>
+                        </div>`;
+            $(content).appendTo(element); 
+        });
+        $('body').on('click', '.btnRematchOptComb', function() {
+            var optionNameTags = $('[name="txtOptionName[]"]');
+            var optionTags = "";
+            var sumOptPrice = 0;
+            optionNameTags.each(function(idx, el) {
+                optionTags +='<input type="text" value="'+ $(this).val() +'" class="form-control text-center font-weight-bold" readonly="">'; 
+            });
+
+            // var optionContainer = $('#divOptionField');
+            // optionContainer.children().each(function(index, element){
+            //     console.log(index);
+            // });
+
+            var divOptionComb = `<div class="input-group">
+                `+ optionTags +`
+                <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="원가" readonly="">
+                <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="할인가" readonly="">
+                <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="판매가" readonly="">
+                <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="옵션추가금" readonly="">
+                <input type="text" class="form-control col-md-1 text-center font-weight-bold" value="재고" readonly="">
+                <div class="input-group-append">
+                    <button class="btn invisible">품절</button>
+                </div>
+            </div>`;
+            var divOptionContainers = $('.divOptionContainer');
+            var arrOptionComb = new Array();
+            divOptionContainers.each(function(index, element){
+                //console.log('good');
+                var arrOption = new Array();
+                $(this).children().each(function(idx, el){
+
+                    var optName = $(el).find('input:nth-child(4)').val();
+                    var optPrice = $(el).find('input:nth-child(5)').val();
+                    var optId = $(el).find('input:nth-child(5)').attr('data-id');
+                    var objOption = {optName, optPrice, optId};
+                    arrOption.push(objOption);
+                    //console.log(optName + optPrice);
+                });
+                arrOptionComb.push(arrOption);
+            });
+            // console.log(arrOptionComb);
+            // var combLength=1;
+            // arrOptionComb.forEach(function(element, index){
+            //     combLength = comblength * element.length
+            // })
+            
+            //var combContent = getCombinations(arrOptionComb, 2); 
+
+            //console.log(arrOptionComb);
+            if(arrOptionComb.length == 1){
+                for(i=0; i<arrOptionComb[0].length; i++){
+                        var stock=0;
+                        var basePrice = $('#txtBasePrice').val()*1;
+                        var discountPrice = $('#txtDiscountPrice').val()*1;
+                        var optionPrice = 0;
+                        optionPrice = arrOptionComb[0][i].optPrice;
+                        window.scrapItems.forEach((el, idx)=>{
                             
+                            var pvs = arrOptionComb[0][i].optId;
+                            if(el.pvs.replaceAll(";", "") === pvs)
+                            {
+                                stock = el.stock;
+                                basePrice = el.price;
+                                discountPrice = Math.round(el.price/2);
+                                
+                            }
                         });
+                        var 환율 = $('#txtExchangeRate').val();
+                        var 원가 = basePrice;
+                        var 마진율 = $('#txtMarginRate').val()/100;
+                        var 판매수수료 = $('#txtSellerMarketCharge').val()/100;
+                        var 구매수수료 = $('#txtBuyerMarketCharge').val()/100;
+                        var 해외배송비 = $('#txtOverSeaCharge').val();
+                        var productPrice = eval($('#txtFunction').val());
+                        var sellPrice = (Math.round(productPrice / 10) * 10);
+                        //var sumOptPrice = $('#txtExchangeRate').val();
 
-                        $('#divOptionField').html(item);
-                        var imgItem = "";
-                        data.images.forEach( (element, index) => {
-                            if(index == 0){
-                                $('#mainImage').attr('src', element);
-                            }
-                            if(index == 1){
-                                $('#subImage1').attr('src', element);
-                            }
-                            if(index == 2){
-                                $('#subImage2').attr('src', element);
-                            }
-                            imgItem +=`<div class="col-sm-2 pl-1 pr-0">
-                                            <span class="badge badge-primary">적합 - 800x800, 127KB</span>
-                                            <div class="card">
-                                                <img class="card-img-top blur" src="${element}" id="img_${index}" alt="Product Image" />
-                                                <input type="hidden" name="txtImage[]" id="hid_${index}" value="${element}"/>
-                                                <div class="card-body p-0">
-                                                    <div class="text-center">
-                                                        <div class="btn-group btn-block">
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0 btnMainImage" data-src="${element}">대표</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0 btnSubImage1" data-src="${element}">추가1</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0 btnSubImage2" data-src="${element}">추가2</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>`;
-                        });
-                        var optCombination= `<div class="input-group">
-                                `+ optionTags +`
-                                <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="옵션추가금" readonly="">
-                                <input type="text" class="form-control col-md-1 text-center font-weight-bold" value="재고" readonly="">
-                                <div class="input-group-append">
-                                    <button class="btn invisible">품절</button>
-                                </div>
-                            </div>`;
-                        data.items.forEach((element, index)=>{
-                            var combination = '';
-
-                            element.options.forEach((el, idx) =>{
-                                combination +='<input type="text" value="'+ el +'" class="form-control col-md-3" readonly="">'; 
-                            });
-                            console.log(combination);
-                            optCombination += `<div class="input-group">
-                                `+ combination +`
-                                <input type="text" value="` + element.price + `" class="form-control col-md-2" readonly="">
-                                <input type="text" value="` + element.stock + `" class="form-control col-md-1">
+                        divOptionComb += `<div class="input-group">
+                                <input type="text" value="`+arrOptionComb[0][i].optName+`" class="form-control col" readonly="">
+                                <input type="text" value="${basePrice}" class="form-control col-md-2 optBasePrice" readonly="">
+                                <input type="text" value="${discountPrice}" class="form-control col-md-2 optDiscountPrice" readonly="">
+                                <input type="text" value="${sellPrice}" class="form-control col-md-2 optSellPrice" readonly="">
+                                <input type="text" value="${optionPrice}" class="form-control col-md-2 optAddPrice" readonly="">
+                                <input type="text" value="${stock}" class="form-control col-md-1 optComStock">
                                 <div class="input-group-append">
                                     <button class="btn btn-danger">품절</button>
                                 </div>
                             </div>`;
+                }
+            }else if(arrOptionComb.length == 2){
+                for(i=0; i<arrOptionComb[0].length; i++){
+                    for (j = 0; j < arrOptionComb[1].length; j++) {
+                        var stock=0;
+                        var basePrice = $('#txtBasePrice').val()*1;
+                        var discountPrice = $('#txtDiscountPrice').val()*1;
+                        var optionPrice = 0;
+                        optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1;
+                        window.scrapItems.forEach((el, idx)=>{
+                            
+                            var pvs = arrOptionComb[0][i].optId + arrOptionComb[1][j].optId;
+                            if(el.pvs.replaceAll(";", "") === pvs)
+                            {
+                                stock = el.stock;
+                                basePrice = el.price;
+                                discountPrice = Math.round(el.price/2);
+                                
+                            }
                         });
-                        $('#divOptionCombinationBox').html(optCombination);
-                        $('#imageContainer').html(imgItem);
-                        $('#summernote').summernote('code', data.description);
+                        var 환율 = $('#txtExchangeRate').val();
+                        var 원가 = basePrice;
+                        var 마진율 = $('#txtMarginRate').val()/100;
+                        var 판매수수료 = $('#txtSellerMarketCharge').val()/100;
+                        var 구매수수료 = $('#txtBuyerMarketCharge').val()/100;
+                        var 해외배송비 = $('#txtOverSeaCharge').val();
+                        var productPrice = eval($('#txtFunction').val());
+                        var sellPrice = (Math.round(productPrice / 10) * 10);
+                        //var sumOptPrice = $('#txtExchangeRate').val();
+
+                        divOptionComb += `<div class="input-group">
+                                <input type="text" value="`+arrOptionComb[0][i].optName+`" class="form-control col" readonly="">
+                                <input type="text" value="`+arrOptionComb[1][j].optName+`" class="form-control col" readonly="">
+                                <input type="text" value="${basePrice}" class="form-control col-md-2 optBasePrice" readonly="">
+                                <input type="text" value="${discountPrice}" class="form-control col-md-2 optDiscountPrice" readonly="">
+                                <input type="text" value="${sellPrice}" class="form-control col-md-2 optSellPrice" readonly="">
+                                <input type="text" value="${optionPrice}" class="form-control col-md-2 optAddPrice" readonly="">
+                                <input type="text" value="${stock}" class="form-control col-md-1 optComStock">
+                                <div class="input-group-append">
+                                    <button class="btn btn-danger">품절</button>
+                                </div>
+                            </div>`;
+                    }
+                }
+            }else if(arrOptionComb.length == 3){
+                for(i=0; i<arrOptionComb[0].length; i++){
+                    for (j = 0; j < arrOptionComb[1].length; j++) {
+                        for (k = 0; k < arrOptionComb[2].length; k++) {
+                            var stock=0;
+                            var basePrice = $('#txtBasePrice').val()*1;
+                            var discountPrice = $('#txtDiscountPrice').val()*1;
+                            var optionPrice = 0;
+                            optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1 + arrOptionComb[2][k].optPrice*1;
+                            window.scrapItems.forEach((el, idx)=>{
+                                
+                                var pvs = arrOptionComb[0][i].optId + arrOptionComb[1][j].optId + arrOptionComb[2][k].optId;
+                                if(el.pvs.replaceAll(";", "") === pvs)
+                                {
+                                    stock = el.stock;
+                                    basePrice = el.price;
+                                    discountPrice = Math.round(el.price/2);
+                                    
+                                }
+                            });
+                            var 환율 = $('#txtExchangeRate').val();
+                            var 원가 = basePrice;
+                            var 마진율 = $('#txtMarginRate').val()/100;
+                            var 판매수수료 = $('#txtSellerMarketCharge').val()/100;
+                            var 구매수수료 = $('#txtBuyerMarketCharge').val()/100;
+                            var 해외배송비 = $('#txtOverSeaCharge').val();
+                            var productPrice = eval($('#txtFunction').val());
+                            var sellPrice = (Math.round(productPrice / 10) * 10);
+                            //var sumOptPrice = $('#txtExchangeRate').val();
+
+                            divOptionComb += `<div class="input-group">
+                                    <input type="text" value="`+arrOptionComb[0][i].optName+`" class="form-control col" readonly="">
+                                    <input type="text" value="`+arrOptionComb[1][j].optName+`" class="form-control col" readonly="">
+                                    <input type="text" value="`+arrOptionComb[2][k].optName+`" class="form-control col" readonly="">
+                                    <input type="text" value="${basePrice}" class="form-control col-md-2 optBasePrice" readonly="">
+                                    <input type="text" value="${discountPrice}" class="form-control col-md-2 optDiscountPrice" readonly="">
+                                    <input type="text" value="${sellPrice}" class="form-control col-md-2 optSellPrice" readonly="">
+                                    <input type="text" value="${optionPrice}" class="form-control col-md-2 optAddPrice" readonly="">
+                                    <input type="text" value="${stock}" class="form-control col-md-1 optComStock">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-danger">품절</button>
+                                    </div>
+                                </div>`;
+                        }
+                    }
+                }
+            }
+            // data.items.forEach((element, index)=>{
+            //     var combination = '';
+
+            //     element.options.forEach((el, idx) =>{
+            //         combination +='<input type="text" value="'+ el +'" class="form-control col" readonly="">'; 
+            //     });
+
+            //     var 환율 = $('#txtExchangeRate').val()/100;
+            //     var 원가 = element.price;
+            //     var 마진율 = $('#txtMarginRate').val()/100;
+            //     var 판매수수료 = $('#txtSellerMarketCharge').val()/100;
+            //     var 구매수수료 = $('#txtBuyerMarketCharge').val()/100;
+            //     var 해외배송비 = $('#txtOverSeaCharge').val();
+            //     var productPrice = eval($('#txtFunction').val());
+            //     var sumPrice = (Math.round(productPrice / 10) * 10);
+            //     var sumOptPrice = 0;
+            //     $('.txtOptionPriceVal').each(function() {
+            //         sumOptPrice += $(this).val();
+            //     });
+            //     optCombination += `<div class="input-group">
+            //         `+ combination +`
+            //         <input type="text" value="` + element.price + `" class="form-control col-md-2 optBasePrice" readonly="">
+            //         <input type="text" value="` + element.price/2 + `" class="form-control col-md-2 optSellPrice" readonly="">
+            //         <input type="text" value="` + sumPrice + `" class="form-control col-md-2 optDiscountPrice" readonly="">
+            //         <input type="text" value="` + sumOptPrice + `" class="form-control col-md-2 optAddPrice" readonly="">
+            //         <input type="text" value="` + element.stock + `" class="form-control col-md-1 optComStock">
+            //         <!--
+            //         <input type="text" value="0" name="txtBasePrice_${index}" id="txtBasePrice_${index}" class="form-control col-md-1" readonly="">
+            //         <input type="text" value="0" name="txtSalePrice_${index}" id="txtSalePrice_${index}" class="form-control col-md-1" readonly="">
+            //         <input type="text" value="0" name="txtSellPrice_${index}" id="txtSellPrice_${index}" class="form-control col-md-1">
+            //         -->
+            //         <div class="input-group-append">
+            //             <button class="btn btn-danger">품절</button>
+            //         </div>
+            //     </div>`;
+            // });
+            $('#divOptionCombinationBox').html(divOptionComb);
+        });
+        $('body').on('click', '.btnSearchCategory', function() {
+            var inputTag = $(this).parent().prev();
+            var cateId = inputTag.attr('cate-id');
+            var listGroupTag = $(this).parent().parent().next();
+            if(listGroupTag.prop('tagName') == "DIV" && listGroupTag.attr('class') == "list-group"){
+                listGroupTag.remove();
+            }
+            SearchCategorySolution(inputTag, cateId);
+        });
+        var SearchCategorySolution = function (element, cateId) {
+            var keyword = element.val();
+            var action = '/scratchProductScrap/category/search/'+cateId;// $("#manageMarketAccount").attr("action");
+            $.ajax({
+                url: action,
+                data: {keyword},
+                type: "GET",
+                dataType: 'json',
+                success: function ({status, data}) {
+                    var content=`<div class="list-group"><small>`;
+                    data.forEach((el, index)=>{
+                        content +=`<a href="javascript:void(0)" data-id="${el.nIdx}" data-code="${el.strCateCode}" class="list-group-item list-group-item-action pt-1 pb-1 bg-light categoryItem">${el.strCategoryName}</a>`;
+                       
+                    });
+                    content+="</small></div>";
+                    element.parent().after(content);
+                },
+                error: function (data) {
+                    
+                }
+            });    
+        };
+        $('body').on('click', '.categoryItem', function() {
+            var inputTag = $(this).parent().parent().prev().children().first();
+
+            var cateCode = $(this).attr('data-code') == "null" || $(this).attr('data-code') == "" ? "0" : $(this).attr('data-code');
+            inputTag.val(cateCode + " : " + $(this).text());
+
+            $(this).parent().parent().remove();
+            if(inputTag.attr('cate-id') == "0"){//카테고리 통합검색이라면
+                var action = '/scratchProductScrap/category/select/0';// $("#manageMarketAccount").attr("action");
+                var keyword = $(this).text();
+                $.ajax({
+                    url: action,
+                    data: {keyword},
+                    type: "GET",
+                    dataType: 'json',
+                    success: function ({status, data}) {
+                        var inputTags = $("input[name='txtCategoryName[]']")
+                        data.forEach((element, index) => {
+                            if(index > 0 && element != null){
+                                    inputTags.eq(index).val(element.strCateCode + " : " + element.strCategoryName);
+                            }
+                        });
                     },
                     error: function (data) {
-                        alert('스크래핑중 오류가 발생했습니다. 잠시후 다시 시도해주십시오.');
                     }
                 });
-            });
+            }
+        });
+        
+        $(window).keydown(function(event){
+            if(event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
     });
     function charByteSize(ch) {
         if (ch == null || ch.length == 0) {
@@ -1309,7 +1837,71 @@
             return 4;
         }
     }
+    function string_byte_length(str) {
+        return (new TextEncoder().encode(str)).length;
+    }
+    function substr_utf8_bytes(str, startInBytes, lengthInBytes) {
 
-    </script>        
+        var resultStr = '';
+        var startInChars = 0;
+
+        for (bytePos = 0; bytePos < startInBytes; startInChars++) {
+            ch = str.charCodeAt(startInChars);
+            bytePos += (ch < 128) ? 1 : encode_utf8(str[startInChars]).length;
+        }
+        end = startInChars + lengthInBytes - 1;
+        for (n = startInChars; startInChars <= end; n++) {
+            ch = str.charCodeAt(n);
+            end -= (ch < 128) ? 1 : encode_utf8(str[n]).length;
+            resultStr += str[n];        
+        }
+
+        return resultStr;
+    }
+    function encode_utf8( s )
+    {
+        return unescape( encodeURIComponent( s ) );
+    }
+    // const getCombinations = function (arr, selectNumber) {
+    //     int lengthArr = arr.length;
+    //     loop1:
+    //     var fix = arr[0];
+    //     arr = arr.slice(1)
+    //     for (let index = 0; index < fix.length; index++) {
+    //         if(lengthArr > 0){
+    //             lengthArr --;
+    //             goto loop1;
+    //         }       
+    //     }
+    //     return results; // 결과 담긴 results return
+    // }
+    const getCombinations1 = function (arr, selectNumber) {
+        const results = [];
+        if (selectNumber === 1){
+            return arr.map((value) => [value]);
+        }  // 1개씩 택할 때, 바로 모든 배열의 원소 return
+
+        arr.forEach((fixed, index, origin) => {
+            
+            const rest = origin.slice(index + 1); // 해당하는 fixed를 제외한 나머지 뒤
+            //console.log(rest);
+            const combinations = getCombinations(rest, selectNumber - 1); // 나머지에 대해서 조합을 구한다.
+            console.log(combinations);
+            const attached = combinations.map((combination) => {
+               console.log(fixed);
+               console.log(combination);
+               return [fixed, ...combination];
+            }); //  돌아온 조합에 떼 놓은(fixed) 값 붙이기
+            // var comArr = [];
+            // fixed.forEach((element)=>{
+
+            // });
+            results.push(...attached); // 배열 spread syntax 로 모두다 push
+        });
+        //0,1,2
+        //0,1,3
+        return results; // 결과 담긴 results return
+    }
+    </script>
     @endsection
 @endsection
