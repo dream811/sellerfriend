@@ -110,7 +110,7 @@
                                 <label class="col-form-label col-sm-2 text-sm-right">스마트스토어</label>
                                 <div class="col-sm-8">
                                     <div class="input-group input-group-sm">
-                                        <input type="text" name="txtCategoryName[]" cate-id="1" class="form-control text-sm" placeholder="미설정">
+                                        <input type="text" name="txtCategoryName[]" cate-id="1" class="form-control text-sm check-size" placeholder="미설정">
                                         <div class="input-group-append">
                                             <button class="btn btn-success btnSearchCategory" type="button"><i class="fas fa-search"></i> 검색</button>
                                         </div>
@@ -250,20 +250,20 @@
                             <div class="form-group row">
                                 <label class="col-form-label col-sm-2 text-sm-right">상품명(CN)</label>
                                 <div class="col-sm-8">
-                                    <input  type="url" name="txtChMainName" id="txtChMainName" value="" class="form-control form-control-sm" placeholder="상품명">
+                                    <input  type="text" name="txtChMainName" id="txtChMainName" class="form-control form-control-sm" placeholder="상품명">
                                 </div>
-                                <div class="col-sm-2 mt-1">
+                                {{-- <div class="col-sm-2 mt-1">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="customSwitchTr">
                                         <label class="custom-control-label" for="customSwitchTr">번역</label>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-sm-2 text-sm-right">상품명(KO)</label>
                                 <div class="col-sm-8">
                                     <input type="text" name="txtKrMainName" id="txtKrMainName" class="form-control form-control-sm" placeholder="상품명">
-                                        <span class="text-success" id="titleSizeInfo">  </span>
+                                    <span class="text-success" id="titleSizeInfo"></span>
                                     <span class="text-success"> (특수문자 사용불가)</span>
                                 </div>
                             </div>
@@ -294,7 +294,7 @@
                                             </div>
                                             <input type="text" name="txtProductPrice" id="txtProductPrice" class="form-control" placeholder="Input">
                                             <div class="input-group-append">
-                                                <button class="btn btn-primary" type="button" id="button-search">다시계산</button>
+                                                <button class="btn btn-primary" type="button" id="btnReCalculate">다시계산</button>
                                             </div>
                                         </div>
                                     </div>
@@ -323,7 +323,7 @@
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text"><i class="fas fa-globe-americas"></i></div>
                                                 </div>
-                                                <input type="text" name="txtBasePrice" id="txtBasePrice" class="form-control" placeholder="원가">
+                                                <input type="text" name="txtBasePrice" id="txtBasePrice" class="form-control" value="0" placeholder="원가">
                                             </div>
                                         </div>
                                         <div class="form-group col-md-3">
@@ -332,7 +332,7 @@
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text"><i class="fas fa-globe-americas"></i></div>
                                                 </div>
-                                                <input type="text" name="txtDiscountPrice" id="txtDiscountPrice" class="form-control" placeholder="할인가">
+                                                <input type="text" name="txtDiscountPrice" id="txtDiscountPrice" class="form-control" value="0" placeholder="할인가">
                                                 <div class="input-group-append">
                                                     <button class="btn btn-success" type="button"> 원가로적용</button>
                                                 </div>
@@ -344,7 +344,7 @@
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text">₩</div>
                                                 </div>
-                                                <input type="text" name="txtExchageRate" id="txtExchangeRate" value="173" class="form-control">
+                                                <input type="text" name="txtExchangeRate" id="txtExchangeRate" value="173" class="form-control">
                                             </div>
                                         </div>
                                         <div class="form-group col-md-3">
@@ -382,7 +382,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text">%</div>
                                                         </div>
-                                                        <input type="text" name="txtSellerMarketCharge" id="txtSellerMarketCharge" value="30" class="form-control" placeholder="Input">
+                                                        <input type="text" name="txtSellerMarketChargeRate" id="txtSellerMarketChargeRate" value="30" class="form-control" placeholder="Input">
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-3">
@@ -391,7 +391,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text">%</div>
                                                         </div>
-                                                        <input type="text" name="txtBuyerMarketCharge" id="txtBuyerMarketCharge"  value="5" class="form-control" placeholder="Input">
+                                                        <input type="text" name="txtBuyerMarketChargeRate" id="txtBuyerMarketChargeRate"  value="5" class="form-control" placeholder="Input">
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-3">
@@ -479,7 +479,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text">개</div>
                                                         </div>
-                                                        <input type="text" name="txtOptionStock" id="txtOptionStock" value="999" class="form-control" placeholder="Input">
+                                                        <input type="text" name="txtOptionStock" id="txtOptionStock" value="0" class="form-control" placeholder="Input">
                                                     </div>
                                                 </div>
                                             </div>
@@ -639,11 +639,11 @@
                                                             <div class="form-group row">
                                                                 <div class="input-group input-group-sm m-3">
                                                                     <input type="text" class="form-control text-center col-md-3 font-weight-bold" value="옵션명" readonly="">
-                                                                    <input type="text" class="form-control text-center">
+                                                                    <input type="text" name="txtOptionAttr[]" class="form-control text-center">
                                                                 </div>
                                                             </div>
                                                             <div class="row">
-                                                                <div class="col-sm-11 row">
+                                                                <div class="col-sm-12 row">
                                                                     <div class="col-sm-6 row">
                                                                         <div class="col-sm-3 p-0 text-center">
                                                                             <label class="col-form-label pl-0 pr-0 text-center font-weight-bold">이미지</label>
@@ -658,63 +658,20 @@
                                                                     <div class="col-sm-3 row pl-0">
                                                                         <label class="col-form-label col-sm-5 pl-0 pr-1 text-right font-weight-bold">옵션추가금</label>
                                                                         <div class="input-group input-group-sm col-sm-7 pl-0">
-                                                                            <input type="text" class="form-control">
+                                                                            <input type="text" name="txtOptionPriceVal[]" id="txtOptionPriceVal_0" class="form-control txtOptionPriceVal">
                                                                             <div class="input-group-append mb-1">
-                                                                                <button class="btn btn-sm btn-dark" type="button">+</button>
-                                                                                <button class="btn btn-sm btn-dark" type="button">-</button>
+                                                                                <button class="btn btn-sm btn-dark btnAddOptionMoney" data-id="0" type="button">+</button>
+                                                                                <button class="btn btn-sm btn-dark btnSubtractOptionMoney" data-id="0" type="button">-</button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                        <div class="col-sm-3 row">
-                                                                            <label class="col-form-label col-sm-5 text-left font-weight-bold pl-0 pr-0">추가(현)</label>
-                                                                            <label class="col-form-label col-sm-3 text-center font-weight-bold pl-0 pr-0">원가</label>
-                                                                            <label class="col-form-label col-sm-4 text-right font-weight-bold pl-0 pr-0">할인가</label>
-                                                                        </div>
+                                                                   
                                                                 </div>
                                                             </div>
-                                                            <div id="divOptionContainer_0">
-                                                                <div class="input-group">
-                                                                    <a href="" target="_blank">
-                                                                        <img class="rounded" src="" width="40" height="40">
-                                                                    </a>
-                                                                    <fieldset>
-                                                                        <button class="btn btn-info p-1"><label for="inputFileOpt01"><i class="fas fa-file-upload fa-lg"></i></label></button>
-                                                                        <input type="file" id="inputFileOpt01" hidden="" _bl_86b8e158-2648-446a-97db-03609da33643="">
-                                                                    </fieldset>
-                                                                    <input type="text" value="123" class="form-control col-md-3">
-                                                                    <input type="text" class="form-control col-md-3">
-                                                                    <input type="text" class="form-control col-md-3">
-                                                                    <input type="text" class="form-control col-md-1" readonly="">
-                                                                    <input type="text" class="form-control col-md-1" readonly="">
-                                                                    <input type="text" class="form-control col-md-1">
-                                                                    <div class="input-group-append">
-                                                                        <button class="btn btn-info border-secondary btnMoveOptRow ">이동</button>
-                                                                        <button class="btn btn-primary btnInsertOptRow"><i class="fas fa-plus"></i></button>
-                                                                        <button class="btn btn-danger btnDelOptRow"><i class="far fa-trash-alt"></i></button>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="input-group">
-                                                                    <a href="" target="_blank">
-                                                                        <img class="rounded" src="" width="40" height="40">
-                                                                    </a>
-                                                                    <fieldset>
-                                                                        <button class="btn btn-info p-1"><label for="inputFileOpt01"><i class="fas fa-file-upload fa-lg"></i></label></button>
-                                                                        <input type="file" id="inputFileOpt01" hidden="" _bl_86b8e158-2648-446a-97db-03609da33643="">
-                                                                    </fieldset>
-                                                                    <input type="text" value="234" class="form-control col-md-3">
-                                                                    <input type="text" class="form-control col-md-3">
-                                                                    <input type="text" class="form-control col-md-3">
-                                                                    <input type="text" class="form-control col-md-1" readonly="">
-                                                                    <input type="text" class="form-control col-md-1" readonly="">
-                                                                    <input type="text" class="form-control col-md-1">
-                                                                    <div class="input-group-append">
-                                                                        <button class="btn btn-info border-secondary btnMoveOptRow ">이동</button>
-                                                                        <button class="btn btn-primary btnInsertOptRow"><i class="fas fa-plus"></i></button>
-                                                                        <button class="btn btn-danger btnDelOptRow"><i class="far fa-trash-alt"></i></button>
-                                                                    </div>
-                                                                </div>
+                                                            <div id="divOptionContainer_0" class="divOptionContainer">
+                                                                
                                                             </div> 
-                                                            <button class="btn btn-success btn-block"><i class="fas fa-plus"></i> 추가</button>
+                                                            <button type="button" class="btn btn-success btn-block btnAddOptRow"><i class="fas fa-plus"></i> 추가</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -729,14 +686,13 @@
                                                             <div class="form-group row">
                                                                 <div class="input-group input-group-sm m-3">
                                                                     <input type="text" class="form-control text-center col-md-3 font-weight-bold" value="옵션명" readonly="">
-                                                                    <input type="text" class="form-control text-center">
+                                                                    <input type="text" name="txtOptionAttr[]" class="form-control text-center">
                                                                 </div>
                                                             </div>
                                                             <div class="row">
-                                                                <div class="col-sm-11 row">
+                                                                <div class="col-sm-12 row">
                                                                     <div class="col-sm-6 row">
                                                                         <div class="col-sm-3 p-0 text-center">
-                                                                            <span class="badge badge-success">기준</span>
                                                                             <label class="col-form-label pl-0 pr-0 text-center font-weight-bold">이미지</label>
                                                                         </div>
                                                                         <div class="col-sm-9 p-0">
@@ -749,45 +705,19 @@
                                                                     <div class="col-sm-3 row pl-0">
                                                                         <label class="col-form-label col-sm-5 pl-0 pr-1 text-right font-weight-bold">옵션추가금</label>
                                                                         <div class="input-group input-group-sm col-sm-7 pl-0">
-                                                                            <input type="text" class="form-control">
+                                                                            <input type="text" name="txtOptionPriceVal[]" id="txtOptionPriceVal_1" class="form-control txtOptionPriceVal">
                                                                             <span class="input-group-append mb-1">
-                                                                            <button class="btn btn-dark" type="button">+</button>
-                                                                            </span>
-                                                                            <span class="input-group-append mb-1">
-                                                                            <button class="btn btn-dark" type="button">-</button>
+                                                                                <button class="btn btn-sm btn-dark btnAddOptionMoney" data-id="1" type="button">+</button>
+                                                                                <button class="btn btn-sm btn-dark btnSubtractOptionMoney" data-id="1" type="button">-</button>
                                                                             </span>
                                                                         </div>
                                                                     </div>
-                                                                        <div class="col-sm-3 row">
-                                                                            <label class="col-form-label col-sm-5 text-left font-weight-bold pl-0 pr-0">추가(현)</label>
-                                                                            <label class="col-form-label col-sm-3 text-center font-weight-bold pl-0 pr-0">원가</label>
-                                                                            <label class="col-form-label col-sm-4 text-right font-weight-bold pl-0 pr-0">할인가</label>
-                                                                        </div>
                                                                 </div>
                                                             </div>
-                                                            <div id="divOptionContainter_1">
-                                                                <div class="input-group">
-                                                                    <a href="https://img.alicdn.com/imgextra/i1/2423612906/O1CN016NTFbv1XKzXazcB3u_!!2423612906.jpg_600x600q90.jpg" target="_blank">
-                                                                        <img class="rounded" src="https://img.alicdn.com/imgextra/i1/2423612906/O1CN016NTFbv1XKzXazcB3u_!!2423612906.jpg_600x600q90.jpg" width="40" height="40">
-                                                                    </a>
-                                                                    <fieldset>
-                                                                        <button class="btn btn-info p-1"><label for="inputFileOpt11"><i class="fas fa-file-upload fa-lg"></i></label></button>
-                                                                        <input type="file" id="inputFileOpt11" hidden="" _bl_a4fe7226-dc05-4134-b89b-66818883ea5d="">
-                                                                    </fieldset>
-                                                                    <input type="text" class="form-control col-md-3">
-                                                                    <input type="text" class="form-control col-md-3">
-                                                                    <input type="text" class="form-control col-md-3">
-                                                                    <input type="text" class="form-control col-md-1" readonly="">
-                                                                    <input type="text" class="form-control col-md-1" readonly="">
-                                                                    <input type="text" class="form-control col-md-1">
-                                                                    <div class="input-group-append">
-                                                                        <button class="btn btn-info border-secondary btnMoveOptRow ">이동</button>
-                                                                        <button class="btn btn-primary btnInsertOptRow"><i class="fas fa-plus"></i></button>
-                                                                        <button class="btn btn-danger btnDelOptRow"><i class="far fa-trash-alt"></i></button>
-                                                                    </div>
-                                                                </div>
+                                                            <div id="divOptionContainer_1" class="divOptionContainer">
+                                                                
                                                             </div>
-                                                            <button class="btn btn-success btn-block"><i class="fas fa-plus"></i> 추가</button>
+                                                            <button type="button" class="btn btn-success btn-block btnAddOptRow"><i class="fas fa-plus"></i> 추가</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -830,13 +760,13 @@
                             </div>
                             <div id="optionCounter">
                                 <span  class="badge badge-success mb-2">
-                                    옵션1 - 11 개
+                                    옵션1 - 0 개
                                 </span>
                                 <span class="badge badge-success mb-2">
-                                    옵션2 - 36 개
+                                    옵션2 - 0 개
                                 </span>
                                 <span class="badge badge-primary mb-2">
-                                    옵션조합 총갯수 - 396 개
+                                    옵션조합 총갯수 - 0 개
                                 </span>
                             </div>
                         </fieldset>
@@ -855,14 +785,14 @@
                                     <div class="col-sm-9 row mb-0">
                                         <label class="col-form-label col-sm-12 text-sm-left text-success">jpg,png만 등록가능, 1000x1000 권장, 600x600 이상, 5000x5000 이하, 2MB이하(인터파크1MB)</label>
                                         <div class="col-sm-4">
-                                            <span class="badge badge-primary" id="spanBaseImageInfo_0">적합 - 800x800, 232KB</span>
+                                            <span class="badge badge-primary" id="spanBaseImageInfo_0"></span>
                                             <div class="card text-white bg-warning">
                                                 <img class="card-img-top blur baseImage" id="mainImage" data-id="0" src="https://via.placeholder.com/300/FFFFFF?text=Main Image" alt="Unsplash">
                                                 <div class="card-body">
                                                     <p class="card-text">대표이미지</p>
                                                     <hr>
                                                     <fieldset>
-                                                        <button class="btn btn-success btn-sm mb-2">권장사이즈 리사이징</button>
+                                                        <button type="button" class="btn btn-success btn-sm mb-2">권장사이즈 리사이징</button>
                                                     </fieldset>
                                                     <br>
                                                     <span><i class="fas fa-file-upload text-danger fa-lg"></i> 이미지파일 업로드</span>
@@ -871,7 +801,7 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
-                                            <span class="badge badge-primary" id="spanBaseImageInfo_1">적합 - 800x800, 188KB</span>
+                                            <span class="badge badge-primary" id="spanBaseImageInfo_1"></span>
                                             <div class="card text-white bg-secondary">
                                                 <img class="card-img-top opacity baseImage" id="subImage1" data-id="1" src="https://via.placeholder.com/300/FFFFFF?text=Sub Image1" alt="Unsplash" style="filter:none">
                                                 <div class="card-body">
@@ -886,7 +816,7 @@
                                                     </p>
                                                     <hr>
                                                     <fieldset>
-                                                        <button class="btn btn-success btn-sm mb-2">권장사이즈 리사이징</button>
+                                                        <button type="button" class="btn btn-success btn-sm mb-2">권장사이즈 리사이징</button>
                                                     </fieldset>
                                                     <br>
                                                     <span><i class="fas fa-file-upload text-danger fa-lg"></i> 이미지파일 업로드</span>
@@ -895,7 +825,7 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
-                                            <span class="badge badge-primary" id="spanBaseImageInfo_2">적합 - 800x800, 252KB</span>
+                                            <span class="badge badge-primary" id="spanBaseImageInfo_2"></span>
                                             <div class="card text-white bg-secondary">
                                                 <img class="card-img-top opacity baseImage" id="subImage2" data-id="2" src="https://via.placeholder.com/300/FFFFFF?text=Sub Image2" alt="Unsplash" style="filter:none">
                                                 <div class="card-body">
@@ -910,7 +840,7 @@
                                                     </p>
                                                     <hr>
                                                     <fieldset>
-                                                        <button class="btn btn-success btn-sm mb-2">권장사이즈 리사이징</button>
+                                                        <button type="button" class="btn btn-success btn-sm mb-2">권장사이즈 리사이징</button>
                                                     </fieldset>
                                                     <br>
                                                     <span><i class="fas fa-file-upload text-danger fa-lg"></i> 이미지파일 업로드</span>
@@ -923,7 +853,7 @@
                                     <label class="col-form-label col-sm-2 text-sm-right"></label>
                                     <div class="col-sm-9 row mb-0" id="imageContainer">
                                         <div class="col-sm-2 pl-1 pr-0">
-                                            <span class="badge badge-primary">적합 - 800x800, 127KB</span>
+                                            <span class="badge badge-primary"></span>
                                             <div class="card">
                                                 <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
                                                 <div class="card-body p-0">
@@ -939,7 +869,7 @@
 
                                         </div>
                                         <div class="col-sm-2 pl-1 pr-0">
-                                                    <span class="badge badge-primary">적합 - 800x800, 145KB</span>
+                                                    <span class="badge badge-primary"></span>
                                             <div class="card">
                                                 <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
                                                 <div class="card-body p-0">
@@ -955,7 +885,7 @@
 
                                         </div>
                                         <div class="col-sm-2 pl-1 pr-0">
-                                            <span class="badge badge-primary">적합 - 800x800, 99KB</span>
+                                            <span class="badge badge-primary"></span>
                                             <div class="card">
                                                 <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
                                                 <div class="card-body p-0">
@@ -970,7 +900,7 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-2 pl-1 pr-0">
-                                            <span class="badge badge-primary">적합 - 800x800, 122KB</span>
+                                            <span class="badge badge-primary"></span>
                                             <div class="card">
                                                 <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
                                                 <div class="card-body p-0">
@@ -986,7 +916,7 @@
 
                                         </div>
                                         <div class="col-sm-2 pl-1 pr-0">
-                                            <span class="badge badge-primary">적합 - 800x800, 178KB</span>
+                                            <span class="badge badge-primary"></span>
                                             <div class="card">
                                                 <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
                                                 <div class="card-body p-0">
@@ -1224,7 +1154,7 @@
                     $("#titleSizeInfo").html(string_byte_length(data.krMainName) + ' / 100 byte');
                     if(titleLength > 100){
                         $("#titleSizeInfo").addClass('text-danger');
-                        $("#titleSizeInfo").removeClass('text-info');
+                        $("#titleSizeInfo").removeClass('text-success');
                         
                     }
 
@@ -1245,7 +1175,7 @@
                                             <div class="form-group row">
                                                 <div class="input-group input-group-sm m-3">
                                                     <input type="text" class="form-control text-center col-md-3 font-weight-bold" value="옵션명" readonly="">
-                                                    <input type="text" name="txtOptionName[]" id="txtOptionName_`+index+`" value=`+ element.optKoName +` class="form-control text-center">
+                                                    <input type="text" name="txtOptionAttr[]" id="txtOptionAttr_`+index+`" value=`+ element.optKoName +` class="form-control text-center">
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -1264,7 +1194,7 @@
                                                     <div class="col-sm-3 row pl-0">
                                                         <label class="col-form-label col-sm-5 pl-0 pr-1 text-right font-weight-bold">옵션추가금</label>
                                                         <div class="input-group input-group-sm col-sm-7 pl-0">
-                                                            <input type="text" id="txtOptionPriceVal_${index}" class="form-control txtOptionPriceVal">
+                                                            <input type="text" name="txtOptionPriceVal[]" id="txtOptionPriceVal_${index}" class="form-control txtOptionPriceVal">
                                                             <div class="input-group-append mb-1">
                                                                 <button class="btn btn-sm btn-dark btnAddOptionMoney" data-id="${index}" type="button">+</button>
                                                                 <button class="btn btn-sm btn-dark btnSubtractOptionMoney" data-id="${index}" type="button">-</button>
@@ -1281,16 +1211,20 @@
                                         if(string_byte_length(el[1]) > 30){
                                             chkLength="is-invalid";
                                         }
+                                        var imageUrl = "{{asset('assets/images/system/no-image.png')}}";
+                                        if(el[3].trim() != ""){
+                                            imageUrl=el[3];
+                                        }
                                         subItem += `<div class="input-group">
                                                     <a href="javascript:void(0)" target="_blank">
                                                         <img class="rounded" src="`+ el[3] +`" width="40" height="40">
                                                     </a>
                                                     <fieldset>
-                                                        <button class="btn btn-info p-1"><label for="inputFileOpt_0_"><i class="fas fa-file-upload fa-lg"></i></label></button>
+                                                        <button type="button" class="btn btn-info p-1 btnImportImage"><label for="inputFileOpt_0_"><i class="fas fa-file-upload fa-lg"></i></label></button>
                                                         <input type="file" id="inputFileOpt_`+ index +`_`+ idx +`" hidden="">
                                                     </fieldset>
                                                     <input type="text" value="`+ el[2] +`" name="txtCnOptionName_${index}[]" id="txtCnOptionName_${index}_${idx}" data-id="${el[0]}" opt-id="${index}" item-id="${idx}" class="form-control  col-md-3">
-                                                    <input type="text" value="`+ el[1] +`" name="txtKoOptionName_${index}[]"  id="txtKoOptionName_${index}_${idx}" data-id="${el[0]}" opt-id="${index}" item-id="${idx}" class="form-control ${chkLength} col-md-3">
+                                                    <input type="text" value="`+ el[1] +`" name="txtKoOptionName_${index}[]"  id="txtKoOptionName_${index}_${idx}" data-id="${el[0]}" opt-id="${index}" item-id="${idx}" class="form-control txtOptionName ${chkLength} col-md-3">
                                                     <input type="text" value="0" name="txtAddOptionPrice_${index}" id="txtAddOptionPrice_${index}_${idx}" data-id="${el[0]}" opt-id="${index}" item-id="${idx}" class="form-control col-md-3">
                                                     <div class="input-group-append">
                                                         <button type="button" class="btn btn-info border-secondary btnMoveOptRow" >이동</button>
@@ -1323,7 +1257,6 @@
                         var width = 0;
                         var height = 0;
                         var size = 0;
-                        
                         img.src = element;
                         imgItem +=`<div class="col-sm-2 pl-1 pr-0">
                                         <span class="badge badge-primary" id="spanImageInfo_${index}" >적합 - `+width+`x`+height+`, `+size+`KB</span>
@@ -1350,7 +1283,7 @@
                             <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="옵션추가금" readonly="">
                             <input type="text" class="form-control col-md-1 text-center font-weight-bold" value="재고" readonly="">
                             <div class="input-group-append">
-                                <button class="btn invisible">품절</button>
+                                <button type="button" class="btn invisible btnSoldOut">품절</button>
                             </div>
                         </div>`;
                     window.scrapItems = data.items;
@@ -1363,8 +1296,8 @@
                         var 환율 = $('#txtExchangeRate').val();
                         var 원가 = element.price;
                         var 마진율 = $('#txtMarginRate').val()/100;
-                        var 판매수수료 = $('#txtSellerMarketCharge').val()/100;
-                        var 구매수수료 = $('#txtBuyerMarketCharge').val()/100;
+                        var 판매수수료 = $('#txtSellerMarketChargeRate').val()/100;
+                        var 구매수수료 = $('#txtBuyerMarketChargeRate').val()/100;
                         var 해외배송비 = $('#txtOverSeaCharge').val();
                         var productPrice = eval($('#txtFunction').val());
                         var sumPrice = (Math.round(productPrice / 10) * 10);
@@ -1378,7 +1311,7 @@
                             <input type="text" value="` + sumOptPrice + `" class="form-control col-md-2 optAddPrice" readonly="">
                             <input type="text" value="` + element.stock + `" class="form-control col-md-1 optComStock">
                             <div class="input-group-append">
-                                <button class="btn btn-danger">품절</button>
+                                <button type="button" class="btn btn-danger btnSoldOut">품절</button>
                             </div>
                         </div>`;
                     });
@@ -1444,27 +1377,20 @@
             var index = $(this).attr('data-id');
             var value = $('#txtOptionPriceVal_'+index).val();
             var optTags = $('#divOptionContainer_'+index);
-            // $("input[name='txtAddOptionPrice_"+index+"']").each( function() {
-            //     $(this).val(parseInt($(this).val()) + parseInt(value));
-            // });
             optTags.children().each(function(idx, el){
                 
                 var optPrice = $(el).find('input:nth-child(5)').val();
                 $(el).find('input:nth-child(5)').val(optPrice*1 + parseInt(value));
-                //console.log(optName + optPrice);
             });
         });
         $('body').on('click', '.btnSubtractOptionMoney', function () {
             var index = $(this).attr('data-id');
+            var value = $('#txtOptionPriceVal_'+index).val();
             var optTags = $('#divOptionContainer_'+index);
-            // $("input[name='txtAddOptionPrice_"+index+"']").each( function() {
-            //     $(this).val(parseInt($(this).val()) + parseInt(value));
-            // });
             optTags.children().each(function(idx, el){
                 
                 var optPrice = $(el).find('input:nth-child(5)').val();
                 $(el).find('input:nth-child(5)').val(optPrice*1 - parseInt(value));
-                //console.log(optName + optPrice);
             });
         });
         $('body').on('click', '.btnDelOptRow', function () {
@@ -1473,15 +1399,15 @@
         $('body').on('click', '.btnInsertOptRow', function () {
             var element = $(this).parent().parent();
             var content=`<div class="input-group">
-                            <a href="img/no-image.png" target="_blank">
-                                <img class="rounded" src="img/no-image.png" width="40" height="40">
+                            <a href="` + "{{asset('assets/images/system/no-image.png')}}" + `" target="_blank">
+                                <img class="rounded" src="` + "{{asset('assets/images/system/no-image.png')}}" + `" width="40" height="40">
                             </a>
                             <fieldset>
                                 <button class="btn btn-info p-1"><label for="inputFileOpt01"><i class="fas fa-file-upload fa-lg"></i></label></button>
                                 <input type="file" hidden="">
                             </fieldset>
-                            <input type="text" class="form-control col-md-3">
-                            <input type="text" class="form-control col-md-3">
+                            <input type="text" class="form-control col-md-3 ">
+                            <input type="text" class="form-control col-md-3 txtOptionName">
                             <input type="text" class="form-control col-md-3">
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-info border-secondary btnMoveOptRow ">이동</button>
@@ -1520,15 +1446,15 @@
         $('body').on('click', '.btnAddOptRow', function () {
             var element = $(this).prev();
             var content=`<div class="input-group">
-                            <a href="img/no-image.png" target="_blank">
-                                <img class="rounded" src="img/no-image.png" width="40" height="40">
+                            <a href="` + "{{asset('assets/images/system/no-image.png')}}" + `" target="_blank">
+                                <img class="rounded" src="` + "{{asset('assets/images/system/no-image.png')}}" + `" width="40" height="40">
                             </a>
                             <fieldset>
                                 <button class="btn btn-info p-1"><label for="inputFileOpt01"><i class="fas fa-file-upload fa-lg"></i></label></button>
                                 <input type="file" hidden="">
                             </fieldset>
                             <input type="text" class="form-control col-md-3">
-                            <input type="text" class="form-control col-md-3">
+                            <input type="text" class="form-control col-md-3 txtOptionName">
                             <input type="text" class="form-control col-md-3">
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-info border-secondary btnMoveOptRow ">이동</button>
@@ -1539,18 +1465,26 @@
             $(content).appendTo(element); 
         });
         $('body').on('click', '.btnRematchOptComb', function() {
-            var optionNameTags = $('[name="txtOptionName[]"]');
+            var optionAttrTags = $('[name="txtOptionAttr[]"]');
             var optionTags = "";
             var sumOptPrice = 0;
-            optionNameTags.each(function(idx, el) {
+            var nEmptyOptionCounter = 0;
+            optionAttrTags.each(function(idx, el) {
+                var optName = $(this).val();
+                if(optName.trim() == ""){
+                    nEmptyOptionCounter++;
+                }
                 optionTags +='<input type="text" value="'+ $(this).val() +'" class="form-control text-center font-weight-bold" readonly="">'; 
             });
+            if(nEmptyOptionCounter){
+                alert('옵션명을 입력하세요');
+            }
 
             // var optionContainer = $('#divOptionField');
             // optionContainer.children().each(function(index, element){
             //     console.log(index);
             // });
-
+            
             var divOptionComb = `<div class="input-group">
                 `+ optionTags +`
                 <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="원가" readonly="">
@@ -1559,7 +1493,7 @@
                 <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="옵션추가금" readonly="">
                 <input type="text" class="form-control col-md-1 text-center font-weight-bold" value="재고" readonly="">
                 <div class="input-group-append">
-                    <button class="btn invisible">품절</button>
+                    <button type="button" class="btn invisible btnSoldOut">품절</button>
                 </div>
             </div>`;
             var divOptionContainers = $('.divOptionContainer');
@@ -1578,38 +1512,41 @@
                 });
                 arrOptionComb.push(arrOption);
             });
-            // console.log(arrOptionComb);
-            // var combLength=1;
-            // arrOptionComb.forEach(function(element, index){
-            //     combLength = comblength * element.length
-            // })
             
-            //var combContent = getCombinations(arrOptionComb, 2); 
-
-            //console.log(arrOptionComb);
             if(arrOptionComb.length == 1){
+                if(arrOptionComb[0].length <= 0){
+                    alert('옵션정보를 입력하세요');
+                } 
+                if(arrOptionComb[0].length <= 0){
+                    alert('옵션정보를 입력하세요');
+                } 
+                var optionCounterInfor = `<span class="badge badge-success mb-2">옵션1 - ${arrOptionComb[0].length} 개</span>
+                                        <span class="badge badge-primary mb-2">옵션조합 총갯수 - ${arrOptionComb[0].length}개</span>`;
+                $("#optionCounter").html(optionCounterInfor);
                 for(i=0; i<arrOptionComb[0].length; i++){
                         var stock=0;
                         var basePrice = $('#txtBasePrice').val()*1;
                         var discountPrice = $('#txtDiscountPrice').val()*1;
                         var optionPrice = 0;
                         optionPrice = arrOptionComb[0][i].optPrice;
-                        window.scrapItems.forEach((el, idx)=>{
-                            
-                            var pvs = arrOptionComb[0][i].optId;
-                            if(el.pvs.replaceAll(";", "") === pvs)
-                            {
-                                stock = el.stock;
-                                basePrice = el.price;
-                                discountPrice = Math.round(el.price/2);
+                        if(window.scrapItems != undefined){
+                            window.scrapItems.forEach((el, idx)=>{
                                 
-                            }
-                        });
+                                var pvs = arrOptionComb[0][i].optId;
+                                if(el.pvs.replaceAll(";", "") === pvs)
+                                {
+                                    stock = el.stock;
+                                    basePrice = el.price;
+                                    discountPrice = Math.round(el.price/2);
+                                    
+                                }
+                            });
+                        }
                         var 환율 = $('#txtExchangeRate').val();
                         var 원가 = basePrice;
                         var 마진율 = $('#txtMarginRate').val()/100;
-                        var 판매수수료 = $('#txtSellerMarketCharge').val()/100;
-                        var 구매수수료 = $('#txtBuyerMarketCharge').val()/100;
+                        var 판매수수료 = $('#txtSellerMarketChargeRate').val()/100;
+                        var 구매수수료 = $('#txtBuyerMarketChargeRate').val()/100;
                         var 해외배송비 = $('#txtOverSeaCharge').val();
                         var productPrice = eval($('#txtFunction').val());
                         var sellPrice = (Math.round(productPrice / 10) * 10);
@@ -1623,11 +1560,15 @@
                                 <input type="text" value="${optionPrice}" class="form-control col-md-2 optAddPrice" readonly="">
                                 <input type="text" value="${stock}" class="form-control col-md-1 optComStock">
                                 <div class="input-group-append">
-                                    <button class="btn btn-danger">품절</button>
+                                    <button type="button" class="btn btn-danger btnSoldOut">품절</button>
                                 </div>
                             </div>`;
                 }
             }else if(arrOptionComb.length == 2){
+                var optionCounterInfor = `<span class="badge badge-success mb-2">옵션1 - ${arrOptionComb[0].length} 개</span>
+                                        <span class="badge badge-success mb-2">옵션2 - ${arrOptionComb[1].length} 개</span>
+                                        <span class="badge badge-primary mb-2">옵션조합 총갯수 - ${arrOptionComb[0].length * arrOptionComb[1].length}개</span>`;
+                $("#optionCounter").html(optionCounterInfor);
                 for(i=0; i<arrOptionComb[0].length; i++){
                     for (j = 0; j < arrOptionComb[1].length; j++) {
                         var stock=0;
@@ -1635,22 +1576,24 @@
                         var discountPrice = $('#txtDiscountPrice').val()*1;
                         var optionPrice = 0;
                         optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1;
-                        window.scrapItems.forEach((el, idx)=>{
-                            
-                            var pvs = arrOptionComb[0][i].optId + arrOptionComb[1][j].optId;
-                            if(el.pvs.replaceAll(";", "") === pvs)
-                            {
-                                stock = el.stock;
-                                basePrice = el.price;
-                                discountPrice = Math.round(el.price/2);
+                        if(window.scrapItems != undefined){
+                            window.scrapItems.forEach((el, idx)=>{
                                 
-                            }
-                        });
+                                var pvs = arrOptionComb[0][i].optId + arrOptionComb[1][j].optId;
+                                if(el.pvs.replaceAll(";", "") === pvs)
+                                {
+                                    stock = el.stock;
+                                    basePrice = el.price;
+                                    discountPrice = Math.round(el.price/2);
+                                    
+                                }
+                            });
+                        }
                         var 환율 = $('#txtExchangeRate').val();
                         var 원가 = basePrice;
                         var 마진율 = $('#txtMarginRate').val()/100;
-                        var 판매수수료 = $('#txtSellerMarketCharge').val()/100;
-                        var 구매수수료 = $('#txtBuyerMarketCharge').val()/100;
+                        var 판매수수료 = $('#txtSellerMarketChargeRate').val()/100;
+                        var 구매수수료 = $('#txtBuyerMarketChargeRate').val()/100;
                         var 해외배송비 = $('#txtOverSeaCharge').val();
                         var productPrice = eval($('#txtFunction').val());
                         var sellPrice = (Math.round(productPrice / 10) * 10);
@@ -1665,12 +1608,17 @@
                                 <input type="text" value="${optionPrice}" class="form-control col-md-2 optAddPrice" readonly="">
                                 <input type="text" value="${stock}" class="form-control col-md-1 optComStock">
                                 <div class="input-group-append">
-                                    <button class="btn btn-danger">품절</button>
+                                    <button type="button" class="btn btn-danger btnSoldOut">품절</button>
                                 </div>
                             </div>`;
                     }
                 }
             }else if(arrOptionComb.length == 3){
+                var optionCounterInfor = `<span class="badge badge-success mb-2">옵션1 - ${arrOptionComb[0].length} 개</span>
+                                        <span class="badge badge-success mb-2">옵션2 - ${arrOptionComb[1].length} 개</span>
+                                        <span class="badge badge-success mb-2">옵션2 - ${arrOptionComb[2].length} 개</span>
+                                        <span class="badge badge-primary mb-2">옵션조합 총갯수 - ${arrOptionComb[0].length * arrOptionComb[1].length * arrOptionComb[2].length}개</span>`;
+                $("#optionCounter").html(optionCounterInfor);
                 for(i=0; i<arrOptionComb[0].length; i++){
                     for (j = 0; j < arrOptionComb[1].length; j++) {
                         for (k = 0; k < arrOptionComb[2].length; k++) {
@@ -1679,22 +1627,24 @@
                             var discountPrice = $('#txtDiscountPrice').val()*1;
                             var optionPrice = 0;
                             optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1 + arrOptionComb[2][k].optPrice*1;
-                            window.scrapItems.forEach((el, idx)=>{
-                                
-                                var pvs = arrOptionComb[0][i].optId + arrOptionComb[1][j].optId + arrOptionComb[2][k].optId;
-                                if(el.pvs.replaceAll(";", "") === pvs)
-                                {
-                                    stock = el.stock;
-                                    basePrice = el.price;
-                                    discountPrice = Math.round(el.price/2);
+                            if(window.scrapItems != "undefined"){
+                                window.scrapItems.forEach((el, idx)=>{
                                     
-                                }
-                            });
+                                    var pvs = arrOptionComb[0][i].optId + arrOptionComb[1][j].optId + arrOptionComb[2][k].optId;
+                                    if(el.pvs.replaceAll(";", "") === pvs)
+                                    {
+                                        stock = el.stock;
+                                        basePrice = el.price;
+                                        discountPrice = Math.round(el.price/2);
+                                        
+                                    }
+                                });
+                            }
                             var 환율 = $('#txtExchangeRate').val();
                             var 원가 = basePrice;
                             var 마진율 = $('#txtMarginRate').val()/100;
-                            var 판매수수료 = $('#txtSellerMarketCharge').val()/100;
-                            var 구매수수료 = $('#txtBuyerMarketCharge').val()/100;
+                            var 판매수수료 = $('#txtSellerMarketChargeRate').val()/100;
+                            var 구매수수료 = $('#txtBuyerMarketChargeRate').val()/100;
                             var 해외배송비 = $('#txtOverSeaCharge').val();
                             var productPrice = eval($('#txtFunction').val());
                             var sellPrice = (Math.round(productPrice / 10) * 10);
@@ -1710,49 +1660,14 @@
                                     <input type="text" value="${optionPrice}" class="form-control col-md-2 optAddPrice" readonly="">
                                     <input type="text" value="${stock}" class="form-control col-md-1 optComStock">
                                     <div class="input-group-append">
-                                        <button class="btn btn-danger">품절</button>
+                                        <button type="button" class="btn btn-danger btnSoldOut">품절</button>
                                     </div>
                                 </div>`;
                         }
                     }
                 }
             }
-            // data.items.forEach((element, index)=>{
-            //     var combination = '';
-
-            //     element.options.forEach((el, idx) =>{
-            //         combination +='<input type="text" value="'+ el +'" class="form-control col" readonly="">'; 
-            //     });
-
-            //     var 환율 = $('#txtExchangeRate').val()/100;
-            //     var 원가 = element.price;
-            //     var 마진율 = $('#txtMarginRate').val()/100;
-            //     var 판매수수료 = $('#txtSellerMarketCharge').val()/100;
-            //     var 구매수수료 = $('#txtBuyerMarketCharge').val()/100;
-            //     var 해외배송비 = $('#txtOverSeaCharge').val();
-            //     var productPrice = eval($('#txtFunction').val());
-            //     var sumPrice = (Math.round(productPrice / 10) * 10);
-            //     var sumOptPrice = 0;
-            //     $('.txtOptionPriceVal').each(function() {
-            //         sumOptPrice += $(this).val();
-            //     });
-            //     optCombination += `<div class="input-group">
-            //         `+ combination +`
-            //         <input type="text" value="` + element.price + `" class="form-control col-md-2 optBasePrice" readonly="">
-            //         <input type="text" value="` + element.price/2 + `" class="form-control col-md-2 optSellPrice" readonly="">
-            //         <input type="text" value="` + sumPrice + `" class="form-control col-md-2 optDiscountPrice" readonly="">
-            //         <input type="text" value="` + sumOptPrice + `" class="form-control col-md-2 optAddPrice" readonly="">
-            //         <input type="text" value="` + element.stock + `" class="form-control col-md-1 optComStock">
-            //         <!--
-            //         <input type="text" value="0" name="txtBasePrice_${index}" id="txtBasePrice_${index}" class="form-control col-md-1" readonly="">
-            //         <input type="text" value="0" name="txtSalePrice_${index}" id="txtSalePrice_${index}" class="form-control col-md-1" readonly="">
-            //         <input type="text" value="0" name="txtSellPrice_${index}" id="txtSellPrice_${index}" class="form-control col-md-1">
-            //         -->
-            //         <div class="input-group-append">
-            //             <button class="btn btn-danger">품절</button>
-            //         </div>
-            //     </div>`;
-            // });
+            
             $('#divOptionCombinationBox').html(divOptionComb);
         });
         $('body').on('click', '.btnSearchCategory', function() {
@@ -1764,6 +1679,23 @@
             }
             SearchCategorySolution(inputTag, cateId);
         });
+        $('body').on('click', '#btnReCalculate', function() {
+            var 환율 = parseFloat($('#txtExchangeRate').val());
+            var 원가 = parseInt($('#txtBasePrice').val());
+            var 마진율 = parseFloat($('#txtMarginRate').val()/100);
+            var 판매수수료 = parseFloat($('#txtSellerMarketChargeRate').val()/100);
+            var 구매수수료 = parseFloat($('#txtBuyerMarketChargeRate').val()/100);
+            var 해외배송비 = parseInt($('#txtOverSeaCharge').val());
+            var productPrice = eval($('#txtFunction').val());
+            $("#txtProductPrice").val(Math.round(productPrice / 10) * 10);
+            $("#txtExpectedRevenue").val($("#txtProductPrice").val() - Math.round(productPrice / 10) * 10);
+        });
+
+        $('body').on('click', '.btnSoldOut', function() {
+            
+            $(this).parent().prev().val(0);
+        });
+
         var SearchCategorySolution = function (element, cateId) {
             var keyword = element.val();
             var action = '/scratchProductScrap/category/search/'+cateId;// $("#manageMarketAccount").attr("action");
@@ -1816,9 +1748,43 @@
         });
         
         $(window).keydown(function(event){
+            console.log('aaa');
             if(event.keyCode == 13) {
                 event.preventDefault();
                 return false;
+            }
+        });
+        $('body').on('blur', '#txtKrMainName', function() {
+            var txt = $(this).val();
+            if(txt.length <= 0){
+                $(this).removeClass('is-valid');
+                $(this).addClass('is-invalid');
+                return false;
+            }
+            var pattern = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+            if ( txt && txt.length > 2 && pattern.test(txt)) {
+                $(this).removeClass('is-valid');
+                $(this).addClass('is-invalid');
+            } else {
+                $(this).removeClass('is-invalid');
+                $(this).addClass('is-valid');
+                var temp = $(this).val();
+                if(string_byte_length(temp) > 50){
+                    $("#txtKrSubName").val(substr_utf8_bytes(temp, 0, 50));
+                }else{
+                    $("#txtKrSubName").val(temp);
+                }
+            }
+        });
+        $('body').on('blur', '.txtOptionName', function() {
+            var txt = $(this).val();
+            
+            if(string_byte_length(txt) > 30 || string_byte_length(txt) <= 0){
+                $(this).removeClass('is-valid');
+                $(this).addClass('is-invalid');
+            }else{
+                $(this).removeClass('is-invalid');
+                $(this).addClass('is-valid');
             }
         });
     });
