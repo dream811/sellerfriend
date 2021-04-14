@@ -47,42 +47,8 @@ class ProductScrapperController extends Controller
     public function index()
     {
 
-        $comes = Come::where('bIsDel', 0)
-                ->orderBy('strComeCode')
-                ->get();
-                //dd($comes);
-        $brands = Brand::where('bIsDel', 0)
-                ->orderBy('strBrandCode')
-                ->get();
-        $categories_1 = Category::where('bIsDel', 0)
-                ->where('nCategoryType', 1)
-                ->orderBy('strCategoryName')
-                ->get();
-        $categories_2 = Category::where('bIsDel', 0)
-                ->where('nCategoryType', 2)
-                ->orderBy('strCategoryName')
-                ->get();
-
-        $categories_3 = Category::where('bIsDel', 0)
-                ->where('nCategoryType', 3)
-                ->orderBy('strCategoryName')
-                ->get();
-        $categories_4 = Category::where('bIsDel', 0)
-                ->where('nCategoryType', 4)
-                ->orderBy('strCategoryName')
-                ->get();
-        $moneyTypes = MoneyType::where('bIsDel', 0)
-                ->get();
-        $weightTypes = WeightType::where('bIsDel', 0)
-                ->get();
-        $shareType = "1";
-        $tr = new GoogleTranslate('ko');
-        $tr->setSource('zh-cn');
-        $tr->setTarget('ko');
-        $strChMainName = '秋冬加厚职业套装2020新款毛呢大衣中长款套裙工作服工装妮子外套';
-        $strKrMainName = $tr->translate($strChMainName);
         $title = "상품스크랩";
-        return view('scratch.ProductScrapper', compact('title', 'strChMainName', 'strKrMainName', 'brands', 'comes', 'categories_1', 'categories_2', 'categories_3', 'categories_4', 'shareType', 'moneyTypes', 'weightTypes'));
+        return view('scratch.ProductScrapper', compact('title'));
     }
     /**
      * 상품수집
@@ -410,107 +376,107 @@ class ProductScrapperController extends Controller
     public function save(Request $request)
     {
         //main data
-        $brand = $request->post('txtBrandName');
-        $product = new Product([
-            'nUserId' => Auth::id(),
-            'strURL' => $request->post('txtScrapURL'), 
-            'strMainName' => mb_substr($request->post('txtKrMainName'), 0, mb_strlen( $request->post('txtKrMainName')) > 25 ? 25 : mb_strlen( $request->post('txtKrMainName'))), 
-            'strSubName' => mb_substr($request->post('txtKrMainName'), 0, mb_strlen( $request->post('txtKrMainName')) > 25 ? 25 : mb_strlen( $request->post('txtKrMainName'))),
-            'nUserId' => Auth::id(), 
-            'nBrandType' => $request->post('selBrandName'), 
-            'strBrand' => ($request->post('txtBrandName') == "" ? $request->post('selBrandName') : $request->post('txtBrandName')),
-            'strKeyword' => $request->post('txtKeyword'), 
-            'strChMainName' => $request->post('txtKrMainName'), 
-            'strKrMainName' => $request->post('txtKrMainName'), 
-            'strChSubName' => $request->post('txtChMainName'), 
-            'strKrSubName' => $request->post('txtKrMainName'), 
-            'strComeCode' => $request->post('selComeName'), 
-            'strCategoryCode1' => $request->post('selCategoryName1'), 
-            'strCategoryCode2' => $request->post('selCategoryName2'), 
-            'strCategoryCode3' => $request->post('selCategoryName3'), 
-            'strCategoryCode4' => $request->post('selCategoryName4'), 
-            'strCategoryName' => $request->post('txtCategoryName'), 
-            'nShareType' => $request->post('rdoShareType'),
-            'nProductWorkProcess' => 0,
-            'bIsDel'=> 0
-        ]);
-        $product->save();
+        // $brand = $request->post('txtBrandName');
+        // $product = new Product([
+        //     'nUserId' => Auth::id(),
+        //     'strURL' => $request->post('txtScrapURL'), 
+        //     'strMainName' => mb_substr($request->post('txtKrMainName'), 0, mb_strlen( $request->post('txtKrMainName')) > 25 ? 25 : mb_strlen( $request->post('txtKrMainName'))), 
+        //     'strSubName' => mb_substr($request->post('txtKrMainName'), 0, mb_strlen( $request->post('txtKrMainName')) > 25 ? 25 : mb_strlen( $request->post('txtKrMainName'))),
+        //     'nUserId' => Auth::id(), 
+        //     'nBrandType' => $request->post('selBrandName'), 
+        //     'strBrand' => ($request->post('txtBrandName') == "" ? $request->post('selBrandName') : $request->post('txtBrandName')),
+        //     'strKeyword' => $request->post('txtKeyword'), 
+        //     'strChMainName' => $request->post('txtKrMainName'), 
+        //     'strKrMainName' => $request->post('txtKrMainName'), 
+        //     'strChSubName' => $request->post('txtChMainName'), 
+        //     'strKrSubName' => $request->post('txtKrMainName'), 
+        //     'strComeCode' => $request->post('selComeName'), 
+        //     'strCategoryCode1' => $request->post('selCategoryName1'), 
+        //     'strCategoryCode2' => $request->post('selCategoryName2'), 
+        //     'strCategoryCode3' => $request->post('selCategoryName3'), 
+        //     'strCategoryCode4' => $request->post('selCategoryName4'), 
+        //     'strCategoryName' => $request->post('txtCategoryName'), 
+        //     'nShareType' => $request->post('rdoShareType'),
+        //     'nProductWorkProcess' => 0,
+        //     'bIsDel'=> 0
+        // ]);
+        // $product->save();
         //detail data
-        $nMarketPrice = number_format(($request->post('txtBasePrice') + $request->post('txtCountryShippingCost'))*170 + $request->post('txtWorldShippingCost'), 2, '.', '');
-        $nMarginPercent = 30;
-        $productDetail = new ProductDetail([
-            'nProductIdx' => $product->nIdx,
-            'strBasePriceType' => $request->post('selBasePriceType'),
-            'nBasePrice' => number_format($request->post('txtBasePrice'), 2, '.', ''),
-            'strCountryShippingCostType' => $request->post('selCountryShippingCostType'),
-            'nCountryShippingCost' => number_format($request->post('txtCountryShippingCost'), 2, '.', ''),
-            'strWorldShippingCostType' => $request->post('selWorldShippingCostType'),
-            'nWorldShippingCost' => $request->post('txtWorldShippingCost'),
-            'strWeightType' => $request->post('selWeightType'),
-            'nWeight' => number_format($request->post('txtWeight'), 2, '.', ''),
-            'bAdditionalOption1' => number_format($request->post('chkAdditionalOption1')),
-            'bAdditionalOption2' => number_format($request->post('chkAdditionalOption2')),
-            'bAdditionalOption3' => number_format($request->post('chkAdditionalOption3')),
-            'bAdditionalOption4' => number_format($request->post('chkAdditionalOption4')),
-            'nMultiPriceOptionType' => number_format($request->post('rdoMultiPriceOptionType')),
-            'nMarketPrice' => $nMarketPrice,
-            'nMarginPrice' => number_format(round($nMarketPrice / (100 - $nMarginPercent) /100 + $nMarketPrice, -1), 2, '.', ''),
-            'nMarginPercent' => $nMarginPercent,
-            'blobNote' => $request->post('summernote'),
-            'bIsDel'=> 0
-        ]);
-        $productDetail->save();
-        //subitem data
-        $countItem = count($request->post('txtSubItemImage'));
+        // $nMarketPrice = number_format(($request->post('txtBasePrice') + $request->post('txtCountryShippingCost'))*170 + $request->post('txtWorldShippingCost'), 2, '.', '');
+        // $nMarginPercent = 30;
+        // $productDetail = new ProductDetail([
+        //     'nProductIdx' => $product->nIdx,
+        //     'strBasePriceType' => $request->post('selBasePriceType'),
+        //     'nBasePrice' => number_format($request->post('txtBasePrice'), 2, '.', ''),
+        //     'strCountryShippingCostType' => $request->post('selCountryShippingCostType'),
+        //     'nCountryShippingCost' => number_format($request->post('txtCountryShippingCost'), 2, '.', ''),
+        //     'strWorldShippingCostType' => $request->post('selWorldShippingCostType'),
+        //     'nWorldShippingCost' => $request->post('txtWorldShippingCost'),
+        //     'strWeightType' => $request->post('selWeightType'),
+        //     'nWeight' => number_format($request->post('txtWeight'), 2, '.', ''),
+        //     'bAdditionalOption1' => number_format($request->post('chkAdditionalOption1')),
+        //     'bAdditionalOption2' => number_format($request->post('chkAdditionalOption2')),
+        //     'bAdditionalOption3' => number_format($request->post('chkAdditionalOption3')),
+        //     'bAdditionalOption4' => number_format($request->post('chkAdditionalOption4')),
+        //     'nMultiPriceOptionType' => number_format($request->post('rdoMultiPriceOptionType')),
+        //     'nMarketPrice' => $nMarketPrice,
+        //     'nMarginPrice' => number_format(round($nMarketPrice / (100 - $nMarginPercent) /100 + $nMarketPrice, -1), 2, '.', ''),
+        //     'nMarginPercent' => $nMarginPercent,
+        //     'blobNote' => $request->post('summernote'),
+        //     'bIsDel'=> 0
+        // ]);
+        // $productDetail->save();
+        // //subitem data
+        // $countItem = count($request->post('txtSubItemImage'));
         
-        //만일 서브아이템이 10개 이상이라면 최대입력수를 늘인다
-        //if($countItem > 10)
-            ini_set('max_input_vars','10000' );
+        // //만일 서브아이템이 10개 이상이라면 최대입력수를 늘인다
+        // //if($countItem > 10)
+        //     ini_set('max_input_vars','10000' );
 
-        $arrImage = $request->post('txtSubItemImage');
-        $arrKrColorPattern = $request->post('txtSubItemKrColorPattern');
-        $arrChColorPattern = $request->post('txtSubItemChColorPattern');
-        $arrKrSize = $request->post('txtSubItemKrSize');
-        $arrChSize = $request->post('txtSubItemChSize');
-        $arrOptionPrice = $request->post('txtSubItemOptionPrice');
+        // $arrImage = $request->post('txtSubItemImage');
+        // $arrKrColorPattern = $request->post('txtSubItemKrColorPattern');
+        // $arrChColorPattern = $request->post('txtSubItemChColorPattern');
+        // $arrKrSize = $request->post('txtSubItemKrSize');
+        // $arrChSize = $request->post('txtSubItemChSize');
+        // $arrOptionPrice = $request->post('txtSubItemOptionPrice');
         
-        $arrBasePrice = $request->post('txtSubItemBasePrice');
-        $arrSalePrice = $request->post('txtSubItemSalePrice');
-        $arrWeight = $request->post('txtSubItemWeight');
-        for ($i=0; $i < $countItem; $i++) { 
-            $productItem = new ProductItem([
-                'nProductIdx' => $product->nIdx,
-                'strSubItemName' => $arrKrColorPattern[$i],
-                'nSubItemOptionPrice' => $arrOptionPrice[$i],
-                'nSubItemBasePrice' => $arrBasePrice[$i],
-                'nSubItemSalePrice' => $arrSalePrice[$i],
-                'nSubItemWeight' => $arrWeight[$i],
-                'strSubItemImage' => $arrImage[$i],
-                'strSubItemChColorPattern' => $arrChColorPattern[$i],
-                'strSubItemKrColorPattern' => $arrKrColorPattern[$i],
-                'strSubItemChSize' => $arrChSize[$i],
-                'strSubItemKrSize' => $arrKrSize[$i],
-                'bIsDel' => 0
-            ]);
-            $productItem->save();
-        }
-        //image data
-        $countImage = count($request->post('txtImage'));
-        $arrDetailImage = $request->post('txtImage');
-        for ($i=0; $i < $countImage; $i++) { 
+        // $arrBasePrice = $request->post('txtSubItemBasePrice');
+        // $arrSalePrice = $request->post('txtSubItemSalePrice');
+        // $arrWeight = $request->post('txtSubItemWeight');
+        // for ($i=0; $i < $countItem; $i++) { 
+        //     $productItem = new ProductItem([
+        //         'nProductIdx' => $product->nIdx,
+        //         'strSubItemName' => $arrKrColorPattern[$i],
+        //         'nSubItemOptionPrice' => $arrOptionPrice[$i],
+        //         'nSubItemBasePrice' => $arrBasePrice[$i],
+        //         'nSubItemSalePrice' => $arrSalePrice[$i],
+        //         'nSubItemWeight' => $arrWeight[$i],
+        //         'strSubItemImage' => $arrImage[$i],
+        //         'strSubItemChColorPattern' => $arrChColorPattern[$i],
+        //         'strSubItemKrColorPattern' => $arrKrColorPattern[$i],
+        //         'strSubItemChSize' => $arrChSize[$i],
+        //         'strSubItemKrSize' => $arrKrSize[$i],
+        //         'bIsDel' => 0
+        //     ]);
+        //     $productItem->save();
+        // }
+        // //image data
+        // $countImage = count($request->post('txtImage'));
+        // $arrDetailImage = $request->post('txtImage');
+        // for ($i=0; $i < $countImage; $i++) { 
             
-            $productImage = new ProductImage([
-                'nProductIdx' => $product->nIdx,
-                'nImageCode' => $i,
-                'strName' => '',
-                'strURL' => $arrDetailImage[$i],
-                'nHeight' => 0,
-                'nWidth' => 0,
-                'strNote' => '',
-                'bIsDel' => 0
-            ]);
-            $productImage->save();
-        }
+        //     $productImage = new ProductImage([
+        //         'nProductIdx' => $product->nIdx,
+        //         'nImageCode' => $i,
+        //         'strName' => '',
+        //         'strURL' => $arrDetailImage[$i],
+        //         'nHeight' => 0,
+        //         'nWidth' => 0,
+        //         'strNote' => '',
+        //         'bIsDel' => 0
+        //     ]);
+        //     $productImage->save();
+        // }
 
         return redirect('scratchProductScrap');
     }
@@ -559,7 +525,7 @@ class ProductScrapperController extends Controller
         }else{
             $keywords = preg_split('/[> \/]/', $keyword);
         }
-
+        $keywords = array_reverse($keywords);
         $categories = array();
         $categories[] = null;//솔루션 카테고리
         $categories[] = CategorySmartStore::where('bIsDel', 0)

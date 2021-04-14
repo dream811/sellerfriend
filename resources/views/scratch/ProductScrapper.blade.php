@@ -1761,6 +1761,7 @@
                 $(this).addClass('is-invalid');
                 return false;
             }
+            $("#titleSizeInfo").html(string_byte_length(txt) + ' / 100 byte');
             var pattern = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
             if ( txt && txt.length > 2 && pattern.test(txt)) {
                 $(this).removeClass('is-valid');
