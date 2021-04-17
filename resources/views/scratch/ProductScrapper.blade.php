@@ -324,6 +324,9 @@
                                                     <div class="input-group-text"><i class="fas fa-globe-americas"></i></div>
                                                 </div>
                                                 <input type="text" name="txtBasePrice" id="txtBasePrice" class="form-control" value="0" placeholder="원가">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-success" id="btnCalWithBasePrice" type="button"> 원가적용</button>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group col-md-3">
@@ -334,7 +337,7 @@
                                                 </div>
                                                 <input type="text" name="txtDiscountPrice" id="txtDiscountPrice" class="form-control" value="0" placeholder="할인가">
                                                 <div class="input-group-append">
-                                                    <button class="btn btn-success" type="button"> 원가로적용</button>
+                                                    <button class="btn btn-success" id="btnCalWithDiscount" type="button"> 할인가적용</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -517,13 +520,13 @@
                                         <div class="col-md-12 form-group row">
                                             <div class="col-sm-10">
                                                 <div class="alert-message bg-light">
-                                                    <button type="button" class="btn btn-info">
+                                                    {{-- <button type="button" class="btn btn-info">
                                                         <i class="fas fa-sync-alt"></i> 옵션 관련 입력한 기준가격 모두보기 (판매가, 스스 ESM 50% 추가금)
                                                     </button>
                                                     <br>
                                                     <span class="text-success"> 조회전용. 기준가격들 수정 시 버튼 재클릭해야 결과값 갱신됨</span>
-                                                    <hr>
-                                                    {{-- <fieldset >
+                                                    <hr> --}}
+                                                    <fieldset >
                                                         <div class="row">
                                                             <div class="form-group col-md-3">
                                                                 <label class="form-label">상품 기본가(판매가)</label>
@@ -594,10 +597,10 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </fieldset> --}}
+                                                    </fieldset>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 form-group row mb-0">
+                                            {{-- <div class="col-md-12 form-group row mb-0">
                                                     <div class="form-group col-md-4 mb-0 ml-0">
                                                             <div class="btn-group btn-group-sm" role="group">
                                                                     <button class="btn btn-success" type="button">옵션원가 적용</button>
@@ -613,7 +616,7 @@
                                             </div>
                                             <div class="col-md-12">
                                                 <hr>
-                                            </div>
+                                            </div> --}}
                                             <span class="text-success ml-3">
                                                 옵션명 - 한글20자 특수문자 불가,   옵션값 - 한글25자 특수문자 불가,   옵션 조합형 기준 100개 이하<br>
                                                 옵션추가금 - 판매가의 50% 이내, 10원단위, 0원 기본옵션 필수<br>
@@ -650,9 +653,9 @@
                                                                         </div>
                                                                         <div class="col-sm-9 p-0">
                                                                             <label class="col-form-label col-sm-4 pl-0 pr-0 text-center font-weight-bold">옵션값</label>
-                                                                            <button class="btn btn-sm btn-dark"><i class="fas fa-sort-numeric-down"></i></button>
-                                                                            <button class="btn btn-sm btn-dark"><i class="fas fa-sort-alpha-down"></i></button>
-                                                                            <button class="btn btn-sm btn-dark text-sm"><i class="fas fa-eraser"></i>특수문자</button>
+                                                                            <button type="button" data-id="0"  class="btn btn-sm btn-dark btnAtoZ"><i class="fas fa-sort-numeric-down"></i></button>
+                                                                            <button type="button" data-id="0"  class="btn btn-sm btn-dark btnZtoA "><i class="fas fa-sort-alpha-down"></i></button>
+                                                                            <button type="button" data-id="0"  class="btn btn-sm btn-dark text-sm btnEraserSpecKey"><i class="fas fa-eraser"></i>특수문자</button>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-sm-3 row pl-0">
@@ -697,9 +700,9 @@
                                                                         </div>
                                                                         <div class="col-sm-9 p-0">
                                                                             <label class="col-form-label col-sm-4 pl-0 pr-0 text-center font-weight-bold">옵션값</label>
-                                                                            <button class="btn btn-sm btn-dark"><i class="fas fa-sort-numeric-down"></i></button>
-                                                                            <button class="btn btn-sm btn-dark"><i class="fas fa-sort-alpha-down"></i></button>
-                                                                            <button class="btn btn-sm btn-dark text-sm"><i class="fas fa-eraser"></i>특수문자</button>
+                                                                            <button type="button" data-id="1" class="btn btn-sm btn-dark btnAtoZ"><i class="fas fa-sort-numeric-down"></i></button>
+                                                                            <button type="button" data-id="1" class="btn btn-sm btn-dark btnZtoA "><i class="fas fa-sort-alpha-down"></i></button>
+                                                                            <button type="button" data-id="1" class="btn btn-sm btn-dark text-sm btnEraserSpecKey"><i class="fas fa-eraser"></i>특수문자</button>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-sm-3 row pl-0">
@@ -1146,6 +1149,7 @@
                     var 구매수수료 = 0;
                     var productPrice = eval($('#txtFunction').val());
                     $("#txtExpectedRevenue").val($("#txtProductPrice").val() - Math.round(productPrice / 10) * 10);
+
                     $("#txtChMainName").val(data.chMainName);
                     
                     var re = new RegExp('.{1,' + 100 + '}', 'g');
@@ -1688,6 +1692,42 @@
             var 해외배송비 = parseInt($('#txtOverSeaCharge').val());
             var productPrice = eval($('#txtFunction').val());
             $("#txtProductPrice").val(Math.round(productPrice / 10) * 10);
+            var 마진율 = 0;
+            var 판매수수료 = 0;
+            var 구매수수료 = 0;
+            var productPrice = eval($('#txtFunction').val());
+            $("#txtExpectedRevenue").val($("#txtProductPrice").val() - Math.round(productPrice / 10) * 10);
+        });
+
+        $('body').on('click', '#btnCalWithBasePrice', function() {
+            var 환율 = parseFloat($('#txtExchangeRate').val());
+            var 원가 = parseInt($('#txtBasePrice').val());
+            var 마진율 = parseFloat($('#txtMarginRate').val()/100);
+            var 판매수수료 = parseFloat($('#txtSellerMarketChargeRate').val()/100);
+            var 구매수수료 = parseFloat($('#txtBuyerMarketChargeRate').val()/100);
+            var 해외배송비 = parseInt($('#txtOverSeaCharge').val());
+            var productPrice = eval($('#txtFunction').val());
+            $("#txtProductPrice").val(Math.round(productPrice / 10) * 10);
+            var 마진율 = 0;
+            var 판매수수료 = 0;
+            var 구매수수료 = 0;
+            var productPrice = eval($('#txtFunction').val());
+            $("#txtExpectedRevenue").val($("#txtProductPrice").val() - Math.round(productPrice / 10) * 10);
+        });
+        
+        $('body').on('click', '#btnCalWithDiscount', function() {
+            var 환율 = parseFloat($('#txtExchangeRate').val());
+            var 원가 = parseInt($('#txtDiscountPrice').val());
+            var 마진율 = parseFloat($('#txtMarginRate').val()/100);
+            var 판매수수료 = parseFloat($('#txtSellerMarketChargeRate').val()/100);
+            var 구매수수료 = parseFloat($('#txtBuyerMarketChargeRate').val()/100);
+            var 해외배송비 = parseInt($('#txtOverSeaCharge').val());
+            var productPrice = eval($('#txtFunction').val());
+            $("#txtProductPrice").val(Math.round(productPrice / 10) * 10);
+            var 마진율 = 0;
+            var 판매수수료 = 0;
+            var 구매수수료 = 0;
+            var productPrice = eval($('#txtFunction').val());
             $("#txtExpectedRevenue").val($("#txtProductPrice").val() - Math.round(productPrice / 10) * 10);
         });
 
@@ -1760,10 +1800,14 @@
                 $(this).removeClass('is-valid');
                 $(this).addClass('is-invalid');
                 return false;
+            }else if(txt.length <= 100){
+                $(this).addClass('is-valid');
+                $(this).removeClass('is-invalid');
             }
+
             $("#titleSizeInfo").html(string_byte_length(txt) + ' / 100 byte');
             var pattern = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-            if ( txt && txt.length > 2 && pattern.test(txt)) {
+            if ( txt && txt.length > 2 && pattern.test(txt) && txt.length <= 100) {
                 $(this).removeClass('is-valid');
                 $(this).addClass('is-invalid');
             } else {

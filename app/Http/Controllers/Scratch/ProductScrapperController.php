@@ -535,13 +535,21 @@ class ProductScrapperController extends Controller
                                 $query->orWhere('strCategoryName', 'like',  '%' . $keywords[$i] .'%');
                             }      
                         })->first();
-        $categories[] = CategoryCoupang::where('bIsDel', 0)
+        $categoriy_c = CategoryCoupang::where('bIsDel', 0)
                         //->whereIn('strCategoryName', 'like', '%'.$keyword.'%')
-                        ->where(function ($query) use($keywords) {
-                            for ($i = 0; $i < count($keywords); $i++){
-                                $query->orWhere('strCategoryName', 'like',  '%' . $keywords[$i] .'%');
-                            }      
-                        })->first();
+                        ->where('strCategoryName', 'like',  '%' . $keywords[0] .'%')->first();
+        if($categoriy_c == null){
+            $categories[] = CategoryCoupang::where('bIsDel', 0)
+                //->whereIn('strCategoryName', 'like', '%'.$keyword.'%')
+                ->where(function ($query) use($keywords) {
+                    for ($i = 0; $i < count($keywords); $i++){
+                        $query->orWhere('strCategoryName', 'like',  '%' . $keywords[$i] .'%');
+                    }      
+                })->first();
+        }else{
+            $categories[] = $categoriy_c;
+        }
+
         $categories[] = Category11thGlobal::where('bIsDel', 0)
                         //->whereIn('strCategoryName', 'like', '%'.$keyword.'%')
                         ->where(function ($query) use($keywords) {
