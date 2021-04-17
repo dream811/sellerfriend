@@ -22,6 +22,7 @@ use App\Models\CategoryInterPark;
 use App\Models\CategorySmartStore;
 use App\Models\CategorySolution;
 use App\Models\CategoryWeMakePrice;
+use App\Models\DocumentImage;
 use App\Models\WeightType;
 use App\Models\MoneyType;
 use Exception;
@@ -73,6 +74,13 @@ class ProductScrapperController extends Controller
         
         $arrResponse = (array)json_decode($result, true);
         $arrOption = array();
+
+        //상하단 이미지
+        $topImage  = DocumentImage::where('strImageType', 'TOP')
+                                        ->where('nUserId', Auth::id())->first();
+        
+        $downImage  = DocumentImage::where('strImageType', 'DOWN')
+                                        ->where('nUserId', Auth::id())->first();
 
         if(str_contains($scrapURL, "detail.tmall.com")){
             $arrKrItem = array();
@@ -157,8 +165,8 @@ class ProductScrapperController extends Controller
                 'items' => $arrResponse['valItemInfo']['skuList'],
                 'images' => $arrResponse['propertyPics']['default'],
                 'options' => $arrOption,
-                'description' => utf8_encode($descData)
             );
+            $resDetailTmall['description'] ='<image src="'.asset('storage/'.$topImage->strImageURL).'">'.utf8_encode($descData).'<image src="'.asset('storage/'.$downImage->strImageURL).'">';
             return response()->json(["status" => "success", "data" => $resDetailTmall]);
         }else if(str_contains($scrapURL, "item.taobao.com")){
             //print_r($arrResponse);
@@ -249,7 +257,7 @@ class ProductScrapperController extends Controller
                 //$descData .= '<div style="pdding-botton:10px; text-align: center;"><p>['.$val['KrColorPattern'].", ".$val['KrSize'].']</p><p><img src="'.$val['image'].'"></p></div>';
             }
             
-            $resDetailTaobao['description'] = $descData.str_replace("|", "\"",$arrResponse['description']);
+            $resDetailTaobao['description'] = '<image src="'.asset('storage/'.$topImage->strImageURL).'">'.$descData.str_replace("|", "\"",$arrResponse['description']).'<image src="'.asset('storage/'.$downImage->strImageURL).'">';
             $resDetailTaobao['images'] = $arrResponse['auctionImages'];
             $resDetailTaobao['price'] = $price;
             $resDetailTaobao['options'] = $arrOption;
