@@ -1132,17 +1132,11 @@
                 type: "GET",
                 dataType: 'json',
                 success: function ({status, data}) {
-                    //console.log(data);
-                    if(status =="error"){
-                        alert("등록된 상품이 존재하지 않습니다");
-                        return;
-                    }
-                    
-                    $("#txtBasePrice").val(data.orginal_price);
-                    $("#txtDiscountPrice").val(data.price);
-                    $("#txtBasePrice").val(data.orginal_price);
+                    $("#txtBasePrice").val(data.price);
+                    $("#txtDiscountPrice").val(data.price/2);
+                    $("#txtBasePrice").val(data.price);
                     var 환율 = 173;
-                    var 원가 = data.orginal_price;
+                    var 원가 = data.price;
                     var 마진율 = 0.1;
                     var 판매수수료 = 0.3;
                     var 구매수수료 = 0.05;
@@ -1156,116 +1150,20 @@
                     var productPrice = eval($('#txtFunction').val());
                     $("#txtExpectedRevenue").val($("#txtProductPrice").val() - Math.round(productPrice / 10) * 10);
 
-                    $("#txtChMainName").val(data.title);
+                    $("#txtChMainName").val(data.chMainName);
                     
                     var re = new RegExp('.{1,' + 100 + '}', 'g');
-                    $("#txtKrMainName").val(data.titleKO.match(re));
-                    var titleLength = string_byte_length(data.titleKO);
-                    $("#titleSizeInfo").html(string_byte_length(data.titleKO) + ' / 100 byte');
+                    $("#txtKrMainName").val(data.krMainName.match(re));
+                    var titleLength = string_byte_length(data.krMainName);
+                    $("#titleSizeInfo").html(string_byte_length(data.krMainName) + ' / 100 byte');
                     if(titleLength > 100){
                         $("#titleSizeInfo").addClass('text-danger');
                         $("#titleSizeInfo").removeClass('text-success');
                     }
 
-                    $("#txtKrSubName").val(substr_utf8_bytes(data.titleKO, 0, 50));
+                    $("#txtKrSubName").val(substr_utf8_bytes(data.krMainName, 0, 50));
                     var item = "";
                     var optionTags = "";
-
-                    // data.props_list.forEach( (element, index) => {
-                    //     console.log(element);                        
-                    // });
-                    var arrOptionName = new Array();
-                    var arrOptionValue = new Array();
-                    $.each(data.props_list, function(idx, value) {
-                    // do your stuff here
-                        
-                        var temp = value.split(':')[0];
-
-                        if(arrOptionValue.findIndex(element => element == temp) < 0){
-                            console.log(temp);
-                            var index = arrOptionValue.length;
-                            arrOptionValue.push(temp);
-                            var num = arrOptionValue.length;
-                            optionTags += `<input type="text" class="form-control col text-center font-weight-bold" value="`+ temp+`" readonly="">`;
-                            item +=`<div class="col-sm-12">
-                                    <div class="card bg-secondary-light">
-                                        <div class="card-body">
-                                            <label class="form-label font-weight-bold">옵션 `+num+`</label>
-                                            <button type="button" class="close text-danger">
-                                                <span aria-hidden="true">×</span>
-                                            </button>
-                                            <br>
-                                            <div class="form-group row">
-                                                <div class="input-group input-group-sm m-3">
-                                                    <input type="text" class="form-control text-center col-md-3 font-weight-bold" value="옵션명" readonly="">
-                                                    <input type="text" name="txtOptionAttr[]" id="txtOptionAttr_`+index+`" value=`+ temp +` class="form-control text-center">
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 row">
-                                                    <div class="col-sm-6 row">
-                                                        <div class="col-sm-3 p-0 text-center">
-                                                            <label class="col-form-label pl-0 pr-0 text-center font-weight-bold">이미지</label>
-                                                        </div>
-                                                        <div class="col-sm-9 p-0">
-                                                            <label class="col-form-label col-sm-4 pl-0 pr-0 text-center font-weight-bold">옵션값</label>
-                                                            <button type="button" class="btn btn-sm btn-dark btnOption1to9"><i class="fas fa-sort-numeric-down"></i></button>
-                                                            <button type="button" class="btn btn-sm btn-dark btnOptionAtoZ"><i class="fas fa-sort-alpha-down"></i></button>
-                                                            <button type="button" class="btn btn-sm btn-dark text-sm btnOptionEraserSpecKey"><i class="fas fa-eraser"></i>특수문자</button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-3 row pl-0">
-                                                        <label class="col-form-label col-sm-5 pl-0 pr-1 text-right font-weight-bold">옵션추가금</label>
-                                                        <div class="input-group input-group-sm col-sm-7 pl-0">
-                                                            <input type="text" name="txtOptionPriceVal[]" id="txtOptionPriceVal_${index}" class="form-control txtOptionPriceVal">
-                                                            <div class="input-group-append mb-1">
-                                                                <button class="btn btn-sm btn-dark btnAddOptionMoney" data-id="${index}" type="button">+</button>
-                                                                <button class="btn btn-sm btn-dark btnSubtractOptionMoney" data-id="${index}" type="button">-</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                            <div id="divOptionContainer_${index}" class="divOptionContainer">`;
-                                    var subItem="";
-                                    // element.optItems.forEach((el, idx) => {
-                                    //     var chkLength = "is-valid";
-                                    //     if(string_byte_length(el[1]) > 30){
-                                    //         chkLength="is-invalid";
-                                    //     }
-                                    //     var imageUrl = "{{asset('assets/images/system/no-image.png')}}";
-                                    //     if(el[3].trim() != ""){
-                                    //         imageUrl=el[3];
-                                    //     }
-                                    //     subItem += `<div class="input-group">
-                                    //                 <a href="javascript:void(0)" target="_blank">
-                                    //                     <img class="rounded" src="`+ el[3] +`" width="40" height="40">
-                                    //                 </a>
-                                    //                 <fieldset>
-                                    //                     <button type="button" class="btn btn-info p-1 btnImportImage"><label for="inputFileOpt_0_"><i class="fas fa-file-upload fa-lg"></i></label></button>
-                                    //                     <input type="file" id="inputFileOpt_`+ index +`_`+ idx +`" hidden="">
-                                    //                 </fieldset>
-                                    //                 <input type="text" value="`+ el[2] +`" name="txtCnOptionName_${index}[]" id="txtCnOptionName_${index}_${idx}" data-id="${el[0]}" opt-id="${index}" item-id="${idx}" class="form-control  col-md-3">
-                                    //                 <input type="text" value="`+ el[1] +`" name="txtKoOptionName_${index}[]"  id="txtKoOptionName_${index}_${idx}" data-id="${el[0]}" opt-id="${index}" item-id="${idx}" class="form-control txtOptionName ${chkLength} col-md-3">
-                                    //                 <input type="text" value="0" name="txtAddOptionPrice_${index}" id="txtAddOptionPrice_${index}_${idx}" data-id="${el[0]}" opt-id="${index}" item-id="${idx}" class="form-control col-md-3">
-                                    //                 <div class="input-group-append">
-                                    //                     <button type="button" class="btn btn-info border-secondary btnMoveOptRow" >이동</button>
-                                    //                     <button type="button" class="btn btn-primary btnInsertOptRow"><i class="fas fa-plus"></i></button>
-                                    //                     <button type="button" class="btn btn-danger btnDelOptRow"><i class="far fa-trash-alt"></i></button>
-                                    //                 </div>
-                                    //             </div>`;
-                                    // });
-                                    item +=  subItem + `</div> 
-                                            <button type="button" class="btn btn-success btn-block btnAddOptRow" opt-id="${index}"><i class="fas fa-plus"></i> 추가</button>
-                                        </div>
-                                    </div>
-                                </div>`;
-                        }
-                    });
-                    $('#divOptionField').html(item);
-                    console.log(item);
-/*
                     data.options.forEach( (element, index) => {
                         var num = index+1;
                         optionTags += `<input type="text" class="form-control col text-center font-weight-bold" value="`+element.optKoName+`" readonly="">`;
@@ -1422,10 +1320,8 @@
                     });
                     $('#divOptionCombinationBox').html(optCombination);
                     $('#imageContainer').html(imgItem);
-*/
-                    $('#summernote').summernote('code', data.desc);
-                    //UpdateImageInfo();
-
+                    $('#summernote').summernote('code', data.description);
+                    UpdateImageInfo();
                 },
                 error: function (data) {
                     alert('스크래핑중 오류가 발생했습니다. 잠시후 다시 시도해주십시오.');
