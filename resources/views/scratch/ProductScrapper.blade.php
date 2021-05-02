@@ -1149,13 +1149,20 @@
                     var 해외배송비 = 6000;
                     var productPrice = eval($('#txtFunction').val());
                     $("#txtProductPrice").val(Math.round(productPrice / 10) * 10);
-
-                    var 마진율 = 0;
-                    var 판매수수료 = 0;
-                    var 구매수수료 = 0;
-                    var productPrice = eval($('#txtFunction').val());
+                    //옵션머니설정가격부분 설정
+                    $("#txtOptionSellPrice").val(Math.round(productPrice / 10) * 10);//상품기본가/판매가
+                    $("#txtOptionBasePrice").val(data.orginal_price);//상품기본가/원가
+                    $("#txtOptionDiscountPrice").val(data.price);//상품기본가 /할인가
+                    $("#txtOptionSSPrice").val(Math.round(productPrice / 20) * 10);//스스50프로 추가금
+                    $("#txtOptionESMPrice").val(Math.round(productPrice / 20) * 10);
+                    $("#txtOptionSellDiscountPrice").val(0);
+                    $("#txtOptionESMDeliveryCharge").val(0);
+                    
+                    마진율 = 0;
+                    판매수수료 = 0;
+                    구매수수료 = 0;
+                    productPrice = eval($('#txtFunction').val());
                     $("#txtExpectedRevenue").val($("#txtProductPrice").val() - Math.round(productPrice / 10) * 10);
-
                     $("#txtChMainName").val(data.title);
                     
                     var re = new RegExp('.{1,' + 100 + '}', 'g');
@@ -1171,22 +1178,27 @@
                     var item = "";
                     var optionTags = "";
 
-                    // data.props_list.forEach( (element, index) => {
-                    //     console.log(element);                        
-                    // });
-                    var arrOptionName = new Array();
-                    var arrOptionValue = new Array();
+                    var arrOptionKey = new Array();
+                    var arrOptionName= new Array();
+                    var index = 0;
                     $.each(data.props_list, function(idx, value) {
                     // do your stuff here
                         
-                        var temp = value.split(':')[0];
-
-                        if(arrOptionValue.findIndex(element => element == temp) < 0){
-                            console.log(temp);
-                            var index = arrOptionValue.length;
-                            arrOptionValue.push(temp);
-                            var num = arrOptionValue.length;
-                            optionTags += `<input type="text" class="form-control col text-center font-weight-bold" value="`+ temp+`" readonly="">`;
+                        var optArr = value.split(':');
+                        var optName=optArr[0];
+                        var optValue=optArr[1];
+                        if(arrOptionName.findIndex(element => element == optName) < 0){
+                            arrOptionName.push(optName);
+                            var num = index+1;
+                            index++;
+                            optionTags += `<input type="text" class="form-control col text-center font-weight-bold" value="`+ optName +`" readonly="">`;
+                            if(item != ""){
+                                item += `</div> 
+                                            <button type="button" class="btn btn-success btn-block btnAddOptRow" opt-id="0"><i class="fas fa-plus"></i> 추가</button>
+                                        </div>
+                                    </div>
+                                </div>`;
+                            }
                             item +=`<div class="col-sm-12">
                                     <div class="card bg-secondary-light">
                                         <div class="card-body">
@@ -1198,7 +1210,7 @@
                                             <div class="form-group row">
                                                 <div class="input-group input-group-sm m-3">
                                                     <input type="text" class="form-control text-center col-md-3 font-weight-bold" value="옵션명" readonly="">
-                                                    <input type="text" name="txtOptionAttr[]" id="txtOptionAttr_`+index+`" value=`+ temp +` class="form-control text-center">
+                                                    <input type="text" name="txtOptionAttr[]" id="txtOptionAttr_`+ index +`" value=`+ optName +` class="form-control text-center">
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -1228,43 +1240,76 @@
                                                 </div>
                                             </div>
                                             <div id="divOptionContainer_${index}" class="divOptionContainer">`;
-                                    var subItem="";
-                                    // element.optItems.forEach((el, idx) => {
-                                    //     var chkLength = "is-valid";
-                                    //     if(string_byte_length(el[1]) > 30){
-                                    //         chkLength="is-invalid";
-                                    //     }
-                                    //     var imageUrl = "{{asset('assets/images/system/no-image.png')}}";
-                                    //     if(el[3].trim() != ""){
-                                    //         imageUrl=el[3];
-                                    //     }
-                                    //     subItem += `<div class="input-group">
-                                    //                 <a href="javascript:void(0)" target="_blank">
-                                    //                     <img class="rounded" src="`+ el[3] +`" width="40" height="40">
-                                    //                 </a>
-                                    //                 <fieldset>
-                                    //                     <button type="button" class="btn btn-info p-1 btnImportImage"><label for="inputFileOpt_0_"><i class="fas fa-file-upload fa-lg"></i></label></button>
-                                    //                     <input type="file" id="inputFileOpt_`+ index +`_`+ idx +`" hidden="">
-                                    //                 </fieldset>
-                                    //                 <input type="text" value="`+ el[2] +`" name="txtCnOptionName_${index}[]" id="txtCnOptionName_${index}_${idx}" data-id="${el[0]}" opt-id="${index}" item-id="${idx}" class="form-control  col-md-3">
-                                    //                 <input type="text" value="`+ el[1] +`" name="txtKoOptionName_${index}[]"  id="txtKoOptionName_${index}_${idx}" data-id="${el[0]}" opt-id="${index}" item-id="${idx}" class="form-control txtOptionName ${chkLength} col-md-3">
-                                    //                 <input type="text" value="0" name="txtAddOptionPrice_${index}" id="txtAddOptionPrice_${index}_${idx}" data-id="${el[0]}" opt-id="${index}" item-id="${idx}" class="form-control col-md-3">
-                                    //                 <div class="input-group-append">
-                                    //                     <button type="button" class="btn btn-info border-secondary btnMoveOptRow" >이동</button>
-                                    //                     <button type="button" class="btn btn-primary btnInsertOptRow"><i class="fas fa-plus"></i></button>
-                                    //                     <button type="button" class="btn btn-danger btnDelOptRow"><i class="far fa-trash-alt"></i></button>
-                                    //                 </div>
-                                    //             </div>`;
-                                    // });
-                                    item +=  subItem + `</div> 
+                        }
+                        
+                        var chkLength = "is-valid";
+                        if(string_byte_length("") > 30){
+                            chkLength="is-invalid";
+                        }
+                        var imageUrl = "{{asset('assets/images/system/no-image.png')}}";
+                        // if(el[3].trim() != ""){
+                        //     imageUrl=el[3];
+                        // }
+                        item += `<div class="input-group">
+                                    <a href="javascript:void(0)" target="_blank">
+                                        <img class="rounded" src="`+ imageUrl +`" width="40" height="40">
+                                    </a>
+                                    <fieldset>
+                                        <button type="button" class="btn btn-info p-1 btnImportImage"><label for="inputFileOpt_0_"><i class="fas fa-file-upload fa-lg"></i></label></button>
+                                        <input type="file" id="inputFileOpt_`+ index +`_`+ idx +`" hidden="">
+                                    </fieldset>
+                                    <input type="text" value="`+ optValue +`" name="txtCnOptionName_${index}[]" id="txtCnOptionName_${index}_${idx}" data-id="" opt-id="${index}" item-id="${idx}" class="form-control  col-md-3">
+                                    <input type="text" value="`+ optValue +`" name="txtKoOptionName_${index}[]"  id="txtKoOptionName_${index}_${idx}" data-id="" opt-id="${index}" item-id="${idx}" class="form-control txtOptionName ${chkLength} col-md-3">
+                                    <input type="text" value="0" name="txtAddOptionPrice_${index}" id="txtAddOptionPrice_${index}_${idx}" data-id="" opt-id="${index}" item-id="${idx}" class="form-control col-md-3">
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-info border-secondary btnMoveOptRow" >이동</button>
+                                        <button type="button" class="btn btn-primary btnInsertOptRow"><i class="fas fa-plus"></i></button>
+                                        <button type="button" class="btn btn-danger btnDelOptRow"><i class="far fa-trash-alt"></i></button>
+                                    </div>
+                                </div>`;
+                    });
+
+                    item +=  `</div> 
                                             <button type="button" class="btn btn-success btn-block btnAddOptRow" opt-id="${index}"><i class="fas fa-plus"></i> 추가</button>
                                         </div>
                                     </div>
                                 </div>`;
-                        }
-                    });
                     $('#divOptionField').html(item);
-                    console.log(item);
+                    //console.log(item);
+                    var imgItem = "";
+                    data.item_imgs.forEach( (element, index) => {
+                        if(index == 0){
+                            $('#mainImage').attr('src', element.url);
+                        }
+                        if(index == 1){
+                            $('#subImage1').attr('src', element.url);
+                        }
+                        if(index == 2){
+                            $('#subImage2').attr('src', element.url);
+                        }
+                        var img = new Image();
+                        var width = 0;
+                        var height = 0;
+                        var size = 0;
+                        img.src = element;
+                        imgItem +=`<div class="col-sm-2 pl-1 pr-0">
+                                        <span class="badge badge-primary" id="spanImageInfo_${index}" >적합 - `+width+`x`+height+`, `+size+`KB</span>
+                                        <div class="card">
+                                            <img class="card-img-top blur productImage" src="${element.url}" data-id="${index}" id="img_${index}" alt="Product Image" />
+                                            <input type="hidden" name="txtImage[]" id="hid_${index}" value="${element.url}"/>
+                                            <div class="card-body p-0">
+                                                <div class="text-center">
+                                                    <div class="btn-group btn-block">
+                                                        <button class="btn btn-secondary btn-sm pl-0 pr-0 btnMainImage" data-src="${element.url}">대표</button>
+                                                        <button class="btn btn-secondary btn-sm pl-0 pr-0 btnSubImage1" data-src="${element.url}">추가1</button>
+                                                        <button class="btn btn-secondary btn-sm pl-0 pr-0 btnSubImage2" data-src="${element.url}">추가2</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                    });
+                    $('#imageContainer').html(imgItem);
 /*
                     data.options.forEach( (element, index) => {
                         var num = index+1;
@@ -1687,7 +1732,6 @@
                 //console.log('good');
                 var arrOption = new Array();
                 $(this).children().each(function(idx, el){
-
                     var optName = $(el).find('input:nth-child(4)').val();
                     var optPrice = $(el).find('input:nth-child(5)').val();
                     var optId = $(el).find('input:nth-child(5)').attr('data-id');
@@ -1714,19 +1758,19 @@
                         var discountPrice = $('#txtDiscountPrice').val()*1;
                         var optionPrice = 0;
                         optionPrice = arrOptionComb[0][i].optPrice;
-                        if(window.scrapItems != undefined){
-                            window.scrapItems.forEach((el, idx)=>{
+                        // if(window.scrapItems != undefined){
+                        //     window.scrapItems.forEach((el, idx)=>{
                                 
-                                var pvs = arrOptionComb[0][i].optId;
-                                if(el.pvs.replaceAll(";", "") === pvs)
-                                {
-                                    stock = el.stock;
-                                    basePrice = el.price;
-                                    discountPrice = Math.round(el.price/2);
+                        //         var pvs = arrOptionComb[0][i].optId;
+                        //         if(el.pvs.replaceAll(";", "") === pvs)
+                        //         {
+                        //             stock = el.stock;
+                        //             basePrice = el.price;
+                        //             discountPrice = Math.round(el.price/2);
                                     
-                                }
-                            });
-                        }
+                        //         }
+                        //     });
+                        // }
                         var 환율 = $('#txtExchangeRate').val();
                         var 원가 = basePrice;
                         var 마진율 = $('#txtMarginRate').val()/100;
