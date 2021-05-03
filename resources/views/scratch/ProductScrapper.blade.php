@@ -1276,6 +1276,7 @@
                                 </div>`;
                     $('#divOptionField').html(item);
                     //console.log(item);
+                    //이미지
                     var imgItem = "";
                     data.item_imgs.forEach( (element, index) => {
                         if(index == 0){
@@ -1291,7 +1292,7 @@
                         var width = 0;
                         var height = 0;
                         var size = 0;
-                        img.src = element;
+                        img.src = element.url;
                         imgItem +=`<div class="col-sm-2 pl-1 pr-0">
                                         <span class="badge badge-primary" id="spanImageInfo_${index}" >적합 - `+width+`x`+height+`, `+size+`KB</span>
                                         <div class="card">
@@ -1300,9 +1301,9 @@
                                             <div class="card-body p-0">
                                                 <div class="text-center">
                                                     <div class="btn-group btn-block">
-                                                        <button class="btn btn-secondary btn-sm pl-0 pr-0 btnMainImage" data-src="${element.url}">대표</button>
-                                                        <button class="btn btn-secondary btn-sm pl-0 pr-0 btnSubImage1" data-src="${element.url}">추가1</button>
-                                                        <button class="btn btn-secondary btn-sm pl-0 pr-0 btnSubImage2" data-src="${element.url}">추가2</button>
+                                                        <button type="button" class="btn btn-secondary btn-sm pl-0 pr-0 btnMainImage" data-src="${element.url}">대표</button>
+                                                        <button type="button" class="btn btn-secondary btn-sm pl-0 pr-0 btnSubImage1" data-src="${element.url}">추가1</button>
+                                                        <button type="button" class="btn btn-secondary btn-sm pl-0 pr-0 btnSubImage2" data-src="${element.url}">추가2</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1310,121 +1311,7 @@
                                     </div>`;
                     });
                     $('#imageContainer').html(imgItem);
-/*
-                    data.options.forEach( (element, index) => {
-                        var num = index+1;
-                        optionTags += `<input type="text" class="form-control col text-center font-weight-bold" value="`+element.optKoName+`" readonly="">`;
-                        item +=`<div class="col-sm-12">
-                                    <div class="card bg-secondary-light">
-                                        <div class="card-body">
-                                            <label class="form-label font-weight-bold">옵션 `+num+`</label>
-                                            <button type="button" class="close text-danger">
-                                                <span aria-hidden="true">×</span>
-                                            </button>
-                                            <br>
-                                            <div class="form-group row">
-                                                <div class="input-group input-group-sm m-3">
-                                                    <input type="text" class="form-control text-center col-md-3 font-weight-bold" value="옵션명" readonly="">
-                                                    <input type="text" name="txtOptionAttr[]" id="txtOptionAttr_`+index+`" value=`+ element.optKoName +` class="form-control text-center">
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 row">
-                                                    <div class="col-sm-6 row">
-                                                        <div class="col-sm-3 p-0 text-center">
-                                                            <label class="col-form-label pl-0 pr-0 text-center font-weight-bold">이미지</label>
-                                                        </div>
-                                                        <div class="col-sm-9 p-0">
-                                                            <label class="col-form-label col-sm-4 pl-0 pr-0 text-center font-weight-bold">옵션값</label>
-                                                            <button type="button" class="btn btn-sm btn-dark btnOption1to9"><i class="fas fa-sort-numeric-down"></i></button>
-                                                            <button type="button" class="btn btn-sm btn-dark btnOptionAtoZ"><i class="fas fa-sort-alpha-down"></i></button>
-                                                            <button type="button" class="btn btn-sm btn-dark text-sm btnOptionEraserSpecKey"><i class="fas fa-eraser"></i>특수문자</button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-3 row pl-0">
-                                                        <label class="col-form-label col-sm-5 pl-0 pr-1 text-right font-weight-bold">옵션추가금</label>
-                                                        <div class="input-group input-group-sm col-sm-7 pl-0">
-                                                            <input type="text" name="txtOptionPriceVal[]" id="txtOptionPriceVal_${index}" class="form-control txtOptionPriceVal">
-                                                            <div class="input-group-append mb-1">
-                                                                <button class="btn btn-sm btn-dark btnAddOptionMoney" data-id="${index}" type="button">+</button>
-                                                                <button class="btn btn-sm btn-dark btnSubtractOptionMoney" data-id="${index}" type="button">-</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                            <div id="divOptionContainer_${index}" class="divOptionContainer">`;
-                                    var subItem="";
-                                    element.optItems.forEach((el, idx) => {
-                                        var chkLength = "is-valid";
-                                        if(string_byte_length(el[1]) > 30){
-                                            chkLength="is-invalid";
-                                        }
-                                        var imageUrl = "{{asset('assets/images/system/no-image.png')}}";
-                                        if(el[3].trim() != ""){
-                                            imageUrl=el[3];
-                                        }
-                                        subItem += `<div class="input-group">
-                                                    <a href="javascript:void(0)" target="_blank">
-                                                        <img class="rounded" src="`+ el[3] +`" width="40" height="40">
-                                                    </a>
-                                                    <fieldset>
-                                                        <button type="button" class="btn btn-info p-1 btnImportImage"><label for="inputFileOpt_0_"><i class="fas fa-file-upload fa-lg"></i></label></button>
-                                                        <input type="file" id="inputFileOpt_`+ index +`_`+ idx +`" hidden="">
-                                                    </fieldset>
-                                                    <input type="text" value="`+ el[2] +`" name="txtCnOptionName_${index}[]" id="txtCnOptionName_${index}_${idx}" data-id="${el[0]}" opt-id="${index}" item-id="${idx}" class="form-control  col-md-3">
-                                                    <input type="text" value="`+ el[1] +`" name="txtKoOptionName_${index}[]"  id="txtKoOptionName_${index}_${idx}" data-id="${el[0]}" opt-id="${index}" item-id="${idx}" class="form-control txtOptionName ${chkLength} col-md-3">
-                                                    <input type="text" value="0" name="txtAddOptionPrice_${index}" id="txtAddOptionPrice_${index}_${idx}" data-id="${el[0]}" opt-id="${index}" item-id="${idx}" class="form-control col-md-3">
-                                                    <div class="input-group-append">
-                                                        <button type="button" class="btn btn-info border-secondary btnMoveOptRow" >이동</button>
-                                                        <button type="button" class="btn btn-primary btnInsertOptRow"><i class="fas fa-plus"></i></button>
-                                                        <button type="button" class="btn btn-danger btnDelOptRow"><i class="far fa-trash-alt"></i></button>
-                                                    </div>
-                                                </div>`;
-                                    });
-                                    item +=  subItem + `</div> 
-                                            <button type="button" class="btn btn-success btn-block btnAddOptRow" opt-id="${index}"><i class="fas fa-plus"></i> 추가</button>
-                                        </div>
-                                    </div>
-                                </div>`;
-                        
-                    });
 
-                    $('#divOptionField').html(item);
-                    var imgItem = "";
-                    data.images.forEach( (element, index) => {
-                        if(index == 0){
-                            $('#mainImage').attr('src', element);
-                        }
-                        if(index == 1){
-                            $('#subImage1').attr('src', element);
-                        }
-                        if(index == 2){
-                            $('#subImage2').attr('src', element);
-                        }
-                        var img = new Image();
-                        var width = 0;
-                        var height = 0;
-                        var size = 0;
-                        img.src = element;
-                        imgItem +=`<div class="col-sm-2 pl-1 pr-0">
-                                        <span class="badge badge-primary" id="spanImageInfo_${index}" >적합 - `+width+`x`+height+`, `+size+`KB</span>
-                                        <div class="card">
-                                            <img class="card-img-top blur productImage" src="${element}" data-id="${index}" id="img_${index}" alt="Product Image" />
-                                            <input type="hidden" name="txtImage[]" id="hid_${index}" value="${element}"/>
-                                            <div class="card-body p-0">
-                                                <div class="text-center">
-                                                    <div class="btn-group btn-block">
-                                                        <button class="btn btn-secondary btn-sm pl-0 pr-0 btnMainImage" data-src="${element}">대표</button>
-                                                        <button class="btn btn-secondary btn-sm pl-0 pr-0 btnSubImage1" data-src="${element}">추가1</button>
-                                                        <button class="btn btn-secondary btn-sm pl-0 pr-0 btnSubImage2" data-src="${element}">추가2</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>`;
-                    });
                     var optCombination= `<div class="input-group">
                             `+ optionTags +`
                             <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="원가" readonly="">
@@ -1436,11 +1323,19 @@
                                 <button type="button" class="btn invisible btnSoldOut">품절</button>
                             </div>
                         </div>`;
-                    window.scrapItems = data.items;
-                    data.items.forEach((element, index)=>{
+                    console.log(data);
+                    window.skus = data.skus.sku;
+                    
+                    window.skus.forEach((element, index)=>{
                         var combination = '';
-                        element.options.forEach((el, idx) =>{
-                            combination +='<input type="text" value="'+ el +'" class="form-control col" readonly="">'; 
+                        // arrOptionName.forEach((el, idx) =>{
+                        //     combination +='<input type="text" value="'+ el +'" class="form-control col" readonly="">'; 
+                        // });
+
+                        var optData = element.properties_name.split(';');
+                        optData.forEach((el, idx) =>{
+                            optVal = el.split(':').pop();
+                            combination +='<input type="text" value="'+ optVal +'" class="form-control col" readonly="">'; 
                         });
 
                         var 환율 = $('#txtExchangeRate').val();
@@ -1452,24 +1347,24 @@
                         var productPrice = eval($('#txtFunction').val());
                         var sumPrice = (Math.round(productPrice / 10) * 10);
                         var sumOptPrice = 0;
-
+                        var orginal_price = element.orginal_price == undefined ? data.orginal_price : element.orginal_price;
+                        console.log(orginal_price);
                         optCombination += `<div class="input-group">
                             `+ combination +`
-                            <input type="text" value="` + element.price + `" class="form-control col-md-2 optBasePrice" readonly="">
-                            <input type="text" value="` + element.price/2 + `" class="form-control col-md-2 optDiscountPrice" readonly="">
+                            <input type="text" value="` + orginal_price + `" class="form-control col-md-2 optBasePrice" readonly="">
+                            <input type="text" value="` + element.price + `" class="form-control col-md-2 optDiscountPrice" readonly="">
                             <input type="text" value="` + sumPrice + `" class="form-control col-md-2 optSellPrice" readonly="">
                             <input type="text" value="` + sumOptPrice + `" class="form-control col-md-2 optAddPrice" readonly="">
-                            <input type="text" value="` + element.stock + `" class="form-control col-md-1 optComStock">
+                            <input type="text" value="` + element.quantity + `" class="form-control col-md-1 optComStock">
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-danger btnSoldOut">품절</button>
                             </div>
                         </div>`;
                     });
                     $('#divOptionCombinationBox').html(optCombination);
-                    $('#imageContainer').html(imgItem);
-*/
+
                     $('#summernote').summernote('code', data.desc);
-                    //UpdateImageInfo();
+                    UpdateImageInfo();
 
                 },
                 error: function (data) {
@@ -1735,7 +1630,8 @@
                     var optName = $(el).find('input:nth-child(4)').val();
                     var optPrice = $(el).find('input:nth-child(5)').val();
                     var optId = $(el).find('input:nth-child(5)').attr('data-id');
-                    var objOption = {optName, optPrice, optId};
+                    var itemId = $(el).find('input:nth-child(5)').attr('item-id');
+                    var objOption = {optName, optPrice, optId, itemId};
                     arrOption.push(objOption);
                     //console.log(optName + optPrice);
                 });
@@ -1758,19 +1654,20 @@
                         var discountPrice = $('#txtDiscountPrice').val()*1;
                         var optionPrice = 0;
                         optionPrice = arrOptionComb[0][i].optPrice;
-                        // if(window.scrapItems != undefined){
-                        //     window.scrapItems.forEach((el, idx)=>{
+                        
+                        if(window.skus != undefined){
+                            window.skus.forEach((el, idx)=>{
                                 
-                        //         var pvs = arrOptionComb[0][i].optId;
-                        //         if(el.pvs.replaceAll(";", "") === pvs)
-                        //         {
-                        //             stock = el.stock;
-                        //             basePrice = el.price;
-                        //             discountPrice = Math.round(el.price/2);
+                                var itemId = arrOptionComb[0][i].itemId;
+                                if(el.properties_name.indexOf(itemId) >=0 )
+                                {
+                                    stock = el.quantity;
+                                    basePrice = addZeroes(el.orginal_price == undefined ? basePrice : el.orginal_price);
+                                    discountPrice = Math.round(el.price);
                                     
-                        //         }
-                        //     });
-                        // }
+                                }
+                            });
+                        }
                         var 환율 = $('#txtExchangeRate').val();
                         var 원가 = basePrice;
                         var 마진율 = $('#txtMarginRate').val()/100;
@@ -1801,20 +1698,21 @@
                 for(i=0; i<arrOptionComb[0].length; i++){
                     for (j = 0; j < arrOptionComb[1].length; j++) {
                         var stock=0;
+                        console.log('ok');
                         var basePrice = $('#txtBasePrice').val()*1;
                         var discountPrice = $('#txtDiscountPrice').val()*1;
                         var optionPrice = 0;
                         optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1;
-                        if(window.scrapItems != undefined){
-                            window.scrapItems.forEach((el, idx)=>{
+                        if(window.skus != undefined){
+                            window.skus.forEach((el, idx)=>{
                                 
-                                var pvs = arrOptionComb[0][i].optId + arrOptionComb[1][j].optId;
-                                if(el.pvs.replaceAll(";", "") === pvs)
+                                var itemId1 = arrOptionComb[0][i].itemId;
+                                var itemId2 = arrOptionComb[1][j].itemId;
+                                if(el.properties_name.indexOf(itemId1) >=0 && el.properties_name.indexOf(itemId2) >=0)
                                 {
-                                    stock = el.stock;
-                                    basePrice = el.price;
-                                    discountPrice = Math.round(el.price/2);
-                                    
+                                    stock = el.quantity;
+                                    basePrice = addZeroes(el.orginal_price == undefined ? basePrice : el.orginal_price);
+                                    discountPrice = el.price;
                                 }
                             });
                         }
@@ -1856,16 +1754,18 @@
                             var discountPrice = $('#txtDiscountPrice').val()*1;
                             var optionPrice = 0;
                             optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1 + arrOptionComb[2][k].optPrice*1;
-                            if(window.scrapItems != "undefined"){
-                                window.scrapItems.forEach((el, idx)=>{
+                            if(window.skus != "undefined"){
+                                window.skus.forEach((el, idx)=>{
                                     
-                                    var pvs = arrOptionComb[0][i].optId + arrOptionComb[1][j].optId + arrOptionComb[2][k].optId;
-                                    if(el.pvs.replaceAll(";", "") === pvs)
+                                    //var pvs = arrOptionComb[0][i].optId + arrOptionComb[1][j].optId + arrOptionComb[2][k].optId;
+                                    var itemId1 = arrOptionComb[0][i].itemId;
+                                    var itemId2 = arrOptionComb[1][j].itemId;
+                                    var itemId3 = arrOptionComb[2][k].itemId;
+                                    if(el.properties_name.indexOf(itemId1) >=0 && el.properties_name.indexOf(itemId2) >=0 && el.properties_name.indexOf(itemId3) >=0)
                                     {
                                         stock = el.stock;
-                                        basePrice = el.price;
-                                        discountPrice = Math.round(el.price/2);
-                                        
+                                        basePrice = addZeroes(el.orginal_price == undefined ? basePrice : el.orginal_price);
+                                        discountPrice = el.price;
                                     }
                                 });
                             }
@@ -2118,6 +2018,10 @@
             current /= ColumnBase;
         }
         return sb.ToString(offset, DigitMax - offset);
+    }
+
+    function addZeroes(num) {
+        return parseFloat(num).toFixed(2);
     }
     // const getCombinations = function (arr, selectNumber) {
     //     int lengthArr = arr.length;
