@@ -413,63 +413,70 @@ class ProductScrapperController extends Controller
      */
     public function save(Request $request)
     {
-        //main data
-        // $brand = $request->post('txtBrandName');
-        // $product = new Product([
-        //     'nUserId' => Auth::id(),
-        //     'strURL' => $request->post('txtScrapURL'), 
-        //     'strMainName' => mb_substr($request->post('txtKrMainName'), 0, mb_strlen( $request->post('txtKrMainName')) > 25 ? 25 : mb_strlen( $request->post('txtKrMainName'))), 
-        //     'strSubName' => mb_substr($request->post('txtKrMainName'), 0, mb_strlen( $request->post('txtKrMainName')) > 25 ? 25 : mb_strlen( $request->post('txtKrMainName'))),
-        //     'nUserId' => Auth::id(), 
-        //     'nBrandType' => $request->post('selBrandName'), 
-        //     'strBrand' => ($request->post('txtBrandName') == "" ? $request->post('selBrandName') : $request->post('txtBrandName')),
-        //     'strKeyword' => $request->post('txtKeyword'), 
-        //     'strChMainName' => $request->post('txtKrMainName'), 
-        //     'strKrMainName' => $request->post('txtKrMainName'), 
-        //     'strChSubName' => $request->post('txtChMainName'), 
-        //     'strKrSubName' => $request->post('txtKrMainName'), 
-        //     'strComeCode' => $request->post('selComeName'), 
-        //     'strCategoryCode1' => $request->post('selCategoryName1'), 
-        //     'strCategoryCode2' => $request->post('selCategoryName2'), 
-        //     'strCategoryCode3' => $request->post('selCategoryName3'), 
-        //     'strCategoryCode4' => $request->post('selCategoryName4'), 
-        //     'strCategoryName' => $request->post('txtCategoryName'), 
-        //     'nShareType' => $request->post('rdoShareType'),
-        //     'nProductWorkProcess' => 0,
-        //     'bIsDel'=> 0
-        // ]);
-        // $product->save();
-        //detail data
-        // $nMarketPrice = number_format(($request->post('txtBasePrice') + $request->post('txtCountryShippingCost'))*170 + $request->post('txtWorldShippingCost'), 2, '.', '');
-        // $nMarginPercent = 30;
-        // $productDetail = new ProductDetail([
-        //     'nProductIdx' => $product->nIdx,
-        //     'strBasePriceType' => $request->post('selBasePriceType'),
-        //     'nBasePrice' => number_format($request->post('txtBasePrice'), 2, '.', ''),
-        //     'strCountryShippingCostType' => $request->post('selCountryShippingCostType'),
-        //     'nCountryShippingCost' => number_format($request->post('txtCountryShippingCost'), 2, '.', ''),
-        //     'strWorldShippingCostType' => $request->post('selWorldShippingCostType'),
-        //     'nWorldShippingCost' => $request->post('txtWorldShippingCost'),
-        //     'strWeightType' => $request->post('selWeightType'),
-        //     'nWeight' => number_format($request->post('txtWeight'), 2, '.', ''),
-        //     'bAdditionalOption1' => number_format($request->post('chkAdditionalOption1')),
-        //     'bAdditionalOption2' => number_format($request->post('chkAdditionalOption2')),
-        //     'bAdditionalOption3' => number_format($request->post('chkAdditionalOption3')),
-        //     'bAdditionalOption4' => number_format($request->post('chkAdditionalOption4')),
-        //     'nMultiPriceOptionType' => number_format($request->post('rdoMultiPriceOptionType')),
-        //     'nMarketPrice' => $nMarketPrice,
-        //     'nMarginPrice' => number_format(round($nMarketPrice / (100 - $nMarginPercent) /100 + $nMarketPrice, -1), 2, '.', ''),
-        //     'nMarginPercent' => $nMarginPercent,
-        //     'blobNote' => $request->post('summernote'),
-        //     'bIsDel'=> 0
-        // ]);
-        // $productDetail->save();
-        // //subitem data
-        // $countItem = count($request->post('txtSubItemImage'));
         
-        // //만일 서브아이템이 10개 이상이라면 최대입력수를 늘인다
-        // //if($countItem > 10)
-        //     ini_set('max_input_vars','10000' );
+        return redirect('scratchProductScrap');
+        //main data
+        $categoryName = $request->post('txtCategoryName');
+        $product = new Product([
+            'nUserId' => Auth::id(),
+            'strURL' => $request->post('txtScrapURL'), 
+            'strMainName' => $request->post('txtKrMainName'), 
+            'strSubName' => $request->post('txtKrSubName'),
+            'nUserId' => Auth::id(), 
+            'nBrandType' => "", 
+            'strBrand' => "",
+            'strKeyword' => "", 
+            'strChMainName' => $request->post('txtChMainName'), 
+            'strKrMainName' => $request->post('txtKrMainName'), 
+            'strChSubName' => $request->post('txtChMainName'), 
+            'strKrSubName' => $request->post('txtKrSubName'), 
+            //'strComeCode' => $request->post('selComeName'), 
+            'strCategoryCode0' => $categoryName[0], 
+            'strCategoryCode1' => $categoryName[1], 
+            'strCategoryCode2' => $categoryName[2], 
+            'strCategoryCode3' => $categoryName[3], 
+            'strCategoryCode4' => $categoryName[4], 
+            'strCategoryCode5' => $categoryName[5], 
+            'strCategoryCode6' => $categoryName[6], 
+            'strCategoryCode7' => $categoryName[7], 
+            'strCategoryCode8' => $categoryName[8], 
+            //'strCategoryName' => $request->post('txtCategoryName'), 
+            //'nShareType' => $request->post('rdoShareType'),
+            'nProductWorkProcess' => 0,
+            'bIsDel'=> 0
+        ]);
+        $product->save();
+        //detail data
+        $nMarketPrice = $request->post('txtProductPrice');
+        $nMarginPercent = 30;
+        $productDetail = new ProductDetail([
+            'nProductIdx' => $product->nIdx,
+            'strBasePriceType' => $request->post('selBasePriceType'),
+            'nBasePrice' => number_format($request->post('txtBasePrice'), 2, '.', ''),
+            'strCountryShippingCostType' => $request->post('selCountryShippingCostType'),
+            'nCountryShippingCost' => number_format($request->post('txtCountryShippingCost'), 2, '.', ''),
+            'strWorldShippingCostType' => $request->post('selWorldShippingCostType'),
+            'nWorldShippingCost' => $request->post('txtWorldShippingCost'),
+            'strWeightType' => $request->post('selWeightType'),
+            'nWeight' => number_format($request->post('txtWeight'), 2, '.', ''),
+            'bAdditionalOption1' => number_format($request->post('chkAdditionalOption1')),
+            'bAdditionalOption2' => number_format($request->post('chkAdditionalOption2')),
+            'bAdditionalOption3' => number_format($request->post('chkAdditionalOption3')),
+            'bAdditionalOption4' => number_format($request->post('chkAdditionalOption4')),
+            'nMultiPriceOptionType' => number_format($request->post('rdoMultiPriceOptionType')),
+            'nMarketPrice' => $nMarketPrice,
+            'nMarginPrice' => number_format(round($nMarketPrice / (100 - $nMarginPercent) /100 + $nMarketPrice, -1), 2, '.', ''),
+            'nMarginPercent' => $nMarginPercent,
+            'blobNote' => $request->post('summernote'),
+            'bIsDel'=> 0
+        ]);
+        $productDetail->save();
+        //subitem data
+        $countItem = count($request->post('txtSubItemImage'));
+        
+        //만일 서브아이템이 10개 이상이라면 최대입력수를 늘인다
+        if($countItem > 10)
+            ini_set('max_input_vars','10000' );
 
         // $arrImage = $request->post('txtSubItemImage');
         // $arrKrColorPattern = $request->post('txtSubItemKrColorPattern');

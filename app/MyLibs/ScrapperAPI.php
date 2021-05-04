@@ -33,7 +33,8 @@ class ScrapperAPI {
         $result = curl_exec($curl);
         $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
-/*
+        return $result;
+
         $result='{
                 "item": {
                     "num_iid": "639741530227",
@@ -902,7 +903,7 @@ class ScrapperAPI {
                 "server_memory": "4.04MB",
                 "request_id": "gw-4.60897baacae7d"
             }';
-*/         
+/**/         
         
         return $result;
     }

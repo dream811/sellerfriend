@@ -21,6 +21,7 @@
     <div class="container-fluid">
         <div class="row">
             <form method="POST" id="frmScrap" action="{{route('scratch.ProductScrap')}}">
+            @csrf
             <div class="col-9">
                 <div class="card">
                     <div class="card-header">
@@ -1107,7 +1108,9 @@
             //     alert("카테고리를 입력해주세요!");
             //     return false;
             // }
-            $('#frmScrap').submit();
+            if(confirm("정말 보관하시겠습니까")){
+                $('#frmScrap').submit();
+            }
         });	
         $('body').on('click', '.btnScrapProduct', function () {
             var scrapURL = $("#txtScrapURL").val();
@@ -1250,6 +1253,13 @@
                         // if(el[3].trim() != ""){
                         //     imageUrl=el[3];
                         // }
+                        var prop_imgs = data.prop_imgs.prop_img;
+                        prop_imgs.forEach((el, imgIdx)=>{
+                            if(el.properties == idx){
+                                imageUrl=el.url;
+                            }
+                        });
+
                         item += `<div class="input-group">
                                     <a href="javascript:void(0)" target="_blank">
                                         <img class="rounded" src="`+ imageUrl +`" width="40" height="40">
