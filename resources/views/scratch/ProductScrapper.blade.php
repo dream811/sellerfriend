@@ -634,11 +634,9 @@
                                             <div id="divOptionField" class="row">
                                                 <div class="col-sm-12">
                                                     <div class="card bg-secondary-light">
-                                                        <div class="card-body">
+                                                        <div class="card-body alert alert-dismissible">
                                                             <label class="form-label font-weight-bold">옵션 1</label>
-                                                            <button type="button" class="close text-danger">
-                                                                <span aria-hidden="true">×</span>
-                                                            </button>
+                                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                                             <br>
                                                             <div class="form-group row">
                                                                 <div class="input-group input-group-sm m-3">
@@ -681,11 +679,9 @@
                                                 </div>
                                                 <div class="col-sm-12">
                                                     <div class="card bg-secondary-light">
-                                                        <div class="card-body">
+                                                        <div class="card-body alert alert-dismissible">
                                                             <label class="form-label font-weight-bold">옵션 2</label>
-                                                            <button type="button" class="close text-danger">
-                                                                <span aria-hidden="true">×</span>
-                                                            </button>
+                                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                                             <br>
                                                             <div class="form-group row">
                                                                 <div class="input-group input-group-sm m-3">
@@ -1161,11 +1157,7 @@
                     $("#txtOptionSellDiscountPrice").val(0);
                     $("#txtOptionESMDeliveryCharge").val(0);
                     
-                    마진율 = 0;
-                    판매수수료 = 0;
-                    구매수수료 = 0;
-                    productPrice = eval($('#txtFunction').val());
-                    $("#txtExpectedRevenue").val($("#txtProductPrice").val() - Math.round(productPrice / 10) * 10);
+                    $("#txtExpectedRevenue").val(Math.round($("#txtProductPrice").val() * $("#txtMarginRate").val()/100));
                     $("#txtChMainName").val(data.title);
                     
                     var re = new RegExp('.{1,' + 100 + '}', 'g');
@@ -1183,6 +1175,7 @@
 
                     var arrOptionKey = new Array();
                     var arrOptionName= new Array();
+                    var indexOption = 0;
                     var index = 0;
                     $.each(data.props_list, function(idx, value) {
                     // do your stuff here
@@ -1192,8 +1185,9 @@
                         var optValue=optArr[1];
                         if(arrOptionName.findIndex(element => element == optName) < 0){
                             arrOptionName.push(optName);
-                            var num = index+1;
-                            index++;
+                            var num = indexOption+1;
+                            index = indexOption;
+                            indexOption++;
                             optionTags += `<input type="text" class="form-control col text-center font-weight-bold" value="`+ optName +`" readonly="">`;
                             if(item != ""){
                                 item += `</div> 
@@ -1204,11 +1198,9 @@
                             }
                             item +=`<div class="col-sm-12">
                                     <div class="card bg-secondary-light">
-                                        <div class="card-body">
+                                        <div class="card-body alert alert-dismissible">
                                             <label class="form-label font-weight-bold">옵션 `+num+`</label>
-                                            <button type="button" class="close text-danger">
-                                                <span aria-hidden="true">×</span>
-                                            </button>
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                             <br>
                                             <div class="form-group row">
                                                 <div class="input-group input-group-sm m-3">
@@ -1254,7 +1246,7 @@
                         //     imageUrl=el[3];
                         // }
                         var prop_imgs = data.prop_imgs.prop_img;
-                        prop_imgs.forEach((el, imgIdx)=>{
+                        $.each(prop_imgs, function(imgIdx, el) {
                             if(el.properties == idx){
                                 imageUrl=el.url;
                             }
@@ -1298,6 +1290,7 @@
                         if(index == 2){
                             $('#subImage2').attr('src', element.url);
                         }
+
                         var img = new Image();
                         var width = 0;
                         var height = 0;
@@ -1336,12 +1329,8 @@
                     console.log(data);
                     window.skus = data.skus.sku;
                     
-                    window.skus.forEach((element, index)=>{
+                    window.skus.forEach((element)=>{
                         var combination = '';
-                        // arrOptionName.forEach((el, idx) =>{
-                        //     combination +='<input type="text" value="'+ el +'" class="form-control col" readonly="">'; 
-                        // });
-
                         var optData = element.properties_name.split(';');
                         optData.forEach((el, idx) =>{
                             optVal = el.split(':').pop();
@@ -1358,14 +1347,14 @@
                         var sumPrice = (Math.round(productPrice / 10) * 10);
                         var sumOptPrice = 0;
                         var orginal_price = element.orginal_price == undefined ? data.orginal_price : element.orginal_price;
-                        console.log(orginal_price);
+                        //console.log(orginal_price);
                         optCombination += `<div class="input-group">
                             `+ combination +`
-                            <input type="text" value="` + orginal_price + `" class="form-control col-md-2 optBasePrice" readonly="">
-                            <input type="text" value="` + element.price + `" class="form-control col-md-2 optDiscountPrice" readonly="">
-                            <input type="text" value="` + sumPrice + `" class="form-control col-md-2 optSellPrice" readonly="">
-                            <input type="text" value="` + sumOptPrice + `" class="form-control col-md-2 optAddPrice" readonly="">
-                            <input type="text" value="` + element.quantity + `" class="form-control col-md-1 optComStock">
+                            <input name="props" type="text" value="` + orginal_price + `" class="form-control col-md-2 optBasePrice" readonly="">
+                            <input name="" type="text" value="` + element.price + `" class="form-control col-md-2 optDiscountPrice" readonly="">
+                            <input name="" type="text" value="` + sumPrice + `" class="form-control col-md-2 optSellPrice" readonly="">
+                            <input name="" type="text" value="` + sumOptPrice + `" class="form-control col-md-2 optAddPrice" readonly="">
+                            <input name="" type="text" value="` + element.quantity + `" class="form-control col-md-1 optComStock">
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-danger btnSoldOut">품절</button>
                             </div>
@@ -1549,11 +1538,9 @@
             var num = count+1; 
             item =`<div class="col-sm-12">
                         <div class="card bg-secondary-light">
-                            <div class="card-body">
+                            <div class="card-body alert alert-dismissible">
                                 <label class="form-label font-weight-bold">옵션 `+num+`</label>
-                                <button type="button" class="close text-danger">
-                                    <span aria-hidden="true">×</span>
-                                </button>
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                 <br>
                                 <div class="form-group row">
                                     <div class="input-group input-group-sm m-3">
@@ -1828,11 +1815,7 @@
             var 해외배송비 = parseInt($('#txtOverSeaCharge').val());
             var productPrice = eval($('#txtFunction').val());
             $("#txtProductPrice").val(Math.round(productPrice / 10) * 10);
-            var 마진율 = 0;
-            var 판매수수료 = 0;
-            var 구매수수료 = 0;
-            var productPrice = eval($('#txtFunction').val());
-            $("#txtExpectedRevenue").val($("#txtProductPrice").val() - Math.round(productPrice / 10) * 10);
+            $("#txtExpectedRevenue").val(Math.round($("#txtProductPrice").val() * $("#txtMarginRate").val()/100));
         });
         
         $('body').on('click', '#btnCalWithDiscount', function() {
@@ -1844,11 +1827,7 @@
             var 해외배송비 = parseInt($('#txtOverSeaCharge').val());
             var productPrice = eval($('#txtFunction').val());
             $("#txtProductPrice").val(Math.round(productPrice / 10) * 10);
-            var 마진율 = 0;
-            var 판매수수료 = 0;
-            var 구매수수료 = 0;
-            var productPrice = eval($('#txtFunction').val());
-            $("#txtExpectedRevenue").val($("#txtProductPrice").val() - Math.round(productPrice / 10) * 10);
+            $("#txtExpectedRevenue").val(Math.round($("#txtProductPrice").val() * $("#txtMarginRate").val()/100));
         });
 
         $('body').on('click', '.btnSoldOut', function() {

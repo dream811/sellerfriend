@@ -414,7 +414,7 @@ class ProductScrapperController extends Controller
     public function save(Request $request)
     {
         
-        return redirect('scratchProductScrap');
+        //return redirect('scratchProductScrap');
         //main data
         $categoryName = $request->post('txtCategoryName');
         $product = new Product([
@@ -423,7 +423,7 @@ class ProductScrapperController extends Controller
             'strMainName' => $request->post('txtKrMainName'), 
             'strSubName' => $request->post('txtKrSubName'),
             'nUserId' => Auth::id(), 
-            'nBrandType' => "", 
+            'nBrandType' => 0, 
             'strBrand' => "",
             'strKeyword' => "", 
             'strChMainName' => $request->post('txtChMainName'), 
@@ -448,22 +448,40 @@ class ProductScrapperController extends Controller
         $product->save();
         //detail data
         $nMarketPrice = $request->post('txtProductPrice');
-        $nMarginPercent = 30;
+        $nMarginPercent = $request->post('txtMarginRate');;
         $productDetail = new ProductDetail([
             'nProductIdx' => $product->nIdx,
-            'strBasePriceType' => $request->post('selBasePriceType'),
+            //'strBasePriceType' => $request->post('selBasePriceType'),
             'nBasePrice' => number_format($request->post('txtBasePrice'), 2, '.', ''),
-            'strCountryShippingCostType' => $request->post('selCountryShippingCostType'),
-            'nCountryShippingCost' => number_format($request->post('txtCountryShippingCost'), 2, '.', ''),
-            'strWorldShippingCostType' => $request->post('selWorldShippingCostType'),
-            'nWorldShippingCost' => $request->post('txtWorldShippingCost'),
-            'strWeightType' => $request->post('selWeightType'),
-            'nWeight' => number_format($request->post('txtWeight'), 2, '.', ''),
-            'bAdditionalOption1' => number_format($request->post('chkAdditionalOption1')),
-            'bAdditionalOption2' => number_format($request->post('chkAdditionalOption2')),
-            'bAdditionalOption3' => number_format($request->post('chkAdditionalOption3')),
-            'bAdditionalOption4' => number_format($request->post('chkAdditionalOption4')),
-            'nMultiPriceOptionType' => number_format($request->post('rdoMultiPriceOptionType')),
+            'nDiscountPrice' => number_format($request->post('txtDiscountPrice'), 2, '.', ''),//
+            'nExchangeRate' => number_format($request->post('txtExchangeRate'), 2, '.', ''),//
+            'nExpectedRevenue' => number_format($request->post('txtExpectedRevenue'), 2, '.', ''),//
+            'nMarginRate' => number_format($request->post('txtMarginRate'), 2, '.', ''),//
+            'nSellerMarketChargeRate' => number_format($request->post('txtSellerMarketChargeRate'), 2, '.', ''),//
+            'nBuyerMarketChargeRate' => number_format($request->post('txtBuyerMarketChargeRate'), 2, '.', ''),//
+            'nOverSeaCharge' => number_format($request->post('txtOverSeaCharge'), 2, '.', ''),//
+            'strFunction' => $request->post('txtFunction'),//
+            'nDeliverCharge' => $request->post('txtDeliverCharge'),//
+            'nReturnDeliverCharge' => number_format($request->post('txtReturnDeliverCharge')),//
+            'nExchangeDeliveryCharge' => number_format($request->post('txtExchangeDeliveryCharge')),//
+            'nOptionSellPrice' => number_format($request->post('txtOptionSellPrice'), 2, '.', ''),//
+            'txtOptionBasePrice' => number_format($request->post('txtOptionBasePrice'), 2, '.', ''),//
+            'txtOptionDiscountPrice' => number_format($request->post('txtOptionDiscountPrice'), 2, '.', ''),//
+            'txtOptionSSPrice' => number_format($request->post('txtOptionSSPrice'), 2, '.', ''),//
+            'txtOptionESMPrice' => number_format($request->post('txtOptionESMPrice'), 2, '.', ''),//
+            'txtOptionSellDiscountPrice' => number_format($request->post('txtOptionSellDiscountPrice'), 2, '.', ''),//
+            'txtOptionESMDeliveryCharge' => number_format($request->post('txtOptionESMDeliveryCharge'), 2, '.', ''),//
+            //'strCountryShippingCostType' => $request->post('selCountryShippingCostType'),
+            //'nCountryShippingCost' => number_format($request->post('txtCountryShippingCost'), 2, '.', ''),
+            //'strWorldShippingCostType' => $request->post('selWorldShippingCostType'),
+            //'nWorldShippingCost' => $request->post('txtWorldShippingCost'),
+            //'strWeightType' => $request->post('selWeightType'),
+            //'nWeight' => number_format($request->post('txtWeight'), 2, '.', ''),
+            //'bAdditionalOption1' => number_format($request->post('chkAdditionalOption1')),
+            //'bAdditionalOption2' => number_format($request->post('chkAdditionalOption2')),
+            //'bAdditionalOption3' => number_format($request->post('chkAdditionalOption3')),
+            //'bAdditionalOption4' => number_format($request->post('chkAdditionalOption4')),
+            //'nMultiPriceOptionType' => number_format($request->post('rdoMultiPriceOptionType')),
             'nMarketPrice' => $nMarketPrice,
             'nMarginPrice' => number_format(round($nMarketPrice / (100 - $nMarginPercent) /100 + $nMarketPrice, -1), 2, '.', ''),
             'nMarginPercent' => $nMarginPercent,

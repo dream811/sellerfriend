@@ -24,7 +24,7 @@ class ScrapperAPI {
         $this->API_NAME = "item_get";
         $this->APP_KIND = $apiKind;
         $method = "GET";
-        $url = 'https://api-gw.onebound.cn/'.$this->APP_KIND.'/item_get/?key='.$this->KEY.'&num_iid='.$itemId.'&&lang=zh-CN&secret='.$this->SECRET;
+        $url = 'https://api-gw.onebound.cn/'.$this->APP_KIND.'/item_get/?key='.$this->KEY.'&num_iid='.$itemId.'&&lang=ko&secret='.$this->SECRET;
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
