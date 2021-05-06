@@ -248,18 +248,19 @@
                     </div>
                     <div class="card-body">
                         <fieldset >
-                            <div class="form-group row">
+                            {{-- <div class="form-group row">
                                 <label class="col-form-label col-sm-2 text-sm-right">상품명(CN)</label>
                                 <div class="col-sm-8">
                                     <input  type="text" name="txtChMainName" id="txtChMainName" class="form-control form-control-sm" placeholder="상품명">
                                 </div>
-                                {{-- <div class="col-sm-2 mt-1">
+                                <div class="col-sm-2 mt-1">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="customSwitchTr">
                                         <label class="custom-control-label" for="customSwitchTr">번역</label>
                                     </div>
-                                </div> --}}
-                            </div>
+                                </div>
+                            </div> --}}
+                            <input  type="hidden" name="txtChMainName" id="txtChMainName" placeholder="상품명">
                             <div class="form-group row">
                                 <label class="col-form-label col-sm-2 text-sm-right">상품명(KO)</label>
                                 <div class="col-sm-8">
@@ -1784,6 +1785,7 @@
                                     <input name="sku_sell_price[]" type="text" value="${sellPrice}" class="form-control col-md-2 optSellPrice" readonly="">
                                     <input name="sku_option_price[]" type="text" value="${optionPrice}" class="form-control col-md-2 optAddPrice" readonly="">
                                     <input name="sku_stock[]" type="text" value="${stock}" class="form-control col-md-1 optComStock">
+                                    <input name="sku_image[]" type="hidden" value="${stock}">
                                     <div class="input-group-append">
                                         <button type="button" class="btn btn-danger btnSoldOut">품절</button>
                                     </div>
