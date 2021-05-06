@@ -448,10 +448,12 @@ class ProductScrapperController extends Controller
         $product->save();
         //detail data
         $nMarketPrice = $request->post('txtProductPrice');
-        $nMarginPercent = $request->post('txtMarginRate');;
+        $nMarginPercent = $request->post('txtMarginRate');
+        
         $productDetail = new ProductDetail([
             'nProductIdx' => $product->nIdx,
             //'strBasePriceType' => $request->post('selBasePriceType'),
+            'nProductPrice' => number_format($request->post('txtProductPrice'), 2, '.', ''),
             'nBasePrice' => number_format($request->post('txtBasePrice'), 2, '.', ''),
             'nDiscountPrice' => number_format($request->post('txtDiscountPrice'), 2, '.', ''),//
             'nExchangeRate' => number_format($request->post('txtExchangeRate'), 2, '.', ''),//
@@ -459,38 +461,24 @@ class ProductScrapperController extends Controller
             'nMarginRate' => number_format($request->post('txtMarginRate'), 2, '.', ''),//
             'nSellerMarketChargeRate' => number_format($request->post('txtSellerMarketChargeRate'), 2, '.', ''),//
             'nBuyerMarketChargeRate' => number_format($request->post('txtBuyerMarketChargeRate'), 2, '.', ''),//
-            'nOverSeaCharge' => number_format($request->post('txtOverSeaCharge'), 2, '.', ''),//
+            'nOverSeaDeliveryCharge' => number_format($request->post('txtOverSeaDeliveryCharge'), 2, '.', ''),//
             'strFunction' => $request->post('txtFunction'),//
-            'nDeliverCharge' => $request->post('txtDeliverCharge'),//
-            'nReturnDeliverCharge' => number_format($request->post('txtReturnDeliverCharge')),//
-            'nExchangeDeliveryCharge' => number_format($request->post('txtExchangeDeliveryCharge')),//
+            'nDeliverCharge' => number_format($request->post('txtDeliverCharge'), 2, '.', ''),//
+            'nReturnDeliverCharge' => number_format($request->post('txtReturnDeliverCharge'), 2, '.', ''),//
+            'nExchangeDeliveryCharge' => number_format($request->post('txtExchangeDeliveryCharge'), 2, '.', ''),//
             'nOptionSellPrice' => number_format($request->post('txtOptionSellPrice'), 2, '.', ''),//
-            'txtOptionBasePrice' => number_format($request->post('txtOptionBasePrice'), 2, '.', ''),//
-            'txtOptionDiscountPrice' => number_format($request->post('txtOptionDiscountPrice'), 2, '.', ''),//
-            'txtOptionSSPrice' => number_format($request->post('txtOptionSSPrice'), 2, '.', ''),//
-            'txtOptionESMPrice' => number_format($request->post('txtOptionESMPrice'), 2, '.', ''),//
-            'txtOptionSellDiscountPrice' => number_format($request->post('txtOptionSellDiscountPrice'), 2, '.', ''),//
-            'txtOptionESMDeliveryCharge' => number_format($request->post('txtOptionESMDeliveryCharge'), 2, '.', ''),//
-            //'strCountryShippingCostType' => $request->post('selCountryShippingCostType'),
-            //'nCountryShippingCost' => number_format($request->post('txtCountryShippingCost'), 2, '.', ''),
-            //'strWorldShippingCostType' => $request->post('selWorldShippingCostType'),
-            //'nWorldShippingCost' => $request->post('txtWorldShippingCost'),
-            //'strWeightType' => $request->post('selWeightType'),
-            //'nWeight' => number_format($request->post('txtWeight'), 2, '.', ''),
-            //'bAdditionalOption1' => number_format($request->post('chkAdditionalOption1')),
-            //'bAdditionalOption2' => number_format($request->post('chkAdditionalOption2')),
-            //'bAdditionalOption3' => number_format($request->post('chkAdditionalOption3')),
-            //'bAdditionalOption4' => number_format($request->post('chkAdditionalOption4')),
-            //'nMultiPriceOptionType' => number_format($request->post('rdoMultiPriceOptionType')),
-            'nMarketPrice' => $nMarketPrice,
-            'nMarginPrice' => number_format(round($nMarketPrice / (100 - $nMarginPercent) /100 + $nMarketPrice, -1), 2, '.', ''),
-            'nMarginPercent' => $nMarginPercent,
+            'nOptionBasePrice' => number_format($request->post('txtOptionBasePrice'), 2, '.', ''),//
+            'nOptionDiscountPrice' => number_format($request->post('txtOptionDiscountPrice'), 2, '.', ''),//
+            'nOptionSSPrice' => number_format($request->post('txtOptionSSPrice'), 2, '.', ''),//
+            'nOptionESMPrice' => number_format($request->post('txtOptionESMPrice'), 2, '.', ''),//
+            'nOptionSellDiscountPrice' => number_format($request->post('txtOptionSellDiscountPrice'), 2, '.', ''),//
+            'nOptionESMDeliveryCharge' => number_format($request->post('txtOptionESMDeliveryCharge'), 2, '.', ''),//
             'blobNote' => $request->post('summernote'),
             'bIsDel'=> 0
         ]);
         $productDetail->save();
-        //subitem data
-        $countItem = count($request->post('txtSubItemImage'));
+        //SKU data
+        $countItem = count($request->post('sku_base_price'));
         
         //만일 서브아이템이 10개 이상이라면 최대입력수를 늘인다
         if($countItem > 10)
@@ -506,23 +494,45 @@ class ProductScrapperController extends Controller
         // $arrBasePrice = $request->post('txtSubItemBasePrice');
         // $arrSalePrice = $request->post('txtSubItemSalePrice');
         // $arrWeight = $request->post('txtSubItemWeight');
-        // for ($i=0; $i < $countItem; $i++) { 
-        //     $productItem = new ProductItem([
-        //         'nProductIdx' => $product->nIdx,
-        //         'strSubItemName' => $arrKrColorPattern[$i],
-        //         'nSubItemOptionPrice' => $arrOptionPrice[$i],
-        //         'nSubItemBasePrice' => $arrBasePrice[$i],
-        //         'nSubItemSalePrice' => $arrSalePrice[$i],
-        //         'nSubItemWeight' => $arrWeight[$i],
-        //         'strSubItemImage' => $arrImage[$i],
-        //         'strSubItemChColorPattern' => $arrChColorPattern[$i],
-        //         'strSubItemKrColorPattern' => $arrKrColorPattern[$i],
-        //         'strSubItemChSize' => $arrChSize[$i],
-        //         'strSubItemKrSize' => $arrKrSize[$i],
-        //         'bIsDel' => 0
-        //     ]);
-        //     $productItem->save();
-        // }
+        //옵션명
+        $arrOptName = $request->post('txtOptionAttr');
+        $cntOptionName = count($arrOptName) > 3 ? 3 : count($arrOptName);
+        $arrOptionAttr = array();
+        for ($i=0; $i < $cntOptionName; $i++) { 
+            $arrOptionAttr[] = $request->post('optName_'.$i);
+        }
+        $sku_base_price = $request->post('sku_base_price');
+        $sku_sell_price = $request->post('sku_sell_price');
+        $sku_discount_price = $request->post('sku_discount_price');
+        $sku_option_price = $request->post('sku_option_price');
+        $sku_stock = $request->post('sku_stock');
+        $sku_image = $request->post('sku_image');
+        print_r($arrOptionAttr);
+        print_r($sku_base_price);
+        print_r($sku_sell_price);
+        print_r($sku_discount_price);
+        print_r($sku_stock);
+        //
+        for ($i=0; $i < $countItem; $i++) { 
+
+            $productItem = new ProductItem([
+                'nProductIdx' => $product->nIdx,
+                'nSubItemOptionPrice' => $sku_option_price[$i],
+                'nSubItemBasePrice' => $sku_base_price[$i],
+                'nSubItemSellPrice' => $sku_sell_price[$i],
+                'nSubItemDiscountPrice' => $sku_discount_price[$i],
+                'nSubItemStock' => $sku_stock[$i],
+                'strSubItemImage' => $sku_image[$i],
+                'bIsDel' => 0
+            ]);
+            $subItemName = "";
+            for ($j=0; $j < $cntOptionName; $j++) {
+                $productItem['strSubItemKoOptionPattern'.$j] = $arrOptionAttr[$j][$i];
+                $subItemName .= $arrOptionAttr[$j][$i]." ";
+            }
+            $productItem['strSubItemName'] = $subItemName;
+            $productItem->save();
+        }
         // //image data
         // $countImage = count($request->post('txtImage'));
         // $arrDetailImage = $request->post('txtImage');
@@ -541,7 +551,7 @@ class ProductScrapperController extends Controller
         //     $productImage->save();
         // }
 
-        return redirect('scratchProductScrap');
+        //return redirect('scratchProductScrap');
     }
 
     public function categoryListSolution()
@@ -584,77 +594,62 @@ class ProductScrapperController extends Controller
         $keywords = array();
         if(strpos($keyword, ':') !== false){
             $temp = explode(' : ', $keyword);
-            $keywords = preg_split('/[> \/]/', $temp[1]);
+            $keywords = preg_split('/[> ]/', $temp[1]);
         }else{
-            $keywords = preg_split('/[> \/]/', $keyword);
+            $keywords = preg_split('/[> ]/', $keyword);
         }
         $keywords = array_reverse($keywords);
+        //print_r($keywords);
         $categories = array();
         $categories[] = null;//솔루션 카테고리
         $categories[] = CategorySmartStore::where('bIsDel', 0)
                         //->whereIn('strCategoryName', 'like', '%'.$keyword.'%')
-                        ->where(function ($query) use($keywords) {
-                            for ($i = 0; $i < count($keywords); $i++){
-                                $query->orWhere('strCategoryName', 'like',  '%' . $keywords[$i] .'%');
-                            }      
-                        })->first();
+                        ->where('strCategoryName', 'like', '%'.$keywords[0].'%')
+                        ->where('strCategoryName', 'like', '%'.$keywords[1].'%')
+                        ->first();
         $categoriy_c = CategoryCoupang::where('bIsDel', 0)
                         //->whereIn('strCategoryName', 'like', '%'.$keyword.'%')
                         ->where('strCategoryName', 'like',  '%' . $keywords[0] .'%')->first();
         if($categoriy_c == null){
             $categories[] = CategoryCoupang::where('bIsDel', 0)
                 //->whereIn('strCategoryName', 'like', '%'.$keyword.'%')
-                ->where(function ($query) use($keywords) {
-                    for ($i = 0; $i < count($keywords); $i++){
-                        $query->orWhere('strCategoryName', 'like',  '%' . $keywords[$i] .'%');
-                    }      
-                })->first();
+                ->where('strCategoryName', 'like', '%'.$keywords[0].'%')
+                ->where('strCategoryName', 'like', '%'.$keywords[1].'%')
+                ->first();
         }else{
             $categories[] = $categoriy_c;
         }
 
         $categories[] = Category11thGlobal::where('bIsDel', 0)
                         //->whereIn('strCategoryName', 'like', '%'.$keyword.'%')
-                        ->where(function ($query) use($keywords) {
-                            for ($i = 0; $i < count($keywords); $i++){
-                                $query->orWhere('strCategoryName', 'like',  '%' . $keywords[$i] .'%');
-                            }      
-                        })->first();
+                        ->where('strCategoryName', 'like', '%'.$keywords[0].'%')
+                        ->where('strCategoryName', 'like', '%'.$keywords[1].'%')
+                        ->first();
         $categories[] = Category11thNormal::where('bIsDel', 0)
                         //->whereIn('strCategoryName', 'like', '%'.$keyword.'%')
-                        ->where(function ($query) use($keywords) {
-                            for ($i = 0; $i < count($keywords); $i++){
-                                $query->orWhere('strCategoryName', 'like',  '%' . $keywords[$i] .'%');
-                            }      
-                        })->first();
+                        ->where('strCategoryName', 'like', '%'.$keywords[0].'%')
+                        ->where('strCategoryName', 'like', '%'.$keywords[1].'%')
+                        ->first();
         $categories[] = CategoryAuction::where('bIsDel', 0)
                         //->whereIn('strCategoryName', 'like', '%'.$keyword.'%')
-                        ->where(function ($query) use($keywords) {
-                            for ($i = 0; $i < count($keywords); $i++){
-                                $query->orWhere('strCategoryName', 'like',  '%' . $keywords[$i] .'%');
-                            }      
-                        })->first();
+                        ->where('strCategoryName', 'like', '%'.$keywords[0].'%')
+                        ->where('strCategoryName', 'like', '%'.$keywords[1].'%')
+                        ->first();
         $categories[] = CategoryGmarket::where('bIsDel', 0)
                         //->whereIn('strCategoryName', 'like', '%'.$keyword.'%')
-                        ->where(function ($query) use($keywords) {
-                            for ($i = 0; $i < count($keywords); $i++){
-                                $query->orWhere('strCategoryName', 'like',  '%' . $keywords[$i] .'%');
-                            }      
-                        })->first();
+                        ->where('strCategoryName', 'like', '%'.$keywords[0].'%')
+                        ->where('strCategoryName', 'like', '%'.$keywords[1].'%')
+                        ->first();
         $categories[] = CategoryInterPark::where('bIsDel', 0)
                         //->whereIn('strCategoryName', 'like', '%'.$keyword.'%')
-                        ->where(function ($query) use($keywords) {
-                            for ($i = 0; $i < count($keywords); $i++){
-                                $query->orWhere('strCategoryName', 'like',  '%' . $keywords[$i] .'%');
-                            }      
-                        })->first();
+                        ->where('strCategoryName', 'like', '%'.$keywords[0].'%')
+                        ->where('strCategoryName', 'like', '%'.$keywords[1].'%')
+                        ->first();
         $categories[] = CategoryWeMakePrice::where('bIsDel', 0)
                         //->whereIn('strCategoryName', 'like', '%'.$keyword.'%')
-                        ->where(function ($query) use($keywords) {
-                            for ($i = 0; $i < count($keywords); $i++){
-                                $query->orWhere('strCategoryName', 'like',  '%' . $keywords[$i] .'%');
-                            }      
-                        })->first();
+                        ->where('strCategoryName', 'like', '%'.$keywords[0].'%')
+                        ->where('strCategoryName', 'like', '%'.$keywords[1].'%')
+                        ->first();
         return response()->json(["status" => "success", "data" => $categories]);
     }
 
