@@ -319,7 +319,7 @@
                                 <label class="col-form-label col-sm-2 text-sm-right"></label>
                                 <div class="col-sm-9">
                                     <div class="row">
-                                        <div class="form-group col-md-3">
+                                        {{-- <div class="form-group col-md-3">
                                             <label class="form-label">원가 (할인전정상가)</label>
                                             <div class="input-group input-group-sm mb-2 mr-sm-2">
                                                 <div class="input-group-prepend">
@@ -330,9 +330,9 @@
                                                     <button class="btn btn-success" id="btnCalWithBasePrice" type="button"> 원가적용</button>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="form-group col-md-3">
-                                            <label class="form-label">할인가</label>
+                                            <label class="form-label">원가(할인가)</label>
                                             <div class="input-group input-group-sm mb-2 mr-sm-2">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text"><i class="fas fa-globe-americas"></i></div>
@@ -1138,9 +1138,8 @@
                         return;
                     }
                     
-                    $("#txtBasePrice").val(data.orginal_price);
+                    //$("#txtBasePrice").val(data.orginal_price);
                     $("#txtDiscountPrice").val(data.price);
-                    $("#txtBasePrice").val(data.orginal_price);
                     var 환율 = 173;
                     var 원가 = data.orginal_price;
                     var 마진율 = 0.1;
@@ -1324,8 +1323,8 @@
 
                     var optCombination= `<div class="input-group">
                             `+ optionTags +`
-                            <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="원가" readonly="">
-                            <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="할인가" readonly="">
+                            <!--<input type="text" class="form-control col-md-2 text-center font-weight-bold" value="원가" readonly="">-->
+                            <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="원가(할인가)" readonly="">
                             <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="판매가" readonly="">
                             <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="옵션추가금" readonly="">
                             <input type="text" class="form-control col-md-1 text-center font-weight-bold" value="재고" readonly="">
@@ -1358,12 +1357,13 @@
                         var productPrice = eval($('#txtFunction').val())*1;
                         var sumPrice = (Math.round(productPrice / 10) * 10);
                         
-                        var orginal_price =  data.orginal_price ;
-                        var optionPrice = Math.round((data.orginal_price-element.price) * 26) *10;
+                        //var orginal_price =  data.orginal_price ;
+                        var optionPrice = Math.round((data.price-element.price) * 26) *10;
                         //console.log(orginal_price);
+                        //<input name="sku_base_price[]" type="text" value="` + orginal_price + `" class="form-control col-md-2 optBasePrice" readonly="">
                         optCombination += `<div class="input-group">
                             `+ combination +`
-                            <input name="sku_base_price[]" type="text" value="` + orginal_price + `" class="form-control col-md-2 optBasePrice" readonly="">
+                            
                             <input name="sku_discount_price[]" type="text" value="` + element.price + `" class="form-control col-md-2 optDiscountPrice" readonly="">
                             <input name="sku_sell_price[]" type="text" value="` + sumPrice + `" class="form-control col-md-2 optSellPrice" readonly="">
                             <input name="sku_option_price[]" type="text" value="` + optionPrice + `" class="form-control col-md-2 optAddPrice" readonly="">
@@ -1627,8 +1627,8 @@
             
             var divOptionComb = `<div class="input-group">
                 `+ optionTags +`
-                <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="원가" readonly="">
-                <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="할인가" readonly="">
+                <!--<input type="text" class="form-control col-md-2 text-center font-weight-bold" value="원가" readonly="">-->
+                <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="원가(할인가)" readonly="">
                 <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="판매가" readonly="">
                 <input type="text" class="form-control col-md-2 text-center font-weight-bold" value="옵션추가금" readonly="">
                 <input type="text" class="form-control col-md-1 text-center font-weight-bold" value="재고" readonly="">
@@ -1666,7 +1666,7 @@
                 $("#optionCounter").html(optionCounterInfor);
                 for(i=0; i<arrOptionComb[0].length; i++){
                         var stock=0;
-                        var basePrice = $('#txtBasePrice').val()*1;
+                        var basePrice = $('#txtDiscountPrice').val()*1;
                         var discountPrice = $('#txtDiscountPrice').val()*1;
                         var optionPrice = 0;
                         
@@ -1694,10 +1694,10 @@
                         var 해외배송비 = $('#txtOverSeaDeliveryCharge').val()*1;
                         var productPrice = eval($('#txtFunction').val());
                         var sellPrice = (Math.round(productPrice / 10) * 10);
-                        
+                        //<input name="sku_base_price[]" type="text" value="${basePrice}" class="form-control col-md-2 optBasePrice" readonly="">
                         divOptionComb += `<div class="input-group">
                                 <input name="optName_0[]" type="text" value="`+arrOptionComb[0][i].optName+`" class="form-control col" readonly="">
-                                <input name="sku_base_price[]" type="text" value="${basePrice}" class="form-control col-md-2 optBasePrice" readonly="">
+                                
                                 <input name="sku_discount_price[]" type="text" value="${discountPrice}" class="form-control col-md-2 optDiscountPrice" readonly="">
                                 <input name="sku_sell_price[]" type="text" value="${sellPrice}" class="form-control col-md-2 optSellPrice" readonly="">
                                 <input name="sku_option_price[]" type="text" value="${optionPrice}" class="form-control col-md-2 optAddPrice" readonly="">
@@ -1717,7 +1717,7 @@
                     for (j = 0; j < arrOptionComb[1].length; j++) {
                         var stock=0;
                         console.log('ok');
-                        var basePrice = $('#txtBasePrice').val()*1;
+                        var basePrice = $('#txtDiscountPrice').val()*1;
                         var discountPrice = $('#txtDiscountPrice').val()*1;
                         var optionPrice = 0;
                         
@@ -1745,11 +1745,11 @@
                         var productPrice = eval($('#txtFunction').val());
                         var sellPrice = (Math.round(productPrice / 10) * 10);
                         //var sumOptPrice = $('#txtExchangeRate').val();
-
+                        //<input name="sku_base_price[]" type="text" value="${basePrice}" class="form-control col-md-2 optBasePrice" readonly="">
                         divOptionComb += `<div class="input-group">
                                 <input name="optName_0[]" type="text" value="`+arrOptionComb[0][i].optName+`" class="form-control col" readonly="">
                                 <input name="optName_1[]" type="text" value="`+arrOptionComb[1][j].optName+`" class="form-control col" readonly="">
-                                <input name="sku_base_price[]" type="text" value="${basePrice}" class="form-control col-md-2 optBasePrice" readonly="">
+                                
                                 <input name="sku_discount_price[]" type="text" value="${discountPrice}" class="form-control col-md-2 optDiscountPrice" readonly="">
                                 <input name="sku_sell_price[]" type="text" value="${sellPrice}" class="form-control col-md-2 optSellPrice" readonly="">
                                 <input name="sku_option_price[]" type="text" value="${optionPrice}" class="form-control col-md-2 optAddPrice" readonly="">
@@ -1771,7 +1771,7 @@
                     for (j = 0; j < arrOptionComb[1].length; j++) {
                         for (k = 0; k < arrOptionComb[2].length; k++) {
                             var stock=0;
-                            var basePrice = $('#txtBasePrice').val()*1;
+                            var basePrice = $('#txtDiscountPrice').val()*1;
                             var discountPrice = $('#txtDiscountPrice').val()*1;
                             var optionPrice = 0;
                             
@@ -1801,22 +1801,22 @@
                             var productPrice = eval($('#txtFunction').val());
                             var sellPrice = (Math.round(productPrice / 10) * 10);
                             //var sumOptPrice = $('#txtExchangeRate').val();
-
+                            //<input name="sku_base_price[]" type="text" value="${basePrice}" class="form-control col-md-2 optBasePrice" readonly="">
                             divOptionComb += `<div class="input-group">
-                                    <input name="optName_0[]" type="text" value="`+arrOptionComb[0][i].optName+`" class="form-control col" readonly="">
-                                    <input name="optName_1[]" type="text" value="`+arrOptionComb[1][j].optName+`" class="form-control col" readonly="">
-                                    <input name="optName_2[]" type="text" value="`+arrOptionComb[2][k].optName+`" class="form-control col" readonly="">
-                                    <input name="sku_base_price[]" type="text" value="${basePrice}" class="form-control col-md-2 optBasePrice" readonly="">
-                                    <input name="sku_discount_price[]" type="text" value="${discountPrice}" class="form-control col-md-2 optDiscountPrice" readonly="">
-                                    <input name="sku_sell_price[]" type="text" value="${sellPrice}" class="form-control col-md-2 optSellPrice" readonly="">
-                                    <input name="sku_option_price[]" type="text" value="${optionPrice}" class="form-control col-md-2 optAddPrice" readonly="">
-                                    <input name="sku_stock[]" type="text" value="${stock}" class="form-control col-md-1 optComStock">
-                                    <input name="sku_image[]" type="hidden" value="${stock}">
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-warning btnSoldOut">품절</button>
-                                        <button type="button" class="btn btn-danger btnDeleteCombRow"><i class="far fa-trash-alt"></i></button>
-                                    </div>
-                                </div>`;
+                                <input name="optName_0[]" type="text" value="`+arrOptionComb[0][i].optName+`" class="form-control col" readonly="">
+                                <input name="optName_1[]" type="text" value="`+arrOptionComb[1][j].optName+`" class="form-control col" readonly="">
+                                <input name="optName_2[]" type="text" value="`+arrOptionComb[2][k].optName+`" class="form-control col" readonly="">
+                                
+                                <input name="sku_discount_price[]" type="text" value="${discountPrice}" class="form-control col-md-2 optDiscountPrice" readonly="">
+                                <input name="sku_sell_price[]" type="text" value="${sellPrice}" class="form-control col-md-2 optSellPrice" readonly="">
+                                <input name="sku_option_price[]" type="text" value="${optionPrice}" class="form-control col-md-2 optAddPrice" readonly="">
+                                <input name="sku_stock[]" type="text" value="${stock}" class="form-control col-md-1 optComStock">
+                                <input name="sku_image[]" type="hidden" value="${stock}">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-warning btnSoldOut">품절</button>
+                                    <button type="button" class="btn btn-danger btnDeleteCombRow"><i class="far fa-trash-alt"></i></button>
+                                </div>
+                            </div>`;
                         }
                     }
                 }
@@ -1836,7 +1836,7 @@
 
         $('body').on('click', '#btnCalWithBasePrice', function() {
             var 환율 = parseFloat($('#txtExchangeRate').val());
-            var 원가 = parseInt($('#txtBasePrice').val());
+            var 원가 = parseInt($('#txtDiscountPrice').val());
             var 마진율 = parseFloat($('#txtMarginRate').val()/100);
             var 판매수수료 = parseFloat($('#txtSellerMarketChargeRate').val()/100);
             var 구매수수료 = parseFloat($('#txtBuyerMarketChargeRate').val()/100);
