@@ -1687,7 +1687,7 @@
                         optionPrice = arrOptionComb[0][i].optPrice*1 + Math.round((basePrice-discountPrice) * 26)* 10 ;
 
                         var 환율 = $('#txtExchangeRate').val()*1;
-                        var 원가 = basePrice*1;
+                        var 원가 = discountPrice*1;
                         var 마진율 = $('#txtMarginRate').val()/100;
                         var 판매수수료 = $('#txtSellerMarketChargeRate').val()/100;
                         var 구매수수료 = $('#txtBuyerMarketChargeRate').val()/100;
@@ -1737,7 +1737,7 @@
                         optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1 + Math.round((basePrice-discountPrice) * 26)* 10;
 
                         var 환율 = $('#txtExchangeRate').val()*1;
-                        var 원가 = basePrice*1;
+                        var 원가 = discountPrice*1;
                         var 마진율 = $('#txtMarginRate').val()/100;
                         var 판매수수료 = $('#txtSellerMarketChargeRate').val()/100;
                         var 구매수수료 = $('#txtBuyerMarketChargeRate').val()/100;
@@ -1793,7 +1793,7 @@
                             optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1 + arrOptionComb[2][k].optPrice*1 + Math.round((basePrice-discountPrice) * 26)* 10;
 
                             var 환율 = $('#txtExchangeRate').val()*1;
-                            var 원가 = basePrice*1;
+                            var 원가 = discountPrice*1;
                             var 마진율 = $('#txtMarginRate').val()/100;
                             var 판매수수료 = $('#txtSellerMarketChargeRate').val()/100;
                             var 구매수수료 = $('#txtBuyerMarketChargeRate').val()/100;
