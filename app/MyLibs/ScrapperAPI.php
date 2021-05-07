@@ -26,14 +26,14 @@ class ScrapperAPI {
         $method = "GET";
         $url = 'https://api-gw.onebound.cn/'.$this->APP_KIND.'/item_get/?key='.$this->KEY.'&num_iid='.$itemId.'&&lang=zh-CN&secret='.$this->SECRET;
 
-        // $curl = curl_init();
-        // curl_setopt($curl, CURLOPT_URL, $url);
-        // curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
-        // curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        // $result = curl_exec($curl);
-        // $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        // curl_close($curl);
-        // return $result;
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $result = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+        return $result;
 
         $result='{
             "item": {
