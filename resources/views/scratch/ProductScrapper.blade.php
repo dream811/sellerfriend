@@ -1349,23 +1349,24 @@
                             optVal = data.props_list_ko[el].split(':').pop();
                             combination +='<input name="optName_'+ idx +'[]" type="text" value="'+ optVal +'" class="form-control col" readonly="">'; 
                         });
-                        var 환율 = $('#txtExchangeRate').val();
+                        var 환율 = $('#txtExchangeRate').val()*1;
                         var 원가 = element.price;
                         var 마진율 = $('#txtMarginRate').val()/100;
                         var 판매수수료 = $('#txtSellerMarketChargeRate').val()/100;
                         var 구매수수료 = $('#txtBuyerMarketChargeRate').val()/100;
-                        var 해외배송비 = $('#txtOverSeaDeliveryCharge').val();
-                        var productPrice = eval($('#txtFunction').val());
+                        var 해외배송비 = $('#txtOverSeaDeliveryCharge').val()*1;
+                        var productPrice = eval($('#txtFunction').val())*1;
                         var sumPrice = (Math.round(productPrice / 10) * 10);
-                        var sumOptPrice = 0;
-                        var orginal_price = element.orginal_price == undefined ? data.orginal_price : element.orginal_price;
+                        
+                        var orginal_price =  data.orginal_price ;
+                        var optionPrice = Math.round((data.orginal_price-element.price) * 26) *10;
                         //console.log(orginal_price);
                         optCombination += `<div class="input-group">
                             `+ combination +`
                             <input name="sku_base_price[]" type="text" value="` + orginal_price + `" class="form-control col-md-2 optBasePrice" readonly="">
                             <input name="sku_discount_price[]" type="text" value="` + element.price + `" class="form-control col-md-2 optDiscountPrice" readonly="">
                             <input name="sku_sell_price[]" type="text" value="` + sumPrice + `" class="form-control col-md-2 optSellPrice" readonly="">
-                            <input name="sku_option_price[]" type="text" value="` + sumOptPrice + `" class="form-control col-md-2 optAddPrice" readonly="">
+                            <input name="sku_option_price[]" type="text" value="` + optionPrice + `" class="form-control col-md-2 optAddPrice" readonly="">
                             <input name="sku_stock[]" type="text" value="` + element.quantity + `" class="form-control col-md-1 optComStock">
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-warning btnSoldOut">품절</button>
@@ -1683,7 +1684,7 @@
                                 }
                             });
                         }
-                        optionPrice = arrOptionComb[0][i].optPrice*1 + (basePrice-discountPrice) * 260 ;
+                        optionPrice = arrOptionComb[0][i].optPrice*1 + Math.round((basePrice-discountPrice) * 26)* 10 ;
 
                         var 환율 = $('#txtExchangeRate').val()*1;
                         var 원가 = basePrice*1;
@@ -1733,7 +1734,7 @@
                                 }
                             });
                         }
-                        optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1 + (basePrice-discountPrice) * 260;
+                        optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1 + Math.round((basePrice-discountPrice) * 26)* 10;
 
                         var 환율 = $('#txtExchangeRate').val()*1;
                         var 원가 = basePrice*1;
@@ -1789,8 +1790,8 @@
                                     }
                                 });
                             }
-                            optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1 + arrOptionComb[2][k].optPrice*1 + (basePrice-discountPrice) * 260;
-                            
+                            optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1 + arrOptionComb[2][k].optPrice*1 + Math.round((basePrice-discountPrice) * 26)* 10;
+
                             var 환율 = $('#txtExchangeRate').val()*1;
                             var 원가 = basePrice*1;
                             var 마진율 = $('#txtMarginRate').val()/100;

@@ -258,23 +258,23 @@ class ProductScrapperController extends Controller
             $productItem['strSubItemName'] = $subItemName;
             $productItem->save();
         }
-        // //image data
-        // $countImage = count($request->post('txtImage'));
-        // $arrDetailImage = $request->post('txtImage');
-        // for ($i=0; $i < $countImage; $i++) { 
+        //image data
+        $countImage = count($request->post('txtImage'));
+        $arrDetailImage = $request->post('txtImage');
+        for ($i=0; $i < $countImage; $i++) { 
             
-        //     $productImage = new ProductImage([
-        //         'nProductIdx' => $product->nIdx,
-        //         'nImageCode' => $i,
-        //         'strName' => '',
-        //         'strURL' => $arrDetailImage[$i],
-        //         'nHeight' => 0,
-        //         'nWidth' => 0,
-        //         'strNote' => '',
-        //         'bIsDel' => 0
-        //     ]);
-        //     $productImage->save();
-        // }
+            $productImage = new ProductImage([
+                'nProductIdx' => $product->nIdx,
+                'nImageCode' => $i,
+                'strName' => '',
+                'strURL' => $arrDetailImage[$i],
+                'nHeight' => 0,
+                'nWidth' => 0,
+                'strNote' => '',
+                'bIsDel' => 0
+            ]);
+            $productImage->save();
+        }
 
         //return redirect('scratchProductScrap');
     }
