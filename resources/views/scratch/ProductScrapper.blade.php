@@ -248,18 +248,18 @@
                     </div>
                     <div class="card-body">
                         <fieldset >
-                            {{-- <div class="form-group row">
+                            <div class="form-group row">
                                 <label class="col-form-label col-sm-2 text-sm-right">상품명(CN)</label>
                                 <div class="col-sm-8">
                                     <input  type="text" name="txtChMainName" id="txtChMainName" class="form-control form-control-sm" placeholder="상품명">
                                 </div>
-                                <div class="col-sm-2 mt-1">
+                                {{-- <div class="col-sm-2 mt-1">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="customSwitchTr">
                                         <label class="custom-control-label" for="customSwitchTr">번역</label>
                                     </div>
-                                </div>
-                            </div> --}}
+                                </div> --}}
+                            </div>
                             <input  type="hidden" name="txtChMainName" id="txtChMainName" placeholder="상품명">
                             <div class="form-group row">
                                 <label class="col-form-label col-sm-2 text-sm-right">상품명(KO)</label>
@@ -1181,15 +1181,21 @@
                     $.each(data.props_list, function(idx, value) {
                     // do your stuff here
                         
-                        var optArr = value.split(':');
-                        var optName=optArr[0];
-                        var optValue=optArr[1];
-                        if(arrOptionName.findIndex(element => element == optName) < 0){
-                            arrOptionName.push(optName);
+                        var optArr_cn = value.split(':');
+                        var optName_cn=optArr_cn[0];
+                        var optValue_cn=optArr_cn[1];
+                        
+                        var optArr_ko = data.props_list_ko[idx].split(':');
+                        var optName_ko=optArr_ko[0];
+                        var optValue_ko=optArr_ko[1];
+                        
+                        if(arrOptionName.findIndex(element => element == optName_cn) < 0){
+                            arrOptionName.push(optName_cn);
                             var num = indexOption+1;
                             index = indexOption;
                             indexOption++;
-                            optionTags += `<input type="text" class="form-control col text-center font-weight-bold" value="`+ optName +`" readonly="">`;
+                            //combination용
+                            optionTags += `<input type="text" class="form-control col text-center font-weight-bold" value="`+ optName_ko +`" readonly="">`;
                             if(item != ""){
                                 item += `</div> 
                                             <button type="button" class="btn btn-success btn-block btnAddOptRow" opt-id="0"><i class="fas fa-plus"></i> 추가</button>
@@ -1206,7 +1212,7 @@
                                             <div class="form-group row">
                                                 <div class="input-group input-group-sm m-3">
                                                     <input type="text" class="form-control text-center col-md-3 font-weight-bold" value="옵션명" readonly="">
-                                                    <input type="text" name="txtOptionAttr[]" id="txtOptionAttr_`+ index +`" value=`+ optName +` class="form-control text-center">
+                                                    <input type="text" name="txtOptionAttr[]" id="txtOptionAttr_`+ index +`" value=`+ optName_ko +` class="form-control text-center">
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -1261,8 +1267,8 @@
                                         <button type="button" class="btn btn-info p-1 btnImportImage"><label for="inputFileOpt_0_"><i class="fas fa-file-upload fa-lg"></i></label></button>
                                         <input type="file" id="inputFileOpt_`+ index +`_`+ idx +`" hidden="">
                                     </fieldset>
-                                    <input type="text" value="`+ optValue +`" name="txtCnOptionName_${index}[]" id="txtCnOptionName_${index}_${idx}" data-id="" opt-id="${index}" item-id="${idx}" class="form-control  col-md-3">
-                                    <input type="text" value="`+ optValue +`" name="txtKoOptionName_${index}[]"  id="txtKoOptionName_${index}_${idx}" data-id="" opt-id="${index}" item-id="${idx}" class="form-control txtOptionName ${chkLength} col-md-3">
+                                    <input type="text" value="`+ optValue_cn +`" name="txtCnOptionName_${index}[]" id="txtCnOptionName_${index}_${idx}" data-id="" opt-id="${index}" item-id="${idx}" class="form-control  col-md-3">
+                                    <input type="text" value="`+ optValue_ko +`" name="txtKoOptionName_${index}[]"  id="txtKoOptionName_${index}_${idx}" data-id="" opt-id="${index}" item-id="${idx}" class="form-control txtOptionName ${chkLength} col-md-3">
                                     <input type="text" value="0" name="txtAddOptionPrice_${index}" id="txtAddOptionPrice_${index}_${idx}" data-id="" opt-id="${index}" item-id="${idx}" class="form-control col-md-3">
                                     <div class="input-group-append">
                                         <button type="button" class="btn btn-info border-secondary btnMoveOptRow" >이동</button>
@@ -1325,19 +1331,24 @@
                             <input type="text" class="form-control col-md-1 text-center font-weight-bold" value="재고" readonly="">
                             <div class="input-group-append">
                                 <button type="button" class="btn invisible btnSoldOut">품절</button>
+                                <button type="button" class="btn invisible"><i class="far fa-trash-alt"></i></button>
                             </div>
                         </div>`;
                     console.log(data);
                     window.skus = data.skus.sku;
-                    
+                    //아이템
                     window.skus.forEach((element)=>{
                         var combination = '';
-                        var optData = element.properties_name.split(';');
-                        optData.forEach((el, idx) =>{
-                            optVal = el.split(':').pop();
+                        // var optData = element.properties_name.split(';');
+                        // optData.forEach((el, idx) =>{
+                        //     optVal = el.split(':').pop();
+                        //     combination +='<input name="optName_'+ idx +'[]" type="text" value="'+ optVal +'" class="form-control col" readonly="">'; 
+                        // });
+                        var properties = element.properties.split(';');
+                        properties.forEach((el, idx)=>{
+                            optVal = data.props_list_ko[el].split(':').pop();
                             combination +='<input name="optName_'+ idx +'[]" type="text" value="'+ optVal +'" class="form-control col" readonly="">'; 
                         });
-
                         var 환율 = $('#txtExchangeRate').val();
                         var 원가 = element.price;
                         var 마진율 = $('#txtMarginRate').val()/100;
@@ -1357,7 +1368,8 @@
                             <input name="sku_option_price[]" type="text" value="` + sumOptPrice + `" class="form-control col-md-2 optAddPrice" readonly="">
                             <input name="sku_stock[]" type="text" value="` + element.quantity + `" class="form-control col-md-1 optComStock">
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-danger btnSoldOut">품절</button>
+                                <button type="button" class="btn btn-warning btnSoldOut">품절</button>
+                                <button type="button" class="btn btn-danger btnDeleteCombRow"><i class="far fa-trash-alt"></i></button>
                             </div>
                         </div>`;
                     });
@@ -1536,6 +1548,10 @@
         $('body').on('click', '.btnAddNewOption', function () {
             var element = $(this).parent().prev();
             var count = element.children().length;
+            if(count > 3){
+                alert('등록가능한 옵션수는 최대 3개입니다');
+                return;
+            }
             var num = count+1; 
             item =`<div class="col-sm-12">
                         <div class="card bg-secondary-light">
@@ -1617,6 +1633,7 @@
                 <input type="text" class="form-control col-md-1 text-center font-weight-bold" value="재고" readonly="">
                 <div class="input-group-append">
                     <button type="button" class="btn invisible btnSoldOut">품절</button>
+                    <button type="button" class="btn invisible"><i class="far fa-trash-alt"></i></button>
                 </div>
             </div>`;
             var divOptionContainers = $('.divOptionContainer');
@@ -1651,7 +1668,7 @@
                         var basePrice = $('#txtBasePrice').val()*1;
                         var discountPrice = $('#txtDiscountPrice').val()*1;
                         var optionPrice = 0;
-                        optionPrice = arrOptionComb[0][i].optPrice;
+                        
                         
                         if(window.skus != undefined){
                             window.skus.forEach((el, idx)=>{
@@ -1660,18 +1677,20 @@
                                 if(el.properties_name.indexOf(itemId) >=0 )
                                 {
                                     stock = el.quantity;
-                                    basePrice = addZeroes(el.orginal_price == undefined ? basePrice : el.orginal_price);
+                                    //basePrice = addZeroes(el.orginal_price == undefined ? basePrice : el.orginal_price);
                                     discountPrice = Math.round(el.price);
                                     
                                 }
                             });
                         }
-                        var 환율 = $('#txtExchangeRate').val();
-                        var 원가 = basePrice;
+                        optionPrice = arrOptionComb[0][i].optPrice*1 + (basePrice-discountPrice) * 260 ;
+
+                        var 환율 = $('#txtExchangeRate').val()*1;
+                        var 원가 = basePrice*1;
                         var 마진율 = $('#txtMarginRate').val()/100;
                         var 판매수수료 = $('#txtSellerMarketChargeRate').val()/100;
                         var 구매수수료 = $('#txtBuyerMarketChargeRate').val()/100;
-                        var 해외배송비 = $('#txtOverSeaDeliveryCharge').val();
+                        var 해외배송비 = $('#txtOverSeaDeliveryCharge').val()*1;
                         var productPrice = eval($('#txtFunction').val());
                         var sellPrice = (Math.round(productPrice / 10) * 10);
                         
@@ -1683,7 +1702,8 @@
                                 <input name="sku_option_price[]" type="text" value="${optionPrice}" class="form-control col-md-2 optAddPrice" readonly="">
                                 <input name="sku_stock[]" type="text" value="${stock}" class="form-control col-md-1 optComStock">
                                 <div class="input-group-append">
-                                    <button type="button" class="btn btn-danger btnSoldOut">품절</button>
+                                    <button type="button" class="btn btn-warning btnSoldOut">품절</button>
+                                    <button type="button" class="btn btn-danger btnDeleteCombRow"><i class="far fa-trash-alt"></i></button>
                                 </div>
                             </div>`;
                 }
@@ -1699,7 +1719,7 @@
                         var basePrice = $('#txtBasePrice').val()*1;
                         var discountPrice = $('#txtDiscountPrice').val()*1;
                         var optionPrice = 0;
-                        optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1;
+                        
                         if(window.skus != undefined){
                             window.skus.forEach((el, idx)=>{
                                 
@@ -1708,17 +1728,19 @@
                                 if(el.properties_name.indexOf(itemId1) >=0 && el.properties_name.indexOf(itemId2) >=0)
                                 {
                                     stock = el.quantity;
-                                    basePrice = addZeroes(el.orginal_price == undefined ? basePrice : el.orginal_price);
+                                    //basePrice = addZeroes(el.orginal_price == undefined ? basePrice : el.orginal_price);
                                     discountPrice = el.price;
                                 }
                             });
                         }
-                        var 환율 = $('#txtExchangeRate').val();
-                        var 원가 = basePrice;
+                        optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1 + (basePrice-discountPrice) * 260;
+
+                        var 환율 = $('#txtExchangeRate').val()*1;
+                        var 원가 = basePrice*1;
                         var 마진율 = $('#txtMarginRate').val()/100;
                         var 판매수수료 = $('#txtSellerMarketChargeRate').val()/100;
                         var 구매수수료 = $('#txtBuyerMarketChargeRate').val()/100;
-                        var 해외배송비 = $('#txtOverSeaDeliveryCharge').val();
+                        var 해외배송비 = $('#txtOverSeaDeliveryCharge').val()*1;
                         var productPrice = eval($('#txtFunction').val());
                         var sellPrice = (Math.round(productPrice / 10) * 10);
                         //var sumOptPrice = $('#txtExchangeRate').val();
@@ -1732,7 +1754,8 @@
                                 <input name="sku_option_price[]" type="text" value="${optionPrice}" class="form-control col-md-2 optAddPrice" readonly="">
                                 <input name="sku_stock[]" type="text" value="${stock}" class="form-control col-md-1 optComStock">
                                 <div class="input-group-append">
-                                    <button type="button" class="btn btn-danger btnSoldOut">품절</button>
+                                    <button type="button" class="btn btn-warning btnSoldOut">품절</button>
+                                    <button type="button" class="btn btn-danger btnDeleteCombRow"><i class="far fa-trash-alt"></i></button>
                                 </div>
                             </div>`;
                     }
@@ -1750,7 +1773,7 @@
                             var basePrice = $('#txtBasePrice').val()*1;
                             var discountPrice = $('#txtDiscountPrice').val()*1;
                             var optionPrice = 0;
-                            optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1 + arrOptionComb[2][k].optPrice*1;
+                            
                             if(window.skus != "undefined"){
                                 window.skus.forEach((el, idx)=>{
                                     
@@ -1760,18 +1783,20 @@
                                     var itemId3 = arrOptionComb[2][k].itemId;
                                     if(el.properties_name.indexOf(itemId1) >=0 && el.properties_name.indexOf(itemId2) >=0 && el.properties_name.indexOf(itemId3) >=0)
                                     {
-                                        stock = el.stock;
-                                        basePrice = addZeroes(el.orginal_price == undefined ? basePrice : el.orginal_price);
+                                        stock = el.quantity;
+                                        //basePrice = addZeroes(el.orginal_price == undefined ? basePrice : el.orginal_price);
                                         discountPrice = el.price;
                                     }
                                 });
                             }
-                            var 환율 = $('#txtExchangeRate').val();
-                            var 원가 = basePrice;
+                            optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1 + arrOptionComb[2][k].optPrice*1 + (basePrice-discountPrice) * 260;
+                            
+                            var 환율 = $('#txtExchangeRate').val()*1;
+                            var 원가 = basePrice*1;
                             var 마진율 = $('#txtMarginRate').val()/100;
                             var 판매수수료 = $('#txtSellerMarketChargeRate').val()/100;
                             var 구매수수료 = $('#txtBuyerMarketChargeRate').val()/100;
-                            var 해외배송비 = $('#txtOverSeaDeliveryCharge').val();
+                            var 해외배송비 = $('#txtOverSeaDeliveryCharge').val()*1;
                             var productPrice = eval($('#txtFunction').val());
                             var sellPrice = (Math.round(productPrice / 10) * 10);
                             //var sumOptPrice = $('#txtExchangeRate').val();
@@ -1787,7 +1812,8 @@
                                     <input name="sku_stock[]" type="text" value="${stock}" class="form-control col-md-1 optComStock">
                                     <input name="sku_image[]" type="hidden" value="${stock}">
                                     <div class="input-group-append">
-                                        <button type="button" class="btn btn-danger btnSoldOut">품절</button>
+                                        <button type="button" class="btn btn-warning btnSoldOut">품절</button>
+                                        <button type="button" class="btn btn-danger btnDeleteCombRow"><i class="far fa-trash-alt"></i></button>
                                     </div>
                                 </div>`;
                         }
@@ -1836,6 +1862,9 @@
             $(this).parent().prev().val(0);
         });
 
+        $('body').on('click', '.btnDeleteCombRow', function () {
+            var index = $(this).parent().parent().remove();
+        });
         var SearchCategorySolution = function (element, cateId) {
             var keyword = element.val();
             var action = '/scratchProductScrap/category/search/'+cateId;// $("#manageMarketAccount").attr("action");
