@@ -49,9 +49,14 @@
                                     </button>
                                 </div>
                             </div>
-                            
+                            <div class="col">
+                                <a class="btn bg-info btn-sm float-right btnSearchData">
+                                    <i class="fas fa-search"></i>
+                                    Search
+                                </a>
+                            </div>
                         </div>
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-1">
                                 <label class="float-right">집하지:</label>
                             </div>
@@ -234,13 +239,8 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col">
-                                <a class="btn bg-info btn-sm float-right btnSearchData">
-                                    <i class="fas fa-search"></i>
-                                    Search
-                                </a>
-                            </div>
-                        </div>
+                            
+                        </div> --}}
                     </div>
                     <div class="card-header border-bottom-0">
                         <div class="row justify-content-md-center">
@@ -366,20 +366,20 @@
                 ajax: {
                     url: "{{ route('product.SellTargetManage') }}",
                     data: function ( d ) {
-                        d.searchWord = $('#txtSearchWord').val();
+                        // d.searchWord = $('#txtSearchWord').val();
                         d.daterange = $('#txtDateRange').val();
-                        d.selCome = $('#selComeName option:selected').val();
-                        d.category1 = $('#selCategoryName1 option:selected').val();
-                        d.category2 = $('#selCategoryName2 option:selected').val();
-                        d.category3 = $('#selCategoryName3 option:selected').val();
-                        d.category4 = $('#selCategoryName4 option:selected').val();
-                        d.categoryName = $('#txtCategoryName').val();
-                        d.productState = $("input[name='rdoProductState']:checked").val();
-                        d.shareType = $("input[name='rdoShareType']:checked").val();
-                        d.marketRegProduct = $("input[name='rdoMarketRegProduct']:checked").val();
-                        d.market = $('#selMarket option:selected').val();
-                        d.marketAccount = $('#selMarketAccount option:selected').val();
-                        d.myProduct = $("#chkMyProduct").attr("checked") ? 1 : 0;
+                        // d.selCome = $('#selComeName option:selected').val();
+                        // d.category1 = $('#selCategoryName1 option:selected').val();
+                        // d.category2 = $('#selCategoryName2 option:selected').val();
+                        // d.category3 = $('#selCategoryName3 option:selected').val();
+                        // d.category4 = $('#selCategoryName4 option:selected').val();
+                        // d.categoryName = $('#txtCategoryName').val();
+                        // d.productState = $("input[name='rdoProductState']:checked").val();
+                        // d.shareType = $("input[name='rdoShareType']:checked").val();
+                        // d.marketRegProduct = $("input[name='rdoMarketRegProduct']:checked").val();
+                        // d.market = $('#selMarket option:selected').val();
+                        // d.marketAccount = $('#selMarketAccount option:selected').val();
+                        // d.myProduct = $("#chkMyProduct").attr("checked") ? 1 : 0;
                     }
                 },
                 columns: [
@@ -421,43 +421,41 @@
                 var form = $('#divProductForm');
                 var table = $('#productTable').DataTable(); 
                 // Iterate over all checkboxes in the table
+                var products = "";
                 table.$('input[type="checkbox"]').each(function(){
                     // If checkbox doesn't exist in DOM
-                    if(!$.contains(document, this)){
-                        // If checkbox is checked
-                        if(this.checked){
-                        // Create a hidden element
-                        $(form).append(
-                            $('<input>')
-                                .attr('type', 'hidden')
-                                .attr('name', this.name)
-                                .val(this.value)
-                        );
-                        }
+                    if(this.checked){
+                    // Create a hidden element
+                        console.log(this.value);
+                        products += this.value + "|";
                     }
                 });
-
+                products = products.slice(0,-1);
                 var action = '/productSellTargetManageProducts/marketProductAdd';// $("#manageMarketAccount").attr("action");
                 var data = $('#divProductForm').serialize();
-                if(data.includes("chkProduct") <= 0)
+                if(products == "")
                 {
                     alert("상품을 하나이상 선택해주세요!");
                     return false;
                 }
-                $.ajax({
-                    url: action,
-                    data: data,
-                    type: "POST",
-                    dataType: 'json',
-                    success: function ({status, data}) {
-                        if(status == "success"){
-                            window.open('/productSellTargetManageProducts/marketAccountList', '상품등록', 'scrollbars=1, resizable=1, width=1000, height=620');
-                            return false;
-                        }
-                    },
-                    error: function (data) {
-                    }
-                });
+
+                window.open('/productSellTargetManageProducts/marketAccountList?products=' + products, '상품등록', 'scrollbars=1, resizable=1, width=1000, height=620');
+
+                // console.log(products);
+                // $.ajax({
+                //     url: action,
+                //     data: data,
+                //     type: "POST",
+                //     dataType: 'json',
+                //     success: function ({status, data}) {
+                //         if(status == "success"){
+                //             window.open('/productSellTargetManageProducts/marketAccountList', '상품등록', 'scrollbars=1, resizable=1, width=1000, height=620');
+                //             return false;
+                //         }
+                //     },
+                //     error: function (data) {
+                //     }
+                // });
                 
             });
             $('body').on('click', '.btnSearchData', function (e) {

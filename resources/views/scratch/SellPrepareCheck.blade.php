@@ -25,76 +25,44 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-1">
-                                <label class="float-right">검색어:</label>
+                                <label class="float-right">일짜:</label>
                             </div>
+                            {{-- 
                             <div class="col-2">
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-sm" name="txtSearchWord" id="txtSearchWord" placeholder="">
                                 </div>
                             </div>
-                            
-                        </div>
-                        <div class="row">
                             <div class="col-1">
-                                <label class="float-right">카테고리:</label>
-                            </div>
-                            <div class="col-sm-1">
-                                <!-- select -->
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <select class="custom-select form-control-border custom-select-sm" name="selCategoryName1" id="selCategoryName1">
-                                                <option value="">카테고리 1</option>
-                                                @foreach ($categories_1 as $category_1)
-                                                <option value="{{$category_1->strCategoryTree}}" >{{$category_1->strCategoryName}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                <label class="float-right">일짜:</label>
+                            </div> --}}
+                            <div class="col-3 form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
                                     </div>
+                                    <input type="text" class="form-control form-control-sm float-right" id="txtDateRange">
                                 </div>
-                            <div class="col-sm-1">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <select class="custom-select form-control-border custom-select-sm" name="selCategoryName2" id="selCategoryName2">
-                                            <option value="">카테고리 2</option>
-                                            @foreach ($categories_2 as $category_2)
-                                            <option value="{{$category_2->strCategoryTree}}" >{{$category_2->strCategoryName}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                            <!-- /.input group -->
+                            </div>
+                            <!-- Date and time range -->
+                            <div class="col-3 form-group">
+                                <div class="input-group">
+                                    <button type="button" class="btn btn-sm btn-default float-right" id="daterange-btn">
+                                    <i class="far fa-calendar-alt"></i> 날짜검색
+                                    <i class="fas fa-caret-down"></i>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="col-sm-1">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <select class="custom-select form-control-border custom-select-sm" name="selCategoryName3" id="selCategoryName3">
-                                            <option value="">카테고리 3</option>
-                                            @foreach ($categories_3 as $category_3)
-                                            <option value="{{$category_3->strCategoryTree}}" >{{$category_3->strCategoryName}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
+                            <div class="col">
+                                <a class="btn bg-info btn-sm float-right btnSearchData">
+                                    <i class="fas fa-search"></i>
+                                    Search
+                                </a>
                             </div>
-                            <div class="col-sm-1">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <select class="custom-select form-control-border custom-select-sm" name="selCategoryName4" id="selCategoryName4">
-                                            <option value="">카테고리 4</option>
-                                            @foreach ($categories_4 as $category_4)
-                                            <option value="{{$category_4->strCategoryTree}}" >{{$category_4->strCategoryName}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-1">
-                                <div class="form-group form-group form-group-sm">
-                                    <input type="text" class="form-control form-control-sm" name="txtCategoryName" id="txtCategoryName" value="" placeholder="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-1">
+                            {{-- <div class="col-1">
                                 <label class="float-right">출항코드:</label>
                             </div>
                             <div class="col-sm-2">
@@ -107,95 +75,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
-                            <div class="col-1">
-                                <label class="float-right">브랜드:</label>
-                            </div>
-                            <div class="col-sm-1">
-                            <!-- select -->
-                                <div class="form-group">
-                                    <select class="custom-select form-control-border custom-select-sm" name="selBrandName" id="selBrandName">
-                                        <option value="0">==직접입력==</option>
-                                        @foreach ($brands as $brand)
-                                        <option value="{{$brand->nIdx}}" >{{$brand->strBrandName}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-1">
-                                <div class="form-group form-group form-group-sm">
-                                    <input type="text" class="form-control form-control-sm" name="txtBrandName" id="txtBrandName" placeholder="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-1">
-                                <label class="float-right">일짜:</label>
-                            </div>
-                            <div class="col-2 form-group">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="far fa-calendar-alt"></i>
-                                    </span>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm float-right" id="txtDateRange">
-                                </div>
-                            <!-- /.input group -->
-                            </div>
-                            <!-- Date and time range -->
-                            <div class="col-6 form-group">
-                                <div class="input-group">
-                                    <button type="button" class="btn btn-sm btn-default float-right" id="daterange-btn">
-                                    <i class="far fa-calendar-alt"></i> 날짜검색
-                                    <i class="fas fa-caret-down"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-sm-1">
-                                <label class="float-right">배공개여부</label>
-                            </div>
-                            <div class="form-group col-1">
-                                <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="rdoShareType0" name="rdoShareType" value="-1" {{ ($shareType =="2")? "checked" : "" }}>
-                                    <label for="rdoShareType0" class="custom-control-label">전체</label>
-                                </div>
-                            </div>
-                            <div class="form-group col-1">
-                                <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="rdoShareType2" name="rdoShareType" value="1" {{ ($shareType =="1")? "checked" : "" }}>
-                                    <label for="rdoShareType2" class="custom-control-label">공개</label>
-                                </div>
-                            </div>
-                            <div class="form-group col-1">
-                                <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="rdoShareType1" name="rdoShareType" value="0" {{ ($shareType =="0")? "checked" : "" }}>
-                                    <label for="rdoShareType1" class="custom-control-label">비공개</label>
-                                </div>
-                            </div>
-                            <div class="col-1">
-                                <label class="float-right">국가별상품:</label>
-                            </div>
-                            <div class="col-sm-1">
-                            <!-- select -->
-                                <div class="form-group">
-                                    <select class="custom-select form-control-border custom-select-sm" name="selCountryName" id="selCountryName">
-                                        <option value="">==국가==</option>
-                                        @foreach ($countries as $country)
-                                        <option value="{{$country->strCountryCode}}" >{{$country->strCountryName}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <a class="btn bg-info btn-sm float-right btnSearchData">
-                                    <i class="fas fa-search"></i>
-                                    Search
-                                </a>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="card-header p-0 pt-1 border-bottom-0">
@@ -291,16 +171,16 @@
                 ajax: {
                     url: "{{ route('scratch.SellPrepareCheck') }}",
                     data: function ( d ) {
-                        d.searchWord = $('#txtSearchWord').val();
+                        //d.searchWord = $('#txtSearchWord').val();
                         d.daterange = $('#txtDateRange').val();
-                        d.selCome = $('#selComeName option:selected').val();
-                        d.category1 = $('#selCategoryName1 option:selected').val();
-                        d.category2 = $('#selCategoryName2 option:selected').val();
-                        d.category3 = $('#selCategoryName3 option:selected').val();
-                        d.category4 = $('#selCategoryName4 option:selected').val();
-                        d.categoryName = $('#txtCategoryName').val();
-                        d.shareType = $("input[name='rdoShareType']:checked").val();
-                        d.selCountry = $('#selCountryName option:selected').val();
+                        // d.selCome = $('#selComeName option:selected').val();
+                        // d.category1 = $('#selCategoryName1 option:selected').val();
+                        // d.category2 = $('#selCategoryName2 option:selected').val();
+                        // d.category3 = $('#selCategoryName3 option:selected').val();
+                        // d.category4 = $('#selCategoryName4 option:selected').val();
+                        // d.categoryName = $('#txtCategoryName').val();
+                        // d.shareType = $("input[name='rdoShareType']:checked").val();
+                        // d.selCountry = $('#selCountryName option:selected').val();
                     }
                 },
                 columns: [

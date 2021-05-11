@@ -12,7 +12,7 @@ class ProductItem extends Model
     protected $primaryKey = 'nIdx';
     public $timestamps = false;
     protected $fillable = ['nIdx', 'nProductIdx', 'strSubItemName', 'nSubItemOptionPrice', 'nSubItemBasePrice', 'nSubItemSellPrice', 'nSubItemDiscountPrice',
-    'nSubItemWeight', 'strSubItemImage', 'strSubItemKoOptionPattern0', 'strSubItemKoOptionPattern1', 'strSubItemKoOptionPattern2', 
+    'nSubItemWeight', 'nSubItemQuantity', 'strSubItemImage', 'strSubItemKoOptionPattern0', 'strSubItemKoOptionPattern1', 'strSubItemKoOptionPattern2', 
     'strSubItemCnOptionPattern0', 'strSubItemCnOptionPattern1', 'strSubItemCnOptionPattern2', 'bIsDel'];
     public function product()
     {

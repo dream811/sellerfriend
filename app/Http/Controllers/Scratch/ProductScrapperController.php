@@ -138,7 +138,12 @@ class ProductScrapperController extends Controller
      */
     public function save(Request $request)
     {
-        
+        //만약 아이템이 없다면 끝낸다
+        if(!$request->exists('sku_sell_price'))
+            return redirect('scratchProductScrap');
+        //옵션명
+        $arrOptName = $request->post('txtOptionAttr');
+        $strOption = implode("|", $arrOptName);
         //return redirect('scratchProductScrap');
         //main data
         $categoryName = $request->post('txtCategoryName');
@@ -151,6 +156,7 @@ class ProductScrapperController extends Controller
             'nBrandType' => 0, 
             'strBrand' => "",
             'strKeyword' => "", 
+            'strOption' => $strOption, 
             'strChMainName' => $request->post('txtChMainName'), 
             'strKrMainName' => $request->post('txtKrMainName'), 
             'strChSubName' => $request->post('txtChMainName'), 
@@ -203,7 +209,8 @@ class ProductScrapperController extends Controller
         ]);
         $productDetail->save();
         //SKU data
-        $countItem = count($request->post('sku_base_price'));
+        
+        $countItem = count($request->post('sku_sell_price'));
         
         //만일 서브아이템이 10개 이상이라면 최대입력수를 늘인다
         if($countItem > 10)
@@ -226,7 +233,7 @@ class ProductScrapperController extends Controller
         for ($i=0; $i < $cntOptionName; $i++) { 
             $arrOptionAttr[] = $request->post('optName_'.$i);
         }
-        $sku_base_price = $request->post('sku_base_price');
+        $sku_base_price = $request->post('sku_discount_price');
         $sku_sell_price = $request->post('sku_sell_price');
         $sku_discount_price = $request->post('sku_discount_price');
         $sku_option_price = $request->post('sku_option_price');
@@ -246,7 +253,7 @@ class ProductScrapperController extends Controller
                 'nSubItemBasePrice' => $sku_base_price[$i],
                 'nSubItemSellPrice' => $sku_sell_price[$i],
                 'nSubItemDiscountPrice' => $sku_discount_price[$i],
-                'nSubItemStock' => $sku_stock[$i],
+                'nSubItemQuantity' => $sku_stock[$i],
                 'strSubItemImage' => $sku_image[$i],
                 'bIsDel' => 0
             ]);
@@ -262,12 +269,12 @@ class ProductScrapperController extends Controller
         $countImage = count($request->post('txtImage'));
         $arrDetailImage = $request->post('txtImage');
         for ($i=0; $i < $countImage; $i++) { 
-            
+            $arrImgData = explode('::', $arrDetailImage[$i]);
             $productImage = new ProductImage([
                 'nProductIdx' => $product->nIdx,
-                'nImageCode' => $i,
+                'nImageCode' => $arrImgData[0],
                 'strName' => '',
-                'strURL' => $arrDetailImage[$i],
+                'strURL' => $arrImgData[1],
                 'nHeight' => 0,
                 'nWidth' => 0,
                 'strNote' => '',
@@ -276,7 +283,7 @@ class ProductScrapperController extends Controller
             $productImage->save();
         }
 
-        //return redirect('scratchProductScrap');
+        return redirect('scratchProductScrap');
     }
 
     public function categoryListSolution()

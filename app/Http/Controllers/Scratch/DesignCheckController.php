@@ -86,7 +86,7 @@ class DesignCheckController extends Controller
                     return $element;
                 })
                 ->addColumn('action', function($row){
-                    $btn = '<button type="button" data-id="'.$row->nIdx.'" style="font-size:10px !important;" class="btn btn-xs btn-primary btnSellTargetProduct">판매대상상품</button>';
+                    $btn = '<button type="button" data-id="'.$row->nIdx.'" style="font-size:10px !important;" class="btn btn-xs btn-primary btnSellTargetProduct">판매상품</button>';
                     return $btn;
                 })
                 ->addColumn('images', function($row){
@@ -103,30 +103,28 @@ class DesignCheckController extends Controller
                 })
                 ->addColumn('productInfo', function($row){
                     $element = '<ul class="list-inline" style="">';
-                    $element .= '<li class="list-inline-item">'
-                                    .Category::where('strCategoryTree', $row->strCategoryCode1)->first()->strCategoryName.'>'
-                                    .Category::where('strCategoryTree', $row->strCategoryCode2)->first()->strCategoryName.'>'
-                                    .Category::where('strCategoryTree', $row->strCategoryCode3)->first()->strCategoryName.'>'
-                                    .Category::where('strCategoryTree', $row->strCategoryCode4)->first()->strCategoryName.
-                                '</li><br>';
+                    // $element .= '<li class="list-inline-item">'
+                    //                 .Category::where('strCategoryTree', $row->strCategoryCode1)->first()->strCategoryName.'>'
+                    //                 .Category::where('strCategoryTree', $row->strCategoryCode2)->first()->strCategoryName.'>'
+                    //                 .Category::where('strCategoryTree', $row->strCategoryCode3)->first()->strCategoryName.'>'
+                    //                 .Category::where('strCategoryTree', $row->strCategoryCode4)->first()->strCategoryName.
+                    //             '</li><br>';
                     $element .= '<li class="font-weight-bold list-inline-item">
                                     '.$row->strKrSubName.'
                                 </li><br>';
                     $element .= '<li class="font-weight-light list-inline-item">
                                     '.$row->strChSubName.'
                                 </li><br>';
-                    $productOptTag = $row->productDetail->nMultiPriceOptionType==1 ? '<span class="badge badge-danger mr-1">다중가격</span>': '';
-                    $productOptTag .= $row->productDetail->bAdditionalOption1==1 ? '<span class="badge badge-primary mr-1">돼지코</span>': '';
-                    $productOptTag .= $row->productDetail->bAdditionalOption2==1 ? '<span class="badge badge-primary mr-1">안전포장</span>': '';
-                    $productOptTag .= $row->productDetail->bAdditionalOption3==1 ? '<span class="badge badge-primary mr-1">사진요청</span>': '';
-                    $productOptTag .= $row->productDetail->bAdditionalOption4==1 ? '<span class="badge badge-primary mr-1">디테일검수</span>': '';
+                    // $productOptTag = $row->productDetail->nMultiPriceOptionType==1 ? '<span class="badge badge-danger mr-1">다중가격</span>': '';
+                    // $productOptTag .= $row->productDetail->bAdditionalOption1==1 ? '<span class="badge badge-primary mr-1">돼지코</span>': '';
+                    // $productOptTag .= $row->productDetail->bAdditionalOption2==1 ? '<span class="badge badge-primary mr-1">안전포장</span>': '';
+                    // $productOptTag .= $row->productDetail->bAdditionalOption3==1 ? '<span class="badge badge-primary mr-1">사진요청</span>': '';
+                    // $productOptTag .= $row->productDetail->bAdditionalOption4==1 ? '<span class="badge badge-primary mr-1">디테일검수</span>': '';
+                    // $element .= '<li class="font-weight-light list-inline-item">
+                    //             '.$productOptTag.'
+                    //         </li><br>';
                     $element .= '<li class="font-weight-light list-inline-item">
-                                '.$productOptTag.'
-                            </li><br>';
-                    $element .= '<li class="font-weight-light list-inline-item">
-                                <span data-id="'.$row->nIdx.'" style="font-size:10px !important;" class="btn btn-sm badge badge-info">상세편집</span>
-                                <span data-id="'.$row->nIdx.'" style="font-size:10px !important;" class="btn btn-sm badge badge-info">정보수정</span>'
-                                .Auth::user()->name.'['.$row->created_at.']
+                                    '.Auth::user()->name.'['.$row->created_at.']
                                 </li>';
                     $element .= '</ul>';
                     return $element;
@@ -134,10 +132,10 @@ class DesignCheckController extends Controller
                 ->addColumn('priceInfo', function($row){
                     $element = '<ul class="list-inline" style="width:100px;">';
                     $element .= '<li class="list-inline-item">
-                            '.$row->productDetail->nBasePrice.'
+                            '.$row->productDetail->nProductPrice.'
                         </li><br>';
                     $element .= '<li class="list-inline-item">
-                            '.$row->productDetail->nMarketPrice.'
+                            '.$row->productDetail->nExpectedRevenue.'
                         </li><br>';
                             
                     $element .= '</ul>';
@@ -147,10 +145,10 @@ class DesignCheckController extends Controller
                     
                     $element = '<ul class="list-inline" style="width:100px;">';
                     $element .= '<li class="list-inline-item">
-                            '.$row->productDetail->nMarginPrice.'
+                            '.$row->productDetail->nMarginRate.'
                         </li><br>';
                     $element .= '<li class="list-inline-item">
-                        '.$row->productDetail->nMarginPercent.'%
+                        '.$row->productDetail->nSellerMarketChargeRate.'%
                     </li><br>';
                       
                     $element .= '</ul>';
@@ -194,36 +192,36 @@ class DesignCheckController extends Controller
                 })
                 ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo', 'action'])
                 ->filter(function($query) use ($request){
-                    if ($request->get('selCome') != "") {
-                        $query->where('strComeCode', "=", "{$request->get('selCome')}");
-                    }
+                    // if ($request->get('selCome') != "") {
+                    //     $query->where('strComeCode', "=", "{$request->get('selCome')}");
+                    // }
                     if($request->get('daterange')){
                         $dates = explode(' ~ ', $request->get('daterange'));
                         $endDate = date('Y-m-d H:i:s', strtotime($dates[1] . ' +1 day'));
                         $query->whereBetween('created_at', [$dates[0], $endDate]);
                     }
-                    if($request->get('category1') != ""){
-                        $query->where('strCategoryCode1', '=', "{$request->get('category1')}");
-                    }
-                    if($request->get('category2') != ""){
-                        $query->where('strCategoryCode2', '=', "{$request->get('category2')}");
-                    }
-                    if($request->get('category3') != ""){
-                        $query->where('strCategoryCode3', '=', "{$request->get('category3')}");
-                    }
-                    if($request->get('category4') != ""){
-                        $query->where('strCategoryCode4', '=', "{$request->get('category4')}");
-                    }
-                    if($request->get('shareType') != -1){
-                        $query->where('nShareType', '=', "{$request->get('shareType')}");
-                    }
-                    if($request->get('selCountry')){
-                        $query->where('nCountryCode', '=', "{$request->get('selCountry')}");
-                    }
-                    if ($request->get('searchWord') != "") {
-                        $query->where('strKrSubName', 'like', "%{$request->get('searchWord')}%")
-                            ->orWhere('strChSubName', 'like', "%{$request->get('searchWord')}%");
-                    }
+                    // if($request->get('category1') != ""){
+                    //     $query->where('strCategoryCode1', '=', "{$request->get('category1')}");
+                    // }
+                    // if($request->get('category2') != ""){
+                    //     $query->where('strCategoryCode2', '=', "{$request->get('category2')}");
+                    // }
+                    // if($request->get('category3') != ""){
+                    //     $query->where('strCategoryCode3', '=', "{$request->get('category3')}");
+                    // }
+                    // if($request->get('category4') != ""){
+                    //     $query->where('strCategoryCode4', '=', "{$request->get('category4')}");
+                    // }
+                    // if($request->get('shareType') != -1){
+                    //     $query->where('nShareType', '=', "{$request->get('shareType')}");
+                    // }
+                    // if($request->get('selCountry')){
+                    //     $query->where('nCountryCode', '=', "{$request->get('selCountry')}");
+                    // }
+                    // if ($request->get('searchWord') != "") {
+                    //     $query->where('strKrSubName', 'like', "%{$request->get('searchWord')}%")
+                    //         ->orWhere('strChSubName', 'like', "%{$request->get('searchWord')}%");
+                    // }
                 })
                 ->make(true);
         }

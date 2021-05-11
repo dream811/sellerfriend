@@ -84,9 +84,9 @@ class SellTargetManageController extends Controller
                 ->addIndexColumn()
                 ->addColumn('check', function($row){
                     $element = '<input type="checkbox" name="chkProduct[]" onclick="" value="'.$row->nIdx.'">';
-                    $shareTag = $row->nShareType != 2 ? '<span class="badge badge-danger">비공개</span>': '';
+                    // $shareTag = $row->nShareType != 2 ? '<span class="badge badge-danger">비공개</span>': '';
 
-                    $element .= '<li class="font-weight-light list-inline-item">'.$shareTag.'</li><br>';
+                    // $element .= '<li class="font-weight-light list-inline-item">'.$shareTag.'</li><br>';
                     return $element;
                 })
                 ->addColumn('images', function($row){
@@ -103,26 +103,26 @@ class SellTargetManageController extends Controller
                 })
                 ->addColumn('productInfo', function($row){
                     $element = '<ul class="list-inline" style="">';
-                    $element .= '<li class="list-inline-item">'
-                                    .Category::where('strCategoryTree', $row->strCategoryCode1)->first()->strCategoryName.'>'
-                                    .Category::where('strCategoryTree', $row->strCategoryCode2)->first()->strCategoryName.'>'
-                                    .Category::where('strCategoryTree', $row->strCategoryCode3)->first()->strCategoryName.'>'
-                                    .Category::where('strCategoryTree', $row->strCategoryCode4)->first()->strCategoryName.
-                                '</li><br>';
+                    // $element .= '<li class="list-inline-item">'
+                    //                 .Category::where('strCategoryTree', $row->strCategoryCode1)->first()->strCategoryName.'>'
+                    //                 .Category::where('strCategoryTree', $row->strCategoryCode2)->first()->strCategoryName.'>'
+                    //                 .Category::where('strCategoryTree', $row->strCategoryCode3)->first()->strCategoryName.'>'
+                    //                 .Category::where('strCategoryTree', $row->strCategoryCode4)->first()->strCategoryName.
+                    //             '</li><br>';
                     $element .= '<li class="font-weight-bold list-inline-item">
                                     '.$row->strKrSubName.'
                                 </li><br>';
                     $element .= '<li class="font-weight-light list-inline-item">
                                     '.$row->strChSubName.'
                                 </li><br>';
-                    $productOptTag = $row->productDetail->nMultiPriceOptionType==1 ? '<span class="badge badge-danger mr-1">다중가격</span>': '';
-                    $productOptTag .= $row->productDetail->bAdditionalOption1==1 ? '<span class="badge badge-primary mr-1">돼지코</span>': '';
-                    $productOptTag .= $row->productDetail->bAdditionalOption2==1 ? '<span class="badge badge-primary mr-1">안전포장</span>': '';
-                    $productOptTag .= $row->productDetail->bAdditionalOption3==1 ? '<span class="badge badge-primary mr-1">사진요청</span>': '';
-                    $productOptTag .= $row->productDetail->bAdditionalOption4==1 ? '<span class="badge badge-primary mr-1">디테일검수</span>': '';
-                    $element .= '<li class="font-weight-light list-inline-item">
-                                '.$productOptTag.'
-                            </li><br>';
+                    // $productOptTag = $row->productDetail->nMultiPriceOptionType==1 ? '<span class="badge badge-danger mr-1">다중가격</span>': '';
+                    // $productOptTag .= $row->productDetail->bAdditionalOption1==1 ? '<span class="badge badge-primary mr-1">돼지코</span>': '';
+                    // $productOptTag .= $row->productDetail->bAdditionalOption2==1 ? '<span class="badge badge-primary mr-1">안전포장</span>': '';
+                    // $productOptTag .= $row->productDetail->bAdditionalOption3==1 ? '<span class="badge badge-primary mr-1">사진요청</span>': '';
+                    // $productOptTag .= $row->productDetail->bAdditionalOption4==1 ? '<span class="badge badge-primary mr-1">디테일검수</span>': '';
+                    // $element .= '<li class="font-weight-light list-inline-item">
+                    //             '.$productOptTag.'
+                    //         </li><br>';
                     $element .= '<li class="font-weight-light list-inline-item">
                                     '.Auth::user()->name.'['.$row->created_at.']
                                 </li>';
@@ -132,10 +132,10 @@ class SellTargetManageController extends Controller
                 ->addColumn('priceInfo', function($row){
                     $element = '<ul class="list-inline" style="width:100px;">';
                     $element .= '<li class="list-inline-item">
-                            '.$row->productDetail->nBasePrice.'
+                            '.$row->productDetail->nProductPrice.'
                         </li><br>';
                     $element .= '<li class="list-inline-item">
-                            '.$row->productDetail->nMarketPrice.'
+                            '.$row->productDetail->nExpectedRevenue.'
                         </li><br>';
                             
                     $element .= '</ul>';
@@ -145,10 +145,10 @@ class SellTargetManageController extends Controller
                     
                     $element = '<ul class="list-inline" style="width:100px;">';
                     $element .= '<li class="list-inline-item">
-                            '.$row->productDetail->nMarginPrice.'
+                            '.$row->productDetail->nMarginRate.'
                         </li><br>';
                     $element .= '<li class="list-inline-item">
-                        '.$row->productDetail->nMarginPercent.'%
+                        '.$row->productDetail->nSellerMarketChargeRate.'%
                     </li><br>';
                       
                     $element .= '</ul>';
@@ -192,87 +192,36 @@ class SellTargetManageController extends Controller
                 })
                 ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo', 'action'])
                 ->filter(function($query) use ($request){
-                    if ($request->get('selCome') != "") {
-                        $query->where('strComeCode', "=", "{$request->get('selCome')}");
-                    }
-                    //상품상태
-                    // if ($request->get('productState') != "") {
+                    // if ($request->get('selCome') != "") {
                     //     $query->where('strComeCode', "=", "{$request->get('selCome')}");
                     // }
-                    // 마켓등록상품
-                    // if ($request->get('marketRegProduct') != "") {
-                    //     $query->where('strComeCode', "=", "{$request->get('marketRegProduct')}");
-                    // }
-                    // 내상품
-                    // if ($request->get('myProduct') != "") {
-                    //     $query->where('strComeCode', "=", "{$request->get('myProduct')}");
-                    // }
-                    //마켓
-                    if($request->get('market') != ""){
-                        switch ($request->get('market')) {
-                            case '11thhouse':
-                                $query->where('bReg11thhouse', 1);
-                                break;
-                            case 'auction':
-                                $query->where('bRegAuction', 1);
-                                break;
-                            case 'coupang':
-                                $query->where('bRegCoupang', 1);
-                                break;
-                            case 'gmarket':
-                                $query->where('bRegGmarket', 1);
-                                break;
-                            case 'interpark':
-                                $query->where('bRegInterpark', 1);
-                                break;
-                            case 'lotteon':
-                                $query->where('bRegLotteon', 1);
-                                break;
-                            case 'smartstore':
-                                $query->where('bRegSmartstore', 1);
-                                break;
-                            case 'tmon':
-                                $query->where('bRegTmon', 1);
-                                break;
-                            case 'wemakeprice':
-                                $query->where('bRegWemakeprice', 1);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    //마켓계정
-                    if($request->get('market') != ""){
-                        //$query->where('bRegTmon', 1);
-                    }
-                    //
                     if($request->get('daterange')){
                         $dates = explode(' ~ ', $request->get('daterange'));
                         $endDate = date('Y-m-d H:i:s', strtotime($dates[1] . ' +1 day'));
                         $query->whereBetween('created_at', [$dates[0], $endDate]);
                     }
-                    if($request->get('category1') != ""){
-                        $query->where('strCategoryCode1', '=', "{$request->get('category1')}");
-                    }
-                    if($request->get('category2') != ""){
-                        $query->where('strCategoryCode2', '=', "{$request->get('category2')}");
-                    }
-                    if($request->get('category3') != ""){
-                        $query->where('strCategoryCode3', '=', "{$request->get('category3')}");
-                    }
-                    if($request->get('category4') != ""){
-                        $query->where('strCategoryCode4', '=', "{$request->get('category4')}");
-                    }
-                    if($request->get('shareType') != -1){
-                        $query->where('nShareType', '=', "{$request->get('shareType')}");
-                    }
-                    if($request->get('shareType') != -1){
-                        $query->where('nShareType', '=', "{$request->get('shareType')}");
-                    }
-                    if ($request->get('searchWord') != "") {
-                        $query->where('strKrSubName', 'like', "%{$request->get('searchWord')}%")
-                            ->orWhere('strChSubName', 'like', "%{$request->get('searchWord')}%");
-                    }
+                    // if($request->get('category1') != ""){
+                    //     $query->where('strCategoryCode1', '=', "{$request->get('category1')}");
+                    // }
+                    // if($request->get('category2') != ""){
+                    //     $query->where('strCategoryCode2', '=', "{$request->get('category2')}");
+                    // }
+                    // if($request->get('category3') != ""){
+                    //     $query->where('strCategoryCode3', '=', "{$request->get('category3')}");
+                    // }
+                    // if($request->get('category4') != ""){
+                    //     $query->where('strCategoryCode4', '=', "{$request->get('category4')}");
+                    // }
+                    // if($request->get('shareType') != -1){
+                    //     $query->where('nShareType', '=', "{$request->get('shareType')}");
+                    // }
+                    // if($request->get('selCountry')){
+                    //     $query->where('nCountryCode', '=', "{$request->get('selCountry')}");
+                    // }
+                    // if ($request->get('searchWord') != "") {
+                    //     $query->where('strKrSubName', 'like', "%{$request->get('searchWord')}%")
+                    //         ->orWhere('strChSubName', 'like', "%{$request->get('searchWord')}%");
+                    // }
                 })
                 ->make(true);
         }
@@ -302,37 +251,543 @@ class SellTargetManageController extends Controller
     }
     //상품등록을 위한 마켓계정 리스트(get)
     //쇼핑몰 아이디 선택
-    public function marketAccountList()
+    public function marketAccountList(Request $request)
     {
+        $products = $request->get('products');
         // $marketAccounts = MarketAccount::where('nUserId', Auth::id())
         //                                 ->get();
         $settingCoupangs = MarketSettingCoupang::where('nUserId', Auth::id())
                                         ->where('bIsDel', 0)
                                         ->get();
-        return view('product.MarketAccountList', compact('settingCoupangs'));
+
+        return view('product.MarketAccountList', compact('settingCoupangs', 'products'));
     }
     //상품등록을 위한 마켓계정 선택(post)
     //상품등록정보
     public function marketAccountSave(Request $request)
     {
         $chkAccount = $request->post('chkAccount');
+        $strProduct = $request->post('products');
         $settingCoupangs = MarketSettingCoupang::where('nUserId', Auth::id())
                                         ->whereIn('nIdx', $chkAccount)
                                         ->get();
         
         $markets = Market::where('strMarketCode', 'coupang');
-        if($request->has('select_all')){
-            session()->put('post_marketId_select_all', '1');
-            session()->put('post_marketIds', $chkAccount);
-        }else{
-            session()->put('post_marketId_select_all', '0');
-            session()->put('post_marketIds', $chkAccount);
-        }
-        $market_select_all = session()->get('post_marketId_select_all', 0);
-        $market_selected = session()->get('post_marketIds', Array());
-        $product_select_all = session()->get('post_product_select_all', 0);
         
-        return view('product.MarketProductPrepare', compact('settingCoupangs', 'markets'));
+        $productIds = explode("|", $strProduct);
+        $products = Product::where('bIsDel', 0)
+            ->where('nUserId', Auth::id())
+            ->where('nProductWorkProcess', 3)
+            ->whereIn('nIdx', $productIds)
+            ->orderBy('nIdx')
+            ->get();
+
+        $productsCount = count($products);
+        $successCount = 0;
+        $failedCount = 0;
+        
+        $coupang = new CoupangConnector();
+        
+       
+        foreach ($settingCoupangs as $key1 => $setting) {
+            //$outboundInfo = (object)json_decode($coupang->getOutboundShippingCenterInfo("", $setting->strOutboundShippingPlaceCode), true);
+            //$returnCenterInfo = (object)json_decode($coupang->getReturnShippingCenterInfo($setting->strReturnCenterCode), true);
+            // $optMappingData = $request->post('txtOptionMapping_coupang_'.$setting->nIdx);
+            // $optMapping = mb_split(",", $optMappingData);
+            // $arrOptMapping = array();
+            // foreach ($optMapping as $key => $value) {
+            //     $key_val= mb_split("::", $value);
+            //     $arrOptMapping[$key_val[0]] = $key_val[1];
+            // }
+            foreach ($products as $key2 => $product) {
+                
+                $start = new DateTime($setting->dtSalesPeriodStartDateTime);
+                $end = new DateTime($setting->dtSalesPeriodEndDateTime);
+                $strOption = $product->strOption;
+                $arrOption = explode("|", $strOption);
+
+                $strCategory = $product->strCategoryCode2;
+                $arrCategory = mb_split(" : ", $strCategory);
+                $strCategoryCode = $arrCategory[0];
+                $strCategoryNames = mb_split(" > ", $arrCategory[1]);
+                $cateMetaInfo = (object)json_decode($coupang->getCategoryMetaInfo($strCategoryCode), true);
+                $certifications = array_slice($cateMetaInfo->data['certifications'], 0, 5);
+                
+                //notice 배렬을 만든다
+                $noticeArr = array();
+                if(count($cateMetaInfo->data['noticeCategories']) < 2){
+                    foreach ($cateMetaInfo->data['noticeCategories'][0]['noticeCategoryDetailNames'] as $key =>$value) {
+                        $notice = array(
+                            "noticeCategoryName"=> $cateMetaInfo->data['noticeCategories'][0]['noticeCategoryName'],
+                            "noticeCategoryDetailName"=> $cateMetaInfo->data['noticeCategories'][0]['noticeCategoryDetailNames'][$key]['noticeCategoryDetailName'],
+                            "content"=> "상세페이지 참조"
+                        );
+                        array_push($noticeArr, $notice);
+                    }
+                }else{
+                    foreach ($cateMetaInfo->data['noticeCategories'][1]['noticeCategoryDetailNames'] as $key =>$value) {
+                        $notice = array(
+                            "noticeCategoryName"=> $cateMetaInfo->data['noticeCategories'][1]['noticeCategoryName'],
+                            "noticeCategoryDetailName"=> $cateMetaInfo->data['noticeCategories'][1]['noticeCategoryDetailNames'][$key]['noticeCategoryDetailName'],
+                            "content"=> "상세페이지 참조"
+                        );
+                        array_push($noticeArr, $notice);
+                    }
+                }
+                //아이템배렬을 만든다
+                $productItems = $product->productItems;
+                $arrItems = Array();
+                foreach ($productItems as $key3 => $item) 
+                {
+                    
+
+                    //attribute 배렬을 만든다
+                    //print_r($cateMetaInfo->data['attributes']);
+                    $attrArr = array();
+                    foreach ($arrOption as $key =>$value) {
+                        $attr = array(
+                            "attributeTypeName"=> $value,
+                            "attributeValueName"=> $item['strSubItemKoOptionPattern'.$key]
+                        );
+                        array_push($attrArr, $attr);
+                    }
+                    
+                    //end of attribute
+                    $arrItems[] = array(
+                        "itemName"=> $item->strSubItemName,
+                        "originalPrice"=> $item->nSubItemSellPrice,
+                        "salePrice"=> $item->nSubItemSellPrice,
+                        "maximumBuyCount"=> $setting->nMaxQtyPerManDayLimit,
+                        "maximumBuyForPerson"=> "0",
+                        "outboundShippingTimeDay"=> $setting->nOutboundShippingTimeDay,
+                        "maximumBuyForPersonPeriod"=> $setting->nMaxQtyPerManQtyLimit,
+                        "unitCount"=> 100,//$item->nUnitQuantity,
+                        "adultOnly"=> $setting->bOnlyAdult == 0 ? "AUDLT_ONLY" : "EVERYONE",
+                        "taxType"=> "TAX",
+                        "parallelImported"=> $setting->bParallelImport == 1 ? "PARALLEL_IMPORTED" : "NOT_PARALLEL_IMPORTED",
+                        "overseasPurchased"=> $setting->bOverSeaPurchaseAgent == 1 ? "OVERSEAS_PURCHASED" :"NOT_OVERSEAS_PURCHASED",
+                        "pccNeeded"=> $setting->nPersonPassingCodeType == 1 ? "true" : "false",
+                        "externalVendorSku"=> "0001",
+                        "barcode"=> "",
+                        "emptyBarcode"=> true,
+                        "emptyBarcodeReason"=> "상품확인불가_바코드없음사유",
+                        "modelNo"=> "1717171",
+                        "extraProperties"=> null,
+                        //"certifications"=> $certifications,
+                        "searchTags"=> array("키워드1", "키워드2"),
+                        "images"=> array(
+                            array(
+                                "imageOrder"=> 0,
+                                "imageType"=> "REPRESENTATION",
+                                "vendorPath"=> "https:".$item->strSubItemImage
+                            )
+                        ),
+                        "certifications"=> array(
+                            array(
+                              "certificationType"=> "NOT_REQUIRED",
+                              "certificationCode"=> ""
+                              )
+                        ),
+                        "notices"=> $noticeArr,
+                        "attributes"=> $attrArr,
+                        "contents"=> array(
+                            array(
+                                "contentsType"=> "TEXT",
+                                "contentDetails"=> array(
+                                    array(
+                                        "content"=> $product->productDetail->blobNote,
+                                        "detailType"=> "TEXT"
+                                    )
+                                )
+                            )
+                        ),
+                        "offerCondition" => "NEW",
+                        "offerDescription" => ""
+                    );
+                }
+                //print_r($arrItems);
+                //기본 상품배렬을 만든다
+                $objProduct = array(
+                    "displayCategoryCode" => $strCategoryCode, //쿠팡카테고리 코드
+                    "sellerProductName" => $product->strMainName,
+                    "vendorId" => $setting->marketAccount->strVendorId,
+                    "saleStartedAt" => $start->format('Y-m-d\TH:i:s'),
+                    "saleEndedAt" => $end->format('Y-m-d\TH:i:s'),
+                    "displayProductName" => $product->strBrand.$product->strKrMainName,
+                    "brand" => $product->strBrand,
+                    "generalProductName" => $product->strKrMainName,
+                    "productGroup" => $strCategoryNames[count($strCategoryNames)-1],
+                    "deliveryMethod" => $setting->deliveryType->strDeliveryCode,
+                    "deliveryCompanyCode" => $setting->strDeliveryCompanyCode,
+                    "deliveryChargeType" => $setting->strDeliveryChargeType,
+                    "deliveryCharge" => $setting->nDeliveryCharge,
+                    "freeShipOverAmount" => $setting->nFreeShipOverAmount,
+                    "deliveryChargeOnReturn" => $setting->nDeliveryChargeOnReturn,
+                    "remoteAreaDeliverable" => $setting->nRemoteAreaDeliveryType == 1 ? "Y" : "N",
+                    "unionDeliveryType" => $setting->strUnionDeliveryType,
+                    "returnCenterCode" => $setting->strReturnCenterCode,
+                    "returnChargeName" => $setting->strReturnSellerName,
+                    "companyContactNumber" => $setting->strCompanyContactNumber,
+                    "returnZipCode" => $setting->strReturnZipCode,
+                    "returnAddress" => $setting->strReturnAddress,
+                    "returnAddressDetail" => $setting->strReturnAddressDetail,
+                    "returnCharge" => $setting->nReturnDeliveryCharge,
+                    "returnChargeVendor" => $setting->strReturnChargeVendorType,
+                    "afterServiceInformation" => $setting->strAfterServiceGuide,
+                    "afterServiceContactNumber" => $setting->strAfterServiceContactNumber,
+                    "outboundShippingPlaceCode" => $setting->strOutboundShippingPlaceCode,
+                    "vendorUserId" => $setting->marketAccount->strAccountId,
+                    "requested" => false,
+                    "items" => $arrItems,
+                    "requiredDocuments"=> array(
+                        array(
+                            "templateName"=> $setting->requireDocument3->strImageName,
+                            "vendorDocumentPath"=> "http://image11.coupangcdn.com/image/product/content/vendorItem/2018/07/02/41579010/eebc0c30-8f35-4a51-8ffd-808953414dc1.jpg"//asset('storage/'. $setting->requireDocument3->strImageURL)
+                        )
+                    ),
+                    "extraInfoMessage"=> "",
+                    "manufacture"=> $product->strBrand
+                );
+                
+                //print_r($objProduct);
+                //echo json_encode($objProduct);
+/*
+                echo $valuea = '{
+                    "displayCategoryCode": 56137,
+                    "sellerProductName": "test_클렌징오일_관리용_상품명",
+                    "vendorId": "'.$setting->marketAccount->strVendorId.'",
+                    "saleStartedAt": "2017-11-30T00:00:00",
+                    "saleEndedAt": "2099-01-01T23:59:59",
+                    "displayProductName": "해피바스 솝베리 클렌징 오일",
+                    "brand": "해피바스",
+                    "generalProductName": "솝베리 클렌징 오일",
+                    "productGroup": "클렌징 오일",
+                    "deliveryMethod": "SEQUENCIAL",
+                    "deliveryCompanyCode": "KDEXP",
+                    "deliveryChargeType": "FREE",
+                    "deliveryCharge": 0,
+                    "freeShipOverAmount": 0,
+                    "deliveryChargeOnReturn": 2500,
+                    "remoteAreaDeliverable": "N",
+                    "unionDeliveryType": "UNION_DELIVERY",
+                    "returnCenterCode": "'.$setting->strReturnCenterCode.'",
+                    "returnChargeName": "반품지_1",
+                    "companyContactNumber": "02-1234-678",
+                    "returnZipCode": "135-090",
+                    "returnAddress": "서울특별시 강남구 삼성동",
+                    "returnAddressDetail": "333",
+                    "returnCharge": 2500,
+                    "returnChargeVendor": "N",
+                    "afterServiceInformation": "",
+                    "afterServiceContactNumber": "",
+                    "outboundShippingPlaceCode": "'.$setting->strOutboundShippingPlaceCode.'",
+                    "vendorUserId": "'.$setting->marketAccount->strAccountId.'",
+                    "requested": true,
+                    "items": [
+                      {
+                        "itemName": "200ml_1개",
+                        "originalPrice": 13000,
+                        "salePrice": 10000,
+                        "maximumBuyCount": "100",
+                        "maximumBuyForPerson": "0",
+                        "outboundShippingTimeDay": "1",
+                        "maximumBuyForPersonPeriod": "1",
+                        "unitCount": 1,
+                        "adultOnly": "EVERYONE",
+                        "taxType": "TAX",
+                        "parallelImported": "NOT_PARALLEL_IMPORTED",
+                        "overseasPurchased": "NOT_OVERSEAS_PURCHASED",
+                        "pccNeeded": "false",
+                        "externalVendorSku": "0001",
+                        "barcode": "",
+                        "emptyBarcode": true,
+                        "emptyBarcodeReason": "상품확인불가_바코드없음사유",
+                        "modelNo": "171717",
+                        "extraProperties": {
+                          "coupangSalePrice": 5000,
+                          "onlineSalePriceForBooks": 10000,
+                          "transactionType": "manufacturer",
+                          "businessType": "Beauty"
+                        },
+                        "certifications": [
+                          {
+                            "certificationType": "NOT_REQUIRED",
+                            "certificationCode": ""
+                          }
+                        ],
+                        "searchTags": [
+                          "검색어1",
+                          "검색어2"
+                        ],
+                        "images": [
+                          {
+                            "imageOrder": 0,
+                            "imageType": "REPRESENTATION",
+                            "vendorPath": "http://image11.coupangcdn.com/image/product/image/vendoritem/2018/06/25/3719529368/27a6b898-ff3b-4a27-b1e4-330a90c25e9c.jpg"
+                          }
+                        ],
+                        "notices": [
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "용량(중량)",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "제품 주요 사양",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "사용기한 또는 개봉 후 사용기간",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "사용방법",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "제조업자 및 제조판매업자",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "제조국",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "화장품법에 따라 기재, 표시하여야 하는 모든 성분",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "식품의약품안전처 심사 필 유무",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "사용할 때 주의사항",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "품질보증기준",
+                            "content": "제품 이상 시 공정거래위원회 고시 소비자분쟁해결기준에 의거 보상합니다."
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "소비자상담관련 전화번호",
+                            "content": "상세페이지 참조"
+                          }
+                        ],
+                        "attributes": [
+                          {
+                            "attributeTypeName": "수량",
+                            "attributeValueName": "1개"
+                          },
+                          {
+                            "attributeTypeName": "개당 용량",
+                            "attributeValueName": "200ml"
+                          },
+                          {
+                            "attributeTypeName": "피부타입",
+                            "attributeValueName": "모든피부",
+                            "exposed": "NONE"
+                          },
+                          {
+                            "attributeTypeName": "피부고민",
+                            "attributeValueName": "모공",
+                            "exposed": "NONE"
+                          },
+                          {
+                            "attributeTypeName": "사용부위",
+                            "attributeValueName": "얼굴",
+                            "exposed": "NONE"
+                          }
+                        ],
+                        "contents": [
+                          {
+                            "contentsType": "TEXT",
+                            "contentDetails": [
+                              {
+                                "content": "<html><div></div><div><img src=\'http://image11.coupangcdn.com/image/product/content/vendorItem/2018/06/26/196713/738d905f-ed80-4fd8-ad21-ed87b195a19e.jpg\' /><div></html>",
+                                "detailType": "TEXT"
+                              }
+                            ]
+                          }
+                        ],
+                        "offerCondition": "NEW",
+                        "offerDescription": ""
+                      },
+                      {
+                        "itemName": "200ml_2개",
+                        "originalPrice": 26000,
+                        "salePrice": 20000,
+                        "maximumBuyCount": 100,
+                        "maximumBuyForPerson": 0,
+                        "outboundShippingTimeDay": 2,
+                        "maximumBuyForPersonPeriod": 1,
+                        "unitCount": 1,
+                        "adultOnly": "EVERYONE",
+                        "taxType": "TAX",
+                        "parallelImported": "NOT_PARALLEL_IMPORTED",
+                        "overseasPurchased": "NOT_OVERSEAS_PURCHASED",
+                        "pccNeeded": "false",
+                        "externalVendorSku": "0001",
+                        "barcode": "",
+                        "emptyBarcode": true,
+                        "emptyBarcodeReason": "상품확인불가_바코드없음사유",
+                        "modelNo": "171717",
+                        "extraProperties": {
+                          "coupangSalePrice": 5000,
+                          "onlineSalePriceForBooks": 10000,
+                          "transactionType": "manufacturer",
+                          "businessType": "Beauty"
+                        },
+                        "certifications": [
+                          {
+                            "certificationType": "NOT_REQUIRED",
+                            "certificationCode": ""
+                          }
+                        ],
+                        "searchTags": [
+                          "검색어1",
+                          "검색어2"
+                        ],
+                        "images": [
+                          {
+                            "imageOrder": 0,
+                            "imageType": "REPRESENTATION",
+                            "vendorPath": "http://image11.coupangcdn.com/image/product/image/vendoritem/2018/06/26/3001519145/74100e2a-d1ad-4b50-9c78-840c12a3e10d.jpg"
+                          }
+                        ],
+                        "notices": [
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "용량(중량)",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "제품 주요 사양",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "사용기한 또는 개봉 후 사용기간",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "사용방법",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "제조업자 및 제조판매업자",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "제조국",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "화장품법에 따라 기재, 표시하여야 하는 모든 성분",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "식품의약품안전처 심사 필 유무",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "사용할 때 주의사항",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "품질보증기준",
+                            "content": "상세페이지 참조"
+                          },
+                          {
+                            "noticeCategoryName": "화장품",
+                            "noticeCategoryDetailName": "소비자상담관련 전화번호",
+                            "content": "상세페이지 참조"
+                          }
+                        ],
+                        "attributes": [
+                          {
+                            "attributeTypeName": "수량",
+                            "attributeValueName": "2개"
+                          },
+                          {
+                            "attributeTypeName": "개당 용량",
+                            "attributeValueName": "200ml"
+                          },
+                          {
+                            "attributeTypeName": "피부타입",
+                            "attributeValueName": "모든피부",
+                            "exposed": "NONE"
+                          },
+                          {
+                            "attributeTypeName": "피부고민",
+                            "attributeValueName": "모공",
+                            "exposed": "NONE"
+                          },
+                          {
+                            "attributeTypeName": "사용부위",
+                            "attributeValueName": "얼굴",
+                            "exposed": "NONE"
+                          }
+                        ],
+                        "contents": [
+                          {
+                            "contentsType": "TEXT",
+                            "contentDetails": [
+                              {
+                                "content": "<html><div></div><div><img src=\'http://image11.coupangcdn.com/image/product/content/vendorItem/2018/06/26/196713/738d905f-ed80-4fd8-ad21-ed87b195a19e.jpg\' /><div></html>",
+                                "detailType": "TEXT"
+                              }
+                            ]
+                          }
+                        ],
+                        "offerCondition": "NEW",
+                        "offerDescription": ""
+                      }
+                    ],
+                    "requiredDocuments": [
+                      {
+                        "templateName": "기타인증서류",
+                        "vendorDocumentPath": "http://image11.coupangcdn.com/image/product/content/vendorItem/2018/07/02/41579010/eebc0c30-8f35-4a51-8ffd-808953414dc1.jpg"
+                      }
+                    ],
+                    "extraInfoMessage": "",
+                    "manufacture": "아모레퍼시픽"
+                  }';
+*/                  
+                $result = $coupang->addProduct(json_encode($objProduct));
+                //echo $result = $coupang->addProduct($valuea);
+                $response = (object)json_decode($result, true);
+                if($response->code=="SUCCESS")
+                {
+                    $successCount++;
+                    //return response()->json(["status" => "success", "data" => "Successfully uploaded products."]);
+                }
+                else{
+                    //return response()->json(["status" => "failed", "data" => "Failed to upload product."]);
+                    $failedCount++;
+                }
+            }
+        }
+        return view('product.ProductUploadResult', compact('productsCount', 'successCount', 'failedCount'));
+        
+        //return view('product.MarketProductPrepare', compact('settingCoupangs', 'markets'));
     }
     /**
      * 마켓 카테고리 탐색
@@ -623,9 +1078,11 @@ class SellTargetManageController extends Controller
                 if($response->code=="SUCCESS")
                 {
                     $successCount++;
+                    Product::find($product->nIdx)->update(['nProductWorkProcess' => 4, 'bRegCoupang' => 1]);//success
                     //return response()->json(["status" => "success", "data" => "Successfully uploaded products."]);
                 }
                 else{
+                    Product::find($product->nIdx)->update(['nProductWorkProcess' => 5]);//failed
                     //return response()->json(["status" => "failed", "data" => "Failed to upload product."]);
                     $failedCount++;
                 }

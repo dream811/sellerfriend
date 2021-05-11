@@ -25,14 +25,44 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-1">
-                                <label class="float-right">검색어:</label>
+                                <label class="float-right">일짜:</label>
                             </div>
+                            {{-- 
                             <div class="col-2">
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-sm" name="txtSearchWord" id="txtSearchWord" placeholder="">
                                 </div>
                             </div>
                             <div class="col-1">
+                                <label class="float-right">일짜:</label>
+                            </div> --}}
+                            <div class="col-3 form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm float-right" id="txtDateRange">
+                                </div>
+                            <!-- /.input group -->
+                            </div>
+                            <!-- Date and time range -->
+                            <div class="col-3 form-group">
+                                <div class="input-group">
+                                    <button type="button" class="btn btn-sm btn-default float-right" id="daterange-btn">
+                                    <i class="far fa-calendar-alt"></i> 날짜검색
+                                    <i class="fas fa-caret-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <a class="btn bg-info btn-sm float-right btnSearchData">
+                                    <i class="fas fa-search"></i>
+                                    Search
+                                </a>
+                            </div>
+                            {{-- <div class="col-1">
                                 <label class="float-right">출항코드:</label>
                             </div>
                             <div class="col-sm-2">
@@ -45,9 +75,9 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-1">
                                 <label class="float-right">카테고리:</label>
                             </div>
@@ -105,34 +135,8 @@
                                     <input type="text" class="form-control form-control-sm" name="txtCategoryName" id="txtCategoryName" value="" placeholder="">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-1">
-                                <label class="float-right">일짜:</label>
-                            </div>
-                            <div class="col-3 form-group">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="far fa-calendar-alt"></i>
-                                    </span>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm float-right" id="txtDateRange">
-                                </div>
-                            <!-- /.input group -->
-                            </div>
-                            <!-- Date and time range -->
-                            <div class="col-6 form-group">
-                                <div class="input-group">
-                                    <button type="button" class="btn btn-sm btn-default float-right" id="daterange-btn">
-                                    <i class="far fa-calendar-alt"></i> 날짜검색
-                                    <i class="fas fa-caret-down"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
+                        </div> --}}                        
+                        {{-- <div class="row">
                             <div class="col-sm-1">
                                 <label class="float-right">배공개여부</label>
                             </div>
@@ -168,13 +172,8 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col">
-                                <a class="btn bg-info btn-sm float-right btnSearchData">
-                                    <i class="fas fa-search"></i>
-                                    Search
-                                </a>
-                            </div>
-                        </div>
+                            
+                        </div> --}}
                     </div>
                     <div class="card-header p-0 pt-1 border-bottom-0">
                         <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
@@ -270,16 +269,16 @@
                 ajax: {
                     url: "{{ route('scratch.ProductGetManage') }}",
                     data: function ( d ) {
-                        d.searchWord = $('#txtSearchWord').val();
+                        //d.searchWord = $('#txtSearchWord').val();
                         d.daterange = $('#txtDateRange').val();
-                        d.selCome = $('#selComeName option:selected').val();
-                        d.category1 = $('#selCategoryName1 option:selected').val();
-                        d.category2 = $('#selCategoryName2 option:selected').val();
-                        d.category3 = $('#selCategoryName3 option:selected').val();
-                        d.category4 = $('#selCategoryName4 option:selected').val();
-                        d.categoryName = $('#txtCategoryName').val();
-                        d.shareType = $("input[name='rdoShareType']:checked").val();
-                        d.selCountry = $('#selCountryName option:selected').val();
+                        //d.selCome = $('#selComeName option:selected').val();
+                        //d.category1 = $('#selCategoryName1 option:selected').val();
+                        //d.category2 = $('#selCategoryName2 option:selected').val();
+                        //d.category3 = $('#selCategoryName3 option:selected').val();
+                        //d.category4 = $('#selCategoryName4 option:selected').val();
+                        //d.categoryName = $('#txtCategoryName').val();
+                        //d.shareType = $("input[name='rdoShareType']:checked").val();
+                        //d.selCountry = $('#selCountryName option:selected').val();
                     }
                 },
                 columns: [

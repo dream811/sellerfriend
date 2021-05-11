@@ -24,7 +24,7 @@
                         </div>
                         <div class="card-body table-responsive p-0" style="height:500px;">
                         
-                            <input type="hidden" name="productId" value="productId">
+                            <input type="hidden" name="products" id="products" value="{{ $products }}">
                             <table id="marketAccountTable" class="table table-striped projects" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
