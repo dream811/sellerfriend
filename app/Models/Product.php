@@ -10,7 +10,7 @@ class Product extends Model
     use HasFactory;
     protected $table = 'tb_products';
     protected $primaryKey = 'nIdx';
-    protected $fillable = ['strId', 'strURL', 'strMainName', 'strSubName', 'nUserId', 'nBrandType', 'strBrand', 'strKeyword', 'strOption', 'strChMainName', 'strKrMainName', 'strChSubName', 'strKrSubName', 'strComeCode', 'strCategoryCode0', 'strCategoryCode1', 'strCategoryCode2', 'strCategoryCode3', 'strCategoryCode4', 'strCategoryCode5', 'strCategoryCode6', 'strCategoryCode7', 'strCategoryCode8', 'nShareType', 'nProductWorkProcess', 
+    protected $fillable = ['strId', 'strURL', 'strMainName', 'strSubName', 'nUserId', 'nBrandType', 'strBrand', 'strKeyword', 'strOption', 'strOptionValue', 'strChMainName', 'strKrMainName', 'strChSubName', 'strKrSubName', 'strComeCode', 'strCategoryCode0', 'strCategoryCode1', 'strCategoryCode2', 'strCategoryCode3', 'strCategoryCode4', 'strCategoryCode5', 'strCategoryCode6', 'strCategoryCode7', 'strCategoryCode8', 'nShareType', 'nProductWorkProcess', 
     'bReg11thhouse', 'bRegAuction', 'bRegCoupang', 'bRegGmarket', 'bRegInterpark', 'bRegLotteon', 'bRegSmartstore', 'bRegTmon', 'bRegWemakeprice', 'created_at', 'updated_at', 'bIsDel'];
     public function productImages()
     {
@@ -46,7 +46,7 @@ class Product extends Model
     }
     public function productSmartstore()
     {
-        return $this->hasMany(productSmartstore::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(ProductSmartstore::class, 'nProductIdx', 'nIdx');
     }
     public function productTmon()
     {
@@ -54,7 +54,7 @@ class Product extends Model
     }
     public function productWemakeprice()
     {
-        return $this->hasMany(productWemakeprice::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(ProductWemakeprice::class, 'nProductIdx', 'nIdx');
     }
     public function productItems()
     {

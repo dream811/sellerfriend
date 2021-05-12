@@ -15,7 +15,15 @@ use App\Models\ProductDetail;
 use App\Models\Come;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\FailedProduct;
+use App\Models\FailedProductDetail;
+use App\Models\FailedProductImage;
+use App\Models\FailedProductItem;
 use App\Models\MarketSettingCoupang;
+use App\Models\SuccessProduct;
+use App\Models\SuccessProductDetail;
+use App\Models\SuccessProductImage;
+use App\Models\SuccessProductItem;
 use Yajra\DataTables\Facades\DataTables;
 use App\MyLibs\CoupangConnector;
 use App\MyLibs\ESMConnector;
@@ -31,7 +39,6 @@ class SellTargetManageController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        
     }
 
     /**
@@ -192,36 +199,11 @@ class SellTargetManageController extends Controller
                 })
                 ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo', 'action'])
                 ->filter(function($query) use ($request){
-                    // if ($request->get('selCome') != "") {
-                    //     $query->where('strComeCode', "=", "{$request->get('selCome')}");
-                    // }
                     if($request->get('daterange')){
                         $dates = explode(' ~ ', $request->get('daterange'));
                         $endDate = date('Y-m-d H:i:s', strtotime($dates[1] . ' +1 day'));
                         $query->whereBetween('created_at', [$dates[0], $endDate]);
                     }
-                    // if($request->get('category1') != ""){
-                    //     $query->where('strCategoryCode1', '=', "{$request->get('category1')}");
-                    // }
-                    // if($request->get('category2') != ""){
-                    //     $query->where('strCategoryCode2', '=', "{$request->get('category2')}");
-                    // }
-                    // if($request->get('category3') != ""){
-                    //     $query->where('strCategoryCode3', '=', "{$request->get('category3')}");
-                    // }
-                    // if($request->get('category4') != ""){
-                    //     $query->where('strCategoryCode4', '=', "{$request->get('category4')}");
-                    // }
-                    // if($request->get('shareType') != -1){
-                    //     $query->where('nShareType', '=', "{$request->get('shareType')}");
-                    // }
-                    // if($request->get('selCountry')){
-                    //     $query->where('nCountryCode', '=', "{$request->get('selCountry')}");
-                    // }
-                    // if ($request->get('searchWord') != "") {
-                    //     $query->where('strKrSubName', 'like', "%{$request->get('searchWord')}%")
-                    //         ->orWhere('strChSubName', 'like', "%{$request->get('searchWord')}%");
-                    // }
                 })
                 ->make(true);
         }
@@ -290,17 +272,11 @@ class SellTargetManageController extends Controller
         
        
         foreach ($settingCoupangs as $key1 => $setting) {
-            //$outboundInfo = (object)json_decode($coupang->getOutboundShippingCenterInfo("", $setting->strOutboundShippingPlaceCode), true);
-            //$returnCenterInfo = (object)json_decode($coupang->getReturnShippingCenterInfo($setting->strReturnCenterCode), true);
-            // $optMappingData = $request->post('txtOptionMapping_coupang_'.$setting->nIdx);
-            // $optMapping = mb_split(",", $optMappingData);
-            // $arrOptMapping = array();
-            // foreach ($optMapping as $key => $value) {
-            //     $key_val= mb_split("::", $value);
-            //     $arrOptMapping[$key_val[0]] = $key_val[1];
-            // }
+            
             foreach ($products as $key2 => $product) {
-                
+                //만약 상품이 쿠팡에 이미 등록되였다면 넘긴다
+                if($product->bRegCoupang == 1)
+                    continue;
                 $start = new DateTime($setting->dtSalesPeriodStartDateTime);
                 $end = new DateTime($setting->dtSalesPeriodEndDateTime);
                 $strOption = $product->strOption;
@@ -770,18 +746,187 @@ class SellTargetManageController extends Controller
                     "extraInfoMessage": "",
                     "manufacture": "아모레퍼시픽"
                   }';
-*/                  
+*/
                 $result = $coupang->addProduct(json_encode($objProduct));
-                //echo $result = $coupang->addProduct($valuea);
                 $response = (object)json_decode($result, true);
                 if($response->code=="SUCCESS")
                 {
                     $successCount++;
-                    //return response()->json(["status" => "success", "data" => "Successfully uploaded products."]);
-                }
-                else{
-                    //return response()->json(["status" => "failed", "data" => "Failed to upload product."]);
+                    $product->update(['bRegCoupang' => 1]);
+                    //상품등록 성공으로 추가
+                    $successProduct = new SuccessProduct([
+                        'nUserId' => Auth::id(),
+                        'strId' => "C:".$response->data,
+                        'strURL' => $product->strURL, 
+                        'strMainName' => $product->strMainName,
+                        'strSubName' => $product->strSubName,
+                        'nBrandType' => $product->nBrandType,
+                        'strBrand' => $product->strBrand,
+                        'strKeyword' => $product->strKeyword,
+                        'strOption' => $product->strOption,
+                        'strOptionValue' => $product->strOptionValue,
+                        'strChMainName' => $product->strChMainName,
+                        'strKrMainName' => $product->strKrMainName,
+                        'strChSubName' => $product->strChSubName,
+                        'strKrSubName' => $product->strKrSubName,
+                        'strComeCode' => $product->strComeCode,
+                        'strCategoryCode1' => $product->strCategoryCode1,
+                        'strCategoryCode2' => $product->strCategoryCode2,
+                        'strCategoryCode3' => $product->strCategoryCode3,
+                        'strCategoryCode4' => $product->strCategoryCode4,
+                        'strCategoryName' => $product->strCategoryName,
+                        'nShareType' => $product->nShareType,
+                        'nProductWorkProcess' => 0,
+                        'bIsDel'=> 0
+                    ]);
+                    $successProduct->save();
+
+                    $productDetail = new SuccessProductDetail([
+                        'nProductIdx' => $successProduct->nIdx,
+                        'nProductPrice' => $product->productDetail->nProductPrice,
+                        'nBasePrice' => $product->productDetail->nBasePrice,
+                        'nDiscountPrice' => $product->productDetail->nDiscountPrice,
+                        'nExchangeRate' => $product->productDetail->nExchangeRate,
+                        'nExpectedRevenue' => $product->productDetail->nExpectedRevenue,
+                        'nMarginRate' => $product->productDetail->nMarginRate,
+                        'nSellerMarketChargeRate' => $product->productDetail->nSellerMarketChargeRate,
+                        'nBuyerMarketChargeRate' => $product->productDetail->nBuyerMarketChargeRate,
+                        'nOverSeaDeliveryCharge' => $product->productDetail->nOverSeaDeliveryCharge,
+                        'strFunction' => $product->productDetail->strFunction,
+                        'nDeliverCharge' => $product->productDetail->nDeliverCharge,
+                        'nReturnDeliverCharge' => $product->productDetail->nReturnDeliverCharge,
+                        'nExchangeDeliveryCharge' => $product->productDetail->nExchangeDeliveryCharge,
+                        'nOptionSellPrice' => $product->productDetail->nOptionSellPrice,
+                        'nOptionBasePrice' => $product->productDetail->nOptionBasePrice,
+                        'nOptionDiscountPrice' => $product->productDetail->nOptionDiscountPrice,
+                        'nOptionSSPrice' => $product->productDetail->nOptionSSPrice,
+                        'nOptionESMPrice' => $product->productDetail->nOptionESMPrice,
+                        'nOptionSellDiscountPrice' => $product->productDetail->nOptionSellDiscountPrice,
+                        'nOptionESMDeliveryCharge' => $product->productDetail->nOptionESMDeliveryCharge,
+                        'blobNote' => $product->productDetail->blobNote,
+                        'bIsDel'=> 0
+                    ]);
+                    $productDetail->save();
+
+                    foreach ($product->productImages as $key => $image) {
+                        $productImage = new SuccessProductImage([
+                            'nProductIdx' => $successProduct->nIdx,
+                            'nImageCode' => $image->nImageCode,
+                            'strName' => $image->strName,
+                            'strURL' => $image->strURL,
+                            'nHeight' => $image->nHeight,
+                            'nWidth' => $image->nWidth,
+                            'strNote' => $image->strNote,
+                            'bIsDel' => 0
+                        ]);
+                        $productImage->save();
+                    }
+
+                    foreach ($product->productItems as $key => $item) {
+                        $productImage = new SuccessProductItem([
+                            'nProductIdx' => $successProduct->nIdx,
+                            'strSubItemName' => $item->strSubItemName,
+                            'nSubItemOptionPrice' => $item->nSubItemOptionPrice,
+                            'nSubItemBasePrice' => $item->nSubItemBasePrice,
+                            'nSubItemSellPrice' => $item->nSubItemSellPrice,
+                            'nSubItemDiscountPrice' => $item->nSubItemDiscountPrice,
+                            'nSubItemQuantity' => $item->nSubItemQuantity,
+                            'strSubItemImage' => $item->strSubItemImage,
+                            'strSubItemKoOptionPattern0' => $item->strSubItemKoOptionPattern0,
+                            'strSubItemKoOptionPattern1' => $item->strSubItemKoOptionPattern1,
+                            'strSubItemKoOptionPattern2' => $item->strSubItemKoOptionPattern2,
+                            'bIsDel' => 0
+                        ]);
+                        $productImage->save();
+                    }
+
+                }else{
                     $failedCount++;
+                    //상품등록 실패로 추가
+                    $failedProduct = new FailedProduct([
+                        'nUserId' => Auth::id(),
+                        'strURL' => $product->strURL, 
+                        'strMainName' => $product->strMainName,
+                        'strSubName' => $product->strSubName,
+                        'nBrandType' => $product->nBrandType,
+                        'strBrand' => $product->strBrand,
+                        'strKeyword' => $product->strKeyword,
+                        'strOption' => $product->strOption,
+                        'strOptionValue' => $product->strOptionValue,
+                        'strChMainName' => $product->strChMainName,
+                        'strKrMainName' => $product->strKrMainName,
+                        'strChSubName' => $product->strChSubName,
+                        'strKrSubName' => $product->strKrSubName,
+                        'strComeCode' => $product->strComeCode,
+                        'strCategoryCode1' => $product->strCategoryCode1,
+                        'strCategoryCode2' => $product->strCategoryCode2,
+                        'strCategoryCode3' => $product->strCategoryCode3,
+                        'strCategoryCode4' => $product->strCategoryCode4,
+                        'strCategoryName' => $product->strCategoryName,
+                        'nShareType' => $product->nShareType,
+                        'nProductWorkProcess' => 0,
+                        'bIsDel'=> 0
+                    ]);
+                    $failedProduct->save();
+
+                    $productDetail = new FailedProductDetail([
+                        'nProductIdx' => $failedProduct->nIdx,
+                        'nProductPrice' => $product->productDetail->nProductPrice,
+                        'nBasePrice' => $product->productDetail->nBasePrice,
+                        'nDiscountPrice' => $product->productDetail->nDiscountPrice,
+                        'nExchangeRate' => $product->productDetail->nExchangeRate,
+                        'nExpectedRevenue' => $product->productDetail->nExpectedRevenue,
+                        'nMarginRate' => $product->productDetail->nMarginRate,
+                        'nSellerMarketChargeRate' => $product->productDetail->nSellerMarketChargeRate,
+                        'nBuyerMarketChargeRate' => $product->productDetail->nBuyerMarketChargeRate,
+                        'nOverSeaDeliveryCharge' => $product->productDetail->nOverSeaDeliveryCharge,
+                        'strFunction' => $product->productDetail->strFunction,
+                        'nDeliverCharge' => $product->productDetail->nDeliverCharge,
+                        'nReturnDeliverCharge' => $product->productDetail->nReturnDeliverCharge,
+                        'nExchangeDeliveryCharge' => $product->productDetail->nExchangeDeliveryCharge,
+                        'nOptionSellPrice' => $product->productDetail->nOptionSellPrice,
+                        'nOptionBasePrice' => $product->productDetail->nOptionBasePrice,
+                        'nOptionDiscountPrice' => $product->productDetail->nOptionDiscountPrice,
+                        'nOptionSSPrice' => $product->productDetail->nOptionSSPrice,
+                        'nOptionESMPrice' => $product->productDetail->nOptionESMPrice,
+                        'nOptionSellDiscountPrice' => $product->productDetail->nOptionSellDiscountPrice,
+                        'nOptionESMDeliveryCharge' => $product->productDetail->nOptionESMDeliveryCharge,
+                        'blobNote' => $product->productDetail->blobNote,
+                        'bIsDel'=> 0
+                    ]);
+                    $productDetail->save();
+
+                    foreach ($product->productImages as $key => $image) {
+                        $productImage = new FailedProductImage([
+                            'nProductIdx' => $failedProduct->nIdx,
+                            'nImageCode' => $image->nImageCode,
+                            'strName' => $image->strName,
+                            'strURL' => $image->strURL,
+                            'nHeight' => $image->nHeight,
+                            'nWidth' => $image->nWidth,
+                            'strNote' => $image->strNote,
+                            'bIsDel' => 0
+                        ]);
+                        $productImage->save();
+                    }
+
+                    foreach ($product->productItems as $key => $item) {
+                        $productImage = new FailedProductItem([
+                            'nProductIdx' => $failedProduct->nIdx,
+                            'strSubItemName' => $item->strSubItemName,
+                            'nSubItemOptionPrice' => $item->nSubItemOptionPrice,
+                            'nSubItemBasePrice' => $item->nSubItemBasePrice,
+                            'nSubItemSellPrice' => $item->nSubItemSellPrice,
+                            'nSubItemDiscountPrice' => $item->nSubItemDiscountPrice,
+                            'nSubItemQuantity' => $item->nSubItemQuantity,
+                            'strSubItemImage' => $item->strSubItemImage,
+                            'strSubItemKoOptionPattern0' => $item->strSubItemKoOptionPattern0,
+                            'strSubItemKoOptionPattern1' => $item->strSubItemKoOptionPattern1,
+                            'strSubItemKoOptionPattern2' => $item->strSubItemKoOptionPattern2,
+                            'bIsDel' => 0
+                        ]);
+                        $productImage->save();
+                    }
                 }
             }
         }

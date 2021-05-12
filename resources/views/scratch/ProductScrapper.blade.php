@@ -1114,18 +1114,24 @@
         $('body').on('click', '.btnSaveProduct', function () {
             // var brandName1 = $('#selBrandName').val();
             // var brandName2 = $('#txtBrandName').val();
-            // if($('#selComeName').val() == 0){
-            //     alert("집하지를 선택해주세요!");
-            //     return false;
-            // }
-            // if($('#selBrandName').val() == 0 && $('#txtBrandName').val().trim() == ""){
-            //     alert("브랜드를 입력해주세요!");
-            //     return false;
-            // }
-            // if($('#selCategoryName1').val() == 0 && $('#selCategoryName2').val() == 0 && $('#selCategoryName3').val() == 0 && $('#selCategoryName4').val() == 0 && $('#txtCategoryName').val().trim() == ""){
-            //     alert("카테고리를 입력해주세요!");
-            //     return false;
-            // }
+            //카테고리 체크
+            var checkCategoryVal = true;
+            $('input[name="txtCategoryName[]"]').each(function(index, element){
+                if(element.value == ""){
+                    checkCategoryVal = false;
+                    return false;
+                }
+            });
+            if(checkCategoryVal == false){
+                alert('카테고리 설정해주세요.');
+                return false;
+            }
+            //기타 입력값 체크
+            if($('.is-invalid').length > 0){
+                alert('입력값을 확인해주세요.');
+                return false;
+            }
+
             if(confirm("정말 보관하시겠습니까")){
                 $('#frmScrap').submit();
             }
@@ -1162,7 +1168,7 @@
                     //$("#txtBasePrice").val(data.orginal_price);
                     $("#txtDiscountPrice").val(data.price);
                     var 환율 = 173;
-                    var 원가 = data.orginal_price;
+                    var 원가 = data.price;
                     var 마진율 = 0.1;
                     var 판매수수료 = 0.3;
                     var 구매수수료 = 0.05;
@@ -1188,6 +1194,7 @@
                     if(titleLength > 100){
                         $("#titleSizeInfo").addClass('text-danger');
                         $("#titleSizeInfo").removeClass('text-success');
+                        $("#txtKrMainName").addClass('is-invalid');
                     }
 
                     $("#txtKrSubName").val(substr_utf8_bytes(data.titleKO, 0, 50));
@@ -1265,7 +1272,7 @@
                         }
                         
                         var chkLength = "is-valid";
-                        if(string_byte_length("") > 30){
+                        if(string_byte_length(optValue_ko) > 30){
                             chkLength="is-invalid";
                         }
                         var imageUrl = "{{asset('assets/images/system/no-image.png')}}";
@@ -1384,13 +1391,9 @@
                         var productPrice = eval($('#txtFunction').val())*1;
                         var sumPrice = (Math.round(productPrice / 10) * 10);
                         
-                        //var orginal_price =  data.orginal_price ;
                         var optionPrice = Math.round((element.price-data.price) * 26) *10;
-                        //console.log(orginal_price);
-                        //<input name="sku_base_price[]" type="text" value="` + orginal_price + `" class="form-control col-md-2 optBasePrice" readonly="">
                         optCombination += `<div class="input-group">
                             `+ combination +`
-                            
                             <input name="sku_discount_price[]" type="text" value="` + element.price + `" class="form-control col-md-2 optDiscountPrice" readonly="">
                             <input name="sku_sell_price[]" type="text" value="` + sumPrice + `" class="form-control col-md-2 optSellPrice" readonly="">
                             <input name="sku_option_price[]" type="text" value="` + optionPrice + `" class="form-control col-md-2 optAddPrice" readonly="">
@@ -1403,7 +1406,6 @@
                         </div>`;
                     });
                     $('#divOptionCombinationBox').html(optCombination);
-
                     $('#summernote').summernote('code', data.desc);
                     UpdateImageInfo();
 
@@ -1873,13 +1875,16 @@
         });        
         $('body').on('click', '#btnCalWithDiscount', function() {
             var 환율 = parseFloat($('#txtExchangeRate').val());
-            var 원가 = parseInt($('#txtDiscountPrice').val());
+            var 원가 = parseFloat($('#txtDiscountPrice').val());
             var 마진율 = parseFloat($('#txtMarginRate').val()/100);
             var 판매수수료 = parseFloat($('#txtSellerMarketChargeRate').val()/100);
             var 구매수수료 = parseFloat($('#txtBuyerMarketChargeRate').val()/100);
             var 해외배송비 = parseInt($('#txtOverSeaDeliveryCharge').val());
             var productPrice = eval($('#txtFunction').val());
             $("#txtProductPrice").val(Math.round(productPrice / 10) * 10);
+            $("#txtOptionSellPrice").val(Math.round(productPrice / 10) * 10);
+            $("#txtOptionSSPrice").val(Math.round(productPrice / 20) * 10);//스스50프로 추가금
+            $("#txtOptionESMPrice").val(Math.round(productPrice / 20) * 10);
             $("#txtExpectedRevenue").val(Math.round($("#txtProductPrice").val() * $("#txtMarginRate").val()/100));
         });
         $('body').on('click', '.btnSoldOut', function() {

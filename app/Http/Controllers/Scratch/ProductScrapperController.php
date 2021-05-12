@@ -147,6 +147,14 @@ class ProductScrapperController extends Controller
         //return redirect('scratchProductScrap');
         //main data
         $categoryName = $request->post('txtCategoryName');
+
+        $arrOptionValue = array();
+        foreach ($arrOptName as $key => $value) {
+            $arrOptionValue[] = implode(",", $request->post('txtKoOptionName_'.$key));
+            
+        }
+        $strOptionValue = implode("|", $arrOptionValue);
+
         $product = new Product([
             'nUserId' => Auth::id(),
             'strURL' => $request->post('txtScrapURL'), 
@@ -157,10 +165,11 @@ class ProductScrapperController extends Controller
             'strBrand' => "",
             'strKeyword' => "", 
             'strOption' => $strOption, 
-            'strChMainName' => $request->post('txtChMainName'), 
-            'strKrMainName' => $request->post('txtKrMainName'), 
-            'strChSubName' => $request->post('txtChMainName'), 
-            'strKrSubName' => $request->post('txtKrSubName'), 
+            'strOptionValue' => $strOptionValue,
+            'strChMainName' =>  $request->post('txtChMainName'), 
+            'strKrMainName' =>  $request->post('txtKrMainName'), 
+            'strChSubName' =>   $request->post('txtChMainName'), 
+            'strKrSubName' =>   $request->post('txtKrSubName'), 
             //'strComeCode' => $request->post('selComeName'), 
             'strCategoryCode0' => $categoryName[0], 
             'strCategoryCode1' => $categoryName[1], 

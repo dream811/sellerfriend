@@ -13,8 +13,9 @@ use App\Models\ProductDetail;
 use App\Models\Come;
 use App\Models\Brand;
 use App\Models\Category;
-use DataTables;
+use App\Models\SuccessProduct;
 use App\MyLibs\CoupangConnector;
+use Yajra\DataTables\Facades\DataTables as DataTables;
 
 class RegisteredProductManageController extends Controller
 {
@@ -38,42 +39,14 @@ class RegisteredProductManageController extends Controller
     {
         $tr = new GoogleTranslate(); // Translates to 'en' from auto-detected language by default
         $title = "등록상품관리";
-        $comes = Come::where('bIsDel', 0)
-                ->orderBy('strComeCode')
-                ->get();
-                //dd($comes);
-        $brands = Brand::where('bIsDel', 0)
-                ->orderBy('strBrandCode')
-                ->get();
-        $categories_1 = Category::where('bIsDel', 0)
-                ->where('nCategoryType', 1)
-                ->orderBy('strCategoryName')
-                ->get();
-        $categories_2 = Category::where('bIsDel', 0)
-                ->where('nCategoryType', 2)
-                ->orderBy('strCategoryName')
-                ->get();
-
-        $categories_3 = Category::where('bIsDel', 0)
-                ->where('nCategoryType', 3)
-                ->orderBy('strCategoryName')
-                ->get();
-        $categories_4 = Category::where('bIsDel', 0)
-                ->where('nCategoryType', 4)
-                ->orderBy('strCategoryName')
-                ->get();
-        $shareType = "1";
-        $basePriceTypes= array('CNY', 'KRW', 'USD', 'JPY');
-        $countryShippingCostTypes= array('CNY', 'KRW', 'USD', 'JPY');
-        $worldShippingCostTypes= array('KRW');
-        $weightTypes= array('Kg');
+        
 
         if ($request->ajax()) {
-            $products = Product::where('bIsDel', 0)
+            $products = SuccessProduct::where('bIsDel', 0)
                 ->where('nUserId', Auth::id())
                 ->orderBy('nIdx');
 
-            return Datatables::eloquent($products)
+            return DataTables::eloquent($products)
                     ->addIndexColumn()
                     ->addColumn('check', function($row){
                         $check = '<input type="checkbox" name="chkProduct[]" onclick="" value="'.$row->nIdx.'">';
@@ -96,24 +69,39 @@ class RegisteredProductManageController extends Controller
                         return $item;
                     })
                     ->addColumn('productInfo', function($row){
+                        $strCategory = $row->strCategoryCode0;
+                        $category = mb_split(" : ", $strCategory)[1];
                         $element = '<ul class="list-inline" style="">';
                         $element .= '<li class="list-inline-item">
-                                    '.$row->strCategoryCode1.'>'.$row->strCategoryCode2.'>'.$row->strCategoryCode3.'>'.$row->strCategoryCode4.'
-                                </li><br>';
+                                '.$category.'
+                            </li><br>';
                         $element .= '<li class="list-inline-item">
-                                    '.$row->strKrSubName.'
-                                </li>';
-
+                                '.$row->strKrSubName.'
+                            </li><br>';
+                        //옵션
+                        $options = explode("|", $row->strOption);
+                        $optionValue = explode("|", $row->strOptionValue);
+                        foreach ($options as $key => $value) {
+                            $element .= '<li class="list-inline-item">
+                                <span style="text-align:left;">'.$value.':</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-align:right;">'.$optionValue[$key].'</span>
+                            </li><br>';
+                        }
+                        $element .= '<li class="list-inline-item">
+                                '.$row->strKrMainName.'
+                            </li><br>';
+                        $element .= '<li class="font-weight-light list-inline-item">
+                                '.Auth::user()->name.'['.$row->created_at.']
+                            </li>';
                         $element .= '</ul>';
                         return $element;
                     })
                     ->addColumn('priceInfo', function($row){
                         $element = '<ul class="list-inline" style="width:100px;">';
                         $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nBasePrice.'
+                                '.$row->productDetail->nProductPrice.'
                             </li><br>';
                         $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nBasePrice.'
+                                '.$row->productDetail->nDiscountPrice.'
                             </li>';
                                 
                         $element .= '</ul>';
@@ -122,27 +110,29 @@ class RegisteredProductManageController extends Controller
                     ->addColumn('marginInfo', function($row){
                         $element = '<ul class="list-inline" style="width:100px;">';
                         $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nBasePrice.'
+                                '.$row->productDetail->nMarginRate.'
                             </li><br>';
                         $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nBasePrice.'
+                                '.$row->productDetail->nSellerMarketChargeRate.'
                             </li>';
                                 
                         $element .= '</ul>';
                         return $element;
                     })
                     ->addColumn('marketInfo', function($row){
-                        $marketInfo = '
-                                <span style="width:20px;" class="badge badge-success">C</span>
-                                <span style="width:20px;" class="badge badge-success">11</span>
-                                <span style="width:20px;" class="badge badge-success">A</span>
-                                <span style="width:20px;" class="badge badge-success">G</span>
-                                <br/>
-                                <span style="width:20px;" class="badge badge-success">I</span>
-                                <span style="width:20px;" class="badge badge-success">S</span>
-                                <span style="width:20px;" class="badge badge-success">T</span>
-                                <span style="width:20px;" class="badge badge-success">W</span>
-                                ';
+                        $arrCode = explode(":", $row->strId);
+                        $strCode = "";
+                        //c이면 쿠팡
+                        if($arrCode[0]=="C"){
+                            $strCode = "쿠팡";
+                        }
+                        $marketInfo = '<ul class="list-inline" style="width:100px;">
+                            <li class="list-inline-item">
+                            '.$strCode.'
+                            </li><br>';
+                        $marketInfo .= '<li class="list-inline-item">
+                            '.$row->strId.'
+                            </li></ul>';
                         return $marketInfo;
                     })
                     ->addColumn('mainImage', function($row){
@@ -161,7 +151,7 @@ class RegisteredProductManageController extends Controller
                     ->make(true);
                     
         }
-        return view('product.RegisteredProductManage', compact('title', 'brands', 'comes', 'categories_1', 'categories_2', 'categories_3', 'categories_4', 'shareType', 'basePriceTypes', 'countryShippingCostTypes', 'worldShippingCostTypes', 'weightTypes'));
+        return view('product.RegisteredProductManage', compact('title'));
     }
 
     /**
