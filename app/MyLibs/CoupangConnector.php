@@ -1089,7 +1089,7 @@ class CoupangConnector {
     /**
      * 발주서목록 조회(일단위 페이징)
      */
-    public function getOrderSheetsList($from="", $to="", $maxPerPage=2, $status="INSTRUCT", $nextToken="")
+    public function getOrderSheetsDayList($from="", $to="", $maxPerPage=2, $status="INSTRUCT", $nextToken="")
     {
         date_default_timezone_set("GMT+0");
         
@@ -1097,6 +1097,199 @@ class CoupangConnector {
         $method = "GET";
         $path = "/v2/providers/openapi/apis/api/v4/vendors/".$this->VENDOR_ID."/ordersheets";
         $query = "createdAtFrom={$from}&createdAtTo={$to}&maxPerPage={$maxPerPage}&status={$status}";
+
+        $message = $datetime.$method.$path.$query;
+
+        $algorithm = "HmacSHA256";
+
+        $signature = hash_hmac('sha256', $message, $this->SECRET_KEY);
+
+        $authorization  = "CEA algorithm=${algorithm}, access-key=".$this->ACCESS_KEY.", signed-date=".$datetime.", signature=".$signature;
+
+        $url = 'https://api-gateway.coupang.com'.$path.'?'.$query;
+        
+        // $curl = curl_init();
+        // curl_setopt($curl, CURLOPT_URL, $url);
+        // curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        // curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type:  application/json;charset=UTF-8", "Authorization:".$authorization, "X-EXTENDED-TIMEOUT:90000"));
+        // curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        // $result = curl_exec($curl);
+        // $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+        // curl_close($curl);
+        
+        // return $result;
+
+        return $result=`{
+            "code": 200,
+            "message": "OK",
+            "data": [
+              {
+                "shipmentBoxId": 448531493,
+                "orderId": 22000009546234,
+                "orderedAt": "2017-10-10T10:20:16",
+                "orderer": {
+                  "name": "신*희",
+                  "email": "eu*****@na",
+                  "safeNumber": "0503-**-5464",
+                  "ordererNumber": null
+                },
+                "paidAt": "2017-10-10T10:20:16",
+                "status": "FINAL_DELIVERY",
+                "shippingPrice": 2500,
+                "remotePrice": null,
+                "remoteArea": false,
+                "parcelPrintMessage": "문 앞",
+                "splitShipping": false,
+                "ableSplitShipping": false,
+                "receiver": {
+                  "name": "신*희",
+                  "safeNumber": "0503-**-5464",
+                  "receiverNumber": null,
+                  "addr1": "경기 오산시 가수동 **아파트",
+                  "addr2": "109동 *호",
+                  "postCode": "447-700"
+                },
+                "orderItems": [
+                  {
+                    "vendorItemPackageId": 0,
+                    "vendorItemPackageName": "인디고뱅크키즈 기모 테잎배색 트레이닝 팬츠 IKTM17WG1",
+                    "productId": 31846051,
+                    "vendorItemId": 3242596358,
+                    "vendorItemName": "인디고뱅크키즈 기모 테잎배색 트레이닝 팬츠 IKTM17WG1, 07 DARK GREY, 160호",
+                    "shippingCount": 1,
+                    "salesPrice": 19000,
+                    "orderPrice": 19000,
+                    "discountPrice": 3000,
+                    "instantCouponDiscount": 2000,
+                    "downloadableCouponDiscount": 1000,
+                    "coupangDiscount": 0,
+                    "externalVendorSkuCode": "170816368810",
+                    "etcInfoHeader": null,
+                    "etcInfoValue": null,
+                    "etcInfoValues": [
+                      "추가메시지1",
+                      "추가메시지2"
+                    ],
+                    "sellerProductId": 80240831,
+                    "sellerProductName": "인디고뱅크키즈 A5 기모 배색츄키니 IKTM17WG1",
+                    "sellerProductItemName": "07 DARK GREY 160호",
+                    "firstSellerProductItemName": "07 DARK GREY/160호",
+                    "cancelCount": 0,
+                    "holdCountForCancel": 0,
+                    "estimatedShippingDate": "2017-10-16",
+                    "plannedShippingDate": "",
+                    "invoiceNumberUploadDate": "",
+                    "extraProperties": {},
+                    "pricingBadge": false,
+                    "usedProduct": false,
+                    "confirmDate": "2017-10-25 00:10:33",
+                    "deliveryChargeTypeName": "유료",
+                    "canceled": false
+                  }
+                ],
+                "overseaShippingInfoDto": {
+                  "personalCustomsClearanceCode": "",
+                  "ordererSsn": "",
+                  "ordererPhoneNumber": ""
+                },
+                "deliveryCompanyName": "CJ 대한통운",
+                "invoiceNumber": "340010913442",
+                "inTrasitDateTime": "2017-10-16 22:08:04",
+                "deliveredDate": "2017-10-17 17:17:52",
+                "refer": "안드로이드앱"
+              },
+              {
+                "shipmentBoxId": 448537989,
+                "orderId": 22000009546630,
+                "orderedAt": "2017-10-10T10:35:04",
+                "orderer": {
+                  "name": "김*숙",
+                  "email": "hs*****@na",
+                  "safeNumber": "0503-**-5013",
+                  "ordererNumber": null
+                },
+                "paidAt": "2017-10-10T10:35:04",
+                "status": "FINAL_DELIVERY",
+                "shippingPrice": 0,
+                "remotePrice": null,
+                "remoteArea": false,
+                "parcelPrintMessage": "직접 받고 부재 시 문 앞",
+                "splitShipping": false,
+                "ableSplitShipping": false,
+                "receiver": {
+                  "name": "김*숙",
+                  "safeNumber": "0502-344-6681",
+                  "receiverNumber": null,
+                  "addr1": "경기 광명시 하안1동 두산트레지움아파트",
+                  "addr2": "107동701호",
+                  "postCode": "423-747"
+                },
+                "orderItems": [
+                  {
+                    "vendorItemPackageId": 0,
+                    "vendorItemPackageName": "리틀브렌 후드달이 구스 경량 점퍼 LBJD17WG5",
+                    "productId": 34047877,
+                    "vendorItemId": 3261300431,
+                    "vendorItemName": "리틀브렌 후드달이 구스 경량 점퍼 LBJD17WG5, 04 MIDDLE MELANGE GR, 170호",
+                    "shippingCount": 1,
+                    "salesPrice": 27800,
+                    "orderPrice": 27800,
+                    "discountPrice": 2470,
+                    "instantCouponDiscount": 560,
+                    "downloadableCouponDiscount": 1910,
+                    "coupangDiscount": 0,
+                    "externalVendorSkuCode": "170824416510",
+                    "etcInfoHeader": null,
+                    "etcInfoValue": null,
+                    "etcInfoValues": [
+                      "추가메시지1",
+                      "추가메시지2"
+                    ],
+                    "sellerProductId": 87037167,
+                    "sellerProductName": "리틀브렌 후드달이 구스 경량 점퍼 LBJD17WG5",
+                    "sellerProductItemName": "04 MIDDLE MELANGE GR 170호",
+                    "firstSellerProductItemName": "04 MIDDLE MELANGE GR/170호",
+                    "cancelCount": 0,
+                    "holdCountForCancel": 0,
+                    "estimatedShippingDate": "2017-10-16",
+                    "plannedShippingDate": "",
+                    "invoiceNumberUploadDate": "",
+                    "extraProperties": {},
+                    "pricingBadge": false,
+                    "usedProduct": false,
+                    "confirmDate": "2017-10-25 02:10:27",
+                    "deliveryChargeTypeName": "무료",
+                    "canceled": false
+                  }
+                ],
+                "overseaShippingInfoDto": {
+                  "personalCustomsClearanceCode": "",
+                  "ordererSsn": "",
+                  "ordererPhoneNumber": ""
+                },
+                "deliveryCompanyName": "CJ 대한통운",
+                "invoiceNumber": "340010912565",
+                "inTrasitDateTime": "2017-10-16 22:08:04",
+                "deliveredDate": "2017-10-17 20:42:23",
+                "refer": "안드로이드앱"
+              }
+            ],
+            "nextToken": "448537989"
+          }`;
+    }
+
+    /**
+     * 발주서목록 조회(분단위 전체)
+     */
+    public function getOrderSheetsTimeList($from="", $to="", $status="INSTRUCT", $nextToken="")
+    {
+        date_default_timezone_set("GMT+0");
+        
+        $datetime = date("ymd").'T'.date("His").'Z';
+        $method = "GET";
+        $path = "/v2/providers/openapi/apis/api/v4/vendors/".$this->VENDOR_ID."/ordersheets";
+        $query = "createdAtFrom={$from}&createdAtTo={$to}&searchType=timeFrame&status={$status}";
 
         $message = $datetime.$method.$path.$query;
 

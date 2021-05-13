@@ -17,7 +17,7 @@
                         @csrf
                         <div class="card-header border-bottom-0">
                             <div class="row col-12 pull-right float-right">
-                                <a href="javascript:void(0)" class="btn btn-success btn-xs btnSubmitAccount" style="font-size:12px !important;">선택</a>
+                                <a href="javascript:void(0)" class="btn btn-success btn-xs btnSubmitAccount" style="font-size:12px !important;">주문수집</a>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <a href="javascript:void(0)" onclick="window.opener=null; window.close(); return false;" class="btn btn-warning btn-xs" style="font-size:12px !important;">닫기</a>
                             </div>
@@ -82,22 +82,22 @@
                     alert("계정을 하나이상 선택해주세요!");
                     return false;
                 }
-                var action = '/orderMarketOrderCollection/GetMarketOrderList';
-                var data = $('#divProductForm').serialize();
-                $.ajax({
-                    url: action,
-                    data: data,
-                    type: "POST",
-                    dataType: 'json',
-                    success: function ({status, data}) {
-                        if(status == "success"){
-                            window.opener.drawTable();
-                            window.close();
-                        }
-                    },
-                    error: function (data) {
-                    }
-                });
+                // var action = '/orderMarketOrderCollection/GetMarketOrderList';
+                // var data = $('#divProductForm').serialize();
+                // $.ajax({
+                //     url: action,
+                //     data: data,
+                //     type: "POST",
+                //     dataType: 'json',
+                //     success: function ({status, data}) {
+                //         if(status == "success"){
+                //             window.opener.drawTable();
+                //             window.close();
+                //         }
+                //     },
+                //     error: function (data) {
+                //     }
+                // });
                 $( "#manageMarketAccount" ).submit();
             });
         });	  
