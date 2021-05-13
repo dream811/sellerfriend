@@ -73,15 +73,17 @@
             });
             
             $('body').on('click', '.btnSubmitAccount', function () {
-                var account = [];
+                var account = "";
                 $.each($("input[name='chkAccount[]']:checked"), function(){
-                    account.push($(this).val());
+                    acount += $(this).val() + "|";
                 });
+                products = products.slice(0,-1);
                 if(account.length <= 0)
                 {
                     alert("계정을 하나이상 선택해주세요!");
                     return false;
                 }
+                // //console.log(account);
                 // var action = '/orderMarketOrderCollection/GetMarketOrderList';
                 // var data = $('#divProductForm').serialize();
                 // $.ajax({

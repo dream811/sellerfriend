@@ -15,6 +15,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Market;
 use App\Models\MarketAccount;
+use App\Models\MarketSettingCoupang;
 use App\Models\Order;
 use App\MyLibs\CoupangConnector;
 use Yajra\DataTables\Facades\DataTables;
@@ -128,6 +129,37 @@ class MarketOrderCollectionController extends Controller
 
         return view('order.MarketAccountList', compact('marketAccounts'));
     }
+
+    //마켓주문수집
+    //발주서조회를 위한 마켓계정 리스트(post)
+    public function getMarketOrderList(Request $request)
+    {
+        
+        $chkAccount = $request->get('chkAccount');
+        $strProduct = $request->post('products');
+        $settingCoupangs = MarketSettingCoupang::where('nUserId', Auth::id())
+                                        ->whereIn('nIdx', $chkAccount)
+                                        ->get();
+        
+        $markets = Market::where('strMarketCode', 'coupang');
+        
+        $productIds = explode("|", $strProduct);
+        $products = Product::where('bIsDel', 0)
+            ->where('nUserId', Auth::id())
+            ->where('nProductWorkProcess', 3)
+            ->whereIn('nIdx', $productIds)
+            ->orderBy('nIdx')
+            ->get();
+
+        $productsCount = count($products);
+        $successCount = 0;
+        $failedCount = 0;
+        
+        $coupang = new CoupangConnector();
+
+        return view('order.MarketAccountList', compact('marketAccounts'));
+    }
+    
     //상품등록을 위한 마켓계정 선택(post)
     public function marketAccountSelect(Request $request)
     {
