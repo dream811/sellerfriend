@@ -133,6 +133,12 @@ class FailedProductManageController extends Controller
                         <li class="list-inline-item">
                         '.$strCode.'
                         </li><br>';
+                    $marketInfo = '<li class="list-inline-item">
+                        '.$row->productMarketSetting->marketAccount->strAccountId.'
+                        </li><br>';
+                    $marketInfo = '<li class="list-inline-item">
+                        '.$row->strSolutionId.'
+                        </li><br>';
                     $marketInfo .= '<li class="list-inline-item">
                         '.$row->strId.'
                         </li></ul>';
@@ -141,7 +147,7 @@ class FailedProductManageController extends Controller
                 ->addColumn('mainImage', function($row){
                     $main = $row->productImages->where('nImageCode', '0')->first();
                     // $btn = '<img alt="Avatar" style="width: 5rem;" class="table-product-image" src="'.$main->strURL.'">';
-                    $mainImage = '<li class="list-inline-item" >
+                    $mainImage = '<li class="list-inline-item">
                                     <a href="'.$row->strURL.'" target="_blank">
                                         <span data="'.$main->strURL.'" class="preview">
                                             <img alt="gallery thumbnail" style="width: 5rem;" src="'.$main->strURL.'">

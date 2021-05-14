@@ -69,95 +69,124 @@ class StoppedProductManageController extends Controller
         if ($request->ajax()) {
             $products = Product::where('bIsDel', 0)
                 ->where('nUserId', Auth::id())
+                ->where('nProductWorkProcess', 3)//판매중지 상품
                 ->orderBy('nIdx');
 
-            return DataTables::eloquent($products)
-                    ->addIndexColumn()
-                    ->addColumn('check', function($row){
-                        $check = '<input type="checkbox" name="chkProduct[]" onclick="" value="'.$row->nIdx.'">';
-                        return $check;
-                    })
-                    ->addColumn('action', function($row){
-                        $btn = '';
-                        return $btn;
-                    })
-                    ->addColumn('images', function($row){
-                        $item = '<ul class="list-inline" style="width:100px;">';
-                        foreach ($row->productImages as $productImage) {
-                            $item .= '<li class="list-inline-item" >
-                                        <a href="'.$productImage->strURL.'" class="preview">
-                                            <img alt="Avatar" class="table-avatar" src="'.$productImage->strURL.'">
-                                        </a>
-                                    </li>';
-                        }
-                        $item .= '</ul>';
-                        return $item;
-                    })
-                    ->addColumn('productInfo', function($row){
-                        $element = '<ul class="list-inline" style="">';
-                        $element .= '<li class="list-inline-item">
-                                    '.$row->strCategoryCode1.'>'.$row->strCategoryCode2.'>'.$row->strCategoryCode3.'>'.$row->strCategoryCode4.'
-                                </li><br>';
-                        $element .= '<li class="list-inline-item">
-                                    '.$row->strKrSubName.'
+            return Datatables::of($products)
+                ->addIndexColumn()
+                ->addColumn('check', function($row){
+                    $element = '<input type="checkbox" name="chkProduct[]" onclick="" value="'.$row->nIdx.'">';
+                    return $element;
+                })
+                ->addColumn('images', function($row){
+                    $item = '<ul class="list-inline" style="width:100px;">';
+                    foreach ($row->productImages as $productImage) {
+                        $item .= '<li class="list-inline-item" >
+                                    <a href="'.$productImage->strURL.'" class="preview">
+                                        <img alt="Avatar" class="table-avatar" src="'.$productImage->strURL.'">
+                                    </a>
                                 </li>';
-
-                        $element .= '</ul>';
-                        return $element;
-                    })
-                    ->addColumn('priceInfo', function($row){
-                        $element = '<ul class="list-inline" style="width:100px;">';
-                        $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nBasePrice.'
-                            </li><br>';
-                        $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nBasePrice.'
-                            </li>';
-                                
-                        $element .= '</ul>';
-                        return $element;
-                    })
-                    ->addColumn('marginInfo', function($row){
-                        $element = '<ul class="list-inline" style="width:100px;">';
-                        $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nBasePrice.'
-                            </li><br>';
-                        $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nBasePrice.'
-                            </li>';
-                                
-                        $element .= '</ul>';
-                        return $element;
-                    })
-                    ->addColumn('marketInfo', function($row){
-                        $marketInfo = '
-                                <span style="width:20px;" class="badge badge-success">C</span>
-                                <span style="width:20px;" class="badge badge-success">11</span>
-                                <span style="width:20px;" class="badge badge-success">A</span>
-                                <span style="width:20px;" class="badge badge-success">G</span>
-                                <br/>
-                                <span style="width:20px;" class="badge badge-success">I</span>
-                                <span style="width:20px;" class="badge badge-success">S</span>
-                                <span style="width:20px;" class="badge badge-success">T</span>
-                                <span style="width:20px;" class="badge badge-success">W</span>
-                                ';
-                        return $marketInfo;
-                    })
-                    ->addColumn('mainImage', function($row){
-                        $main = $row->productImages->where('nImageCode', '0')->first();
-                        // $btn = '<img alt="Avatar" style="width: 5rem;" class="table-product-image" src="'.$main->strURL.'">';
-                        $mainImage = '<li class="list-inline-item" >
-                                        <a href="'.$row->strURL.'" target="_blank">
-                                            <span data="'.$main->strURL.'" class="preview">
-                                                <img alt="gallery thumbnail" style="width: 5rem;" src="'.$main->strURL.'">
-                                            </span>
-                                        </a>
-                                    </li>';
-                        return $mainImage;
-                    })
-                    ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo'])
-                    ->make(true);
+                    }
+                    $item .= '</ul>';
+                    return $item;
+                })
+                ->addColumn('productInfo', function($row){
+                  $strCategory = $row->strCategoryCode0;
+                  $category = mb_split(" : ", $strCategory)[1];
+                  $element = '<ul class="list-inline" style="">';
+                  $element .= '<li class="list-inline-item">
+                          '.$category.'
+                      </li><br>';
+                  $element .= '<li class="list-inline-item">
+                          '.$row->strKrSubName.'
+                      </li><br>';
+                  //옵션
+                  $options = explode("|", $row->strOption);
+                  $optionValue = explode("|", $row->strOptionValue);
+                  foreach ($options as $key => $value) {
+                      $element .= '<li class="list-inline-item">
+                          <span style="text-align:left;">'.$value.':</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-align:right;">'.$optionValue[$key].'</span>
+                      </li><br>';
+                  }
+                  $element .= '<li class="list-inline-item">
+                          '.$row->strKrMainName.'
+                      </li><br>';
+                  $element .= '<li class="font-weight-light list-inline-item">
+                          '.Auth::user()->name.'['.$row->created_at.']
+                      </li>';
+                  $element .= '</ul>';
+                  return $element;
+                })
+                ->addColumn('priceInfo', function($row){
+                    $element = '<ul class="list-inline" style="width:100px;">';
+                    $element .= '<li class="list-inline-item">
+                            '.$row->productDetail->nProductPrice.'
+                        </li><br>';
+                    $element .= '<li class="list-inline-item">
+                            '.$row->productDetail->nExpectedRevenue.'
+                        </li><br>';
+                            
+                    $element .= '</ul>';
+                    return $element;
+                })
+                ->addColumn('marginInfo', function($row) use ($request){
                     
+                    $element = '<ul class="list-inline" style="width:100px;">';
+                    $element .= '<li class="list-inline-item">
+                            '.$row->productDetail->nMarginRate.'
+                        </li><br>';
+                    $element .= '<li class="list-inline-item">
+                        '.$row->productDetail->nSellerMarketChargeRate.'%
+                    </li><br>';
+                      
+                    $element .= '</ul>';
+                    return $element;
+                })
+                ->addColumn('marketInfo', function($row){
+                    $_11thhouseTag = $row->bReg11thhouse == 0 ? 'badge-secondary' : 'badge-success';
+                    $autionTag = $row->bRegAuction == 0 ? 'badge-secondary' : 'badge-success';
+                    $coupangTag = $row->bRegCoupang == 0 ? 'badge-secondary' : 'badge-success';
+                    $gmarketTag = $row->bRegGmarket == 0 ? 'badge-secondary' : 'badge-success';
+                    $interparkTag = $row->bRegInterpark == 0 ? 'badge-secondary' : 'badge-success';
+                    $lotteonTag = $row->bRegLotteon == 0 ? 'badge-secondary' : 'badge-success';
+                    $smartstoreTag = $row->bRegSmartstore == 0 ? 'badge-secondary' : 'badge-success';
+                    $tmonTag = $row->bRegTmon == 0 ? 'badge-secondary' : 'badge-success';
+                    $wemakepriceTag = $row->bRegWemakeprice == 0 ? 'badge-secondary' : 'badge-success';
+                    
+                    $marketInfo = '
+                            <span style="width:20px;" class="badge '.$coupangTag.'">C</span>
+                            <span style="width:20px;" class="badge '.$_11thhouseTag.'">11</span>
+                            <span style="width:20px;" class="badge '.$autionTag.'">A</span>
+                            <span style="width:20px;" class="badge '.$gmarketTag.'">G</span>
+                            <br/>
+                            <span style="width:20px;" class="badge '.$interparkTag.'">I</span>
+                            <span style="width:20px;" class="badge '.$smartstoreTag.'">S</span>
+                            <span style="width:20px;" class="badge '.$tmonTag.'">T</span>
+                            <span style="width:20px;" class="badge '.$wemakepriceTag.'">W</span>
+                            ';
+                    return $marketInfo;
+                })
+                ->addColumn('mainImage', function($row){
+                    $main = $row->productImages->where('nImageCode', '0')->first();
+                    // $btn = '<img alt="Avatar" style="width: 5rem;" class="table-product-image" src="'.$main->strURL.'">';
+                    $mainImage = '<li class="list-inline-item" >
+                                    <a href="'.$row->strURL.'" target="_blank">
+                                        <span data="'.$main->strURL.'" class="preview">
+                                            <img alt="gallery thumbnail" style="width: 5rem;" src="'.$main->strURL.'">
+                                        </span>
+                                    </a>
+                                </li>';
+                    return $mainImage;
+                })
+                ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo', 'action'])
+                ->filter(function($query) use ($request){
+                    if($request->get('daterange')){
+                        $dates = explode(' ~ ', $request->get('daterange'));
+                        $endDate = date('Y-m-d H:i:s', strtotime($dates[1] . ' +1 day'));
+                        $query->whereBetween('created_at', [$dates[0], $endDate]);
+                    }
+                })
+                ->make(true);        
         }
         return view('product.StoppedProductManage', compact('title', 'brands', 'comes', 'categories_1', 'categories_2', 'categories_3', 'categories_4'));
     }

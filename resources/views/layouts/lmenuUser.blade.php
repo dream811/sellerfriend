@@ -21,24 +21,24 @@
             <p>[1]상품스크랩</p>
         </a>
         </li>
-        <li class="nav-item">
+        {{-- <li class="nav-item">
         <a href="{{ route('scratch.ProductGetManage') }}" class="nav-link {{ (request()->is('scratchProductGetManage')) ? 'active' : '' }}">
             <i class="fas fa-briefcase nav-icon"></i>
             <p>[2]상품수집관리</p>
         </a>
-        </li>
+        </li> --}}
         <li class="nav-item">
         <a href="{{ route('scratch.SellPrepareCheck') }}" class="nav-link {{ (request()->is('scratchSellPrepareCheck')) ? 'active' : '' }}">
             <i class="fas fa-clipboard-list nav-icon"></i>
             <p>[3]판매준비검토</p>
         </a>
         </li>
-        <li class="nav-item">
+        {{-- <li class="nav-item">
         <a href="{{ route('scratch.DesignCheck') }}" class="nav-link {{ (request()->is('scratchDesignCheck')) ? 'active' : '' }}">
             <i class="fas fa-crop-alt nav-icon"></i>
             <p>[4]디자인검토</p>
         </a>
-        </li>
+        </li> --}}
     </ul>
 </li>
 <li class="nav-item {{ (request()->routeIs('product*')) ? 'menu-open' : '' }}">

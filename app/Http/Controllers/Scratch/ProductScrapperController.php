@@ -26,6 +26,7 @@ use App\Models\DocumentImage;
 use App\Models\WeightType;
 use App\Models\MoneyType;
 use App\Mylibs\ScrapperAPI;
+use DateTime;
 use Exception;
 use Laravel\Ui\Presets\React;
 
@@ -154,9 +155,12 @@ class ProductScrapperController extends Controller
             
         }
         $strOptionValue = implode("|", $arrOptionValue);
+        $date = new DateTime('now');
+        $tid = "SF".$date->format('YmdHisu');
 
         $product = new Product([
             'nUserId' => Auth::id(),
+            'strSolutionId' => $tid,
             'strURL' => $request->post('txtScrapURL'), 
             'strMainName' => $request->post('txtKrMainName'), 
             'strSubName' => $request->post('txtKrSubName'),

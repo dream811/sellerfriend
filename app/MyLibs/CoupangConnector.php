@@ -1091,6 +1091,7 @@ class CoupangConnector {
      */
     public function getOrderSheetsDayList($from="", $to="", $maxPerPage=2, $status="INSTRUCT", $nextToken="")
     {
+        
         date_default_timezone_set("GMT+0");
         
         $datetime = date("ymd").'T'.date("His").'Z';
@@ -1106,6 +1107,7 @@ class CoupangConnector {
 
         $authorization  = "CEA algorithm=${algorithm}, access-key=".$this->ACCESS_KEY.", signed-date=".$datetime.", signature=".$signature;
 
+        
         $url = 'https://api-gateway.coupang.com'.$path.'?'.$query;
         
         // $curl = curl_init();
@@ -1120,7 +1122,7 @@ class CoupangConnector {
         
         // return $result;
 
-        return $result=`{
+        $result = '{
             "code": 200,
             "message": "OK",
             "data": [
@@ -1276,7 +1278,8 @@ class CoupangConnector {
               }
             ],
             "nextToken": "448537989"
-          }`;
+          }';
+          return $result;
     }
 
     /**

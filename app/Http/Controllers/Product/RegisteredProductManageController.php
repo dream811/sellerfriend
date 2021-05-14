@@ -115,7 +115,6 @@ class RegisteredProductManageController extends Controller
                         $element .= '<li class="list-inline-item">
                                 '.$row->productDetail->nSellerMarketChargeRate.'
                             </li>';
-                                
                         $element .= '</ul>';
                         return $element;
                     })
@@ -129,6 +128,12 @@ class RegisteredProductManageController extends Controller
                         $marketInfo = '<ul class="list-inline" style="width:100px;">
                             <li class="list-inline-item">
                             '.$strCode.'
+                            </li><br>';
+                        $marketInfo = '<li class="list-inline-item">
+                            '.$row->productMarketSetting->marketAccount->strAccountId.'
+                            </li><br>';
+                        $marketInfo = '<li class="list-inline-item">
+                            '.$row->strSolutionId.'
                             </li><br>';
                         $marketInfo .= '<li class="list-inline-item">
                             '.$row->strId.'

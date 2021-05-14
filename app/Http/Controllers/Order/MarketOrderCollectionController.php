@@ -19,6 +19,7 @@ use App\Models\MarketSettingCoupang;
 use App\Models\Order;
 use App\MyLibs\CoupangConnector;
 use Yajra\DataTables\Facades\DataTables;
+use DateTime;
 
 class MarketOrderCollectionController extends Controller
 {
@@ -136,28 +137,30 @@ class MarketOrderCollectionController extends Controller
     {
         
         $chkAccount = $request->get('chkAccount');
-        $strProduct = $request->post('products');
-        $settingCoupangs = MarketSettingCoupang::where('nUserId', Auth::id())
+        
+        $accounts = MarketAccount::where('nUserId', Auth::id())
                                         ->whereIn('nIdx', $chkAccount)
                                         ->get();
-        
+        //dd($accounts);
         $markets = Market::where('strMarketCode', 'coupang');
         
-        $productIds = explode("|", $strProduct);
-        $products = Product::where('bIsDel', 0)
-            ->where('nUserId', Auth::id())
-            ->where('nProductWorkProcess', 3)
-            ->whereIn('nIdx', $productIds)
-            ->orderBy('nIdx')
-            ->get();
 
-        $productsCount = count($products);
+        $productsCount = 0;
         $successCount = 0;
         $failedCount = 0;
-        
-        $coupang = new CoupangConnector();
 
-        return view('order.MarketAccountList', compact('marketAccounts'));
+        $coupang = new CoupangConnector();
+        foreach ($accounts as $key1 => $account) {
+            $coupang = new CoupangConnector($account->strAPIAccessKey, $account->strSecretKey, $account->strVendorId, $account->strAccountId);
+            $date = new DateTime('now');
+            $start_date = $date->format('Y-m-d H:i:s'); 
+            $date->modify('+1 day');
+            $end_date = $date->format('Y-m-d H:i:s');
+            $res =  (object)json_decode($coupang->getOrderSheetsDayList($start_date, $end_date, 50), false);
+            print_r($res);
+        }
+          
+        //return view('order.MarketAccountList', compact('marketAccounts'));
     }
     
     //상품등록을 위한 마켓계정 선택(post)

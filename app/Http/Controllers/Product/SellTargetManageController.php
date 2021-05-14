@@ -78,22 +78,17 @@ class SellTargetManageController extends Controller
                 ->where('nCategoryType', 4)
                 ->orderBy('strCategoryName')
                 ->get();
-        
-        
 
         if ($request->ajax()) {
             $products = Product::where('bIsDel', 0)
                 ->where('nUserId', Auth::id())
-                ->where('nProductWorkProcess', 3)//디자인 검토 완료상품
+                ->where('nProductWorkProcess', 1)//디자인 검토 완료상품
                 ->orderBy('nIdx');
 
             return Datatables::of($products)
                 ->addIndexColumn()
                 ->addColumn('check', function($row){
                     $element = '<input type="checkbox" name="chkProduct[]" onclick="" value="'.$row->nIdx.'">';
-                    // $shareTag = $row->nShareType != 2 ? '<span class="badge badge-danger">비공개</span>': '';
-
-                    // $element .= '<li class="font-weight-light list-inline-item">'.$shareTag.'</li><br>';
                     return $element;
                 })
                 ->addColumn('images', function($row){
@@ -266,10 +261,6 @@ class SellTargetManageController extends Controller
         $productsCount = count($products);
         $successCount = 0;
         $failedCount = 0;
-        
-        
-        
-       
         foreach ($settingCoupangs as $key1 => $setting) {
           $coupang = new CoupangConnector($setting->marketAccount->strAPIAccessKey, $setting->marketAccount->strSecretKey, $setting->marketAccount->strVendorId, $setting->marketAccount->strAccountId);
             foreach ($products as $key2 => $product) {
@@ -431,7 +422,9 @@ class SellTargetManageController extends Controller
                     //상품등록 성공으로 추가
                     $successProduct = new SuccessProduct([
                         'nUserId' => Auth::id(),
+                        'nMarketSetIdx' => $setting->nIdx,
                         'strId' => "C:".$response->data,
+                        'strSolutionId' => $product->strSolutionId,
                         'strURL' => $product->strURL, 
                         'strMainName' => $product->strMainName,
                         'strSubName' => $product->strSubName,
@@ -521,9 +514,12 @@ class SellTargetManageController extends Controller
 
                 }else{
                     $failedCount++;
+                    
                     //상품등록 실패로 추가
                     $failedProduct = new FailedProduct([
                         'nUserId' => Auth::id(),
+                        'strSolutionId' => $product->strSolutionId,
+                        'nMarketSetIdx' => $setting->nIdx,
                         'strURL' => $product->strURL, 
                         'strMainName' => $product->strMainName,
                         'strSubName' => $product->strSubName,
@@ -548,7 +544,7 @@ class SellTargetManageController extends Controller
                         'strCategoryCode8' => $product->strCategoryCode8,
                         'nShareType' => $product->nShareType,
                         'nProductWorkProcess' => 0,
-                        'strReason' => (strPos($response->message, "'") !== false ? "알수없는 오류가 발생했습니다." : $response->message ),
+                        'strReason' => (strPos($response->message, "[") !== false ? "알수없는 오류가 발생했습니다." : $response->message),
                         'bIsDel'=> 0
                     ]);
                     $failedProduct->save();

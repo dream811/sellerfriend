@@ -24,7 +24,7 @@
             <div class="col-12 col-sm-12">
                 <div class="card card-primary card-outline card-tabs">
                     <div class="card-header border-bottom-0">
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-1">
                                 <label class="float-right">집하지:</label>
                             </div>
@@ -108,7 +108,7 @@
                                     <input type="text" class="form-control form-control-sm" name="txtCategoryName" id="txtCategoryName" value="" placeholder="">
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="row">
                             <!-- /.form group -->
                             <div class="col-1">
@@ -162,7 +162,7 @@
                             <div class="tab-pane fade show active" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
                                 <form id="divProductForm">
                                     <div class="card-body p-0">
-                                        <table id="example" class="table table-striped projects" cellspacing="0" width="100%">
+                                        <table id="example" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th><input type="checkbox" name="select_all" value="1" id="select_all"></th>
@@ -239,7 +239,7 @@
                 scrollY: "400px",
                 //ajax: "{{ route('product.SellTargetManage') }}",
                 ajax: {
-                    url: "{{ route('product.SellTargetManage') }}",
+                    url: "{{ route('product.StoppedProductManage') }}",
                     data: function ( d ) {
                         d.daterange = $('#reservation').val();
                         d.comecode = $('#reservation').val();

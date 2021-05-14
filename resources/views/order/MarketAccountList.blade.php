@@ -74,11 +74,11 @@
             
             $('body').on('click', '.btnSubmitAccount', function () {
                 var account = "";
-                $.each($("input[name='chkAccount[]']:checked"), function(){
-                    acount += $(this).val() + "|";
-                });
-                products = products.slice(0,-1);
-                if(account.length <= 0)
+                // $.each($("input[name='chkAccount[]']:checked"), function(){
+                //     acount += $(this).val() + "|";
+                // });
+                // products = products.slice(0,-1);
+                if($("input[name='chkAccount[]']:checked").length <= 0)
                 {
                     alert("계정을 하나이상 선택해주세요!");
                     return false;

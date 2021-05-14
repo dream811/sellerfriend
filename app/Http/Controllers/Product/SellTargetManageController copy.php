@@ -77,7 +77,7 @@ class SellTargetManageController extends Controller
         if ($request->ajax()) {
             $products = Product::where('bIsDel', 0)
                 ->where('nUserId', Auth::id())
-                ->where('nProductWorkProcess', 3)//디자인 검토 완료상품
+                ->where('nProductWorkProcess', 1)//디자인 검토 완료상품
                 ->orderBy('nIdx');
 
             return Datatables::of($products)

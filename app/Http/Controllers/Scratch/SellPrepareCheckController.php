@@ -87,7 +87,7 @@ class SellPrepareCheckController extends Controller
         if ($request->ajax()) {
             $products = Product::where('bIsDel', 0)
                 ->where('nUserId', Auth::id())
-                ->where('nProductWorkProcess', 1)
+                ->where('nProductWorkProcess', 0)
                 ->orderBy('nIdx');
             return DataTables::of($products)
                 ->addIndexColumn()
