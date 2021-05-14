@@ -14,50 +14,50 @@ class SuccessProduct extends Model
     'bReg11thhouse', 'bRegAuction', 'bRegCoupang', 'bRegGmarket', 'bRegInterpark', 'bRegLotteon', 'bRegSmartstore', 'bRegTmon', 'bRegWemakeprice', 'created_at', 'updated_at', 'bIsDel'];
     public function productImages()
     {
-        return $this->hasMany(ProductImage::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(SuccessProductImage::class, 'nProductIdx', 'nIdx');
     }
     public function productDetail()
     {
-        return $this->hasOne(ProductDetail::class, 'nProductIdx', 'nIdx');
+        return $this->hasOne(SuccessProductDetail::class, 'nProductIdx', 'nIdx');
     }
     public function productRegCoupang()
     {
-        return $this->hasMany(ProductRegCoupang::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(SuccessProductRegCoupang::class, 'nProductIdx', 'nIdx');
     }
     public function productReg11thhouse()
     {
-        return $this->hasMany(ProductReg11thhouse::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(SuccessProductReg11thhouse::class, 'nProductIdx', 'nIdx');
     }
     public function productRegAuction()
     {
-        return $this->hasMany(ProductRegAuction::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(SuccessProductRegAuction::class, 'nProductIdx', 'nIdx');
     }
     public function productRegGmarket()
     {
-        return $this->hasMany(ProductRegGmarket::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(SuccessProductRegGmarket::class, 'nProductIdx', 'nIdx');
     }
     public function productRegInterpark()
     {
-        return $this->hasMany(ProductRegInterpark::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(SuccessProductRegInterpark::class, 'nProductIdx', 'nIdx');
     }
     public function productLotteon()
     {
-        return $this->hasMany(ProductRegLotteon::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(SuccessProductRegLotteon::class, 'nProductIdx', 'nIdx');
     }
     public function productSmartstore()
     {
-        return $this->hasMany(productSmartstore::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(SuccessProductSmartstore::class, 'nProductIdx', 'nIdx');
     }
     public function productTmon()
     {
-        return $this->hasMany(ProductRegTmon::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(SuccessProductRegTmon::class, 'nProductIdx', 'nIdx');
     }
     public function productWemakeprice()
     {
-        return $this->hasMany(productWemakeprice::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(SuccessProductWemakeprice::class, 'nProductIdx', 'nIdx');
     }
     public function productItems()
     {
-        return $this->hasMany(ProductItem::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(SuccessProductItem::class, 'nProductIdx', 'nIdx');
     }
 }

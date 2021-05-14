@@ -14,6 +14,6 @@ class FailedProductImage extends Model
     protected $fillable = ['nIdx', 'nProductIdx', 'nImageCode', 'strName', 'strURL', 'nHeight', 'nWidth', 'strNote', 'bIsDel'];
     public function product()
     {
-        return $this->belongsTo(Product::class, 'nProductIdx', 'nIdx');
+        return $this->belongsTo(FailedProduct::class, 'nProductIdx', 'nIdx');
     }
 }

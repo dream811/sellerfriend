@@ -11,53 +11,53 @@ class FailedProduct extends Model
     protected $table = 'tb_failed_products';
     protected $primaryKey = 'nIdx';
     protected $fillable = ['strId', 'strURL', 'strMainName', 'strSubName', 'nUserId', 'nBrandType', 'strBrand', 'strKeyword', 'strOption', 'strOptionValue', 'strChMainName', 'strKrMainName', 'strChSubName', 'strKrSubName', 'strComeCode', 'strCategoryCode0', 'strCategoryCode1', 'strCategoryCode2', 'strCategoryCode3', 'strCategoryCode4', 'strCategoryCode5', 'strCategoryCode6', 'strCategoryCode7', 'strCategoryCode8', 'nShareType', 'nProductWorkProcess', 
-    'bReg11thhouse', 'bRegAuction', 'bRegCoupang', 'bRegGmarket', 'bRegInterpark', 'bRegLotteon', 'bRegSmartstore', 'bRegTmon', 'bRegWemakeprice', 'created_at', 'updated_at', 'bIsDel'];
+    'bReg11thhouse', 'bRegAuction', 'bRegCoupang', 'bRegGmarket', 'bRegInterpark', 'bRegLotteon', 'bRegSmartstore', 'bRegTmon', 'bRegWemakeprice', 'created_at', 'updated_at', 'strReason', 'bIsDel'];
     public function productImages()
     {
-        return $this->hasMany(ProductImage::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(FailedProductImage::class, 'nProductIdx', 'nIdx');
     }
     public function productDetail()
     {
-        return $this->hasOne(ProductDetail::class, 'nProductIdx', 'nIdx');
+        return $this->hasOne(FailedProductDetail::class, 'nProductIdx', 'nIdx');
     }
     public function productRegCoupang()
     {
-        return $this->hasMany(ProductRegCoupang::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(FailedProductRegCoupang::class, 'nProductIdx', 'nIdx');
     }
     public function productReg11thhouse()
     {
-        return $this->hasMany(ProductReg11thhouse::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(FailedProductReg11thhouse::class, 'nProductIdx', 'nIdx');
     }
     public function productRegAuction()
     {
-        return $this->hasMany(ProductRegAuction::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(FailedProductRegAuction::class, 'nProductIdx', 'nIdx');
     }
     public function productRegGmarket()
     {
-        return $this->hasMany(ProductRegGmarket::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(FailedProductRegGmarket::class, 'nProductIdx', 'nIdx');
     }
     public function productRegInterpark()
     {
-        return $this->hasMany(ProductRegInterpark::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(FailedProductRegInterpark::class, 'nProductIdx', 'nIdx');
     }
     public function productLotteon()
     {
-        return $this->hasMany(ProductRegLotteon::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(FailedProductRegLotteon::class, 'nProductIdx', 'nIdx');
     }
     public function productSmartstore()
     {
-        return $this->hasMany(productSmartstore::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(FailedProductSmartstore::class, 'nProductIdx', 'nIdx');
     }
     public function productTmon()
     {
-        return $this->hasMany(ProductRegTmon::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(FailedProductRegTmon::class, 'nProductIdx', 'nIdx');
     }
     public function productWemakeprice()
     {
-        return $this->hasMany(productWemakeprice::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(FailedProductWemakeprice::class, 'nProductIdx', 'nIdx');
     }
     public function productItems()
     {
-        return $this->hasMany(ProductItem::class, 'nProductIdx', 'nIdx');
+        return $this->hasMany(FailedProductItem::class, 'nProductIdx', 'nIdx');
     }
 }

@@ -92,7 +92,10 @@ class FailedProductManageController extends Controller
                         </li><br>';
                     $element .= '<li class="font-weight-light list-inline-item">
                             '.Auth::user()->name.'['.$row->created_at.']
-                        </li>';
+                        </li><br>';
+                    $element .= '<li class="font-weight-light list-inline-item">
+                        <code style="font-size: 12px; color: red;" >실패내용:&nbsp;&nbsp;&nbsp;&nbsp;'.$row->strReason.'</code>
+                    </li>';
                     $element .= '</ul>';
                     return $element;
                 })
@@ -104,7 +107,6 @@ class FailedProductManageController extends Controller
                     $element .= '<li class="list-inline-item">
                             '.$row->productDetail->nDiscountPrice.'
                         </li>';
-                            
                     $element .= '</ul>';
                     return $element;
                 })

@@ -17,6 +17,6 @@ class FailedProductDetail extends Model
     'nOptionDiscountPrice', 'nOptionSSPrice', 'nOptionESMPrice', 'nOptionSellDiscountPrice', 'nOptionESMDeliveryCharge', 'blobNote', 'bIsDel'];
     public function product()
     {
-        return $this->belongsTo(Product::class, 'nProductIdx', 'nIdx');
+        return $this->belongsTo(FailedProduct::class, 'nProductIdx', 'nIdx');
     }
 }

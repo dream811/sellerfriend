@@ -267,11 +267,11 @@ class SellTargetManageController extends Controller
         $successCount = 0;
         $failedCount = 0;
         
-        $coupang = new CoupangConnector();
+        
         
        
         foreach ($settingCoupangs as $key1 => $setting) {
-            
+          $coupang = new CoupangConnector($setting->marketAccount->strAPIAccessKey, $setting->marketAccount->strSecretKey, $setting->marketAccount->strVendorId, $setting->marketAccount->strAccountId);
             foreach ($products as $key2 => $product) {
                 //만약 상품이 쿠팡에 이미 등록되였다면 넘긴다
                 if($product->bRegCoupang == 1)
@@ -314,438 +314,115 @@ class SellTargetManageController extends Controller
                 $arrItems = Array();
                 foreach ($productItems as $key3 => $item) 
                 {
-                    
-
-                    //attribute 배렬을 만든다
-                    //print_r($cateMetaInfo->data['attributes']);
-                    $attrArr = array();
-                    foreach ($arrOption as $key =>$value) {
-                        $attr = array(
-                            "attributeTypeName"=> $value,
-                            "attributeValueName"=> $item['strSubItemKoOptionPattern'.$key]
-                        );
-                        array_push($attrArr, $attr);
-                    }
-                    
-                    //end of attribute
-                    $arrItems[] = array(
-                        "itemName"=> $item->strSubItemName,
-                        "originalPrice"=> $item->nSubItemSellPrice,
-                        "salePrice"=> $item->nSubItemSellPrice,
-                        "maximumBuyCount"=> $setting->nMaxQtyPerManDayLimit,
-                        "maximumBuyForPerson"=> "0",
-                        "outboundShippingTimeDay"=> $setting->nOutboundShippingTimeDay,
-                        "maximumBuyForPersonPeriod"=> $setting->nMaxQtyPerManQtyLimit,
-                        "unitCount"=> 100,//$item->nUnitQuantity,
-                        "adultOnly"=> $setting->bOnlyAdult == 0 ? "AUDLT_ONLY" : "EVERYONE",
-                        "taxType"=> "TAX",
-                        "parallelImported"=> $setting->bParallelImport == 1 ? "PARALLEL_IMPORTED" : "NOT_PARALLEL_IMPORTED",
-                        "overseasPurchased"=> $setting->bOverSeaPurchaseAgent == 1 ? "OVERSEAS_PURCHASED" :"NOT_OVERSEAS_PURCHASED",
-                        "pccNeeded"=> $setting->nPersonPassingCodeType == 1 ? "true" : "false",
-                        "externalVendorSku"=> "0001",
-                        "barcode"=> "",
-                        "emptyBarcode"=> true,
-                        "emptyBarcodeReason"=> "상품확인불가_바코드없음사유",
-                        "modelNo"=> "1717171",
-                        "extraProperties"=> null,
-                        //"certifications"=> $certifications,
-                        "searchTags"=> array("키워드1", "키워드2"),
-                        "images"=> array(
-                            array(
-                                "imageOrder"=> 0,
-                                "imageType"=> "REPRESENTATION",
-                                "vendorPath"=> "https:".$item->strSubItemImage
+                  //attribute 배렬을 만든다
+                  //print_r($cateMetaInfo->data['attributes']);
+                  $attrArr = array();
+                  foreach ($arrOption as $key =>$value) {
+                      $attr = array(
+                          "attributeTypeName"=> $value,
+                          "attributeValueName"=> $item['strSubItemKoOptionPattern'.$key]
+                      );
+                      array_push($attrArr, $attr);
+                  }
+                  echo ($setting->nUnitQuantity);
+                  echo ($item->nSubItemQuantity);
+                  //end of attribute
+                  $arrItems[] = array(
+                      "itemName"=> $item->strSubItemName,
+                      "originalPrice"=> $item->nSubItemSellPrice,
+                      "salePrice"=> $item->nSubItemSellPrice,
+                      "maximumBuyCount"=> $item->nSubItemQuantity > 0 ? $item->nSubItemQuantity : $setting->nUnitQuantity,//$setting->nMaxQtyPerManDayLimit,
+                      "maximumBuyForPerson"=> "0",
+                      "outboundShippingTimeDay"=> $setting->nOutboundShippingTimeDay,
+                      "maximumBuyForPersonPeriod"=> $setting->nMaxQtyPerManQtyLimit,
+                      "unitCount"=> 0,//$item->nSubItemQuantity > 0 ? $item->nSubItemQuantity : $setting->nUnitQuantity,
+                      "adultOnly"=> $setting->bOnlyAdult == 0 ? "EVERYONE" : "AUDLT_ONLY",
+                      "taxType"=> "TAX",
+                      "parallelImported"=> $setting->bParallelImport == 1 ? "PARALLEL_IMPORTED" : "NOT_PARALLEL_IMPORTED",
+                      "overseasPurchased"=> $setting->bOverSeaPurchaseAgent == 1 ? "OVERSEAS_PURCHASED" :"NOT_OVERSEAS_PURCHASED",
+                      "pccNeeded"=> $setting->nPersonPassingCodeType == 1 ? "true" : "false",
+                      "externalVendorSku"=> "0001",
+                      "barcode"=> "",
+                      "emptyBarcode"=> true,
+                      "emptyBarcodeReason"=> "상품확인불가_바코드없음사유",
+                      "modelNo"=> "1717171",
+                      "extraProperties"=> null,
+                      //"certifications"=> $certifications,
+                      "searchTags"=> array("키워드1", "키워드2"),
+                      "images"=> array(
+                          array(
+                              "imageOrder"=> 0,
+                              "imageType"=> "REPRESENTATION",
+                              "vendorPath"=> "https:".$item->strSubItemImage
+                          )
+                      ),
+                      "certifications"=> array(
+                          array(
+                            "certificationType"=> "NOT_REQUIRED",
+                            "certificationCode"=> ""
                             )
-                        ),
-                        "certifications"=> array(
-                            array(
-                              "certificationType"=> "NOT_REQUIRED",
-                              "certificationCode"=> ""
+                      ),
+                      "notices"=> $noticeArr,
+                      "attributes"=> $attrArr,
+                      "contents"=> array(
+                          array(
+                              "contentsType"=> "TEXT",
+                              "contentDetails"=> array(
+                                  array(
+                                      "content"=> $product->productDetail->blobNote,
+                                      "detailType"=> "TEXT"
+                                  )
                               )
-                        ),
-                        "notices"=> $noticeArr,
-                        "attributes"=> $attrArr,
-                        "contents"=> array(
-                            array(
-                                "contentsType"=> "TEXT",
-                                "contentDetails"=> array(
-                                    array(
-                                        "content"=> $product->productDetail->blobNote,
-                                        "detailType"=> "TEXT"
-                                    )
-                                )
-                            )
-                        ),
-                        "offerCondition" => "NEW",
-                        "offerDescription" => ""
-                    );
+                          )
+                      ),
+                      "offerCondition" => "NEW",
+                      "offerDescription" => ""
+                  );
                 }
                 //print_r($arrItems);
                 //기본 상품배렬을 만든다
                 $objProduct = array(
-                    "displayCategoryCode" => $strCategoryCode, //쿠팡카테고리 코드
-                    "sellerProductName" => $product->strMainName,
-                    "vendorId" => $setting->marketAccount->strVendorId,
-                    "saleStartedAt" => $start->format('Y-m-d\TH:i:s'),
-                    "saleEndedAt" => $end->format('Y-m-d\TH:i:s'),
-                    "displayProductName" => $product->strBrand.$product->strKrMainName,
-                    "brand" => $product->strBrand,
-                    "generalProductName" => $product->strKrMainName,
-                    "productGroup" => $strCategoryNames[count($strCategoryNames)-1],
-                    "deliveryMethod" => $setting->deliveryType->strDeliveryCode,
-                    "deliveryCompanyCode" => $setting->strDeliveryCompanyCode,
-                    "deliveryChargeType" => $setting->strDeliveryChargeType,
-                    "deliveryCharge" => $setting->nDeliveryCharge,
-                    "freeShipOverAmount" => $setting->nFreeShipOverAmount,
-                    "deliveryChargeOnReturn" => $setting->nDeliveryChargeOnReturn,
-                    "remoteAreaDeliverable" => $setting->nRemoteAreaDeliveryType == 1 ? "Y" : "N",
-                    "unionDeliveryType" => $setting->strUnionDeliveryType,
-                    "returnCenterCode" => $setting->strReturnCenterCode,
-                    "returnChargeName" => $setting->strReturnSellerName,
-                    "companyContactNumber" => $setting->strCompanyContactNumber,
-                    "returnZipCode" => $setting->strReturnZipCode,
-                    "returnAddress" => $setting->strReturnAddress,
-                    "returnAddressDetail" => $setting->strReturnAddressDetail,
-                    "returnCharge" => $setting->nReturnDeliveryCharge,
-                    "returnChargeVendor" => $setting->strReturnChargeVendorType,
-                    "afterServiceInformation" => $setting->strAfterServiceGuide,
-                    "afterServiceContactNumber" => $setting->strAfterServiceContactNumber,
-                    "outboundShippingPlaceCode" => $setting->strOutboundShippingPlaceCode,
-                    "vendorUserId" => $setting->marketAccount->strAccountId,
-                    "requested" => false,
-                    "items" => $arrItems,
-                    "requiredDocuments"=> array(
-                        array(
-                            "templateName"=> "기타문서",//$setting->requireDocument3->strImageName,
-                            "vendorDocumentPath"=> "http://image11.coupangcdn.com/image/product/content/vendorItem/2018/07/02/41579010/eebc0c30-8f35-4a51-8ffd-808953414dc1.jpg"//asset('storage/'. $setting->requireDocument3->strImageURL)
-                        )
-                    ),
-                    "extraInfoMessage"=> "",
-                    "manufacture"=> $product->strBrand
+                  "displayCategoryCode" => $strCategoryCode, //쿠팡카테고리 코드
+                  "sellerProductName" => $product->strMainName,
+                  "vendorId" => $setting->marketAccount->strVendorId,
+                  "saleStartedAt" => $start->format('Y-m-d\TH:i:s'),
+                  "saleEndedAt" => $end->format('Y-m-d\TH:i:s'),
+                  "displayProductName" => $product->strBrand.$product->strKrMainName,
+                  "brand" => $product->strBrand,
+                  "generalProductName" => $product->strKrMainName,
+                  "productGroup" => $strCategoryNames[count($strCategoryNames)-1],
+                  "deliveryMethod" => $setting->deliveryType->strDeliveryCode,
+                  "deliveryCompanyCode" => $setting->strDeliveryCompanyCode,
+                  "deliveryChargeType" => $setting->strDeliveryChargeType,
+                  "deliveryCharge" => $setting->nDeliveryCharge,
+                  "freeShipOverAmount" => $setting->nFreeShipOverAmount,
+                  "deliveryChargeOnReturn" => $setting->nDeliveryChargeOnReturn,
+                  "remoteAreaDeliverable" => $setting->nRemoteAreaDeliveryType == 1 ? "Y" : "N",
+                  "unionDeliveryType" => $setting->strUnionDeliveryType,
+                  "returnCenterCode" => $setting->strReturnCenterCode,
+                  "returnChargeName" => $setting->strReturnSellerName,
+                  "companyContactNumber" => $setting->strCompanyContactNumber,
+                  "returnZipCode" => $setting->strReturnZipCode,
+                  "returnAddress" => $setting->strReturnAddress,
+                  "returnAddressDetail" => $setting->strReturnAddressDetail,
+                  "returnCharge" => $setting->nReturnDeliveryCharge,
+                  "returnChargeVendor" => $setting->strReturnChargeVendorType,
+                  "afterServiceInformation" => $setting->strAfterServiceGuide,
+                  "afterServiceContactNumber" => $setting->strAfterServiceContactNumber,
+                  "outboundShippingPlaceCode" => $setting->strOutboundShippingPlaceCode,
+                  "vendorUserId" => $setting->marketAccount->strAccountId,
+                  "requested" => false,
+                  "items" => $arrItems,
+                  "requiredDocuments"=> array(
+                      array(
+                          "templateName"=> "기타문서",//$setting->requireDocument3->strImageName,
+                          "vendorDocumentPath"=> "http://image11.coupangcdn.com/image/product/content/vendorItem/2018/07/02/41579010/eebc0c30-8f35-4a51-8ffd-808953414dc1.jpg"//asset('storage/'. $setting->requireDocument3->strImageURL)
+                      )
+                  ),
+                  "extraInfoMessage"=> "",
+                  "manufacture"=> $product->strBrand
                 );
                 
-                //print_r($objProduct);
-                //echo json_encode($objProduct);
-/*
-                echo $valuea = '{
-                    "displayCategoryCode": 56137,
-                    "sellerProductName": "test_클렌징오일_관리용_상품명",
-                    "vendorId": "'.$setting->marketAccount->strVendorId.'",
-                    "saleStartedAt": "2017-11-30T00:00:00",
-                    "saleEndedAt": "2099-01-01T23:59:59",
-                    "displayProductName": "해피바스 솝베리 클렌징 오일",
-                    "brand": "해피바스",
-                    "generalProductName": "솝베리 클렌징 오일",
-                    "productGroup": "클렌징 오일",
-                    "deliveryMethod": "SEQUENCIAL",
-                    "deliveryCompanyCode": "KDEXP",
-                    "deliveryChargeType": "FREE",
-                    "deliveryCharge": 0,
-                    "freeShipOverAmount": 0,
-                    "deliveryChargeOnReturn": 2500,
-                    "remoteAreaDeliverable": "N",
-                    "unionDeliveryType": "UNION_DELIVERY",
-                    "returnCenterCode": "'.$setting->strReturnCenterCode.'",
-                    "returnChargeName": "반품지_1",
-                    "companyContactNumber": "02-1234-678",
-                    "returnZipCode": "135-090",
-                    "returnAddress": "서울특별시 강남구 삼성동",
-                    "returnAddressDetail": "333",
-                    "returnCharge": 2500,
-                    "returnChargeVendor": "N",
-                    "afterServiceInformation": "",
-                    "afterServiceContactNumber": "",
-                    "outboundShippingPlaceCode": "'.$setting->strOutboundShippingPlaceCode.'",
-                    "vendorUserId": "'.$setting->marketAccount->strAccountId.'",
-                    "requested": true,
-                    "items": [
-                      {
-                        "itemName": "200ml_1개",
-                        "originalPrice": 13000,
-                        "salePrice": 10000,
-                        "maximumBuyCount": "100",
-                        "maximumBuyForPerson": "0",
-                        "outboundShippingTimeDay": "1",
-                        "maximumBuyForPersonPeriod": "1",
-                        "unitCount": 1,
-                        "adultOnly": "EVERYONE",
-                        "taxType": "TAX",
-                        "parallelImported": "NOT_PARALLEL_IMPORTED",
-                        "overseasPurchased": "NOT_OVERSEAS_PURCHASED",
-                        "pccNeeded": "false",
-                        "externalVendorSku": "0001",
-                        "barcode": "",
-                        "emptyBarcode": true,
-                        "emptyBarcodeReason": "상품확인불가_바코드없음사유",
-                        "modelNo": "171717",
-                        "extraProperties": {
-                          "coupangSalePrice": 5000,
-                          "onlineSalePriceForBooks": 10000,
-                          "transactionType": "manufacturer",
-                          "businessType": "Beauty"
-                        },
-                        "certifications": [
-                          {
-                            "certificationType": "NOT_REQUIRED",
-                            "certificationCode": ""
-                          }
-                        ],
-                        "searchTags": [
-                          "검색어1",
-                          "검색어2"
-                        ],
-                        "images": [
-                          {
-                            "imageOrder": 0,
-                            "imageType": "REPRESENTATION",
-                            "vendorPath": "http://image11.coupangcdn.com/image/product/image/vendoritem/2018/06/25/3719529368/27a6b898-ff3b-4a27-b1e4-330a90c25e9c.jpg"
-                          }
-                        ],
-                        "notices": [
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "용량(중량)",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "제품 주요 사양",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "사용기한 또는 개봉 후 사용기간",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "사용방법",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "제조업자 및 제조판매업자",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "제조국",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "화장품법에 따라 기재, 표시하여야 하는 모든 성분",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "식품의약품안전처 심사 필 유무",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "사용할 때 주의사항",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "품질보증기준",
-                            "content": "제품 이상 시 공정거래위원회 고시 소비자분쟁해결기준에 의거 보상합니다."
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "소비자상담관련 전화번호",
-                            "content": "상세페이지 참조"
-                          }
-                        ],
-                        "attributes": [
-                          {
-                            "attributeTypeName": "수량",
-                            "attributeValueName": "1개"
-                          },
-                          {
-                            "attributeTypeName": "개당 용량",
-                            "attributeValueName": "200ml"
-                          },
-                          {
-                            "attributeTypeName": "피부타입",
-                            "attributeValueName": "모든피부",
-                            "exposed": "NONE"
-                          },
-                          {
-                            "attributeTypeName": "피부고민",
-                            "attributeValueName": "모공",
-                            "exposed": "NONE"
-                          },
-                          {
-                            "attributeTypeName": "사용부위",
-                            "attributeValueName": "얼굴",
-                            "exposed": "NONE"
-                          }
-                        ],
-                        "contents": [
-                          {
-                            "contentsType": "TEXT",
-                            "contentDetails": [
-                              {
-                                "content": "<html><div></div><div><img src=\'http://image11.coupangcdn.com/image/product/content/vendorItem/2018/06/26/196713/738d905f-ed80-4fd8-ad21-ed87b195a19e.jpg\' /><div></html>",
-                                "detailType": "TEXT"
-                              }
-                            ]
-                          }
-                        ],
-                        "offerCondition": "NEW",
-                        "offerDescription": ""
-                      },
-                      {
-                        "itemName": "200ml_2개",
-                        "originalPrice": 26000,
-                        "salePrice": 20000,
-                        "maximumBuyCount": 100,
-                        "maximumBuyForPerson": 0,
-                        "outboundShippingTimeDay": 2,
-                        "maximumBuyForPersonPeriod": 1,
-                        "unitCount": 1,
-                        "adultOnly": "EVERYONE",
-                        "taxType": "TAX",
-                        "parallelImported": "NOT_PARALLEL_IMPORTED",
-                        "overseasPurchased": "NOT_OVERSEAS_PURCHASED",
-                        "pccNeeded": "false",
-                        "externalVendorSku": "0001",
-                        "barcode": "",
-                        "emptyBarcode": true,
-                        "emptyBarcodeReason": "상품확인불가_바코드없음사유",
-                        "modelNo": "171717",
-                        "extraProperties": {
-                          "coupangSalePrice": 5000,
-                          "onlineSalePriceForBooks": 10000,
-                          "transactionType": "manufacturer",
-                          "businessType": "Beauty"
-                        },
-                        "certifications": [
-                          {
-                            "certificationType": "NOT_REQUIRED",
-                            "certificationCode": ""
-                          }
-                        ],
-                        "searchTags": [
-                          "검색어1",
-                          "검색어2"
-                        ],
-                        "images": [
-                          {
-                            "imageOrder": 0,
-                            "imageType": "REPRESENTATION",
-                            "vendorPath": "http://image11.coupangcdn.com/image/product/image/vendoritem/2018/06/26/3001519145/74100e2a-d1ad-4b50-9c78-840c12a3e10d.jpg"
-                          }
-                        ],
-                        "notices": [
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "용량(중량)",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "제품 주요 사양",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "사용기한 또는 개봉 후 사용기간",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "사용방법",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "제조업자 및 제조판매업자",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "제조국",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "화장품법에 따라 기재, 표시하여야 하는 모든 성분",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "식품의약품안전처 심사 필 유무",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "사용할 때 주의사항",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "품질보증기준",
-                            "content": "상세페이지 참조"
-                          },
-                          {
-                            "noticeCategoryName": "화장품",
-                            "noticeCategoryDetailName": "소비자상담관련 전화번호",
-                            "content": "상세페이지 참조"
-                          }
-                        ],
-                        "attributes": [
-                          {
-                            "attributeTypeName": "수량",
-                            "attributeValueName": "2개"
-                          },
-                          {
-                            "attributeTypeName": "개당 용량",
-                            "attributeValueName": "200ml"
-                          },
-                          {
-                            "attributeTypeName": "피부타입",
-                            "attributeValueName": "모든피부",
-                            "exposed": "NONE"
-                          },
-                          {
-                            "attributeTypeName": "피부고민",
-                            "attributeValueName": "모공",
-                            "exposed": "NONE"
-                          },
-                          {
-                            "attributeTypeName": "사용부위",
-                            "attributeValueName": "얼굴",
-                            "exposed": "NONE"
-                          }
-                        ],
-                        "contents": [
-                          {
-                            "contentsType": "TEXT",
-                            "contentDetails": [
-                              {
-                                "content": "<html><div></div><div><img src=\'http://image11.coupangcdn.com/image/product/content/vendorItem/2018/06/26/196713/738d905f-ed80-4fd8-ad21-ed87b195a19e.jpg\' /><div></html>",
-                                "detailType": "TEXT"
-                              }
-                            ]
-                          }
-                        ],
-                        "offerCondition": "NEW",
-                        "offerDescription": ""
-                      }
-                    ],
-                    "requiredDocuments": [
-                      {
-                        "templateName": "기타인증서류",
-                        "vendorDocumentPath": "http://image11.coupangcdn.com/image/product/content/vendorItem/2018/07/02/41579010/eebc0c30-8f35-4a51-8ffd-808953414dc1.jpg"
-                      }
-                    ],
-                    "extraInfoMessage": "",
-                    "manufacture": "아모레퍼시픽"
-                  }';
-*/
                 $result = $coupang->addProduct(json_encode($objProduct));
                 $response = (object)json_decode($result, true);
                 if($response->code=="SUCCESS")
@@ -872,6 +549,7 @@ class SellTargetManageController extends Controller
                         'strCategoryCode8' => $product->strCategoryCode8,
                         'nShareType' => $product->nShareType,
                         'nProductWorkProcess' => 0,
+                        'strReason' => (strPos($response->message, "'") !== false ? "알수없는 오류가 발생했습니다." : $response->message ),
                         'bIsDel'=> 0
                     ]);
                     $failedProduct->save();

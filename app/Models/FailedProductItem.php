@@ -16,7 +16,7 @@ class FailedProductItem extends Model
     'strSubItemCnOptionPattern0', 'strSubItemCnOptionPattern1', 'strSubItemCnOptionPattern2', 'bIsDel'];
     public function product()
     {
-        return $this->belongsTo(Product::class, 'nProductIdx', 'nIdx');
+        return $this->belongsTo(FailedProduct::class, 'nProductIdx', 'nIdx');
     }
     
     
