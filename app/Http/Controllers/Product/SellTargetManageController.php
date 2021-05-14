@@ -324,8 +324,7 @@ class SellTargetManageController extends Controller
                       );
                       array_push($attrArr, $attr);
                   }
-                  echo ($setting->nUnitQuantity);
-                  echo ($item->nSubItemQuantity);
+                  
                   //end of attribute
                   $arrItems[] = array(
                       "itemName"=> $item->strSubItemName,
