@@ -13,6 +13,8 @@ use App\Models\ProductDetail;
 use App\Models\Come;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Market;
+use App\Models\MarketAccount;
 use App\Models\SuccessProduct;
 use App\MyLibs\CoupangConnector;
 use Yajra\DataTables\Facades\DataTables as DataTables;
@@ -37,6 +39,11 @@ class RegisteredProductManageController extends Controller
      */
     public function index(Request $request)
     {
+        $markets = Market::where('bIsDel', 0)
+                ->get();
+        $marketAccounts = MarketAccount::where('bIsDel', 0)
+                ->where('nUserId', Auth::id())
+                ->get();
         $tr = new GoogleTranslate(); // Translates to 'en' from auto-detected language by default
         $title = "등록상품관리";
         
@@ -99,21 +106,51 @@ class RegisteredProductManageController extends Controller
                         $element = '<ul class="list-inline" style="width:100px;">';
                         $element .= '<li class="list-inline-item">
                                 '.$row->productDetail->nProductPrice.'
+                            </li>';
+                        $element .= '</ul>';
+                        return $element;
+                    })
+                    ->addColumn('acceptPriceInfo', function($row){
+                        $marginPrice = number_format(($row->productDetail->nProductPrice) * $row->productDetail->nMarginRate / 100, 2, '', '');
+                        $element = '<ul class="list-inline" style="width:100px;">';
+                        $element .= '<li class="list-inline-item">
+                                '.$marginPrice.'
                             </li><br>';
                         $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nDiscountPrice.'
-                            </li>';
+                                '.$row->productDetail->nMarginRate.'%
+                            </li><br>';
                                 
                         $element .= '</ul>';
+                        return $element;
+                    })
+                    ->addColumn('codeInfo', function ($row){
+                        $element = '<ul class="list-inline" style="width:100px;">';
+                        $element .= '<li class="list-inline-item">
+                            '.$row->strId.'
+                            </li><br>';
+                        $element .= '<li class="list-inline-item">
+                            '.$row->strSolutionId.'
+                            </li></ul>';
                         return $element;
                     })
                     ->addColumn('marginInfo', function($row){
                         $element = '<ul class="list-inline" style="width:100px;">';
                         $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nMarginRate.'
+                                '.$row->productDetail->nMarginRate.'%
                             </li><br>';
                         $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nSellerMarketChargeRate.'
+                                '.$row->productDetail->nSellerMarketChargeRate.'%
+                            </li><br>';
+                        $element .= '</ul>';
+                        return $element;
+                    })
+                    ->addColumn('dateInfo', function($row){
+                        $element = '<ul class="list-inline" style="width:100px;">';
+                        $element .= '<li class="list-inline-item">
+                                '.$row->productDetail->created_at.'
+                            </li><br>';
+                        $element .= '<li class="list-inline-item">
+                            '.$row->productDetail->created_at.'-'.$row->productDetail->updated_at.'
                             </li>';
                         $element .= '</ul>';
                         return $element;
@@ -129,15 +166,11 @@ class RegisteredProductManageController extends Controller
                             <li class="list-inline-item">
                             '.$strCode.'
                             </li><br>';
-                        $marketInfo = '<li class="list-inline-item">
-                            '.$row->productMarketSetting->marketAccount->strAccountId.'
-                            </li><br>';
-                        $marketInfo = '<li class="list-inline-item">
-                            '.$row->strSolutionId.'
-                            </li><br>';
                         $marketInfo .= '<li class="list-inline-item">
-                            '.$row->strId.'
+                            '.$row->productMarketSetting->marketAccount->strAccountId.'
                             </li></ul>';
+                        
+                        
                         return $marketInfo;
                     })
                     ->addColumn('mainImage', function($row){
@@ -152,11 +185,11 @@ class RegisteredProductManageController extends Controller
                                     </li>';
                     return $mainImage;
                     })
-                    ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo'])
+                    ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'codeInfo', 'priceInfo', 'acceptPriceInfo', 'marginInfo', 'dateInfo'])
                     ->make(true);
                     
         }
-        return view('product.RegisteredProductManage', compact('title'));
+        return view('product.RegisteredProductManage', compact('title', 'markets', 'marketAccounts'));
     }
 
     /**

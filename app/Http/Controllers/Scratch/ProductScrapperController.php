@@ -167,7 +167,7 @@ class ProductScrapperController extends Controller
             'nUserId' => Auth::id(), 
             'nBrandType' => 0, 
             'strBrand' => "",
-            'strKeyword' => "", 
+            'strKeyword' => str_replace(' ', ',', $request->post('txtKrMainName')),
             'strOption' => $strOption, 
             'strOptionValue' => $strOptionValue,
             'strChMainName' =>  $request->post('txtChMainName'), 

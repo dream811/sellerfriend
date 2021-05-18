@@ -11,9 +11,11 @@ class Order extends Model
     protected $table = 'tb_orders';
     protected $primaryKey = 'nIdx';
     protected $fillable = [
+        'nUserId',
+        'nMarketAccIdx',
         'strShipmentBoxId',
         'strOrderId',
-        'dtOrderAt',
+        'dtOrderedAt',
         'strOrdererName',
         'strOrdererEmail',
         'strOrdererSafeNumber',
@@ -42,4 +44,13 @@ class Order extends Model
         'created_at', 'updated_at', 'bIsDel'
     ];
     
+    public function orderItem()
+    {
+        return $this->hasMany(OrderItem::class, 'nOrderIdx', 'nIdx');
+    }
+
+    public function marketAccount()
+    {
+        return $this->belongsTo(MarketAccount::class, 'nMarketAccIdx', 'nIdx');
+    }
 }

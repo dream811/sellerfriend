@@ -82,7 +82,7 @@
                                     <input type="text" class="form-control form-control-sm" name="txtCategoryName" id="txtCategoryName" value="" placeholder="">
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="row">
                             <div class="col-1">
                                 <label class="float-right">검색항목:</label>
@@ -99,20 +99,20 @@
                             </div>
                             <div class="form-group col-2">
                                 <div class="input-group">
-                                    <select class="custom-select form-control-border custom-select-sm" name="selCategoryName4" id="selCategoryName4">
+                                    <select class="custom-select form-control-border custom-select-sm" name="market" id="market">
                                         <option value="0">==쇼핑몰 선택==</option>
-                                        @foreach ($categories_4 as $category_4)
-                                        <option value="{{$category_4->nIdx}}" >{{$category_4->strCategoryName}}</option>
+                                        @foreach ($markets as $market)
+                                        <option value="{{$market->nIdx}}" >{{$market->strMarketName}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group col-2">
                                 <div class="input-group">
-                                    <select class="custom-select form-control-border custom-select-sm" name="selCategoryName4" id="selCategoryName4">
+                                    <select class="custom-select form-control-border custom-select-sm" name="marketAccount" id="marketAccount">
                                         <option value="0">==쇼핑몰 아이디 선택==</option>
-                                        @foreach ($categories_4 as $category_4)
-                                        <option value="{{$category_4->nIdx}}" >{{$category_4->strCategoryName}}</option>
+                                        @foreach ($marketAccounts as $account)
+                                        <option value="{{$account->nIdx}}" >{{$account->strAccountId}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -123,7 +123,7 @@
                                     Search
                                 </a>
                             </div>
-                        </div> --}}
+                        </div>
                     </div>
                     <hr>
                     <div class="card-header p-0 pt-1 border-bottom-0">
@@ -148,11 +148,14 @@
                                             <thead>
                                                 <tr>
                                                     <th><input type="checkbox" name="select_all" value="1" id="select_all"></th>
+                                                    <th>이미지</th>
                                                     <th>상품정보</th>
-                                                    <th></th>
-                                                    <th>등록마켓관리</th>
-                                                    <th>공급가/판매가</th>
+                                                    <th>마켓아이디</th>
+                                                    <th>연동코드</th>
+                                                    <th>판매가</th>
+                                                    <th>적용판매가<br>할인율</th>
                                                     <th>마진</th>
+                                                    <th>판매기간<br>상품전송일</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -232,8 +235,11 @@
                     {data: 'mainImage', name: 'mainImage'},
                     {data: 'productInfo', name: 'productInfo'},
                     {data: 'marketInfo', name: 'marketInfo'},
-                    {data: 'priceInfo', name: 'priceInfo'},
-                    {data: 'marginInfo', name: 'marginInfo'},
+                    {data: 'codeInfo', name: 'codeInfo'},
+                    {data: 'priceInfo', name: 'priceInfo', className: "text-right"},
+                    {data: 'acceptPriceInfo', name: 'acceptPriceInfo', className: "text-right"},
+                    {data: 'marginInfo', name: 'marginInfo', className: "text-right"},
+                    {data: 'dateInfo', name: 'dateInfo'},
                 ],
                 responsive: true, lengthChange: true, autoWidth: false
             });

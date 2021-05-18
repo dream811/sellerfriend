@@ -77,6 +77,50 @@
                                 </div>
                             </div> --}}
                         </div>
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <label class="float-right">마켓등록상품:</label>
+                            </div>
+                            <div class="form-group col-1">
+                                <div class="custom-control custom-radio">
+                                    <input class="custom-control-input" type="radio" id="rdoMarketRegProduct0" name="rdoMarketRegProduct" value="-1" checked>
+                                    <label for="rdoMarketRegProduct0" class="custom-control-label">전체</label>
+                                </div>
+                            </div>
+                            <div class="form-group col-1">
+                                <div class="custom-control custom-radio">
+                                    <input class="custom-control-input" type="radio" id="rdoMarketRegProduct1" name="rdoMarketRegProduct" value="1">
+                                    <label for="rdoMarketRegProduct1" class="custom-control-label">등록상품</label>
+                                </div>
+                            </div>
+                            <div class="form-group col-1">
+                                <div class="custom-control custom-radio">
+                                    <input class="custom-control-input" type="radio" id="rdoMarketRegProduct2" name="rdoMarketRegProduct" value="0">
+                                    <label for="rdoMarketRegProduct2" class="custom-control-label">미등록상품</label>
+                                </div>
+                            </div>
+                            <div class="form-group col-1">
+                                <div class="input-group">
+                                    <select class="custom-select form-control-border custom-select-sm" name="selMarket" id="selCategoryName4">
+                                        <option value="">==마켓 선택==</option>
+                                        @foreach ($markets as $market)
+                                        <option value="{{$market->strMarketCode}}" >{{$market->strMarketName}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-1">
+                                <div class="input-group">
+                                    <select class="custom-select form-control-border custom-select-sm" name="selMarketAccount" id="selCategoryName4">
+                                        <option value="">==선택==</option>
+                                        @foreach ($marketAccounts as $account)
+                                        <option value="{{$account->nIdx}}" >{{$account->strAccountId}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            
+                        </div>
                     </div>
                     <div class="card-header p-0 pt-1 border-bottom-0">
                         <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
@@ -95,8 +139,9 @@
                                                 <tr>
                                                     <th style="width:20px !important"><input type="checkbox" name="select_all" value="1" id="select-all"></th>
                                                     <th style="width:50px !important">대표이미지</th>
-                                                    <th style="width:800px !important">상품정보</th>
+                                                    <th style="width:500px !important">상품정보</th>
                                                     <th style="width:100px !important">등록마켓</th>
+                                                    <th >옵션</th>
                                                     <th style="width:40px !important">공급가/판매가</th>
                                                     <th style="width:40px !important">마진</th>
                                                     <th style="width:70px !important">Action</th>
@@ -188,6 +233,7 @@
                     {data: 'mainImage', name: 'mainImage'},
                     {data: 'productInfo', name: 'productInfo'},
                     {data: 'marketInfo', name: 'marketInfo', className: "text-center"},
+                    {data: 'optionInfo', name: 'optionInfo'},
                     {data: 'priceInfo', name: 'priceInfo', className: "text-right"},
                     {data: 'marginInfo', name: 'marginInfo', className: "text-right"},
                     {data: 'action', name: 'action', className: "text-center"},

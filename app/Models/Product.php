@@ -16,6 +16,11 @@ class Product extends Model
     {
         return $this->hasMany(ProductImage::class, 'nProductIdx', 'nIdx');
     }
+    public function productMainImage()
+    {
+        return $this->hasOne(ProductImage::class, 'nProductIdx', 'nIdx')->where('nImageCode', 0)->first();
+    }
+
     public function productDetail()
     {
         return $this->hasOne(ProductDetail::class, 'nProductIdx', 'nIdx');

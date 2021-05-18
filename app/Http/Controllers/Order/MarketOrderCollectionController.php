@@ -17,9 +17,11 @@ use App\Models\Market;
 use App\Models\MarketAccount;
 use App\Models\MarketSettingCoupang;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\MyLibs\CoupangConnector;
 use Yajra\DataTables\Facades\DataTables;
 use DateTime;
+use Illuminate\Support\Facades\DB;
 
 class MarketOrderCollectionController extends Controller
 {
@@ -45,55 +47,142 @@ class MarketOrderCollectionController extends Controller
         $tr = new GoogleTranslate(); // Translates to 'en' from auto-detected language by default
 
         $title = "마켓주문수집";
+        
         $markets = Market::where('bIsDel', 0)
                 ->where('bIsUsed', 1)
                 ->get();
-
+        
+        
+        // $orders = Order::where('bIsDel', 0)
+        //         ->where('nUserId', Auth::id())
+        //         ->select('nIdx')
+        //         ->get();
+        // print_r($orders);
         if ($request->ajax()) {
-            $orders = Order::where('bIsDel', 0)
+            $orderItems = OrderItem::where('bIsDel', 0)
+            ->whereIn('nOrderIdx', 
+                DB::table("tb_orders")
                 ->where('nUserId', Auth::id())
-                ->orderBy('nIdx');
-
-            return DataTables::eloquent($orders)
+                ->pluck('nIdx'))
+            ->get();
+            return DataTables::of($orderItems)
                     ->addIndexColumn()
-                    ->addColumn('market', function ( $row )
-                    {
-                        $element = "";
+                    ->addColumn('check', function($row){
+                        $check = '<input type="checkbox" name="chkProduct[]" onclick="" value="'.$row->nIdx.'">';
+                        return $check;
                     })
-                    // ->addColumn('images', function($row){
-                    //     $btn = '<ul class="list-inline" style="width:100px;">';
-                    //     foreach ($row->productImages as $productImage) {
-                    //         $btn .= '<li class="list-inline-item">
-                    //                     <img alt="Avatar" class="table-avatar" src="'.$productImage->strURL.'">
-                    //                 </li>';
-                    //     }
-                    //     $btn .= '</ul>';
-                    //     return $btn;
-                    // })
-                    // ->addColumn('productInfo', function($row){
-                    //     $element = '<ul class="list-inline" style="">';
-                    //     $element .= '<li class="list-inline-item">
-                    //                 '.$row->strCategoryCode1.'>'.$row->strCategoryCode2.'>'.$row->strCategoryCode3.'>'.$row->strCategoryCode4.'
-                    //             </li><br>';
-                    //     $element .= '<li class="list-inline-item">
-                    //                 '.$row->strKrSubName.'
-                    //             </li>';
-                    //     $element .= '</ul>';
-                    //     return $element;
-                    // })
-                    // ->addColumn('priceInfo', function($row){
-                    //     $element = '<ul class="list-inline" style="width:100px;">';
-                    //     $element .= '<li class="list-inline-item">
-                    //             '.$row->productDetail->nBasePrice.'
-                    //         </li><br>';
-                    //     $element .= '<li class="list-inline-item">
-                    //             '.$row->productDetail->nBasePrice.'
-                    //         </li>';
-                                
-                    //     $element .= '</ul>';
-                    //     return $element;
-                    // })
-                    //->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo'])
+                    ->addColumn('marketInfo', function($row){
+                        $element = '<ul class="list-inline" style="">';
+                        $element .= '<li class="text-center list-inline-item">
+                                '.$row->order->marketAccount->market->strMarketName.'
+                            </li><br>';
+                        $element .= '<li class="text-center list-inline-item">
+                                '.$row->order->marketAccount->strAccountId.'
+                            </li><br>';
+                        $element .= '</ul>';
+                        return $element;
+                    })
+                    ->addColumn('mainImage', function($row){
+                        if($row->strImageUrl==""){
+                            $mainImage = '<li class="list-inline-item">
+                                    <span>
+                                        <img alt="gallery thumbnail" style="width: 5rem;" src="'.asset('assets/images/system/no-image.png').'">
+                                    </span>
+                            </li>';
+                            return $mainImage;
+                        }else{
+                            $mainImage = '<li class="list-inline-item">
+                                <a href="'.asset('storage/'.$row->strImageUrl).'" target="_blank">
+                                    <span data="'.asset('storage/'.$row->strImageUrl).'" class="preview">
+                                        <img alt="gallery thumbnail" style="width: 5rem;" src="'.asset('storage/'.$row->strImageUrl).'">
+                                    </span>
+                                </a>
+                            </li>';
+                            return $mainImage;
+                        }
+                    })
+                    ->addColumn('productInfo', function($row){
+                        $element = '<ul class="list-inline" style="">';
+                        $element .= '<li class="list-inline-item" style="font-size:14px;">
+                                '.$row->strVendorItemPackageName.'
+                            </li><br>';
+                        $element .= '<li class="list-inline-item " style="font-size:11px;">
+                                '.$row->strFirstSellerProductItemName.'
+                            </li><br>';
+                        $checked0 = $row->nRequestType == 0 ? "checked" : "";
+                        $checked1 = $row->nRequestType == 1 ? "checked" : "";
+                        $element .='<div class="input-group">
+                                <div class="custom-control custom-radio">
+                                    <input class="custom-control-input mt-1 rdoRequestType" data-id="'.$row->nIdx.'" type="radio" id="rdoRequestType1_'.$row->nIdx.'" name="rdoRequestType_'.$row->nIdx.'" value="1" '.$checked1.'>
+                                    <label for="rdoRequestType1_'.$row->nIdx.'" style="padding-top:4px; font-size:10px;" class="custom-control-label">구매요청</label>
+                                </div>
+                                <div class="custom-control custom-radio ml-3">
+                                    <input class="custom-control-input rdoRequestType" data-id="'.$row->nIdx.'" type="radio" id="rdoRequestType2_'.$row->nIdx.'" name="rdoRequestType_'.$row->nIdx.'" value="0" '.$checked0.'>
+                                    <label for="rdoRequestType2_'.$row->nIdx.'" style="padding-top:4px; font-size:10px;" class="custom-control-label">직접구매</label>
+                                </div>
+                            </div>';
+                        $element .= '</ul>';
+                        return $element;
+                    })
+                    ->addColumn('ICNumber', function($row){
+                        $element = '<ul class="list-inline">';
+                        $element .= '<li class="list-inline-item" style="font-size:14px;">
+                                '.$row->strProductId.'
+                            </li>';
+                        $element .= '</ul>';
+                        return $element;
+                    })
+                    ->addColumn('orderNumber', function($row){
+                        $element = '<ul class="list-inline">';
+                        $element .= '<li class="list-inline-item" style="font-size:14px;">
+                            '.$row->order->strShipmentBoxId.'
+                        </li><br>';
+                        $element .= '<li class="list-inline-item" style="font-size:14px;">
+                            '.$row->order->strOrderId.'
+                        </li>';
+                        $element .= '</ul>';
+                        return $element;
+                    })
+                    ->addColumn('OrderPayDate', function($row){
+                        $element = '<ul class="list-inline">';
+                        $element .= '<li class="list-inline-item" style="font-size:14px;">
+                            '.$row->order->dtOrderedAt.'
+                        </li><br>';
+                        $element .= '<li class="list-inline-item" style="font-size:14px;">
+                            '.$row->order->dtPaidAt.'
+                        </li><br>';
+                        $element .= '</ul>';
+                        return $element;
+                    })
+                    ->addColumn('ODInfo', function($row){
+                        $element = '<ul class="list-inline">';
+                        $element .= '<li class="list-inline-item">
+                            '.$row->order->strOrdererName.'
+                        </li><br>';
+                        $element .= '<li class="list-inline-item">
+                            '.$row->order->strReceiverName.'
+                        </li><br>';
+                        $element .= '<li class="list-inline-item">
+                            '.$row->order->strReceiverAddr1.' '.$row->order->strReceiverAddr2.'
+                        </li><br>';
+                        $element .= '</ul>';
+                        return $element;
+                    })
+                    ->addColumn('action', function($row){
+                        $element = "";
+                        if($row->nWorkProcess == 0){
+                            $element = '<button type="button" data-id="'.$row->nIdx.'" style="font-size:10px !important;" class="btn btn-xs btn-primary btnManualMatching btnMatching">수동매칭</button>';
+                        }else if ($row->nWorkProcess == 1) {
+                            $element = '<button type="button" data-id="'.$row->nIdx.'" style="font-size:10px !important;" class="btn btn-xs btn-primary btnAutoMatching btnMatching">자동매칭</button>';
+                        }else if ($row->nWorkProcess == 2) {
+                            $element = '<button type="button" data-id="'.$row->nIdx.'" style="font-size:10px !important;" class="btn btn-xs btn-primary btnOptionMatching btnMatching">옵션매칭</button>';
+                        }else{
+                            $element = '<span>매칭완료</span>';
+                        }
+                        
+                        return $element;
+                    })
+                    ->rawColumns(['check', 'marketInfo', 'mainImage', 'productInfo', 'ICNumber', 'orderNumber', 'OrderPayDate', 'ODInfo', 'action'])
                     ->make(true);
                     
         }
@@ -143,8 +232,6 @@ class MarketOrderCollectionController extends Controller
                                         ->get();
         //dd($accounts);
         $markets = Market::where('strMarketCode', 'coupang');
-        
-
         $productsCount = 0;
         $successCount = 0;
         $failedCount = 0;
@@ -153,16 +240,114 @@ class MarketOrderCollectionController extends Controller
         foreach ($accounts as $key1 => $account) {
             $coupang = new CoupangConnector($account->strAPIAccessKey, $account->strSecretKey, $account->strVendorId, $account->strAccountId);
             $date = new DateTime('now');
-            $start_date = $date->format('Y-m-d H:i:s'); 
+            $start_date = $date->format('Y-m-d H:i:s');
             $date->modify('+1 day');
             $end_date = $date->format('Y-m-d H:i:s');
             $res =  (object)json_decode($coupang->getOrderSheetsDayList($start_date, $end_date, 50), false);
-            print_r($res);
+            
+            if($res->code == "200"){
+                $cnt = count($res->data);
+                foreach ($res->data as $key2 => $order) {
+                    
+                    $orderM = new Order([
+                        'nUserId'                             => Auth::id(),
+                        'nMarketAccIdx'                       => $account->nIdx,
+                        'strShipmentBoxId'                    => $order->shipmentBoxId,
+                        'strOrderId'                          => $order->orderId,
+                        'dtOrderedAt'                         => $order->orderedAt,
+                        'strOrdererName'                      => $order->orderer->name,
+                        'strOrdererEmail'                     => $order->orderer->email,
+                        'strOrdererSafeNumber'                => $order->orderer->safeNumber,
+                        'strOrdererNumber'                    => $order->orderer->ordererNumber,
+                        'dtPaidAt'                            => $order->paidAt,
+                        'strStatus'                           => $order->status,
+                        'nShippingPrice'                      => $order->shippingPrice,
+                        'nRemotePrice'                        => $order->remotePrice,
+                        'bRemoteArea'                         => $order->remoteArea,
+                        'strParcelPrintMessage'               => $order->parcelPrintMessage,
+                        'bSplitShipping'                      => $order->splitShipping,
+                        'bAbleSplitShipping'                  => $order->ableSplitShipping,
+                        'strReceiverName'                     => $order->receiver->name,
+                        'strReceiverSafeNumber'               => $order->receiver->safeNumber,
+                        'strReceiverNumber'                   => $order->receiver->receiverNumber,
+                        'strReceiverAddr1'                    => $order->receiver->addr1,
+                        'strReceiverAddr2'                    => $order->receiver->addr2,
+                        'strPostCode'                         => $order->receiver->postCode,
+                        'strOSIDPersonalCustomClearanceCode'  => $order->overseaShippingInfoDto->personalCustomsClearanceCode,
+                        'strOSIDOrdererSsn'                   => $order->overseaShippingInfoDto->ordererSsn,
+                        'strOSIDOrdererPhoneNumber'           => $order->overseaShippingInfoDto->ordererPhoneNumber,
+                        'strDeliveryCompanyName'              => $order->deliveryCompanyName,
+                        'strInvoiceNumber'                    => $order->invoiceNumber,
+                        'dtInTrasitDateTime'                  => $order->inTrasitDateTime,
+                        'dtDeliveredDate'                     => $order->deliveredDate,
+                        'strReferer'                          => $order->refer,
+                        'bIsDel'                              => 0
+                    ]);
+
+                    $orderM->save();
+                    
+                    foreach ($order->orderItems as $key3 => $orderItem) {
+                        
+                        $strEtcInfoValues = implode("|", $orderItem->etcInfoValues);
+                        $item = new OrderItem([
+                            'nOrderIdx'                      => $orderM->nIdx,
+                            'strVendorItemPackageId'         => $orderItem->vendorItemPackageId,
+                            'strVendorItemPackageName'       => $orderItem->vendorItemPackageName,
+                            'strProductId'                   => $orderItem->productId,
+                            'strVendorItemId'                => $orderItem->vendorItemId,
+                            'strVendorItemName'              => $orderItem->vendorItemName,
+                            'nShippingCount'                 => $orderItem->shippingCount,
+                            'nSalesPrice'                    => $orderItem->salesPrice,
+                            'nOrderPrice'                    => $orderItem->orderPrice,
+                            'nDiscountPrice'                 => $orderItem->discountPrice,
+                            'nInstantCouponDiscount'         => $orderItem->instantCouponDiscount,
+                            'nDownloadableCouponDiscount'    => $orderItem->downloadableCouponDiscount,
+                            'nCoupangDiscount'               => $orderItem->coupangDiscount,
+                            'strExternalVendorSkuCode'       => $orderItem->externalVendorSkuCode,
+                            'strEtcInfoHeader'               => $orderItem->etcInfoHeader,
+                            'strEtcInfoValue'                => $orderItem->etcInfoValue,
+                            'strEtcInfoValues'               => $strEtcInfoValues,//$orderItem->strEtcInfoValues,
+                            'strSellerProductId'             => $orderItem->sellerProductId,
+                            'strSellerProductName'           => $orderItem->sellerProductName,
+                            'strSellerProductItemName'       => $orderItem->sellerProductItemName,
+                            'strFirstSellerProductItemName'  => $orderItem->firstSellerProductItemName,
+                            'nCancelCount'                   => $orderItem->cancelCount,
+                            'nHoldCountForCancel'            => $orderItem->holdCountForCancel,
+                            'dtEstimatedShippingDate'        => $orderItem->estimatedShippingDate == "" ? "0000-00-00 00:00:00" : $orderItem->estimatedShippingDate,
+                            'dtPlannedShippingDate'          => $orderItem->plannedShippingDate == "" ? "0000-00-00 00:00:00" : $orderItem->plannedShippingDate,
+                            'dtInvoiceNumberUploadDate'      => $orderItem->invoiceNumberUploadDate,
+                            'strExtraProperties'             => "",//$orderItem->extraProperties
+                            'bPricingBadge'                  => $orderItem->pricingBadge,
+                            'bUsedProduct'                   => $orderItem->usedProduct,
+                            'dtConfirmDate'                  => $orderItem->confirmDate,
+                            'strDeliveryChargeTypeName'      => $orderItem->deliveryChargeTypeName,
+                            'bCanceled'                      => $orderItem->canceled,
+                            'bIsDel'                         => 0
+                        ]);
+                        $item->save();
+                    }
+                }
+            }
+            
         }
           
         //return view('order.MarketAccountList', compact('marketAccounts'));
     }
     
+    public function updateRequestType($orderItemId, Request $request){
+        $val = $request->post('value');
+        $orderItem = OrderItem::find($orderItemId)->update(['nRequestType' => $val]);
+        return response()->json(["status" => "success", "data" => $orderItem]);
+    }
+
+    public function matchProduct($orderItemId){
+        
+        $products = Product::where('bIsDel', 0)
+            ->where('nUserId', Auth::id())
+            ->get();
+        return view('order.MatchProductList', compact('orderItemId', 'products'));
+    }
+
     //상품등록을 위한 마켓계정 선택(post)
     public function marketAccountSelect(Request $request)
     {

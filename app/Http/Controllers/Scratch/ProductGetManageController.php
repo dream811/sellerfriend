@@ -125,6 +125,9 @@ class ProductGetManageController extends Controller
                     $element .= '<li class="list-inline-item">
                             '.$row->strKrSubName.'
                         </li><br>';
+                    $element .= '<li class="list-inline-item">
+                            '.$row->strChSubName.'
+                        </li><br>';
                     //옵션
                     $options = explode("|", $row->strOption);
                     $optionValue = explode("|", $row->strOptionValue);

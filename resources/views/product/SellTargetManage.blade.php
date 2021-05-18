@@ -49,6 +49,14 @@
                                     </button>
                                 </div>
                             </div>
+                            <div class="col-sm-1">
+                                <label class="float-right">검색항목:</label>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
                             <div class="col">
                                 <a class="btn bg-info btn-sm float-right btnSearchData">
                                     <i class="fas fa-search"></i>
@@ -138,7 +146,7 @@
                                     <input type="text" class="form-control form-control-sm" name="txtCategoryName" id="txtCategoryName" value="" placeholder="">
                                 </div>
                             </div>
-                        </div>
+                        </div>--}}
                         <div class="row">
                             <div class="col-1">
                                 <label class="float-right">상품상태:</label>
@@ -162,6 +170,7 @@
                                 </div>
                             </div>
                         </div>
+                        {{--
                         <div class="row">
                             <div class="col-sm-1">
                                 <label class="float-right">배공개여부:</label>
@@ -196,7 +205,7 @@
                                     <label for="chkMyProduct" class="custom-control-label">내상품</label>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="row">
                             <div class="col-sm-1">
                                 <label class="float-right">마켓등록상품:</label>
@@ -240,7 +249,7 @@
                                 </div>
                             </div>
                             
-                        </div> --}}
+                        </div>
                     </div>
                     <div class="card-header border-bottom-0">
                         <div class="row justify-content-md-center">
@@ -431,6 +440,7 @@
                     }
                 });
                 products = products.slice(0,-1);
+                console.log();
                 var action = '/productSellTargetManageProducts/marketProductAdd';// $("#manageMarketAccount").attr("action");
                 var data = $('#divProductForm').serialize();
                 if(products == "")
@@ -472,8 +482,6 @@
                 img.src = imagUrl;
                 var xOffset = 80;
                 var yOffset = 700-50;
-                console.log(offset.top);
-                console.log(offset.left);
                 if($('#preview').length)
                 {
                     $("#preview").css({

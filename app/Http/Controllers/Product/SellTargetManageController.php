@@ -253,7 +253,7 @@ class SellTargetManageController extends Controller
         $productIds = explode("|", $strProduct);
         $products = Product::where('bIsDel', 0)
             ->where('nUserId', Auth::id())
-            ->where('nProductWorkProcess', 3)
+            ->where('nProductWorkProcess', 1)
             ->whereIn('nIdx', $productIds)
             ->orderBy('nIdx')
             ->get();
@@ -266,7 +266,7 @@ class SellTargetManageController extends Controller
             foreach ($products as $key2 => $product) {
                 //만약 상품이 쿠팡에 이미 등록되였다면 넘긴다
                 if($product->bRegCoupang == 1)
-                    continue;
+                  continue;
                 $start = new DateTime($setting->dtSalesPeriodStartDateTime);
                 $end = new DateTime($setting->dtSalesPeriodEndDateTime);
                 $strOption = $product->strOption;
@@ -610,7 +610,7 @@ class SellTargetManageController extends Controller
                 }
             }
         }
-        return view('product.ProductUploadResult', compact('productsCount', 'successCount', 'failedCount'));
+        //return view('product.ProductUploadResult', compact('productsCount', 'successCount', 'failedCount'));
         
         //return view('product.MarketProductPrepare', compact('settingCoupangs', 'markets'));
     }

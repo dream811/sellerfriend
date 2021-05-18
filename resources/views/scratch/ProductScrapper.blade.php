@@ -260,7 +260,6 @@
                                     </div>
                                 </div> --}}
                             </div>
-                            <input  type="hidden" name="txtChMainName" id="txtChMainName" placeholder="상품명">
                             <div class="form-group row">
                                 <label class="col-form-label col-sm-2 text-sm-right">상품명(KO)</label>
                                 <div class="col-sm-8">
@@ -1132,7 +1131,7 @@
                 return false;
             }
 
-            if(confirm("정말 보관하시겠습니까")){
+            if(confirm("수집정보를 보관하시겠습니까")){
                 $('#frmScrap').submit();
             }
         });	
@@ -1361,7 +1360,7 @@
                                 <button type="button" class="btn invisible"><i class="far fa-trash-alt"></i></button>
                             </div>
                         </div>`;
-                    console.log(data);
+                    
                     window.skus = data.skus.sku;
                     //아이템
                     window.skus.forEach((element)=>{

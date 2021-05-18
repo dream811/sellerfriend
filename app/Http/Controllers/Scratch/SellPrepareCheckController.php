@@ -23,6 +23,8 @@ use App\Models\Come;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Country;
+use App\Models\Market;
+use App\Models\MarketAccount;
 use App\MyLibs\CoupangConnector;
 use Exception;
 use Yajra\DataTables\DataTables;
@@ -51,34 +53,13 @@ class SellPrepareCheckController extends Controller
         $comes = Come::where('bIsDel', 0)
                 ->orderBy('strComeCode')
                 ->get();
-        $countries = Country::where('bIsDel', 0)
-                ->orderBy('strCountryCode')
+        $markets = Market::where('bIsDel', 0)
+                ->orderBy('nIdx')
                 ->get();
-        $brands = Brand::where('bIsDel', 0)
-                ->orderBy('strBrandCode')
+        $marketAccounts = MarketAccount::where('nUserId', Auth::id())
                 ->get();
-        $categories_1 = Category::where('bIsDel', 0)
-                ->where('nCategoryType', 1)
-                ->orderBy('strCategoryName')
-                ->get();
-        $categories_2 = Category::where('bIsDel', 0)
-                ->where('nCategoryType', 2)
-                ->orderBy('strCategoryName')
-                ->get();
-
-        $categories_3 = Category::where('bIsDel', 0)
-                ->where('nCategoryType', 3)
-                ->orderBy('strCategoryName')
-                ->get();
-        $categories_4 = Category::where('bIsDel', 0)
-                ->where('nCategoryType', 4)
-                ->orderBy('strCategoryName')
-                ->get();
-        $shareType = "1";
-        $basePriceTypes= array('CNY', 'KRW', 'USD', 'JPY');
-        $countryShippingCostTypes= array('CNY', 'KRW', 'USD', 'JPY');
-        $worldShippingCostTypes= array('KRW');
-        $weightTypes= array('Kg');
+        
+        
         $tr = new GoogleTranslate('ko');
         $tr->setSource('zh-cn');
         $tr->setTarget('ko');
@@ -117,24 +98,27 @@ class SellPrepareCheckController extends Controller
                 ->addColumn('productInfo', function($row){
                     $strCategory = $row->strCategoryCode0;
                     $category = mb_split(" : ", $strCategory)[1];
-                    $element = '<ul class="list-inline" style="">';
+                    $element = '<ul class="list-inline">';
                     $element .= '<li class="list-inline-item">
                             '.$category.'
                         </li><br>';
-                    $element .= '<li class="list-inline-item">
+                    $element .= '<li class="list-inline-item" style="font-size: 14px;">
                             '.$row->strKrSubName.'
                         </li><br>';
-                    //옵션
-                    $options = explode("|", $row->strOption);
-                    $optionValue = explode("|", $row->strOptionValue);
-                    foreach ($options as $key => $value) {
-                        $element .= '<li class="list-inline-item">
-                            <span style="text-align:left;">'.$value.':</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-align:right;">'.$optionValue[$key].'</span>
-                        </li><br>';
-                    }
                     $element .= '<li class="list-inline-item">
-                            '.$row->strKrMainName.'
+                            '.$row->strChSubName.'
                         </li><br>';
+                    // //옵션
+                    // $options = explode("|", $row->strOption);
+                    // $optionValue = explode("|", $row->strOptionValue);
+                    // foreach ($options as $key => $value) {
+                    //     $element .= '<li class="list-inline-item">
+                    //         <span style="text-align:left;">'.$value.':</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-align:right;">'.$optionValue[$key].'</span>
+                    //     </li><br>';
+                    // }
+                    // $element .= '<li class="list-inline-item">
+                    //         '.$row->strKrMainName.'
+                    //     </li><br>';
                     $element .= '<li class="font-weight-light list-inline-item">
                             '.Auth::user()->name.'['.$row->created_at.']
                         </li>';
@@ -163,6 +147,17 @@ class SellPrepareCheckController extends Controller
                         '.$row->productDetail->nSellerMarketChargeRate.'%
                     </li><br>';
                       
+                    $element .= '</ul>';
+                    return $element;
+                })
+                ->addColumn('optionInfo', function($row) use ($request){
+                    $arrTemp = explode("|", $row->strOptionValue);
+                    $element = '<ul class="list-inline">';
+                    foreach ($arrTemp as $key => $value) {
+                        $element .= '<li>
+                            '.$value.'
+                        </li>';
+                    }
                     $element .= '</ul>';
                     return $element;
                 })
@@ -202,42 +197,40 @@ class SellPrepareCheckController extends Controller
                                 </li>';
                     return $mainImage;
                 })
-                ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo', 'action'])
+                ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo', 'optionInfo', 'action'])
                 ->filter(function($query) use ($request){
-                    // if ($request->get('selCome') != "") {
-                    //     $query->where('strComeCode', "=", "{$request->get('selCome')}");
-                    // }
+                    
                     if($request->get('daterange')){
                         $dates = explode(' ~ ', $request->get('daterange'));
                         $endDate = date('Y-m-d H:i:s', strtotime($dates[1] . ' +1 day'));
                         $query->whereBetween('created_at', [$dates[0], $endDate]);
                     }
-                    // if($request->get('category1') != ""){
-                    //     $query->where('strCategoryCode1', '=', "{$request->get('category1')}");
-                    // }
-                    // if($request->get('category2') != ""){
-                    //     $query->where('strCategoryCode2', '=', "{$request->get('category2')}");
-                    // }
-                    // if($request->get('category3') != ""){
-                    //     $query->where('strCategoryCode3', '=', "{$request->get('category3')}");
-                    // }
-                    // if($request->get('category4') != ""){
-                    //     $query->where('strCategoryCode4', '=', "{$request->get('category4')}");
-                    // }
-                    // if($request->get('shareType') != -1){
-                    //     $query->where('nShareType', '=', "{$request->get('shareType')}");
-                    // }
-                    // if($request->get('selCountry')){
-                    //     $query->where('nCountryCode', '=', "{$request->get('selCountry')}");
-                    // }
-                    // if ($request->get('searchWord') != "") {
-                    //     $query->where('strKrSubName', 'like', "%{$request->get('searchWord')}%")
-                    //         ->orWhere('strChSubName', 'like', "%{$request->get('searchWord')}%");
-                    // }
+                    if($request->get('rdoMarketRegProduct') == 0){
+                        $query->orWhere('bReg11thhouse', 0)
+                            ->orWhere('bRegAuction', 0)
+                            ->orWhere('bRegCoupang', 0)
+                            ->orWhere('bRegGmarket', 0)
+                            ->orWhere('bRegInterpark', 0)
+                            ->orWhere('bRegLotteon', 0)
+                            ->orWhere('bRegSmartstore', 0)
+                            ->orWhere('bRegTmon', 0)
+                            ->orWhere('bRegWemakeprice', 0);
+                    }else if($request->get('rdoMarketRegProduct') == 1){
+                        $query->orWhere('bReg11thhouse', 1)
+                            ->orWhere('bRegAuction', 1)
+                            ->orWhere('bRegCoupang', 1)
+                            ->orWhere('bRegGmarket', 1)
+                            ->orWhere('bRegInterpark', 1)
+                            ->orWhere('bRegLotteon', 1)
+                            ->orWhere('bRegSmartstore', 1)
+                            ->orWhere('bRegTmon', 1)
+                            ->orWhere('bRegWemakeprice', 1);
+                    }
+                    
                 })
                 ->make(true);
         }
-        return view('scratch.SellPrepareCheck', compact('title', 'brands', 'comes', 'countries', 'categories_1', 'categories_2', 'categories_3', 'categories_4', 'shareType', 'basePriceTypes', 'countryShippingCostTypes', 'worldShippingCostTypes', 'weightTypes'));
+        return view('scratch.SellPrepareCheck', compact('title', 'markets', 'marketAccounts'));
     }
 
     
