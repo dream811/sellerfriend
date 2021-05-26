@@ -382,7 +382,7 @@ class StoppedProductManageController extends Controller
     {
         $stopReason = $request->post('txtStopReason');
         $product = SuccessProduct::where('nIdx', $productId)->first();
-        $product->update(['nProductWorkSuccess' => 1]);//판매상태로 이행
+        $product->update(['nProductWorkProcess' => 1]);//판매상태로 이행
         $productDetail = $product->productDetail->update([
             'strStopReason' => "",
             'strFileURL0' => "",
@@ -503,7 +503,7 @@ class StoppedProductManageController extends Controller
     public function accountShow($marketId = 0, $accountId = 0)
     {
         //
-        // $marketAccount  = MarketAccount::where('nIdx', $accountId)->first();
+         $marketAccount  = MarketAccount::where('nIdx', $accountId)->first();
         return response()->json(["status" => "success", "data" => $marketAccount]);
     }
 

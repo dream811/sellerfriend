@@ -978,6 +978,7 @@
         });
         
         $('body').on('click', '.btnSaveSellProduct', function (e) {
+            var productId = $('#txtProductId').val();
             var action = '/productStoppedProductManage/'+ productId +'/saveSellInfo';
             $.ajax({
                 url: action,
