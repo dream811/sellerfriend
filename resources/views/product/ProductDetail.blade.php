@@ -982,8 +982,7 @@
             $.get('/productRegisteredProductManage/' + itemId +'/getStopInfo', function ({status, data}) {
                 $('#txtStopReason').val(data.strStopReason);
                 $('#modal-id').modal('show');
-                window.opener.location.reload();
-                window.close();
+                
             });
         });
         
@@ -1029,6 +1028,8 @@
                 success: function ({status, data}) {
                     $('#modal-id').modal('hide');
                     window.opener.location.reload();
+                    window.close();
+                    
                 },
                 error: function (data) {
                 }

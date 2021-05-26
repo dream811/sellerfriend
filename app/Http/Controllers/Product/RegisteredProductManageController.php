@@ -389,7 +389,7 @@ class RegisteredProductManageController extends Controller
     {
         $stopReason = $request->post('txtStopReason');
         $product = SuccessProduct::where('nIdx', $productId)->first();
-        $product->update(['nProductWorkSuccess' => 2]);//판매중지상태로 이행
+        $product->update(['nProductWorkProcess' => 2]);//판매중지상태로 이행
         $productDetail = $product->productDetail->update([
             'strStopReason' => $stopReason
         ]);
