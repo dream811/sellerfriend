@@ -1457,7 +1457,7 @@
                 }
                 xhr.send();
             }).each(function() {
-                if(this.complete) $(this).load();
+                //if(this.complete) $(this).load();
             });
         };
         $('body').on('click', '.btnOption1to9', function () {

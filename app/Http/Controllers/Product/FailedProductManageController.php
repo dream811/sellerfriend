@@ -15,6 +15,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\FailedProduct;
 use App\Models\MarketAccount;
+use App\Models\MarketSettingCoupang;
 use App\MyLibs\CoupangConnector;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -229,13 +230,15 @@ class FailedProductManageController extends Controller
     }
     
     //상품등록을 위한 마켓계정 리스트(get)
-    public function marketAccountList()
+    public function marketAccountList(Request $request)
     {
         
-        $marketAccounts = MarketAccount::where('nUserId', Auth::id())
+        $products = $request->get('products');
+        $settingCoupangs = MarketSettingCoupang::where('nUserId', Auth::id())
+                                        ->where('bIsDel', 0)
                                         ->get();
 
-        return view('product.FailedMarketAccountList', compact('marketAccounts'));
+        return view('scratch.MarketAccountList', compact('settingCoupangs', 'products'));
     }
 
 }
