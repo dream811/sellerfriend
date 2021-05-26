@@ -6,13 +6,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0" style="">판매중지 상품관리</h1>
+                <h1 class="m-0" style="">판매중지상품관리</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">HOME</a></li>
                 <li class="breadcrumb-item"><a href="#">상품관리</a></li>
-                <li class="breadcrumb-item active">판매중지 상품관리</li>
+                <li class="breadcrumb-item active">판매중지상품관리</li>
                 </ol>
             </div><!-- /.col -->
             </div><!-- /.row -->
@@ -25,22 +25,6 @@
                 <div class="card card-primary card-outline card-tabs">
                     <div class="card-header border-bottom-0">
                         {{-- <div class="row">
-                            <div class="col-1">
-                                <label class="float-right">집하지:</label>
-                            </div>
-                            <div class="col-sm-2">
-                            <!-- select -->
-                                <div class="form-group">
-                                    <select class="custom-select form-control-border custom-select-sm" name="selComeName" id="selComeName">
-                                        <option value="0">==출항코드==</option>
-                                        @foreach ($comes as $come)
-                                        <option value="{{$come->nIdx}}" >[{{$come->strComeCode}}] {{$come->strComeName}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-sm-1">
                                 <label class="float-right">카테고리:</label>
                             </div>
@@ -98,7 +82,7 @@
                                     <input type="text" class="form-control form-control-sm" name="txtCategoryName" id="txtCategoryName" value="" placeholder="">
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="row">
                             <div class="col-1">
                                 <label class="float-right">검색항목:</label>
@@ -108,30 +92,29 @@
                                     <input type="text" class="form-control form-control-sm" name="txtCategoryName" id="txtCategoryName" value="" placeholder="">
                                 </div>
                             </div>
-                        </div> --}}
+                        </div>
                         <div class="row">
-                            <!-- /.form group -->
-                            <div class="col-1">
-                                <label class="float-right">등록일:</label>
+                            <div class="col-sm-1">
+                                <label class="float-right">마켓:</label>
                             </div>
-                            <div class="col-2 form-group">
+                            <div class="form-group col-2">
                                 <div class="input-group">
-                                    <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="far fa-calendar-alt"></i>
-                                    </span>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm float-right" id="reservation">
+                                    <select class="custom-select form-control-border custom-select-sm" name="market" id="market">
+                                        <option value="0">==쇼핑몰 선택==</option>
+                                        @foreach ($markets as $market)
+                                        <option value="{{$market->nIdx}}" >{{$market->strMarketName}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                            <!-- /.input group -->
                             </div>
-                            <!-- Date and time range -->
-                            <div class="col-2 form-group">
+                            <div class="form-group col-2">
                                 <div class="input-group">
-                                    <button type="button" class="btn btn-sm btn-default float-right" id="daterange-btn">
-                                    <i class="far fa-calendar-alt"></i> 날짜검색
-                                    <i class="fas fa-caret-down"></i>
-                                    </button>
+                                    <select class="custom-select form-control-border custom-select-sm" name="marketAccount" id="marketAccount">
+                                        <option value="0">==쇼핑몰 아이디 선택==</option>
+                                        @foreach ($marketAccounts as $account)
+                                        <option value="{{$account->nIdx}}" >{{$account->strAccountId}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-sm-7">
@@ -143,41 +126,30 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="card-header p-0 pt-1 border-bottom-0">
-                        <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="custom-tabs-three-home-tab" data-toggle="pill" href="#custom-tabs-three-home" role="tab" aria-controls="custom-tabs-three-home" aria-selected="true">목록스타일</a>
-                            </li>
-                            
-                        </ul>
-                        <ul class="nav float-right">
-                            <li class="pull-right float-right pr-1 pt-1" style="">
-                                <a href="javascript:void(0)" class="btn btn-success btnAddMarketProduct" >리스트상품코드</a>
-                            </li>
-                        </ul>
-                    </div>
+                    
                     <div class="card-body">
-                        
-                        <div class="tab-content" id="custom-tabs-three-tabContent">
-                            <div class="tab-pane fade show active" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
-                                <form id="divProductForm">
-                                    <div class="card-body p-0">
-                                        <table id="example" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th><input type="checkbox" name="select_all" value="1" id="select_all"></th>
-                                                    <th>상품정보</th>
-                                                    <th></th>
-                                                    <th>등록마켓관리</th>
-                                                    <th>공급가/판매가</th>
-                                                    <th>마진</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                        {{-- <ul class="nav float-right mr-3">
+                            <li class="pull-right float-right pr-1 pt-1" style="">
+                                <a href="javascript:void(0)" class="btn btn-success btn-xs btnAddMarketProduct" >수정전송</a>
+                            </li>
+                        </ul> --}}
+                        <form id="divProductForm">
+                            <table id="example" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" name="select_all" value="1" id="select_all"></th>
+                                        <th>이미지</th>
+                                        <th>상품정보</th>
+                                        <th>마켓아이디</th>
+                                        <th>연동코드</th>
+                                        <th>판매가</th>
+                                        <th>적용판매가<br>할인율</th>
+                                        <th>마진</th>
+                                        <th>판매기간<br>상품전송일</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </form>
                     </div>
                     <!-- /.card -->
                 </div>
@@ -236,13 +208,13 @@
                 stateSave: true,
                 processing: true,
                 serverSide: true,
-                scrollY: "400px",
+                scrollY: "500px",
                 //ajax: "{{ route('product.SellTargetManage') }}",
                 ajax: {
                     url: "{{ route('product.StoppedProductManage') }}",
                     data: function ( d ) {
-                        d.daterange = $('#reservation').val();
-                        d.comecode = $('#reservation').val();
+                        // d.daterange = $('#reservation').val();
+                        // d.comecode = $('#reservation').val();
                     }
                 },
                 columns: [
@@ -250,12 +222,18 @@
                     {data: 'mainImage', name: 'mainImage'},
                     {data: 'productInfo', name: 'productInfo'},
                     {data: 'marketInfo', name: 'marketInfo'},
-                    {data: 'priceInfo', name: 'priceInfo'},
-                    {data: 'marginInfo', name: 'marginInfo'},
+                    {data: 'codeInfo', name: 'codeInfo'},
+                    {data: 'priceInfo', name: 'priceInfo', className: "text-right"},
+                    {data: 'acceptPriceInfo', name: 'acceptPriceInfo', className: "text-right"},
+                    {data: 'marginInfo', name: 'marginInfo', className: "text-right"},
+                    {data: 'dateInfo', name: 'dateInfo'},
                 ],
                 responsive: true, lengthChange: true, autoWidth: false
             });
-            
+            $('body').on('click', '.openWindow', function(){
+                var id = $(this).attr('data-id');
+                window.open('/productStoppedProductManage/'+id+'/edit','상품수정','width=900,height=900,location=no,status=no,scrollbars=no');
+            })
             // Handle click on "Select all" control
             $('#select_all').on('click', function(){
                 // Get all rows with search applied
@@ -277,29 +255,6 @@
                     }
                 }
             });
-
-            // // Handle form submission event
-            // $('#divProductForm').on('submit', function(e){
-            //     var form = this;
-
-            //     // Iterate over all checkboxes in the table
-            //     table.$('input[type="checkbox"]').each(function(){
-            //         // If checkbox doesn't exist in DOM
-            //         if(!$.contains(document, this)){
-            //             // If checkbox is checked
-            //             if(this.checked){
-            //             // Create a hidden element
-            //             $(form).append(
-            //                 $('<input>')
-            //                     .attr('type', 'hidden')
-            //                     .attr('name', this.name)
-            //                     .val(this.value)
-            //             );
-            //             }
-            //         }
-            //     });
-            // });
-
             $('body').on('click', '.btnAddMarketProduct', function () {
                 var form = $('#divProductForm');
 

@@ -14,7 +14,7 @@ class SuccessProductDetail extends Model
     protected $fillable = ['nIdx', 'nProductIdx', 'nProductPrice', 'nBasePrice', 'nDiscountPrice', 
     'nExchangeRate', 'nExpectedRevenue', 'nMarginRate', 'nSellerMarketChargeRate', 'nBuyerMarketChargeRate', 'nOverSeaDeliveryCharge', 
     'strFunction', 'nDeliveryCharge', 'nReturnDeliveryCharge', 'nExchangeDeliveryCharge', 'nOptionSellPrice', 'nOptionBasePrice', 
-    'nOptionDiscountPrice', 'nOptionSSPrice', 'nOptionESMPrice', 'nOptionSellDiscountPrice', 'nOptionESMDeliveryCharge', 'blobNote', 'bIsDel'];
+    'nOptionDiscountPrice', 'nOptionSSPrice', 'nOptionESMPrice', 'nOptionSellDiscountPrice', 'nOptionESMDeliveryCharge', 'blobNote', 'strStopReason', 'strFileURL0', 'strFileURL1', 'strFileURL2', 'bIsDel'];
     public function product()
     {
         return $this->belongsTo(Product::class, 'nProductIdx', 'nIdx');

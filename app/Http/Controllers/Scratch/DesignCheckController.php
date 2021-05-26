@@ -115,8 +115,8 @@ class DesignCheckController extends Controller
                         '.$row->strChSubName.'
                     </li><br>';
                     //옵션
-                    $options = explode("|", $row->strOption);
-                    $optionValue = explode("|", $row->strOptionValue);
+                    $options = explode("§", $row->strOption);
+                    $optionValue = explode("§", $row->strOptionValue);
                     foreach ($options as $key => $value) {
                         $element .= '<li class="list-inline-item">
                             <span style="text-align:left;">'.$value.':</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-align:right;">'.$optionValue[$key].'</span>
@@ -194,36 +194,11 @@ class DesignCheckController extends Controller
                 })
                 ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo', 'action'])
                 ->filter(function($query) use ($request){
-                    // if ($request->get('selCome') != "") {
-                    //     $query->where('strComeCode', "=", "{$request->get('selCome')}");
-                    // }
                     if($request->get('daterange')){
                         $dates = explode(' ~ ', $request->get('daterange'));
                         $endDate = date('Y-m-d H:i:s', strtotime($dates[1] . ' +1 day'));
                         $query->whereBetween('created_at', [$dates[0], $endDate]);
                     }
-                    // if($request->get('category1') != ""){
-                    //     $query->where('strCategoryCode1', '=', "{$request->get('category1')}");
-                    // }
-                    // if($request->get('category2') != ""){
-                    //     $query->where('strCategoryCode2', '=', "{$request->get('category2')}");
-                    // }
-                    // if($request->get('category3') != ""){
-                    //     $query->where('strCategoryCode3', '=', "{$request->get('category3')}");
-                    // }
-                    // if($request->get('category4') != ""){
-                    //     $query->where('strCategoryCode4', '=', "{$request->get('category4')}");
-                    // }
-                    // if($request->get('shareType') != -1){
-                    //     $query->where('nShareType', '=', "{$request->get('shareType')}");
-                    // }
-                    // if($request->get('selCountry')){
-                    //     $query->where('nCountryCode', '=', "{$request->get('selCountry')}");
-                    // }
-                    // if ($request->get('searchWord') != "") {
-                    //     $query->where('strKrSubName', 'like', "%{$request->get('searchWord')}%")
-                    //         ->orWhere('strChSubName', 'like', "%{$request->get('searchWord')}%");
-                    // }
                 })
                 ->make(true);
         }

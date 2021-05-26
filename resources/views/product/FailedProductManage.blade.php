@@ -135,7 +135,7 @@
                         </ul>
                         <ul class="nav float-right">
                             <li class="pull-right float-right pr-1 pt-1" style="">
-                                <a href="javascript:void(0)" class="btn btn-success btnAddMarketProduct" >수정전송</a>
+                                <a href="javascript:void(0)" class="btn btn-success btnAddMarketProduct" >상품재전송</a>
                             </li>
                         </ul>
                     </div>
@@ -321,7 +321,7 @@
                     dataType: 'json',
                     success: function ({status, data}) {
                         if(status == "success"){
-                            window.open('/productSellTargetManageProducts/marketAccountList', '상품등록', 'scrollbars=1, resizable=1, width=1000, height=620');
+                            window.open('/productFailedProductManage/marketAccountList', '계정목록', 'scrollbars=1, resizable=1, width=1000, height=620');
                             return false;
                         }
                     },

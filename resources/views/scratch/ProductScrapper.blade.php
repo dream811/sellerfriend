@@ -465,7 +465,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text">₩</div>
                                                         </div>
-                                                        <input type="text" name="txtReturnDeliveryCharge" id="txtReturnDeliverCharge" value="25000" class="form-control">
+                                                        <input type="text" name="txtReturnDeliveryCharge" id="txtReturnDeliveryCharge" value="25000" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-3 mb-0">
@@ -961,7 +961,7 @@
                             {{-- 
                             <iframe id="ifSN" width="100%" height="800" src="sn.html" frameborder="0" allowfullscreen=""></iframe>
                                     <button class="btn btn-primary btn-lg btn-block" disabled="">잠시 기다려주세요</button> --}}
-                                    <button type="button" class="btn btn-primary btn-lg btn-block btnSaveProduct"><!--!--><i class="fas fa-check"></i> 상품등록</button>
+                                    <button type="button" class="btn btn-primary btn-lg btn-block btnSaveProduct"><!--!--><i class="fas fa-check"></i> 수집정보 저장</button>
                         </div>
                     </div>
                 </fieldset>
@@ -1131,7 +1131,7 @@
                 return false;
             }
 
-            if(confirm("수집정보를 보관하시겠습니까")){
+            if(confirm("수집정보를 저장하시겠습니까")){
                 $('#frmScrap').submit();
             }
         });	
@@ -1239,6 +1239,7 @@
                                                 <div class="input-group input-group-sm m-3">
                                                     <input type="text" class="form-control text-center col-md-3 font-weight-bold" value="옵션명" readonly="">
                                                     <input type="text" name="txtOptionAttr[]" id="txtOptionAttr_`+ index +`" value=`+ optName_ko +` class="form-control text-center">
+                                                    <input type="hidden" name="txtCnOptionAttr[]" id="txtCnOptionAttr_`+ index +`" value=`+ optName_cn +` class="form-control text-center">
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -1275,6 +1276,7 @@
                             chkLength="is-invalid";
                         }
                         var imageUrl = "{{asset('assets/images/system/no-image.png')}}";
+                        var realImageUrl = "";
                         // if(el[3].trim() != ""){
                         //     imageUrl=el[3];
                         // }
@@ -1282,6 +1284,7 @@
                         $.each(prop_imgs, function(imgIdx, el) {
                             if(el.properties == idx){
                                 imageUrl=el.url;
+                                realImageUrl=el.url;
                             }
                         });
 
@@ -1290,17 +1293,18 @@
                                         <img class="rounded" src="`+ imageUrl +`" width="40" height="40">
                                     </a>
                                     <fieldset>
-                                        <button type="button" class="btn btn-info p-1 btnImportImage"><label for="inputFileOpt_0_"><i class="fas fa-file-upload fa-lg"></i></label></button>
+                                        <button type="button" class="btn btn-info p-1 btnImportImage"><label for="inputFileOpt_`+ index +`_`+ idx +`"><i class="fas fa-file-upload fa-lg"></i></label></button>
                                         <input type="file" id="inputFileOpt_`+ index +`_`+ idx +`" hidden="">
                                     </fieldset>
                                     <input type="text" value="`+ optValue_cn +`" name="txtCnOptionName_${index}[]" id="txtCnOptionName_${index}_${idx}" data-id="" opt-id="${index}" item-id="${idx}" class="form-control  col-md-3">
                                     <input type="text" value="`+ optValue_ko +`" name="txtKoOptionName_${index}[]"  id="txtKoOptionName_${index}_${idx}" data-id="" opt-id="${index}" item-id="${idx}" class="form-control txtOptionName ${chkLength} col-md-3">
-                                    <input type="text" value="0" name="txtAddOptionPrice_${index}" id="txtAddOptionPrice_${index}_${idx}" data-id="" opt-id="${index}" item-id="${idx}" class="form-control col-md-3">
+                                    <input type="text" value="0" name="txtAddOptionPrice_${index}[]" id="txtAddOptionPrice_${index}_${idx}" data-id="" opt-id="${index}" item-id="${idx}" class="form-control col-md-3">
                                     <div class="input-group-append">
                                         <button type="button" class="btn btn-info border-secondary btnMoveOptRow" >이동</button>
                                         <button type="button" class="btn btn-primary btnInsertOptRow"><i class="fas fa-plus"></i></button>
                                         <button type="button" class="btn btn-danger btnDelOptRow"><i class="far fa-trash-alt"></i></button>
                                     </div>
+                                    <input type="hidden" name="txtOptionImage_${index}[]" value="`+realImageUrl+`">
                                 </div>`;
                     });
 

@@ -48,7 +48,7 @@ class TopDownImageManageController extends Controller
                     return $btn;
                 })
                 ->addColumn('image', function($row){
-                    $element = '<img alt="Avatar" style="width: 5rem;" class="table-product-image" src="'.asset('storage/'. $row->strImageURL).'">';
+                    $element = '<img alt="Avatar" style="width: 5rem;" class="table-product-image" src="'. $row->strImageURL.'">';
                     return $element;
                 })
                 ->rawColumns(['image', 'action'])
@@ -76,7 +76,7 @@ class TopDownImageManageController extends Controller
         $docImage = new DocumentImage([
             'nUserId' => Auth::id(),
             'strImageType' => $request->post('selImageType'),
-            'strImageURL'=> $path,
+            'strImageURL'=> asset('storage/'.$path),
             'strImageName'=> $request->post('txtImageName'),
             'strFileName'=> $old_name,
             'bIsDel'=> 0
@@ -92,7 +92,6 @@ class TopDownImageManageController extends Controller
     {
         //
         $documentImage  = DocumentImage::where('nIdx', $imageId)->first();
-        $documentImage->strImageURL = asset('storage/'. $documentImage->strImageURL);
         return response()->json(["status" => "success", "data" => $documentImage]);
     }
 
@@ -108,7 +107,7 @@ class TopDownImageManageController extends Controller
             $path = $request->file('fileImage')->storeAs('uploads/document_images', $new_name, 'public');
 
             //edit file info of db
-            $image->strImageURL = $path;
+            $image->strImageURL = asset('storage/'.$path);
             $image->strFileName = $old_name;
         }
         $image->strImageType = $request->get('selImageType');

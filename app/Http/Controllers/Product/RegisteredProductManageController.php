@@ -16,6 +16,9 @@ use App\Models\Category;
 use App\Models\Market;
 use App\Models\MarketAccount;
 use App\Models\SuccessProduct;
+use App\Models\SuccessProductDetail;
+use App\Models\SuccessProductImage;
+use App\Models\SuccessProductItem;
 use App\MyLibs\CoupangConnector;
 use Yajra\DataTables\Facades\DataTables as DataTables;
 
@@ -51,6 +54,7 @@ class RegisteredProductManageController extends Controller
         if ($request->ajax()) {
             $products = SuccessProduct::where('bIsDel', 0)
                 ->where('nUserId', Auth::id())
+                ->where('nProductWorkProcess', 1)
                 ->orderBy('nIdx');
 
             return DataTables::eloquent($products)
@@ -86,8 +90,8 @@ class RegisteredProductManageController extends Controller
                                 '.$row->strKrSubName.'
                             </li><br>';
                         //옵션
-                        $options = explode("|", $row->strOption);
-                        $optionValue = explode("|", $row->strOptionValue);
+                        $options = explode("§", $row->strKoOption);
+                        $optionValue = explode("§", $row->strKoOptionValue);
                         foreach ($options as $key => $value) {
                             $element .= '<li class="list-inline-item">
                                 <span style="text-align:left;">'.$value.':</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-align:right;">'.$optionValue[$key].'</span>
@@ -119,18 +123,18 @@ class RegisteredProductManageController extends Controller
                         $element .= '<li class="list-inline-item">
                                 '.$row->productDetail->nMarginRate.'%
                             </li><br>';
-                                
                         $element .= '</ul>';
                         return $element;
                     })
                     ->addColumn('codeInfo', function ($row){
                         $element = '<ul class="list-inline" style="width:100px;">';
+                        $element .= '<a href="javascript:void(0)" class="openWindow" data-id="'.$row->nIdx.'">';
                         $element .= '<li class="list-inline-item">
                             '.$row->strId.'
                             </li><br>';
                         $element .= '<li class="list-inline-item">
                             '.$row->strSolutionId.'
-                            </li></ul>';
+                            </li></a></ul>';
                         return $element;
                     })
                     ->addColumn('marginInfo', function($row){
@@ -169,8 +173,6 @@ class RegisteredProductManageController extends Controller
                         $marketInfo .= '<li class="list-inline-item">
                             '.$row->productMarketSetting->marketAccount->strAccountId.'
                             </li></ul>';
-                        
-                        
                         return $marketInfo;
                     })
                     ->addColumn('mainImage', function($row){
@@ -192,6 +194,209 @@ class RegisteredProductManageController extends Controller
         return view('product.RegisteredProductManage', compact('title', 'markets', 'marketAccounts'));
     }
 
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function edit($productId = 0)
+    {
+        $product = SuccessProduct::where('bIsDel', 0)
+            ->where('nIdx', $productId)
+            ->first();
+        $product->productMainImage = $product->productImages->where('nImageCode',0)->first();
+        $product->productSubImage1 = $product->productImages->where('nImageCode',1)->first();
+        $product->productSubImage2 = $product->productImages->where('nImageCode',2)->first();
+        
+        $koOptions = explode('§', $product->strKoOption);
+        $koOptNames = explode('§', $product->strKoOptionValue);
+        $koOptPrice = explode('§', $product->strOptionPrice);
+        $OptImage = explode('§', $product->blobOptionImage);
+
+        $cnOptions = explode('§', $product->strCnOption);
+        $cnOptNames = explode('§', $product->strCnOptionValue);
+        //print_r($cnOptions);
+        $arrKoOption = array();
+        $arrCnOption = array();
+        $arrOptionPrice = array();
+        $arrOptionImage = array();
+        
+        foreach ($koOptions as $key => $value) {
+            $arrKoOption[] = explode(',', $koOptNames[$key]); 
+            $arrCnOption[] = explode(',', array_key_exists($key, $cnOptNames) == true ? $cnOptNames[$key] : ""); 
+            $arrOptionPrice[] = explode('¶', array_key_exists($key, $koOptPrice) == true ? $koOptPrice[$key] : ""); 
+            $arrOptionImage[] = explode('¶', array_key_exists($key, $OptImage) == true ? $OptImage[$key] : ""); 
+        }
+        return view('product.ProductDetail', compact('product', 'koOptions', 'arrKoOption', 'cnOptions', 'arrCnOption', 'arrOptionPrice', 'arrOptionImage'));
+
+    }
+
+    public function update($productId = 0, Request $request)
+    {
+        $val = $request->post('txtChMainName');
+        
+        //옵션명
+        $arrKoOptName = $request->post('txtOptionAttr');
+        $strKoOption = implode("§", $arrKoOptName);
+        //return redirect('scratchProductScrap');
+        $arrCnOptName = $request->post('txtCnOptionAttr');
+        $strCnOption = implode("§", $arrCnOptName);
+        //main data
+        $categoryName = $request->post('txtCategoryName');
+
+        $arrOptionAttr = array();
+        $arrKoOptionValue = array();
+        $arrCnOptionValue = array();
+        $arrOptionPrice = array();
+        $arrOptionImage = array();
+        foreach ($arrKoOptName as $key => $value) {
+            $arrOptionAttr[] = $request->post('optName_'.$key);
+            $arrKoOptionValue[] = implode(",", $request->post('txtKoOptionName_'.$key));
+            $arrCnOptionValue[] = implode(",", $request->post('txtCnOptionName_'.$key));
+            $arrOptionPrice[] = implode("¶", $request->post('txtAddOptionPrice_'.$key));
+            $arrOptionImage[] = implode("¶", $request->post('txtOptionImage_'.$key));
+            
+        }
+        $strKoOptionValue = implode("§", $arrKoOptionValue);
+        $strCnOptionValue = implode("§", $arrCnOptionValue);
+        $strOptionPrice = implode("§", $arrOptionPrice);
+        $strOptionImage = implode("§", $arrOptionImage);
+        $product = SuccessProduct::where('nIdx', $productId)->first();
+
+        $product->update([
+            'nUserId' => Auth::id(),
+            'strURL' => $product->strURL, 
+            'strMainName' => $request->post('txtKrMainName'),
+            'strSubName' => $request->post('txtKrSubName'),
+            'nBrandType' => $product->nBrandType,
+            'strBrand' => $product->strBrand,
+            'strKeyword' => $product->strKeyword,
+            'strKoOption' => $strKoOption,
+            'strKoOptionValue' => $strKoOptionValue,
+            'strCnOption' => $strCnOption,
+            'strCnOptionValue' => $strCnOptionValue,
+            'strOptionPrice' => $strOptionPrice,
+            'blobOptionImage' => $strOptionImage,
+            'strChMainName' => $request->post('txtChMainName'),
+            'strKrMainName' => $request->post('txtKrMainName'), 
+            'strChSubName' => $request->post('txtChMainName'), 
+            'strKrSubName' => $request->post('txtKrSubName'), 
+            'strComeCode' => $product->strComeCode,
+            'strCategoryCode0' => $categoryName[0], 
+            'strCategoryCode1' => $categoryName[1], 
+            'strCategoryCode2' => $categoryName[2], 
+            'strCategoryCode3' => $categoryName[3], 
+            'strCategoryCode4' => $categoryName[4], 
+            'strCategoryCode5' => $categoryName[5], 
+            'strCategoryCode6' => $categoryName[6], 
+            'strCategoryCode7' => $categoryName[7], 
+            'strCategoryCode8' => $categoryName[8], 
+            'nShareType' => $product->nShareType,
+            'nProductWorkProcess' => 2,//stopped product
+            'bIsDel'=> 0
+        ]);
+        $product->save();
+
+        $product->productDetail->update([
+            'nProductPrice' => number_format($request->post('txtProductPrice'), 2, '.', ''),
+            'nBasePrice' => number_format($request->post('txtBasePrice'), 2, '.', ''),
+            'nDiscountPrice' => number_format($request->post('txtDiscountPrice'), 2, '.', ''),//
+            'nExchangeRate' => number_format($request->post('txtExchangeRate'), 2, '.', ''),//
+            'nExpectedRevenue' => number_format($request->post('txtExpectedRevenue'), 2, '.', ''),//
+            'nMarginRate' => number_format($request->post('txtMarginRate'), 2, '.', ''),//
+            'nSellerMarketChargeRate' => number_format($request->post('txtSellerMarketChargeRate'), 2, '.', ''),//
+            'nBuyerMarketChargeRate' => number_format($request->post('txtBuyerMarketChargeRate'), 2, '.', ''),//
+            'nOverSeaDeliveryCharge' => number_format($request->post('txtOverSeaDeliveryCharge'), 2, '.', ''),//
+            'strFunction' => $request->post('txtFunction'),//
+            'nDeliveryCharge' => number_format($request->post('txtDeliveryCharge'), 2, '.', ''),//
+            'nReturnDeliveryCharge' => number_format($request->post('txtReturnDeliveryCharge'), 2, '.', ''),//
+            'nExchangeDeliveryCharge' => number_format($request->post('txtExchangeDeliveryCharge'), 2, '.', ''),//
+            'nOptionSellPrice' => number_format($request->post('txtOptionSellPrice'), 2, '.', ''),//
+            'nOptionBasePrice' => number_format($request->post('txtOptionBasePrice'), 2, '.', ''),//
+            'nOptionDiscountPrice' => number_format($request->post('txtOptionDiscountPrice'), 2, '.', ''),//
+            'nOptionSSPrice' => number_format($request->post('txtOptionSSPrice'), 2, '.', ''),//
+            'nOptionESMPrice' => number_format($request->post('txtOptionESMPrice'), 2, '.', ''),//
+            'nOptionSellDiscountPrice' => number_format($request->post('txtOptionSellDiscountPrice'), 2, '.', ''),//
+            'nOptionESMDeliveryCharge' => number_format($request->post('txtOptionESMDeliveryCharge'), 2, '.', ''),//
+            'blobNote' => $request->post('summernote'),
+            'bIsDel'=> 0
+        ]);
+        
+        $arrOptName = $request->post('txtOptionAttr');
+        $arrCnOptName = $request->post('txtCnOptionAttr');
+        $cntOptionName = count($arrOptName) > 3 ? 3 : count($arrOptName);
+
+        $countItem = count($request->post('sku_sell_price'));
+        $sku_base_price = $request->post('sku_discount_price');
+        $sku_sell_price = $request->post('sku_sell_price');
+        $sku_discount_price = $request->post('sku_discount_price');
+        $sku_option_price = $request->post('sku_option_price');
+        $sku_stock = $request->post('sku_stock');
+        $sku_image = $request->post('sku_image');
+        
+        SuccessProductItem::where('nProductIdx',$product->nIdx)->delete();
+        for ($i=0; $i < $countItem; $i++) { 
+
+            $productItem = new SuccessProductItem([
+                'nProductIdx' => $product->nIdx,
+                'nSubItemOptionPrice' => $sku_option_price[$i],
+                'nSubItemBasePrice' => $sku_base_price[$i],
+                'nSubItemSellPrice' => $sku_sell_price[$i],
+                'nSubItemDiscountPrice' => $sku_discount_price[$i],
+                'nSubItemQuantity' => $sku_stock[$i],
+                'strSubItemImage' => $sku_image[$i],
+                'bIsDel' => 0
+            ]);
+            $subItemName = "";
+            for ($j=0; $j < $cntOptionName; $j++) {
+                $productItem['strSubItemKoOptionPattern'.$j] = $arrOptionAttr[$j][$i];
+                $subItemName .= $arrOptionAttr[$j][$i]." ";
+            }
+            $productItem['strSubItemName'] = $subItemName;
+            $productItem->save();
+        }
+        
+        SuccessProductImage::where('nProductIdx',$product->nIdx)->delete();
+        $countImage = count($request->post('txtImage'));
+        $arrDetailImage = $request->post('txtImage');
+        //print_r($arrDetailImage);
+        for ($i=0; $i < $countImage; $i++) { 
+            $arrImgData = explode('::', $arrDetailImage[$i]);
+            $productImage = new SuccessProductImage([
+                'nProductIdx' => $product->nIdx,
+                'nImageCode' => $arrImgData[0],
+                'strName' => '',
+                'strURL' => $arrImgData[1],
+                'nHeight' => 0,
+                'nWidth' => 0,
+                'strNote' => '',
+                'bIsDel' => 0
+            ]);
+            $productImage->save();
+        }
+    }  
+
+    public function getStopInfo($productId, Request $request)
+    {
+        $product = SuccessProduct::where('nIdx', $productId)->first();
+        $productDetail = $product->productDetail;
+        return response()->json(["status" => "success", "data" => $productDetail]);
+
+        return view('product.MarketAccountList', compact('product'));
+    }
+
+    public function saveStopInfo($productId, Request $request)
+    {
+        $stopReason = $request->post('txtStopReason');
+        $product = SuccessProduct::where('nIdx', $productId)->first();
+        $product->update(['nProductWorkSuccess' => 2]);//판매중지상태로 이행
+        $productDetail = $product->productDetail->update([
+            'strStopReason' => $stopReason
+        ]);
+        
+        return response()->json(["status" => "success", "data" => $productDetail]);
+        //return view('product.MarketAccountList', compact('marketAccounts'));
+    }
     /**
      * Show the application dashboard.
      *
@@ -267,7 +472,6 @@ class RegisteredProductManageController extends Controller
             return response()->json(["status" => "error", "data" => array()]);
         }
         
-        //dd($categories_1);
         return view('product.MarketCategorySearch', compact('marketCode', 'categories_1'));
     }
     /**
@@ -277,14 +481,9 @@ class RegisteredProductManageController extends Controller
      */
     public function add(Request $request)
     {
-        //$product  = Product::where('nIdx', $request->post('id'))->first();
         $product  = Product::where('nIdx', 1)->first();
         $coupang = new CoupangConnector();
-        //$coupang->getCategoryInfoViaCode(56174);
         $coupang->getCategoryMetaInfo(0);
-        // $coupang->getCategoryListInfo();
-        // $coupang->addOutboundShippingCenter();
-        // $coupang->addReturnShippingCenter();
         $coupang->addProduct();
         return view('product.MarketIDList');
     }
@@ -296,16 +495,10 @@ class RegisteredProductManageController extends Controller
      */
     public function saveMarketProduct(Request $request)
     {
-        //$product  = Product::where('nIdx', $request->post('id'))->first();
         $product  = Product::where('nIdx', 1)->first();
         $coupang = new CoupangConnector();
-        //$coupang->getCategoryInfoViaCode(56174);
         $coupang->getCategoryMetaInfo(56174);
-        // $coupang->getCategoryListInfo();
-        // $coupang->addOutboundShippingCenter();
-        // $coupang->addReturnShippingCenter();
         $coupang->addProduct();
-        //return response()->json(["status" => "success", "data" => $marketAccount]);
     }
     /**
      * Display the specified resource.
@@ -318,39 +511,5 @@ class RegisteredProductManageController extends Controller
         return response()->json(["status" => "success", "data" => $marketAccount]);
     }
 
-    public function accountUpdate($marketId=0, $accountId=0, Request $request)
-    {
-        // $marketAccount = MarketAccount::find($accountId);
-        // $marketAccount->strAccountId = $request->post('txtAccountId');
-        // $marketAccount->strAccountPwd = $request->post('txtAccountPwd');
-        // $marketAccount->strAPIAccessKey = $request->post('txtAPIAccessKey');
-        // $marketAccount->update();
-        return response()->json(["status" => "success", "data" => $marketAccount]);
 
-        // $tr = new GoogleTranslate(); // Translates to 'en' from auto-detected language by default
-
-        // $title = "오픈마켓계정관리";
-       
-        // $marketAccounts = MarketAccount::where('bIsDel', 0)
-        //         ->where('nMarketIdx', $id)
-        //         ->where('nUserId', Auth::id())
-        //         ->orderBy('nIdx')->paginate(15);
-              //dd($markets);
-        // return view('operation.OpenMarketAccountManage', compact('title', 'markets'))
-        //    ->with('i', (request()->input('page', 1) - 1) * 15);
-        //return response()->json(["status" => "success", "data" => $marketAccount]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  $accountId
-     * @return \Illuminate\Http\Response
-     */
-    public function accountDelete($marketId, $accountId)
-    {
-        //
-        //$marketAccount = MarketAccount::where('nIdx', $accountId)->delete();
-        return response()->json(["status" => "success", "data" => $marketAccount]);
-    }
 }

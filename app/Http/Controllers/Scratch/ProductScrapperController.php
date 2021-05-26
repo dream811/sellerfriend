@@ -25,6 +25,7 @@ use App\Models\CategoryWeMakePrice;
 use App\Models\DocumentImage;
 use App\Models\WeightType;
 use App\Models\MoneyType;
+use App\Models\ProductOption;
 use App\Mylibs\ScrapperAPI;
 use DateTime;
 use Exception;
@@ -125,8 +126,9 @@ class ProductScrapperController extends Controller
         $arrResponse['item']['props_list_ko'] = $trans_ko_props_list;
         
         // $trans_str_desc = $tr->translate($arrResponse['item']['desc']);
-
-        $arrResponse['item']['desc'] = '<image src="'.asset('storage/'.$topImage->strImageURL).'">'.$arrResponse['item']['desc'].'<image src="'.asset('storage/'.$downImage->strImageURL).'">';
+        $topImageURL = $topImage == null ? "" : $topImage->strImageURL;
+        $downImageURL = $downImage == null ? "" : $downImage->strImageURL;
+        $arrResponse['item']['desc'] = '<image src="'.$topImageURL.'">'.$arrResponse['item']['desc'].'<image src="'.$downImageURL.'">';
         
         return response()->json(["status" => "success", "data" => $arrResponse['item'] ]);
         
@@ -143,21 +145,34 @@ class ProductScrapperController extends Controller
         if(!$request->exists('sku_sell_price'))
             return redirect('scratchProductScrap');
         //옵션명
-        $arrOptName = $request->post('txtOptionAttr');
-        $strOption = implode("|", $arrOptName);
+        $arrKoOptName = $request->post('txtOptionAttr');
+        $strKoOption = implode("§", $arrKoOptName);
         //return redirect('scratchProductScrap');
+        $arrCnOptName = $request->post('txtCnOptionAttr');
+        $strCnOption = implode("§", $arrCnOptName);
         //main data
         $categoryName = $request->post('txtCategoryName');
 
-        $arrOptionValue = array();
-        foreach ($arrOptName as $key => $value) {
-            $arrOptionValue[] = implode(",", $request->post('txtKoOptionName_'.$key));
+        $arrOptionAttr = array();
+        $arrKoOptionValue = array();
+        $arrCnOptionValue = array();
+        $arrOptionPrice = array();
+        $arrOptionImage = array();
+        foreach ($arrKoOptName as $key => $value) {
+            $arrOptionAttr[] = $request->post('optName_'.$key);
+            $arrKoOptionValue[] = implode(",", $request->post('txtKoOptionName_'.$key));
+            $arrCnOptionValue[] = implode(",", $request->post('txtCnOptionName_'.$key));
+            $arrOptionPrice[] = implode("¶", $request->post('txtAddOptionPrice_'.$key));
+            $arrOptionImage[] = implode("¶", $request->post('txtOptionImage_'.$key));
             
         }
-        $strOptionValue = implode("|", $arrOptionValue);
+        $strKoOptionValue = implode("§", $arrKoOptionValue);
+        $strCnOptionValue = implode("§", $arrCnOptionValue);
+        $strOptionPrice = implode("§", $arrOptionPrice);
+        $strOptionImage = implode("§", $arrOptionImage);
         $date = new DateTime('now');
-        $tid = "SF".$date->format('YmdHisu');
-
+        $tid = "T".$date->format('YmdHisv');
+        
         $product = new Product([
             'nUserId' => Auth::id(),
             'strSolutionId' => $tid,
@@ -168,8 +183,12 @@ class ProductScrapperController extends Controller
             'nBrandType' => 0, 
             'strBrand' => "",
             'strKeyword' => str_replace(' ', ',', $request->post('txtKrMainName')),
-            'strOption' => $strOption, 
-            'strOptionValue' => $strOptionValue,
+            'strKoOption' => $strKoOption, 
+            'strKoOptionValue' => $strKoOptionValue,
+            'strCnOption' => $strCnOption, 
+            'strCnOptionValue' => $strCnOptionValue,
+            'strOptionPrice' => $strOptionPrice,
+            'blobOptionImage' => $strOptionImage,
             'strChMainName' =>  $request->post('txtChMainName'), 
             'strKrMainName' =>  $request->post('txtKrMainName'), 
             'strChSubName' =>   $request->post('txtChMainName'), 
@@ -207,8 +226,8 @@ class ProductScrapperController extends Controller
             'nBuyerMarketChargeRate' => number_format($request->post('txtBuyerMarketChargeRate'), 2, '.', ''),//
             'nOverSeaDeliveryCharge' => number_format($request->post('txtOverSeaDeliveryCharge'), 2, '.', ''),//
             'strFunction' => $request->post('txtFunction'),//
-            'nDeliverCharge' => number_format($request->post('txtDeliverCharge'), 2, '.', ''),//
-            'nReturnDeliverCharge' => number_format($request->post('txtReturnDeliverCharge'), 2, '.', ''),//
+            'nDeliveryCharge' => number_format($request->post('txtDeliveryCharge'), 2, '.', ''),//
+            'nReturnDeliveryCharge' => number_format($request->post('txtReturnDeliveryCharge'), 2, '.', ''),//
             'nExchangeDeliveryCharge' => number_format($request->post('txtExchangeDeliveryCharge'), 2, '.', ''),//
             'nOptionSellPrice' => number_format($request->post('txtOptionSellPrice'), 2, '.', ''),//
             'nOptionBasePrice' => number_format($request->post('txtOptionBasePrice'), 2, '.', ''),//
@@ -241,11 +260,36 @@ class ProductScrapperController extends Controller
         // $arrWeight = $request->post('txtSubItemWeight');
         //옵션명
         $arrOptName = $request->post('txtOptionAttr');
+        $arrCnOptName = $request->post('txtCnOptionAttr');
         $cntOptionName = count($arrOptName) > 3 ? 3 : count($arrOptName);
-        $arrOptionAttr = array();
-        for ($i=0; $i < $cntOptionName; $i++) { 
-            $arrOptionAttr[] = $request->post('optName_'.$i);
-        }
+        
+        // $arrKoOptionAttr = array();
+        // $arrCnOptionAttr = array();
+        // $arrOptionImage = array();
+        // $arrOptionPrice = array();
+        // for ($i=0; $i < $cntOptionName; $i++) { 
+        //     $arrOptionAttr[] = $request->post('optName_'.$i);
+        //     $arrKoOptionAttr[] = $request->post('txtKoOptionName_'.$i);
+        //     $arrCnOptionAttr[] = $request->post('txtCnOptionName_'.$i);
+        //     $arrOptionImage[] = $request->post('txtOptionImage_'.$i);
+        //     $arrOptionPrice[] = $request->post('txtOptionPrice_'.$i);
+        //     // foreach ($arrOptionAttr[$i] as $key => $value) {
+        //     //     // $option = new ProductOption([
+        //     //     //     'nProductIdx' => $product->nIdx, 
+        //     //     //     'nOptionKey' => $i, 
+        //     //     //     'strKoOptionName' => $arrOptName[$i], 
+        //     //     //     'strKoOptionValue' => $arrKoOptionAttr[$i][$key], 
+        //     //     //     'strCnOptionName' => $arrCnOptName[$i], 
+        //     //     //     'strCnOptionValue' => $arrCnOptionAttr[$i][$key], 
+        //     //     //     'strOptionPrice' => $arrOptionImage[$i][$key], 
+        //     //     //     'strImageURL' => $arrOptionPrice[$i][$key], 
+        //     //     //     'bIsDel' => 0
+        //     //     // ]);
+        //     //     // $option->save();
+        //     // }
+        // }
+        //옵션저장
+
         $sku_base_price = $request->post('sku_discount_price');
         $sku_sell_price = $request->post('sku_sell_price');
         $sku_discount_price = $request->post('sku_discount_price');
@@ -262,6 +306,9 @@ class ProductScrapperController extends Controller
 
             $productItem = new ProductItem([
                 'nProductIdx' => $product->nIdx,
+                // 'nProductOptIdx0' => $product->nIdx,
+                // 'nProductOptIdx1' => $product->nIdx,
+                // 'nProductOptIdx2' => $product->nIdx,
                 'nSubItemOptionPrice' => $sku_option_price[$i],
                 'nSubItemBasePrice' => $sku_base_price[$i],
                 'nSubItemSellPrice' => $sku_sell_price[$i],
@@ -296,7 +343,7 @@ class ProductScrapperController extends Controller
             $productImage->save();
         }
 
-        return redirect('scratchProductScrap');
+        //return redirect('scratchSellPrepareCheck');
     }
 
     public function categoryListSolution()

@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col-12 col-sm-12">
                 <div class="card card-primary card-outline card-tabs">
-                    <div class="card-header border-bottom-0">
+                    <div class="bg-secondary card-header border-bottom-0">
                         <div class="row">
                             <!-- /.form group -->
                             <div class="col-sm-1">
@@ -251,7 +251,7 @@
                             
                         </div>
                     </div>
-                    <div class="card-header border-bottom-0">
+                    {{-- <div class="card-header border-bottom-0">
                         <div class="row justify-content-md-center">
                             <div class="col-sm-1">
                                 <img width="30px;" src="{{asset('assets/images/country/china.ico')}}">
@@ -274,42 +274,27 @@
                                 <label>0</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-header p-0 pt-1 border-bottom-0">
-                        <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="custom-tabs-three-home-tab" data-toggle="pill" href="#custom-tabs-three-home" role="tab" aria-controls="custom-tabs-three-home" aria-selected="true">목록스타일</a>
-                            </li>
-                            
-                        </ul>
+                    </div> --}}
+                    <div class="card-body">
                         <ul class="nav float-right">
                             <li class="pull-right float-right pr-1 pt-1" style="">
-                                <a href="javascript:void(0)" class="btn btn-success btnAddMarketProduct" >마켓상품등록</a>
+                                <a href="javascript:void(0)" class="btn btn-success btn-xs btnAddMarketProduct" >마켓상품등록</a>
                             </li>
                         </ul>
-                    </div>
-                    <div class="card-body">
-                        
-                        <div class="tab-content" id="custom-tabs-three-tabContent">
-                            <div class="tab-pane fade show active" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
-                                <form id="divProductForm">
-                                    <div class="card-body p-0" >
-                                        <table id="productTable" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width:20px !important"><input type="checkbox" name="select_all" value="1" id="select_all"></th>
-                                                    <th style="width:50px !important">대표이미지</th>
-                                                    <th style="width:800px !important">상품정보</th>
-                                                    <th style="width:100px !important">등록마켓</th>
-                                                    <th style="width:40px !important">공급가/판매가</th>
-                                                    <th style="width:40px !important">마진</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                        <form id="divProductForm">
+                            <table id="productTable" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th style="width:20px !important"><input type="checkbox" name="select_all" value="1" id="select_all"></th>
+                                        <th style="width:50px !important">대표이미지</th>
+                                        <th style="width:800px !important">상품정보</th>
+                                        <th style="width:100px !important">등록마켓</th>
+                                        <th style="width:40px !important">공급가/판매가</th>
+                                        <th style="width:40px !important">마진</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </form>
                     </div>
                     <!-- /.card -->
                 </div>

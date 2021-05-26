@@ -126,43 +126,30 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="card-header p-0 pt-1 border-bottom-0">
-                        <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="custom-tabs-three-home-tab" data-toggle="pill" href="#custom-tabs-three-home" role="tab" aria-controls="custom-tabs-three-home" aria-selected="true">목록스타일</a>
-                            </li>
-                            
-                        </ul>
-                        <ul class="nav float-right">
-                            <li class="pull-right float-right pr-1 pt-1" style="">
-                                <a href="javascript:void(0)" class="btn btn-success btnAddMarketProduct" >수정전송</a>
-                            </li>
-                        </ul>
-                    </div>
+                    
                     <div class="card-body">
-                        <div class="tab-content" id="custom-tabs-three-tabContent">
-                            <div class="tab-pane fade show active" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
-                                <form id="divProductForm">
-                                    <div class="card-body p-0">
-                                        <table id="example" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th><input type="checkbox" name="select_all" value="1" id="select_all"></th>
-                                                    <th>이미지</th>
-                                                    <th>상품정보</th>
-                                                    <th>마켓아이디</th>
-                                                    <th>연동코드</th>
-                                                    <th>판매가</th>
-                                                    <th>적용판매가<br>할인율</th>
-                                                    <th>마진</th>
-                                                    <th>판매기간<br>상품전송일</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                        {{-- <ul class="nav float-right mr-3">
+                            <li class="pull-right float-right pr-1 pt-1" style="">
+                                <a href="javascript:void(0)" class="btn btn-success btn-xs btnAddMarketProduct" >수정전송</a>
+                            </li>
+                        </ul> --}}
+                        <form id="divProductForm">
+                            <table id="example" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" name="select_all" value="1" id="select_all"></th>
+                                        <th>이미지</th>
+                                        <th>상품정보</th>
+                                        <th>마켓아이디</th>
+                                        <th>연동코드</th>
+                                        <th>판매가</th>
+                                        <th>적용판매가<br>할인율</th>
+                                        <th>마진</th>
+                                        <th>판매기간<br>상품전송일</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </form>
                     </div>
                     <!-- /.card -->
                 </div>
@@ -221,7 +208,7 @@
                 stateSave: true,
                 processing: true,
                 serverSide: true,
-                scrollY: "400px",
+                scrollY: "500px",
                 //ajax: "{{ route('product.SellTargetManage') }}",
                 ajax: {
                     url: "{{ route('product.RegisteredProductManage') }}",
@@ -297,6 +284,12 @@
             //         }
             //     });
             // });
+
+            $('body').on('click', '.openWindow', function(){
+                console.log('good');
+                var id = $(this).attr('data-id');
+                window.open('/productRegisteredProductManage/'+id+'/edit','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no');
+            })
 
             $('body').on('click', '.btnAddMarketProduct', function () {
                 var form = $('#divProductForm');

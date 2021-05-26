@@ -10,21 +10,26 @@ class Product extends Model
     use HasFactory;
     protected $table = 'tb_products';
     protected $primaryKey = 'nIdx';
-    protected $fillable = ['strId', 'strSolutionId', 'strURL', 'strMainName', 'strSubName', 'nUserId', 'nBrandType', 'strBrand', 'strKeyword', 'strOption', 'strOptionValue', 'strChMainName', 'strKrMainName', 'strChSubName', 'strKrSubName', 'strComeCode', 'strCategoryCode0', 'strCategoryCode1', 'strCategoryCode2', 'strCategoryCode3', 'strCategoryCode4', 'strCategoryCode5', 'strCategoryCode6', 'strCategoryCode7', 'strCategoryCode8', 'nShareType', 'nProductWorkProcess', 
-    'bReg11thhouse', 'bRegAuction', 'bRegCoupang', 'bRegGmarket', 'bRegInterpark', 'bRegLotteon', 'bRegSmartstore', 'bRegTmon', 'bRegWemakeprice', 'created_at', 'updated_at', 'bIsDel'];
+    protected $fillable = ['strId', 'strSolutionId', 'strURL', 'strMainName', 'strSubName', 'nUserId', 'nBrandType', 'strBrand', 'strKeyword', 'strKoOption', 'strKoOptionValue', 
+    'strCnOption', 'strCnOptionValue', 'strOptionPrice', 'blobOptionImage', 'strChMainName', 'strKrMainName', 'strChSubName', 'strKrSubName', 'strComeCode', 'strCategoryCode0', 'strCategoryCode1', 
+    'strCategoryCode2', 'strCategoryCode3', 'strCategoryCode4', 'strCategoryCode5', 'strCategoryCode6', 'strCategoryCode7', 'strCategoryCode8', 'nShareType', 'nProductWorkProcess', 
+    'bReg11thhouse', 'bRegAuction', 'bRegCoupang', 'bRegGmarket', 'bRegInterpark', 'bRegLotteon', 'bRegSmartstore', 'bRegTmon', 'bRegWemakeprice', 'strReason', 
+    'created_at', 'updated_at', 'bIsDel'];
     public function productImages()
     {
         return $this->hasMany(ProductImage::class, 'nProductIdx', 'nIdx');
     }
-    public function productMainImage()
-    {
-        return $this->hasOne(ProductImage::class, 'nProductIdx', 'nIdx')->where('nImageCode', 0)->first();
-    }
-
+    
     public function productDetail()
     {
         return $this->hasOne(ProductDetail::class, 'nProductIdx', 'nIdx');
     }
+
+    public function productOptions()
+    {
+        return $this->hasOne(ProductOption::class, 'nProductIdx', 'nIdx');
+    }
+
     public function productRegCoupang()
     {
         return $this->hasMany(ProductRegCoupang::class, 'nProductIdx', 'nIdx');

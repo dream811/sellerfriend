@@ -270,7 +270,7 @@ class SellTargetManageController extends Controller
                 $start = new DateTime($setting->dtSalesPeriodStartDateTime);
                 $end = new DateTime($setting->dtSalesPeriodEndDateTime);
                 $strOption = $product->strOption;
-                $arrOption = explode("|", $strOption);
+                $arrOption = explode("§", $strOption);
 
                 $strCategory = $product->strCategoryCode2;
                 $arrCategory = mb_split(" : ", $strCategory);

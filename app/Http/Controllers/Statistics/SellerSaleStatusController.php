@@ -13,6 +13,7 @@ use App\Models\ProductDetail;
 use App\Models\Come;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\MarketAccount;
 use DataTables;
 use App\MyLibs\CoupangConnector;
 

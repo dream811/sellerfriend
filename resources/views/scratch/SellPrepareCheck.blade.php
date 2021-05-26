@@ -22,11 +22,9 @@
         <div class="row">
             <div class="col-12 col-sm-12">
                 <div class="card card-primary card-outline card-tabs">
-                    <div class="card-header">
+                    <div class="card-header pt-4">
                         <div class="row">
-                            <div class="col-1">
-                                <label class="float-right">일짜:</label>
-                            </div>
+                            
                             {{-- 
                             <div class="col-2">
                                 <div class="form-group">
@@ -36,26 +34,59 @@
                             <div class="col-1">
                                 <label class="float-right">일짜:</label>
                             </div> --}}
-                            <div class="col-3 form-group">
+                            <div class="form-group ml-4" style="width:320px;">
+                                
                                 <div class="input-group">
-                                    <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="far fa-calendar-alt"></i>
-                                    </span>
+                                    <label class="input-group-append mt-2 ml-2" style="font-size:14px;">기간:</label>
+                                    <input type="text" class="form-control form-control-sm float-right rounded-0 text-center ml-1" id="txtDateRange">
+                                    <div class="input-group-append mb-2">
+                                        <button type="button" class="btn btn-sm btn-default float-right rounded-0" id="daterange-btn">
+                                        <i class="far fa-calendar-alt"></i> 날짜검색
+                                        <i class="fas fa-caret-down"></i>
+                                        </button>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm float-right" id="txtDateRange">
                                 </div>
                             <!-- /.input group -->
                             </div>
                             <!-- Date and time range -->
-                            <div class="col-3 form-group">
+                            {{-- <div class="col-3 form-group">
                                 <div class="input-group">
-                                    <button type="button" class="btn btn-sm btn-default float-right" id="daterange-btn">
+                                    <button type="button" class="btn btn-sm btn-default float-right rounded-0" id="daterange-btn">
                                     <i class="far fa-calendar-alt"></i> 날짜검색
                                     <i class="fas fa-caret-down"></i>
                                     </button>
                                 </div>
+                            </div> --}}
+                            <div class="form-group col-3" style="justify-content: space-between !important;">
+                                <div class="input-group mt-1">
+                                    <label class="input-group-append ml-2" style="font-size:14px;">마켓등록상품:</label>
+                                    <div class="input-group-append custom-control custom-radio ml-1" style="width:70px;">
+                                        <input class="custom-control-input" type="radio" id="rdoMarketRegProduct0" name="rdoMarketRegProduct" value="-1" checked>
+                                        <label for="rdoMarketRegProduct0" class="custom-control-label font-weight-normal">전체</label>
+                                    </div>
+                                    <div class="input-group-append custom-control custom-radio" style="width:100px;">
+                                        <input class="custom-control-input" type="radio" id="rdoMarketRegProduct1" name="rdoMarketRegProduct" value="1">
+                                        <label for="rdoMarketRegProduct1" class="custom-control-label font-weight-normal">등록상품</label>
+                                    </div>
+                                    <div class="input-group-append custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="rdoMarketRegProduct2" name="rdoMarketRegProduct" value="0">
+                                        <label for="rdoMarketRegProduct2" class="custom-control-label font-weight-normal">미등록상품</label>
+                                    </div>
+                                    
+                                </div>
                             </div>
+                            <div class="form-group " style="width:150px;">
+                                <div class="input-group">
+                                    <label class="input-group-append mt-1 ml-2" style="font-size:14px;">마켓:</label>
+                                    <select class="custom-select form-control-border custom-select-sm rounded-0 ml-2" name="selMarket" id="selCategoryName4">
+                                        <option value="">==마켓 선택==</option>
+                                        @foreach ($markets as $market)
+                                            <option value="{{$market->strMarketCode}}" >{{$market->strMarketName}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            
                             <div class="col">
                                 <a class="btn bg-info btn-sm float-right btnSearchData">
                                     <i class="fas fa-search"></i>
@@ -77,7 +108,7 @@
                                 </div>
                             </div> --}}
                         </div>
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-sm-1">
                                 <label class="float-right">마켓등록상품:</label>
                             </div>
@@ -121,37 +152,30 @@
                             </div>
                             
                         </div>
-                    </div>
-                    <div class="card-header p-0 pt-1 border-bottom-0">
-                        <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="custom-tabs-three-home-tab" data-toggle="pill" href="#custom-tabs-three-home" role="tab" aria-controls="custom-tabs-three-home" aria-selected="true">목록스타일</a>
+                    </div> --}}
+                    <hr>
+                    <div class="card-body table-responsive">
+                        <ul class="nav float-right">
+                            <li class="pull-right float-right pr-4 pt-1" style="">
+                                <a href="javascript:void(0)" class="btn btn-success btn-xs btnAddMarketProduct" >마켓상품등록</a>
                             </li>
                         </ul>
-                    </div>
-                    <div class="card-body">
-                        <div class="tab-content" id="custom-tabs-three-tabContent">
-                            <div class="tab-pane fade show active" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
-                                <form>
-                                    <div class="card-body table-responsive p-0">
-                                        <table id="productTable" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width:20px !important"><input type="checkbox" name="select_all" value="1" id="select-all"></th>
-                                                    <th style="width:50px !important">대표이미지</th>
-                                                    <th style="width:500px !important">상품정보</th>
-                                                    <th style="width:100px !important">등록마켓</th>
-                                                    <th >옵션</th>
-                                                    <th style="width:40px !important">공급가/판매가</th>
-                                                    <th style="width:40px !important">마진</th>
-                                                    <th style="width:70px !important">Action</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                        <form id="divProductForm">
+                            <table id="productTable" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th style="width:20px !important"><input type="checkbox" name="select_all" value="1" id="select_all"></th>
+                                        <th style="width:50px !important">대표이미지</th>
+                                        <th style="width:500px !important">상품정보</th>
+                                        <th style="width:100px !important">등록마켓</th>
+                                        <th >옵션</th>
+                                        <th style="width:40px !important">공급가<br>판매가</th>
+                                        <th style="width:40px !important">마진</th>
+                                        <th style="width:70px !important">Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </form>
                     </div>
                     <!-- /.card -->
                 </div>
@@ -212,7 +236,7 @@
                 processing: true,
                 serverSide: true,
                 searching: false,
-                scrollY: "400px",
+                scrollY: "540px",
                 ajax: {
                     url: "{{ route('scratch.SellPrepareCheck') }}",
                     data: function ( d ) {
@@ -224,12 +248,12 @@
                         // d.category3 = $('#selCategoryName3 option:selected').val();
                         // d.category4 = $('#selCategoryName4 option:selected').val();
                         // d.categoryName = $('#txtCategoryName').val();
-                        // d.shareType = $("input[name='rdoShareType']:checked").val();
+                        d.rdoMarketRegProduct = $("input[name='rdoMarketRegProduct']:checked").val();
                         // d.selCountry = $('#selCountryName option:selected').val();
                     }
                 },
                 columns: [
-                    {data: 'check', name: 'check'},
+                    {data: 'check', name: 'check', orderable : false},
                     {data: 'mainImage', name: 'mainImage'},
                     {data: 'productInfo', name: 'productInfo'},
                     {data: 'marketInfo', name: 'marketInfo', className: "text-center"},
@@ -249,7 +273,7 @@
             });
             $('#productTable').on('click', '.btnSellPrepare', function (e) {
                 var id = $(this).attr('data-id');
-                var action = '/scratchSellPrepareCheck/' + id;// $("#manageMarketAccount").attr("action");
+                var action = '/scratchSellPrepareCheck/prduct/' + id;// $("#manageMarketAccount").attr("action");
                 $.ajax({
                     url: action,
                     type: "PUT",
@@ -262,6 +286,16 @@
                     }
                 });
             });
+
+            $('#productTable').on('click', '.btnEditProduct', function (e) {
+                var id = $(this).attr('data-id');
+                window.open('/scratchSellPrepareCheck/product/' + id + '/edit', '상품수정', 'scrollbars=1, resizable=1, width=1000, height=620');
+            });
+
+            $('#productTable').on('click', '.btnViewDetail', function (e) {
+                var id = $(this).attr('data-id');
+                window.open('/scratchSellPrepareCheck/product/' + id + '/detail', '상품상세', 'scrollbars=1, resizable=1, width=1000, height=620');
+            });
             $('body').on('mousemove', '.preview', function (e) {
                 var offset = $(this).offset();
                 var imagUrl = $(this).attr('data');
@@ -269,8 +303,6 @@
                 img.src = imagUrl;
                 var xOffset = 80;
                 var yOffset = 700-50;
-                console.log(offset.top);
-                console.log(offset.left);
                 if($('#preview').length)
                 {
                     $("#preview").css({
@@ -292,6 +324,53 @@
             });
             $('body').on('mouseout', '.preview', function (e) {
                 $("#preview").remove();
+            });
+
+            $('body').on('click', '.btnAddMarketProduct', function () {
+                var form = $('#divProductForm');
+                var table = $('#productTable').DataTable(); 
+                // Iterate over all checkboxes in the table
+                var products = "";
+                table.$('input[type="checkbox"]').each(function(){
+                    // If checkbox doesn't exist in DOM
+                    if(this.checked){
+                    // Create a hidden element
+                        console.log(this.value);
+                        products += this.value + "|";
+                    }
+                });
+                products = products.slice(0,-1);
+                var data = $('#divProductForm').serialize();
+                if(products == "")
+                {
+                    alert("상품을 하나이상 선택해주세요!");
+                    return false;
+                }
+
+                window.open('/scratchSellPrepareCheck/marketAccountList?products=' + products, '상품등록', 'scrollbars=1, resizable=1, width=1000, height=620');
+
+                
+            });
+            $('#select_all').on('click', function(){
+                var table = $('#productTable').DataTable(); 
+                // Get all rows with search applied
+                var rows = table.rows({ 'search': 'applied' }).nodes();
+                // Check/uncheck checkboxes for all rows in the table
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            });
+
+            // Handle click on checkbox to set state of "Select all" control
+            $('#productTable tbody').on('change', 'input[type="checkbox"]', function(){
+                // If checkbox is not checked
+                if(!this.checked){
+                    var el = $('#select_all').get(0);
+                    // If "Select all" control is checked and has 'indeterminate' property
+                    if(el && el.checked && ('indeterminate' in el)){
+                        // Set visual state of "Select all" control
+                        // as 'indeterminate'
+                        el.indeterminate = true;
+                    }
+                }
             });
         });	
     </script>

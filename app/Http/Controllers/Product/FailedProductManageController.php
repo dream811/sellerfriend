@@ -14,6 +14,7 @@ use App\Models\Come;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\FailedProduct;
+use App\Models\MarketAccount;
 use App\MyLibs\CoupangConnector;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -80,8 +81,8 @@ class FailedProductManageController extends Controller
                             '.$row->strKrSubName.'
                         </li><br>';
                     //옵션
-                    $options = explode("|", $row->strOption);
-                    $optionValue = explode("|", $row->strOptionValue);
+                    $options = explode("§", $row->strKoOption);
+                    $optionValue = explode("§", $row->strKoOptionValue);
                     foreach ($options as $key => $value) {
                         $element .= '<li class="list-inline-item">
                             <span style="text-align:left;">'.$value.':</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-align:right;">'.$optionValue[$key].'</span>
@@ -227,4 +228,14 @@ class FailedProductManageController extends Controller
         //return response()->json(["status" => "success", "data" => $marketAccount]);
     }
     
+    //상품등록을 위한 마켓계정 리스트(get)
+    public function marketAccountList()
+    {
+        
+        $marketAccounts = MarketAccount::where('nUserId', Auth::id())
+                                        ->get();
+
+        return view('product.FailedMarketAccountList', compact('marketAccounts'));
+    }
+
 }

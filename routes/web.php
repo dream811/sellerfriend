@@ -47,15 +47,25 @@ Route::get('/scratchProductGetManage', [App\Http\Controllers\Scratch\ProductGetM
 Route::put('/scratchProductGetManage/{productId}', [App\Http\Controllers\Scratch\ProductGetManageController::class, 'update'])->name('scratch.ProductGetManage.update');
 //3
 Route::get('/scratchSellPrepareCheck', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'index'])->name('scratch.SellPrepareCheck');
-Route::put('/scratchSellPrepareCheck/{productId}', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'update'])->name('scratch.SellPrepareCheck.update');
+//Route::put('/scratchSellPrepareCheck/{productId}', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'update'])->name('scratch.SellPrepareCheck.update');
+
+Route::get('/scratchSellPrepareCheck/marketAccountList', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'marketAccountList'])->name('scratch.SellPrepareCheck.marektAccountList');
+//상품 대행사에 등록
+Route::post('/scratchSellPrepareCheck/registProduct', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'registProduct'])->name('scratch.SellPrepareCheck.registProduct');
+//상품 수정
+Route::get('/scratchSellPrepareCheck/product/{prodcutId}/edit', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'editProduct'])->name('scratch.SellPrepareCheck.edit');
+Route::get('/scratchSellPrepareCheck/product/{prodcutId}/detail', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'detailProduct'])->name('scratch.SellPrepareCheck.detail');
+Route::post('/scratchSellPrepareCheck/product/{productId}/update', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'update'])->name('scratch.SellPrepareCheck.update');
+Route::post('/scratchSellPrepareCheck/product/{productId}/updateDescription', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'updateDescription'])->name('scratch.SellPrepareCheck.updateDescription');
 //4
 Route::get('/scratchDesignCheck', [App\Http\Controllers\Scratch\DesignCheckController::class, 'index'])->name('scratch.DesignCheck');
 Route::put('/scratchDesignCheck/{productId}', [App\Http\Controllers\Scratch\DesignCheckController::class, 'update'])->name('scratch.DesignCheck.update');
+
 /** 상품관리 **/
 //1
 Route::get('/productSellTargetManage', [App\Http\Controllers\Product\SellTargetManageController::class, 'index'])->name('product.SellTargetManage');
 //**??? */
-Route::get('/productSellTargetManageProducts', [App\Http\Controllers\Product\SellTargetManageController::class, 'producSele'])->name('product.SellTargetManageProducts');
+Route::get('/productSellTargetManageProducts', [App\Http\Controllers\Product\SellTargetManageController::class, 'productSelect'])->name('product.SellTargetManageProducts');
 Route::post('/productSellTargetManageProducts/marketProductAdd', [App\Http\Controllers\Product\SellTargetManageController::class, 'marketProductAdd'])->name('product.SellTargetManageMarketProductAdd');
 //Route::post('/productSellTargetManageProducts/addMarketProduct', [App\Http\Controllers\Product\SellTargetManageController::class, 'saveMarketProduct'])->name('product.SellTargetManageAddMarketProduct');
 Route::get('/productSellTargetManageProducts/marketAccountList', [App\Http\Controllers\Product\SellTargetManageController::class, 'marketAccountList'])->name('product.MarketAccountList');
@@ -68,10 +78,17 @@ Route::get('/productSearchMarketCategory/{marketCode}/category/{categoryCode}/se
 Route::get('/productSearchMarketOptionMapping/{marketCode}/category/{categoryCode}', [App\Http\Controllers\Product\SellTargetManageController::class, 'marketOptionMappingSearch'])->name('product.SearchMarketOptionMapping');
 //2
 Route::get('/productRegisteredProductManage', [App\Http\Controllers\Product\RegisteredProductManageController::class, 'index'])->name('product.RegisteredProductManage');
+Route::get('/productRegisteredProductManage/{productId}/edit', [App\Http\Controllers\Product\RegisteredProductManageController::class, 'edit'])->name('product.RegisteredProductManage.edit');
+Route::post('/productRegisteredProductManage/{productId}/update', [App\Http\Controllers\Product\RegisteredProductManageController::class, 'update'])->name('product.RegisteredProductManage.update');
+Route::get('/productRegisteredProductManage/{productId}/getStopInfo', [App\Http\Controllers\Product\RegisteredProductManageController::class, 'getStopInfo'])->name('product.RegisteredProductManage.getStopInfo');
+Route::post('/productRegisteredProductManage/{productId}/saveStopInfo', [App\Http\Controllers\Product\RegisteredProductManageController::class, 'saveStopInfo'])->name('product.RegisteredProductManage.saveStopInfo');
 //3
 Route::get('/productFailedProductManage', [App\Http\Controllers\Product\FailedProductManageController::class, 'index'])->name('product.FailedProductManage');
+Route::get('/productFailedProductManage/marketAccountList', [App\Http\Controllers\Product\FailedProductManageController::class, 'marketAccountList'])->name('product.FailedProductManage.MarketAccountList');
 //4
 Route::get('/productStoppedProductManage', [App\Http\Controllers\Product\StoppedProductManageController::class, 'index'])->name('product.StoppedProductManage');
+Route::get('/productStoppedProductManage/{productId}/edit', [App\Http\Controllers\Product\StoppedProductManageController::class, 'edit'])->name('product.StoppedProductManage.edit');
+Route::post('/productStoppedProductManage/{productId}/saveSellInfo', [App\Http\Controllers\Product\StoppedProductManageController::class, 'saveSellInfo'])->name('product.StoppedProductManage.saveSellInfo');
 /** 주문관리 **/
 Route::get('/orderWaiting', [App\Http\Controllers\Order\WaitingController::class, 'index'])->name('order.Waiting');
 
@@ -80,7 +97,7 @@ Route::get('/orderMarketOrderCollection', [App\Http\Controllers\Order\MarketOrde
 Route::get('/orderMarketOrderCollection/getMarketAccountList', [App\Http\Controllers\Order\MarketOrderCollectionController::class, 'getMarketAccountList'])->name('order.MarketOrderCollection.GetMarketAccountList');
 Route::post('/orderMarketOrderCollection/GetMarketOrderList', [App\Http\Controllers\Order\MarketOrderCollectionController::class, 'getMarketOrderList'])->name('order.MarketOrderCollection.GetMarketOrderList');
 Route::put('/orderMarketOrderCollection/updateRequestType/{orderItemId}', [App\Http\Controllers\Order\MarketOrderCollectionController::class, 'updateRequestType'])->name('order.MarketOrderCollection.updateRequestType');
-Route::put('/orderMarketOrderCollection/matchProduct/{orderItemId}', [App\Http\Controllers\Order\MarketOrderCollectionController::class, 'updateRequestType'])->name('order.MarketOrderCollection.updateRequestType');
+Route::put('/orderMarketOrderCollection/matchProduct/{orderItemId}', [App\Http\Controllers\Order\MarketOrderCollectionController::class, 'matchProduct'])->name('order.MarketOrderCollection.matchProduct');
 
 
 Route::get('/orderPaymentWaiting', [App\Http\Controllers\Order\PaymentWaitingController::class, 'index'])->name('order.PaymentWaiting');

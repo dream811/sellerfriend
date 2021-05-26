@@ -129,8 +129,8 @@ class ProductGetManageController extends Controller
                             '.$row->strChSubName.'
                         </li><br>';
                     //옵션
-                    $options = explode("|", $row->strOption);
-                    $optionValue = explode("|", $row->strOptionValue);
+                    $options = explode("§", $row->strOption);
+                    $optionValue = explode("§", $row->strOptionValue);
                     foreach ($options as $key => $value) {
                         $element .= '<li class="list-inline-item">
                             <span style="text-align:left;">'.$value.':</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-align:right;">'.$optionValue[$key].'</span>

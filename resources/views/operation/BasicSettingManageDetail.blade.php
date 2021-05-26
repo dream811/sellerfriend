@@ -631,13 +631,13 @@
                                                 <option value="" data-url="">= 선택 =</option>
                                                 @foreach ($documentImages as $image)
                                                     @if ($image->strImageType == "TOP")
-                                                        <option value="{{$image->nIdx}}" data-url="{{asset('storage/'. $image->strImageURL)}}" @if($marketSetting->topImage && $marketSetting->nTopImageIdx == $image->nIdx) selected @endif>{{$image->strImageName}}</option>    
+                                                        <option value="{{$image->nIdx}}" data-url="{{$image->strImageURL}}" @if($marketSetting->topImage && $marketSetting->nTopImageIdx == $image->nIdx) selected @endif>{{$image->strImageName}}</option>    
                                                     @endif
                                                 @endforeach
                                             </select>
                                             <div>
                                                 <div class="bg-gray border border-danger"  style="height: 200px;">
-                                                    <img name="imgTopPrev" id="imgTopPrev" @if($marketSetting->topImage) src="{{asset('storage/'. $marketSetting->topImage->strImageURL)}}" @else src="https://via.placeholder.com/300/FFFFFF?text=No%20Image" @endif style="width:100%; height:100%;" alt="">
+                                                    <img name="imgTopPrev" id="imgTopPrev" @if($marketSetting->topImage) src="{{$marketSetting->topImage->strImageURL}}" @else src="https://via.placeholder.com/300/FFFFFF?text=No%20Image" @endif style="width:100%; height:100%;" alt="">
                                                 </div>
                                             </div>
                                         </dd>
@@ -646,13 +646,13 @@
                                                 <option value="" data-url="">= 선택 =</option>
                                                 @foreach ($documentImages as $image)
                                                     @if ($image->strImageType == "DOWN")
-                                                        <option value="{{$image->nIdx}}" data-url="{{asset('storage/'. $image->strImageURL)}}" @if($marketSetting->nDownImageIdx == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
+                                                        <option value="{{$image->nIdx}}" data-url="{{ $image->strImageURL}}" @if($marketSetting->nDownImageIdx == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
                                                     @endif
                                                 @endforeach
                                             </select>
                                             <div>
                                                 <div class="bg-gray border border-danger" style="height: 200px;">
-                                                    <img name="imgDownPrev" id="imgDownPrev" @if($marketSetting->downImage) src="{{asset('storage/'. $marketSetting->downImage->strImageURL)}}" @else src="https://via.placeholder.com/300/FFFFFF?text=No%20Image" @endif style="width:100%; height:100%;" alt="">
+                                                    <img name="imgDownPrev" id="imgDownPrev" @if($marketSetting->downImage) src="{{$marketSetting->downImage->strImageURL}}" @else src="https://via.placeholder.com/300/FFFFFF?text=No%20Image" @endif style="width:100%; height:100%;" alt="">
                                                 </div>
                                             </div>
                                         </dd>
@@ -661,12 +661,6 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="card card-secondary" style="margin-bottom:0px;">
-                            <div class="card-footer float-right text-right margin-auto">
-                                <button type="button" class="btn btn-primary btn-xs">설정저장</button>
-                                <button type="button" class="btn bg-indigo btn-xs">닫기</button>
-                            </div>
-                        </div> --}}
                     </form>
             </div>
         </div>
@@ -689,9 +683,7 @@
                 locale: {
                 format: 'YYYY-MM-DD HH:mm:ss'
                 },
-                // minYear: 1901,
                 minYear: parseInt(moment().format('YYYY'),10)-1
-                // maxYear: parseInt(moment().format('YYYY'),10)
             }, function(start, end, label) {
                 var years = moment().diff(start, 'years');
                 

@@ -30,7 +30,7 @@
         <li class="nav-item">
         <a href="{{ route('scratch.SellPrepareCheck') }}" class="nav-link {{ (request()->is('scratchSellPrepareCheck')) ? 'active' : '' }}">
             <i class="fas fa-clipboard-list nav-icon"></i>
-            <p>[3]판매준비검토</p>
+            <p>[2]판매준비검토</p>
         </a>
         </li>
         {{-- <li class="nav-item">
@@ -51,28 +51,28 @@
         </p>
     </a>
     <ul class="nav nav-treeview">
-        <li class="nav-item">
+        {{-- <li class="nav-item">
         <a href="{{ route('product.SellTargetManage') }}" class="nav-link {{ (request()->is('productSellTargetManage')) ? 'active' : '' }}">
             <i class="fas fa-cart-plus nav-icon"></i>
             <p>[1]판매대상상품</p>
         </a>
-        </li>
+        </li> --}}
         <li class="nav-item">
         <a href="{{ route('product.RegisteredProductManage') }}" class="nav-link {{ (request()->is('productRegisteredProductManage')) ? 'active' : '' }}">
             <i class="fas fa-briefcase nav-icon"></i>
-            <p>[2]등록상품관리</p>
+            <p>[1]등록상품관리</p>
         </a>
         </li>
         <li class="nav-item">
         <a href="{{ route('product.FailedProductManage') }}" class="nav-link {{ (request()->is('productFailedProductManage')) ? 'active' : '' }}">
             <i class="fas fa-clipboard-list nav-icon"></i>
-            <p>[3]등록실패상품관리</p>
+            <p>[2]등록실패상품관리</p>
         </a>
         </li>
         <li class="nav-item">
         <a href="{{ route('product.StoppedProductManage') }}" class="nav-link {{ (request()->is('productStoppedProductManage')) ? 'active' : '' }}">
             <i class="fas fa-crop-alt nav-icon"></i>
-            <p>[4]판매중지상품</p>
+            <p>[3]판매중지상품</p>
         </a>
         </li>
     </ul>
