@@ -46,7 +46,7 @@
             <div class="col-sm-6 float-right text-right" >
                 <div style="position: fixed; z-index: 99; padding: 4px; right: 20px; background-color: lightgray; border-radius: 0.5rem;">
                     <button type="submit" class="btn btn-primary btn-xs btnUpdateProduct">상품수정</button>
-                    <button type="submit" data-id="{{$product->nIdx}}" class="btn btn-primary btn-xs btnSaveStoppedProduct">판매중지</button>
+                    {{-- <button type="submit" data-id="{{$product->nIdx}}" class="btn btn-primary btn-xs btnSaveSellProduct">판매중</button> --}}
                     <button type="button" class="btn bg-indigo btn-xs btnClose">닫기</button>
                 </div>
                 
@@ -56,7 +56,7 @@
     </div>
     <div class="container-fluid">
         <div class="row">
-            <form method="POST" id="frmScrap" action="{{route('product.RegisteredProductManage.update', $product->nIdx)}}">
+            <form method="POST" id="frmScrap" action="{{route('product.FailedProductManage.update', $product->nIdx)}}">
             @csrf
             <div class="col-12">
                 <div class="card">
@@ -977,12 +977,22 @@
             }
         });
         
-        $('body').on('click', '.btnSaveStoppedProduct', function (e) {
-            var itemId = $(this).attr('data-id');
-            $.get('/productRegisteredProductManage/' + itemId +'/getStopInfo', function ({status, data}) {
-                $('#txtStopReason').val(data.strStopReason);
-                $('#modal-id').modal('show');
-                
+        $('body').on('click', '.btnSaveSellProduct', function (e) {
+            var productId = $('#txtProductId').val();
+            var action = '/productStoppedProductManage/'+ productId +'/saveSellInfo';
+            $.ajax({
+                url: action,
+                type: "POST",
+                dataType: 'JSON',
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function ({status, data}) {
+                    window.opener.location.reload();
+                    window.close();
+                },
+                error: function (data) {
+                }
             });
         });
         
@@ -1006,42 +1016,11 @@
             readURL(this);
         });
 
-        $('#manageStopInfo').submit(function(e) {
-            e.preventDefault();
-            var productId = $('#txtProductId').val();
-            let formData = new FormData(this);
-
-            if($('#txtStopReason').val() == ""){
-                alert('사유를 입력해주세요');
-                return false;
-            }
-            
-            var action = '/productRegisteredProductManage/'+ productId +'/saveStopInfo';
-            $.ajax({
-                url: action,
-                data: formData,
-                type: "POST",
-                dataType: 'JSON',
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function ({status, data}) {
-                    $('#modal-id').modal('hide');
-                    window.opener.location.reload();
-                    window.close();
-                    
-                },
-                error: function (data) {
-                }
-            });
-        });
-
         $( "#selBrandName" ).change(function() {
             $('#txtBrandName').val($("#selBrandName  option:selected").html());
         });
         $('#summernote').summernote({
-            height: '300px',
-            width: 800
+            height: '300px'
         });
         $('#summernote').summernote('code', $('#txtDesc').val());
         //delete account
@@ -1049,10 +1028,6 @@
             var rowId = $(this).attr('data-id');
 
             $(".subItemsTable tbody").find("#row_" + rowId).remove();
-        });
-        //delete account
-        $('body').on('click', '.btnClose', function () {
-            window.close();
         });
         //대표이미지 바꾸기
         $('body').on('click', '.btnMainImage', function () {
@@ -1073,6 +1048,7 @@
                 var xhr = new XMLHttpRequest(); 
                 xhr.open('GET', $(this).attr('src'), true); 
                 xhr.responseType = 'blob';
+                //$('#spanImageInfo_' + index).html('적합 - '+width+'x'+height+', ' + 'KB');
                 xhr.onload = function() 
                 {
                     blob = xhr.response;

@@ -248,46 +248,13 @@ class ProductScrapperController extends Controller
         if($countItem > 10)
             ini_set('max_input_vars','10000' );
 
-        // $arrImage = $request->post('txtSubItemImage');
-        // $arrKrColorPattern = $request->post('txtSubItemKrColorPattern');
-        // $arrChColorPattern = $request->post('txtSubItemChColorPattern');
-        // $arrKrSize = $request->post('txtSubItemKrSize');
-        // $arrChSize = $request->post('txtSubItemChSize');
-        // $arrOptionPrice = $request->post('txtSubItemOptionPrice');
         
-        // $arrBasePrice = $request->post('txtSubItemBasePrice');
-        // $arrSalePrice = $request->post('txtSubItemSalePrice');
-        // $arrWeight = $request->post('txtSubItemWeight');
         //옵션명
         $arrOptName = $request->post('txtOptionAttr');
         $arrCnOptName = $request->post('txtCnOptionAttr');
         $cntOptionName = count($arrOptName) > 3 ? 3 : count($arrOptName);
         
-        // $arrKoOptionAttr = array();
-        // $arrCnOptionAttr = array();
-        // $arrOptionImage = array();
-        // $arrOptionPrice = array();
-        // for ($i=0; $i < $cntOptionName; $i++) { 
-        //     $arrOptionAttr[] = $request->post('optName_'.$i);
-        //     $arrKoOptionAttr[] = $request->post('txtKoOptionName_'.$i);
-        //     $arrCnOptionAttr[] = $request->post('txtCnOptionName_'.$i);
-        //     $arrOptionImage[] = $request->post('txtOptionImage_'.$i);
-        //     $arrOptionPrice[] = $request->post('txtOptionPrice_'.$i);
-        //     // foreach ($arrOptionAttr[$i] as $key => $value) {
-        //     //     // $option = new ProductOption([
-        //     //     //     'nProductIdx' => $product->nIdx, 
-        //     //     //     'nOptionKey' => $i, 
-        //     //     //     'strKoOptionName' => $arrOptName[$i], 
-        //     //     //     'strKoOptionValue' => $arrKoOptionAttr[$i][$key], 
-        //     //     //     'strCnOptionName' => $arrCnOptName[$i], 
-        //     //     //     'strCnOptionValue' => $arrCnOptionAttr[$i][$key], 
-        //     //     //     'strOptionPrice' => $arrOptionImage[$i][$key], 
-        //     //     //     'strImageURL' => $arrOptionPrice[$i][$key], 
-        //     //     //     'bIsDel' => 0
-        //     //     // ]);
-        //     //     // $option->save();
-        //     // }
-        // }
+        
         //옵션저장
 
         $sku_base_price = $request->post('sku_discount_price');
@@ -343,7 +310,7 @@ class ProductScrapperController extends Controller
             $productImage->save();
         }
 
-        //return redirect('scratchSellPrepareCheck');
+        return redirect('scratchSellPrepareCheck');
     }
 
     public function categoryListSolution()

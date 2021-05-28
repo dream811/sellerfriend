@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-12 col-sm-12">
                 <div class="card card-primary card-outline card-tabs">
-                    <form id="manageMarketAccount" method="post" action="{{ route('product.FailedProductManage.MarketAccountList') }}"> 
+                    <form id="manageMarketAccount" method="post" action="{{ route('product.FailedProductManage.registProduct') }}"> 
                         @csrf
                         <div class="card-header border-bottom-0">
                             <div class="row col-12 pull-right float-right">

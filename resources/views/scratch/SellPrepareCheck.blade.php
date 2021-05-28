@@ -24,21 +24,13 @@
                 <div class="card card-primary card-outline card-tabs">
                     <div class="card-header pt-4">
                         <div class="row">
-                            
-                            {{-- 
-                            <div class="col-2">
-                                <div class="form-group">
-                                    <input type="text" class="form-control form-control-sm" name="txtSearchWord" id="txtSearchWord" placeholder="">
-                                </div>
-                            </div>
-                            <div class="col-1">
+                            {{-- <div class="col-1">
                                 <label class="float-right">일짜:</label>
                             </div> --}}
-                            <div class="form-group ml-4" style="width:320px;">
-                                
+                            <div class="form-group ml-4" style="width:400px;">
                                 <div class="input-group">
                                     <label class="input-group-append mt-2 ml-2" style="font-size:14px;">기간:</label>
-                                    <input type="text" class="form-control form-control-sm float-right rounded-0 text-center ml-1" id="txtDateRange">
+                                    <input type="text" class="form-control form-control-sm float-right rounded-0 text-center ml-2" id="txtDateRange">
                                     <div class="input-group-append mb-2">
                                         <button type="button" class="btn btn-sm btn-default float-right rounded-0" id="daterange-btn">
                                         <i class="far fa-calendar-alt"></i> 날짜검색
@@ -78,7 +70,7 @@
                             <div class="form-group " style="width:150px;">
                                 <div class="input-group">
                                     <label class="input-group-append mt-1 ml-2" style="font-size:14px;">마켓:</label>
-                                    <select class="custom-select form-control-border custom-select-sm rounded-0 ml-2" name="selMarket" id="selCategoryName4">
+                                    <select class="custom-select form-control-border custom-select-sm rounded-0 ml-2" name="selMarket" id="selMarket">
                                         <option value="">==마켓 선택==</option>
                                         @foreach ($markets as $market)
                                             <option value="{{$market->strMarketCode}}" >{{$market->strMarketName}}</option>
@@ -86,7 +78,12 @@
                                     </select>
                                 </div>
                             </div>
-                            
+                            <div class="form-group col-2">
+                                <div class="input-group">
+                                    <label class="input-group-append mt-1 ml-2" style="font-size:14px;">검색어:</label>
+                                    <input type="text" class="ml-2 form-control form-control-sm rounded-0" name="txtSearchWord" id="txtSearchWord" placeholder="">
+                                </div>
+                            </div>
                             <div class="col">
                                 <a class="btn bg-info btn-sm float-right btnSearchData">
                                     <i class="fas fa-search"></i>
@@ -240,7 +237,7 @@
                 ajax: {
                     url: "{{ route('scratch.SellPrepareCheck') }}",
                     data: function ( d ) {
-                        //d.searchWord = $('#txtSearchWord').val();
+                        d.searchWord = $('#txtSearchWord').val();
                         d.daterange = $('#txtDateRange').val();
                         // d.selCome = $('#selComeName option:selected').val();
                         // d.category1 = $('#selCategoryName1 option:selected').val();
@@ -249,7 +246,7 @@
                         // d.category4 = $('#selCategoryName4 option:selected').val();
                         // d.categoryName = $('#txtCategoryName').val();
                         d.rdoMarketRegProduct = $("input[name='rdoMarketRegProduct']:checked").val();
-                        // d.selCountry = $('#selCountryName option:selected').val();
+                        d.selMarket = $('#selMarket option:selected').val();
                     }
                 },
                 columns: [
@@ -264,7 +261,7 @@
                 ],
                 responsive: true, lengthChange: true,
                 buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#productTable_wrapper .col-md-6:eq(0)');
+            }).buttons().container().appendTo('#productTable .col-md-6:eq(0)');
             $('body').on('click', '.btnSearchData', function (e) {
                 //table.reload();
                 var table = $('#productTable').DataTable(); 
@@ -302,11 +299,12 @@
                 const img = new Image();
                 img.src = imagUrl;
                 var xOffset = 80;
-                var yOffset = 700-50;
+                var yOffset = 600;
                 if($('#preview').length)
                 {
+                    var top = offset.top - yOffset > 0 ? offset.top - yOffset : 0; 
                     $("#preview").css({
-                        "top": (offset.top - yOffset) + "px",
+                        "top": top + "px",
                         "left": (offset.left + xOffset) + "px"
                     }).fadeIn();
                 }
@@ -315,7 +313,7 @@
                     this.t = this.title,
                     this.title = "";
                     var c = (this.t != "") ? "<br/>" + this.t : "";
-                    $("body").append("<p id='preview'><img style='height:700px;' src='" + imagUrl + "' alt='Image preview' />" + c + "</p>");
+                    $("body").append("<p id='preview'><img style='height:600px;' src='" + imagUrl + "' alt='Image preview' />" + c + "</p>");
                     $("#preview").css({
                         "top": (offset.top - yOffset) + "px",
                         "left": (offset.left + xOffset) + "px"

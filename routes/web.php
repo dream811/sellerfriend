@@ -85,6 +85,10 @@ Route::post('/productRegisteredProductManage/{productId}/saveStopInfo', [App\Htt
 //3
 Route::get('/productFailedProductManage', [App\Http\Controllers\Product\FailedProductManageController::class, 'index'])->name('product.FailedProductManage');
 Route::get('/productFailedProductManage/marketAccountList', [App\Http\Controllers\Product\FailedProductManageController::class, 'marketAccountList'])->name('product.FailedProductManage.MarketAccountList');
+Route::get('/productFailedProductManage/product/{productId}/edit', [App\Http\Controllers\Product\FailedProductManageController::class, 'edit'])->name('product.FailedProductManage.edit');
+Route::post('/productFailedProductManage/product/{productId}/update', [App\Http\Controllers\Product\FailedProductManageController::class, 'update'])->name('product.FailedProductManage.update');
+//상품 대행사에 등록
+Route::post('/productFailedProductManage/registProduct', [App\Http\Controllers\Product\FailedProductManageController::class, 'registProduct'])->name('product.FailedProductManage.registProduct');
 //4
 Route::get('/productStoppedProductManage', [App\Http\Controllers\Product\StoppedProductManageController::class, 'index'])->name('product.StoppedProductManage');
 Route::get('/productStoppedProductManage/{productId}/edit', [App\Http\Controllers\Product\StoppedProductManageController::class, 'edit'])->name('product.StoppedProductManage.edit');

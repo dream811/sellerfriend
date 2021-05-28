@@ -611,7 +611,8 @@ class SellTargetManageController extends Controller
             }
         }
         //return view('product.ProductUploadResult', compact('productsCount', 'successCount', 'failedCount'));
-        
+        $data = '<script>alert("수정이 완료되었습니다.");window.opener.location.reload();window.close();</script>';
+        return view('test', compact('data'));
         //return view('product.MarketProductPrepare', compact('settingCoupangs', 'markets'));
     }
     /**

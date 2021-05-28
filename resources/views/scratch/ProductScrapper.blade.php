@@ -1451,8 +1451,6 @@
                 xhr.onload = function() 
                 {
                     blob = xhr.response;
-                    console.log(blob.size);
-                    console.log($(this).attr("data-id"));
                     $('#spanBaseImageInfo_' + index).html('적합 - '+width+'x'+height+', ' + Math.round(blob.size/1024) + 'KB');
                 }
                 xhr.send();
@@ -1946,7 +1944,6 @@
                 });
             }
         });
-        
         $(window).keydown(function(event){
             console.log('aaa');
             if(event.keyCode == 13) {

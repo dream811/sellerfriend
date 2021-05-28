@@ -475,7 +475,9 @@ class SellPrepareCheckController extends Controller
             ]);
             $productImage->save();
         }
-    echo "ggg";
+
+        $data = '<script>alert("수정이 완료되었습니다.");window.opener.location.reload();window.close();</script>';
+        return view('test', compact('data'));
     }
     
     public function updateDescription($productId, Request $request)

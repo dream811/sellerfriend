@@ -144,7 +144,7 @@
                             <div class="tab-pane fade show active" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
                                 <form id="divProductForm">
                                     <div class="card-body p-0">
-                                        <table id="example" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
+                                        <table id="productTable" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th><input type="checkbox" name="select_all" value="1" id="select_all"></th>
@@ -214,11 +214,11 @@
                 }
             );
 
-            var table = $('#example').DataTable({
+            var table = $('#productTable').DataTable({
                 stateSave: true,
                 processing: true,
                 serverSide: true,
-                scrollY: "400px",
+                scrollY: "590px",
                 //ajax: "{{ route('product.SellTargetManage') }}",
                 ajax: {
                     url: "{{ route('product.FailedProductManage') }}",
@@ -231,7 +231,7 @@
                     {data: 'check', name: 'check', orderable: false},
                     {data: 'mainImage', name: 'mainImage'},
                     {data: 'productInfo', name: 'productInfo'},
-                    {data: 'marketInfo', name: 'marketInfo'},
+                    {data: 'codeInfo', name: 'codeInfo'},
                     {data: 'priceInfo', name: 'priceInfo'},
                     {data: 'marginInfo', name: 'marginInfo'},
                 ],
@@ -257,7 +257,7 @@
             });
 
             // Handle click on checkbox to set state of "Select all" control
-            $('#example tbody').on('change', 'input[type="checkbox"]', function(){
+            $('#productTable tbody').on('change', 'input[type="checkbox"]', function(){
                 // If checkbox is not checked
                 if(!this.checked){
                     var el = $('#select_all').get(0);
@@ -270,65 +270,31 @@
                 }
             });
 
-            // // Handle form submission event
-            // $('#divProductForm').on('submit', function(e){
-            //     var form = this;
-
-            //     // Iterate over all checkboxes in the table
-            //     table.$('input[type="checkbox"]').each(function(){
-            //         // If checkbox doesn't exist in DOM
-            //         if(!$.contains(document, this)){
-            //             // If checkbox is checked
-            //             if(this.checked){
-            //             // Create a hidden element
-            //             $(form).append(
-            //                 $('<input>')
-            //                     .attr('type', 'hidden')
-            //                     .attr('name', this.name)
-            //                     .val(this.value)
-            //             );
-            //             }
-            //         }
-            //     });
-            // });
+            $('body').on('click', '.openWindow', function(){
+                console.log('good');
+                var id = $(this).attr('data-id');
+                window.open('/productFailedProductManage/product/'+id+'/edit','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no');
+            })
 
             $('body').on('click', '.btnAddMarketProduct', function () {
                 var form = $('#divProductForm');
-
+                var table = $('#productTable').DataTable(); 
                 // Iterate over all checkboxes in the table
+                var products = "";
                 table.$('input[type="checkbox"]').each(function(){
                     // If checkbox doesn't exist in DOM
-                    if(!$.contains(document, this)){
-                        // If checkbox is checked
-                        if(this.checked){
-                        // Create a hidden element
-                        $(form).append(
-                            $('<input>')
-                                .attr('type', 'hidden')
-                                .attr('name', this.name)
-                                .val(this.value)
-                        );
-                        }
+                    if(this.checked){
+                        products += this.value + "|";
                     }
                 });
-
-                var action = '/productSellTargetManageProducts/marketProductAdd';// $("#manageMarketAccount").attr("action");
+                products = products.slice(0,-1);
                 var data = $('#divProductForm').serialize();
-                $.ajax({
-                    url: action,
-                    data: data,
-                    type: "POST",
-                    dataType: 'json',
-                    success: function ({status, data}) {
-                        if(status == "success"){
-                            window.open('/productFailedProductManage/marketAccountList', '계정목록', 'scrollbars=1, resizable=1, width=1000, height=620');
-                            return false;
-                        }
-                    },
-                    error: function (data) {
-                    }
-                });
-                
+                if(products == "")
+                {
+                    alert("상품을 하나이상 선택해주세요!");
+                    return false;
+                }
+                window.open('/productFailedProductManage/marketAccountList?products=' + products, '상품등록', 'scrollbars=1, resizable=1, width=1000, height=620');
             });
             $('body').on('mousemove', '.preview', function (e) {
                 var offset = $(this).offset();

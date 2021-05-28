@@ -204,10 +204,10 @@ class RegisteredProductManageController extends Controller
         $product = SuccessProduct::where('bIsDel', 0)
             ->where('nIdx', $productId)
             ->first();
-        $product->productMainImage = $product->productImages->where('nImageCode',0)->first();
-        $product->productSubImage1 = $product->productImages->where('nImageCode',1)->first();
-        $product->productSubImage2 = $product->productImages->where('nImageCode',2)->first();
-        
+        $product->productMainImage = $product->productImages->where('nImageCode',0)->first() == null ? new SuccessProductImage() : $product->productImages->where('nImageCode',0)->first();
+        $product->productSubImage1 = $product->productImages->where('nImageCode',1)->first() == null ? new SuccessProductImage() : $product->productImages->where('nImageCode',1)->first();
+        $product->productSubImage2 = $product->productImages->where('nImageCode',2)->first() == null ? new SuccessProductImage() : $product->productImages->where('nImageCode',2)->first();
+            
         $koOptions = explode('§', $product->strKoOption);
         $koOptNames = explode('§', $product->strKoOptionValue);
         $koOptPrice = explode('§', $product->strOptionPrice);
@@ -374,6 +374,9 @@ class RegisteredProductManageController extends Controller
             ]);
             $productImage->save();
         }
+
+        $data = '<script>alert("수정이 완료되었습니다.");window.opener.location.reload();window.close();</script>';
+        return view('test', compact('data'));
     }  
 
     public function getStopInfo($productId, Request $request)
