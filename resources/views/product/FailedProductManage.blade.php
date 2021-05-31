@@ -302,13 +302,12 @@
                 const img = new Image();
                 img.src = imagUrl;
                 var xOffset = 80;
-                var yOffset = 700-50;
-                console.log(offset.top);
-                console.log(offset.left);
+                var yOffset = 600;
                 if($('#preview').length)
                 {
+                    var top = offset.top - yOffset > 0 ? offset.top - yOffset : 0; 
                     $("#preview").css({
-                        "top": (offset.top - yOffset) + "px",
+                        "top": top + "px",
                         "left": (offset.left + xOffset) + "px"
                     }).fadeIn();
                 }
@@ -317,7 +316,7 @@
                     this.t = this.title,
                     this.title = "";
                     var c = (this.t != "") ? "<br/>" + this.t : "";
-                    $("body").append("<p id='preview'><img style='height:700px;' src='" + imagUrl + "' alt='Image preview' />" + c + "</p>");
+                    $("body").append("<p id='preview'><img style='height:600px;' src='" + imagUrl + "' alt='Image preview' />" + c + "</p>");
                     $("#preview").css({
                         "top": (offset.top - yOffset) + "px",
                         "left": (offset.left + xOffset) + "px"

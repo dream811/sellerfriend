@@ -15,7 +15,7 @@ class SuccessProduct extends Model
     'strChSubName', 'strKrSubName', 'strComeCode', 'strCategoryCode0', 'strCategoryCode1', 'strCategoryCode2', 'strCategoryCode3', 'strCategoryCode4', 
     'strCategoryCode5', 'strCategoryCode6', 'strCategoryCode7', 'strCategoryCode8', 'nShareType', 'nProductWorkProcess', 
     'bReg11thhouse', 'bRegAuction', 'bRegCoupang', 'bRegGmarket', 'bRegInterpark', 'bRegLotteon', 'bRegSmartstore', 'bRegTmon', 
-    'bRegWemakeprice', 'created_at', 'updated_at', 'bIsDel'];
+    'bRegWemakeprice', 'dtSellStartDate', 'dtSellEndDate', 'created_at', 'updated_at', 'bIsDel'];
     public function productImages()
     {
         return $this->hasMany(SuccessProductImage::class, 'nProductIdx', 'nIdx');

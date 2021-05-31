@@ -239,12 +239,6 @@
                     data: function ( d ) {
                         d.searchWord = $('#txtSearchWord').val();
                         d.daterange = $('#txtDateRange').val();
-                        // d.selCome = $('#selComeName option:selected').val();
-                        // d.category1 = $('#selCategoryName1 option:selected').val();
-                        // d.category2 = $('#selCategoryName2 option:selected').val();
-                        // d.category3 = $('#selCategoryName3 option:selected').val();
-                        // d.category4 = $('#selCategoryName4 option:selected').val();
-                        // d.categoryName = $('#txtCategoryName').val();
                         d.rdoMarketRegProduct = $("input[name='rdoMarketRegProduct']:checked").val();
                         d.selMarket = $('#selMarket option:selected').val();
                     }

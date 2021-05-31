@@ -85,7 +85,6 @@ class SellPrepareCheckController extends Controller
                 ->addColumn('check', function($row){
                     $element = '<input type="checkbox" name="chkProduct[]" onclick="" value="'.$row->nIdx.'">';
                     $shareTag = $row->nShareType != 2 ? '<span class="badge badge-danger">비공개</span>': '';
-
                     $element .= '<li class="font-weight-light list-inline-item">'.$shareTag.'</li><br>';
                     return $element;
                 })
@@ -138,14 +137,14 @@ class SellPrepareCheckController extends Controller
                     return $element;
                 })
                 ->addColumn('priceInfo', function($row){
+                    $price1 = $row->productDetail->nProductPrice + $row->productDetail->nOptionSellDiscountPrice;
                     $element = '<ul class="list-inline" style="width:100px;">';
                     $element .= '<li class="list-inline-item">
                             '.$row->productDetail->nProductPrice.'
                         </li><br>';
                     $element .= '<li class="list-inline-item">
-                            '.$row->productDetail->nExpectedRevenue.'
+                            '.$price1.'
                         </li><br>';
-                            
                     $element .= '</ul>';
                     return $element;
                 })
@@ -217,6 +216,48 @@ class SellPrepareCheckController extends Controller
                             $query1->whereBetween('created_at', [$dates[0], $endDate]);
                             
                         })
+                        ->when($request->get('selMarket') != "", function($query2) use ($request) {
+                            $cond = $request->get('selMarket');
+                            switch ($cond) {
+                                case '11thhouse':
+                                    $query2->where('bReg11thhouse', 1);
+                                    break;
+                                case 'auction':
+                                    $query2->where('bRegAuction', 1);
+                                    break;
+                                case 'coupang':
+                                    $query2->where('bRegCoupang', 1);
+                                    break;
+                                case 'gmarket':
+                                    $query2->where('bRegGmarket', 1);
+                                    break;
+                                case 'interpark':
+                                    $query2->where('bRegInterpark', 1);
+                                    break;
+                                case 'lotteon':
+                                    $query2->where('bRegLotteon', 1);
+                                    break;
+                                case 'tmon':
+                                    $query2->where('bRegTmon', 1);
+                                    break;
+                                case 'wemakeprice':
+                                    $query2->where('bRegWemakeprice', 1);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        })
+                        ->when($request->get('searchWord') != "", function($query2) use ($request) {
+                            $cond = $request->get('searchWord');
+                            $query2->where('strChSubName', 'like', '%'.$cond.'%')
+                                ->orWhere('strKrSubName', 'like', '%'.$cond.'%')
+                                ->orWhere('strKoOption', 'like', '%'.$cond.'%')
+                                ->orWhere('strKoOptionValue', 'like', '%'.$cond.'%')
+                                ->orWhere('strCnOption', 'like', '%'.$cond.'%')
+                                ->orWhere('strCnOptionValue', 'like', '%'.$cond.'%')
+                                ->orWhere('strCategoryCode0', 'like', '%'.$cond.'%');
+                                
+                        })
                         ->when($request->get('rdoMarketRegProduct') >= 0, function($query2) use ($request) {
                             $cond = $request->get('rdoMarketRegProduct');
                                 if($cond == 1) {
@@ -241,36 +282,6 @@ class SellPrepareCheckController extends Controller
                                         ->where('bRegWemakeprice', $cond);
                                 }
                         });
-                        // ->where(function($query3) use ($request) {
-                            
-                        // });
-                    // if($request->get('daterange')){
-                    //     $dates = explode(' ~ ', $request->get('daterange'));
-                    //     $endDate = date('Y-m-d H:i:s', strtotime($dates[1] . ' +1 day'));
-                    //     $query->whereBetween('created_at', [$dates[0], $endDate]);
-                    // }
-                    // if($request->get('rdoMarketRegProduct') == 0){
-                    //     $query->where('bReg11thhouse', 0)
-                    //         ->orWhere('bRegAuction', 0)
-                    //         ->orWhere('bRegCoupang', 0)
-                    //         ->orWhere('bRegGmarket', 0)
-                    //         ->orWhere('bRegInterpark', 0)
-                    //         ->orWhere('bRegLotteon', 0)
-                    //         ->orWhere('bRegSmartstore', 0)
-                    //         ->orWhere('bRegTmon', 0)
-                    //         ->orWhere('bRegWemakeprice', 0);
-                    // }else if($request->get('rdoMarketRegProduct') == 1){
-                    //     $query->where('bReg11thhouse', 1)
-                    //         ->orWhere('bRegAuction', 1)
-                    //         ->orWhere('bRegCoupang', 1)
-                    //         ->orWhere('bRegGmarket', 1)
-                    //         ->orWhere('bRegInterpark', 1)
-                    //         ->orWhere('bRegLotteon', 1)
-                    //         ->orWhere('bRegSmartstore', 1)
-                    //         ->orWhere('bRegTmon', 1)
-                    //         ->orWhere('bRegWemakeprice', 1);
-                    // }
-                    
                 })
                 ->make(true);
         }
@@ -718,6 +729,8 @@ class SellPrepareCheckController extends Controller
                         'strCategoryCode8' => $product->strCategoryCode8,
                         'nShareType' => $product->nShareType,
                         'nProductWorkProcess' => 1,
+                        'dtSellStartDate' => $start->format('Y-m-d'),
+                        'dtSellEndDate' => $end->format('Y-m-d'),
                         'bIsDel'=> 0
                     ]);
                     $successProduct->save();

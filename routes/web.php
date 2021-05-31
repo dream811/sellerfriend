@@ -102,6 +102,7 @@ Route::get('/orderMarketOrderCollection/getMarketAccountList', [App\Http\Control
 Route::post('/orderMarketOrderCollection/GetMarketOrderList', [App\Http\Controllers\Order\MarketOrderCollectionController::class, 'getMarketOrderList'])->name('order.MarketOrderCollection.GetMarketOrderList');
 Route::put('/orderMarketOrderCollection/updateRequestType/{orderItemId}', [App\Http\Controllers\Order\MarketOrderCollectionController::class, 'updateRequestType'])->name('order.MarketOrderCollection.updateRequestType');
 Route::put('/orderMarketOrderCollection/matchProduct/{orderItemId}', [App\Http\Controllers\Order\MarketOrderCollectionController::class, 'matchProduct'])->name('order.MarketOrderCollection.matchProduct');
+Route::get('/orderMarketOrderCollection/matchProduct/{orderItemId}', [App\Http\Controllers\Order\MarketOrderCollectionController::class, 'getMatchProductList'])->name('order.MarketOrderCollection.getMatchProductList');
 
 
 Route::get('/orderPaymentWaiting', [App\Http\Controllers\Order\PaymentWaitingController::class, 'index'])->name('order.PaymentWaiting');

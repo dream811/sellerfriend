@@ -51,13 +51,6 @@ class MarketOrderCollectionController extends Controller
         $markets = Market::where('bIsDel', 0)
                 ->where('bIsUsed', 1)
                 ->get();
-        
-        
-        // $orders = Order::where('bIsDel', 0)
-        //         ->where('nUserId', Auth::id())
-        //         ->select('nIdx')
-        //         ->get();
-        // print_r($orders);
         if ($request->ajax()) {
             $orderItems = OrderItem::where('bIsDel', 0)
             ->whereIn('nOrderIdx', 
@@ -340,11 +333,16 @@ class MarketOrderCollectionController extends Controller
         return response()->json(["status" => "success", "data" => $orderItem]);
     }
 
-    public function matchProduct($orderItemId){
+    public function getMatchProductList($orderItemId){
         
         $products = Product::where('bIsDel', 0)
             ->where('nUserId', Auth::id())
             ->get();
+            
+        // $product->productMainImage = $product->productImages->where('nImageCode',0)->first() == null ? new SuccessProductImage() : $product->productImages->where('nImageCode',0)->first();
+        // $product->productSubImage1 = $product->productImages->where('nImageCode',1)->first() == null ? new SuccessProductImage() : $product->productImages->where('nImageCode',1)->first();
+        // $product->productSubImage2 = $product->productImages->where('nImageCode',2)->first() == null ? new SuccessProductImage() : $product->productImages->where('nImageCode',2)->first();
+        
         return view('order.MatchProductList', compact('orderItemId', 'products'));
     }
 

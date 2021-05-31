@@ -89,7 +89,7 @@
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group form-group form-group-sm">
-                                    <input type="text" class="form-control form-control-sm" name="txtCategoryName" id="txtCategoryName" value="" placeholder="">
+                                    <input type="text" class="form-control form-control-sm" name="txtSearchWord" id="txtSearchWord" value="" placeholder="">
                                 </div>
                             </div>
                         </div>
@@ -99,7 +99,7 @@
                             </div>
                             <div class="form-group col-2">
                                 <div class="input-group">
-                                    <select class="custom-select form-control-border custom-select-sm" name="market" id="market">
+                                    <select class="custom-select form-control-border custom-select-sm" name="selMarketId" id="selMarketId">
                                         <option value="0">==쇼핑몰 선택==</option>
                                         @foreach ($markets as $market)
                                         <option value="{{$market->nIdx}}" >{{$market->strMarketName}}</option>
@@ -109,7 +109,7 @@
                             </div>
                             <div class="form-group col-2">
                                 <div class="input-group">
-                                    <select class="custom-select form-control-border custom-select-sm" name="marketAccount" id="marketAccount">
+                                    <select class="custom-select form-control-border custom-select-sm" name="selAccountId" id="selAccountId">
                                         <option value="0">==쇼핑몰 아이디 선택==</option>
                                         @foreach ($marketAccounts as $account)
                                         <option value="{{$account->nIdx}}" >{{$account->strAccountId}}</option>
@@ -213,8 +213,9 @@
                 ajax: {
                     url: "{{ route('product.StoppedProductManage') }}",
                     data: function ( d ) {
-                        // d.daterange = $('#reservation').val();
-                        // d.comecode = $('#reservation').val();
+                        d.txtSearchWord = $('#txtSearchWord').val();
+                        d.selMarketId = $('#selMarketId').val();
+                        d.selAccountId = $('#selAccountId').val();
                     }
                 },
                 columns: [

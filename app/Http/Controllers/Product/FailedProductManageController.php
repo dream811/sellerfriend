@@ -113,13 +113,14 @@ class FailedProductManageController extends Controller
                     return $element;
                 })
                 ->addColumn('priceInfo', function($row){
+                    $price1 = $row->productDetail->nProductPrice + $row->productDetail->nOptionSellDiscountPrice;
                     $element = '<ul class="list-inline" style="width:100px;">';
                     $element .= '<li class="list-inline-item">
                             '.$row->productDetail->nProductPrice.'
                         </li><br>';
                     $element .= '<li class="list-inline-item">
-                            '.$row->productDetail->nDiscountPrice.'
-                        </li>';
+                            '.$price1.'
+                        </li><br>';
                     $element .= '</ul>';
                     return $element;
                 })
@@ -170,7 +171,6 @@ class FailedProductManageController extends Controller
                 })
                 ->addColumn('mainImage', function($row){
                     $main = $row->productImages->where('nImageCode', '0')->first();
-                    // $btn = '<img alt="Avatar" style="width: 5rem;" class="table-product-image" src="'.$main->strURL.'">';
                     $mainImage = '<li class="list-inline-item">
                                     <a href="'.$row->strURL.'" target="_blank">
                                         <span data="'.$main->strURL.'" class="preview">
@@ -462,11 +462,9 @@ class FailedProductManageController extends Controller
         $markets = Market::where('strMarketCode', 'coupang');
         
         $productIds = explode("|", $strProduct);
-        $products = Product::where('bIsDel', 0)
+        $products = FailedProduct::where('bIsDel', 0)
             ->where('nUserId', Auth::id())
-            ->where('nProductWorkProcess', 0)
             ->whereIn('nIdx', $productIds)
-            ->orderBy('nIdx')
             ->get();
 
         $productsCount = count($products);
@@ -550,7 +548,7 @@ class FailedProductManageController extends Controller
                       "modelNo"=> "1717171",
                       "extraProperties"=> null,
                       //"certifications"=> $certifications,
-                      "searchTags"=> array("키워드1", "키워드2"),
+                      "searchTags"=> explode(',',$product->strKeyword),
                       "images"=> array(
                           array(
                               "imageOrder"=> 0,

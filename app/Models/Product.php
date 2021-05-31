@@ -20,6 +20,28 @@ class Product extends Model
         return $this->hasMany(ProductImage::class, 'nProductIdx', 'nIdx');
     }
     
+    public function productMainImage()
+    {
+        //return $this->hasMany(ProductImage::class, 'nProductIdx', 'nIdx')->where('nImageCode', 0);
+
+        $instance = $this->hasMany(ProductImage::class, 'nProductIdx', 'nIdx');
+        $instance->getQuery()->where('nImageCode','=', 0);
+        return $instance;
+    }
+    // public function productSubImage1()
+    // {
+    //     return $this->hasMany(ProductImage::class, 'nProductIdx', 'nIdx')->where('nImageCode', 1)->first();
+    // }
+    // public function productSubImage2()
+    // {
+    //     return $this->hasMany(ProductImage::class, 'nProductIdx', 'nIdx')->where('nImageCode', 2)->first();
+    // }
+
+    // public function options()
+    // {
+    //     return $this->hasMany(SuccessProductOption::class, 'nProductIdx', 'nIdx');
+    // }
+
     public function productDetail()
     {
         return $this->hasOne(ProductDetail::class, 'nProductIdx', 'nIdx');

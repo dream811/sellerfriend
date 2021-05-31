@@ -107,21 +107,22 @@ class RegisteredProductManageController extends Controller
                         return $element;
                     })
                     ->addColumn('priceInfo', function($row){
+                        $price1 = $row->productDetail->nProductPrice + $row->productDetail->nOptionSellDiscountPrice;
                         $element = '<ul class="list-inline" style="width:100px;">';
                         $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nProductPrice.'
+                                '.$price1.'
                             </li>';
                         $element .= '</ul>';
                         return $element;
                     })
                     ->addColumn('acceptPriceInfo', function($row){
-                        $marginPrice = number_format(($row->productDetail->nProductPrice) * $row->productDetail->nMarginRate / 100, 2, '', '');
+                        $discountPrice = number_format(($row->productDetail->nOptionSellDiscountPrice)  * 100 / $row->productDetail->nProductPrice, 2, '.', '');
                         $element = '<ul class="list-inline" style="width:100px;">';
                         $element .= '<li class="list-inline-item">
-                                '.$marginPrice.'
+                                '.$row->productDetail->nProductPrice.'
                             </li><br>';
                         $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->nMarginRate.'%
+                                '.$discountPrice.'%
                             </li><br>';
                         $element .= '</ul>';
                         return $element;
@@ -149,12 +150,12 @@ class RegisteredProductManageController extends Controller
                         return $element;
                     })
                     ->addColumn('dateInfo', function($row){
-                        $element = '<ul class="list-inline" style="width:100px;">';
+                        $element = '<ul class="list-inline" style="width:;">';
                         $element .= '<li class="list-inline-item">
-                                '.$row->productDetail->created_at.'
+                                '.$row->created_at.'
                             </li><br>';
                         $element .= '<li class="list-inline-item">
-                            '.$row->productDetail->created_at.'-'.$row->productDetail->updated_at.'
+                            '.date("Y-m-d", strtotime($row->dtSellStartDate))  .' ~ '.date("Y-m-d", strtotime($row->dtSellEndDate)).'
                             </li>';
                         $element .= '</ul>';
                         return $element;
@@ -511,7 +512,7 @@ class RegisteredProductManageController extends Controller
     {
         //
         // $marketAccount  = MarketAccount::where('nIdx', $accountId)->first();
-        return response()->json(["status" => "success", "data" => $marketAccount]);
+        //return response()->json(["status" => "success", "data" => $marketAccount]);
     }
 
 
