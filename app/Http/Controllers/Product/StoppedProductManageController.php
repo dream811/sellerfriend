@@ -119,6 +119,7 @@ class StoppedProductManageController extends Controller
                         return $element;
                     })
                     ->addColumn('acceptPriceInfo', function($row){
+
                         $discountPrice = number_format(($row->productDetail->nOptionSellDiscountPrice)  * 100 / $row->productDetail->nProductPrice, 2, '.', '');
                         $element = '<ul class="list-inline" style="width:100px;">';
                         $element .= '<li class="list-inline-item">
