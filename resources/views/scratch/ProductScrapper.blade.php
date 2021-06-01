@@ -1704,12 +1704,10 @@
                             window.skus.forEach((el, idx)=>{
                                 
                                 var itemId = arrOptionComb[0][i].itemId;
-                                if(el.properties_name.indexOf(itemId) >=0)
+                                if(el.properties == itemId )
                                 {
                                     stock = el.quantity;
-                                    //basePrice = addZeroes(el.orginal_price == undefined ? basePrice : el.orginal_price);
                                     itemPrice = Math.round(el.price);
-
                                 }
                                 sku_image = arrOptionComb[0][i].itemImg;
                             });
@@ -1757,7 +1755,7 @@
                                 
                                 var itemId1 = arrOptionComb[0][i].itemId;
                                 var itemId2 = arrOptionComb[1][j].itemId;
-                                if(el.properties_name.indexOf(itemId1) >=0 && el.properties_name.indexOf(itemId2) >=0)
+                                if(el.properties.indexOf(itemId1) >=0 && el.properties.indexOf(itemId2) >=0)
                                 {
                                     stock = el.quantity;
                                     //basePrice = addZeroes(el.orginal_price == undefined ? basePrice : el.orginal_price);
@@ -1815,7 +1813,7 @@
                                     var itemId1 = arrOptionComb[0][i].itemId;
                                     var itemId2 = arrOptionComb[1][j].itemId;
                                     var itemId3 = arrOptionComb[2][k].itemId;
-                                    if(el.properties_name.indexOf(itemId1) >=0 && el.properties_name.indexOf(itemId2) >=0 && el.properties_name.indexOf(itemId3) >=0)
+                                    if(el.properties.indexOf(itemId1) >=0 && el.properties.indexOf(itemId2) >=0 && el.properties.indexOf(itemId3) >=0)
                                     {
                                         stock = el.quantity;
                                         //basePrice = addZeroes(el.orginal_price == undefined ? basePrice : el.orginal_price);
