@@ -56,9 +56,8 @@ class MarketOrderCollectionController extends Controller
             ->whereIn('nOrderIdx', 
                 DB::table("tb_orders")
                 ->where('nUserId', Auth::id())
-                ->pluck('nIdx'))
-            ->get();
-            return DataTables::of($orderItems)
+                ->pluck('nIdx'));
+            return DataTables::eloquent($orderItems)
                     ->addIndexColumn()
                     ->addColumn('check', function($row){
                         $check = '<input type="checkbox" name="chkProduct[]" onclick="" value="'.$row->nIdx.'">';
@@ -174,6 +173,38 @@ class MarketOrderCollectionController extends Controller
                         }
                         
                         return $element;
+                    })
+                    ->filter(function($query) use ($request){
+                        //마켓
+                        $query->when($request->get('chkMatchY') == 1 || $request->get('chkMatchN') == 1, function($query2) use ($request) {
+                            $cond1 = $request->get('chkMatchN');
+                            $cond2 = $request->get('chkMatchY');
+                            if(!($cond1 && $cond2)){
+                                if($cond1){
+                                    $query2->where('nProductItemIdx', 0);
+                                }else if($cond2){
+                                    $query2->where('nProductItemIdx', '<>', 0);
+                                }
+                            }                                 
+                        })
+                        ->when($request->get('searchWord') != "", function($query2) use ($request) {
+                            $cond = $request->get('searchWord');
+                            $query2->where('strVendorItemPackageId', 'like', '%'.$cond.'%')
+                                ->orWhere('strVendorItemPackageName', 'like', '%'.$cond.'%')
+                                ->orWhere('strVendorItemName', 'like', '%'.$cond.'%')
+                                ->orWhere('strSellerProductName', 'like', '%'.$cond.'%')
+                                ->orWhere('strSellerProductItemName', 'like', '%'.$cond.'%')
+                                ->orWhere('strFirstSellerProductItemName', 'like', '%'.$cond.'%')
+                                ->orWhere('strDeliveryChargeTypeName', 'like', '%'.$cond.'%');
+                        })
+                        ->when($request->get('selMarketId') > 0, function($query2) use ($request) {
+                            $cond = $request->get('selMarketId');
+                            $cond = Market::where('nIdx', $cond)->first()->nIdx;
+                            $query2->whereIn('nMarketAccIdx', 
+                                MarketSettingCoupang::where('nMarketIdx', $cond)
+                                ->pluck('nIdx'))
+                            ->get();
+                        });
                     })
                     ->rawColumns(['check', 'marketInfo', 'mainImage', 'productInfo', 'ICNumber', 'orderNumber', 'OrderPayDate', 'ODInfo', 'action'])
                     ->make(true);

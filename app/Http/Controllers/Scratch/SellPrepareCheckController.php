@@ -116,6 +116,9 @@ class SellPrepareCheckController extends Controller
                     $element .= '<li class="list-inline-item" style="font-size: 14px;">
                             '.$row->strKrSubName.'
                         </li><br>';
+                    $element .= '<li class="list-inline-item" style="font-size: 14px;">
+                        '.$row->strKrMainName.'
+                    </li><br>';
                     $element .= '<li class="list-inline-item">
                             '.$row->strChSubName.'
                         </li><br>';
@@ -131,7 +134,7 @@ class SellPrepareCheckController extends Controller
                     //         '.$row->strKrMainName.'
                     //     </li><br>';
                     $element .= '<li class="font-weight-light list-inline-item">
-                            '.Auth::user()->name.'['.$row->created_at.']
+                            '.Auth::user()->name.'['.$row->created_at.']&nbsp;&nbsp;<span class="bg-warning">'.$row->strSolutionId.'</span>
                         </li>';
                     $element .= '</ul>';
                     return $element;
@@ -729,6 +732,7 @@ class SellPrepareCheckController extends Controller
                         'strCategoryCode8' => $product->strCategoryCode8,
                         'nShareType' => $product->nShareType,
                         'nProductWorkProcess' => 1,
+                        'bRegCoupang' => 1,
                         'dtSellStartDate' => $start->format('Y-m-d'),
                         'dtSellEndDate' => $end->format('Y-m-d'),
                         'bIsDel'=> 0

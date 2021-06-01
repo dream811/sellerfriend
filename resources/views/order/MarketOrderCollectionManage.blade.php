@@ -24,63 +24,38 @@
             <div class="col-12 col-sm-12">
                 <div class="card card-primary card-outline card-tabs">
                     <div class="card-header border-bottom-0">
-                        
                         <div class="row">
-                            <div class="col-1">
-                                <label class="float-right">검색:</label>
-                            </div>
-                            <div class="col-sm-2">
-                            <!-- select -->
-                                <div class="form-group">
-                                    <select class="custom-select form-control-border custom-select-sm" name="selSearchType" id="selSearchType">
-                                        <option value="">==전체==</option>
-                                        <option value="OrderNo" >주문번호</option>
-                                        <option value="ProductName" >상품명</option>
-                                        <option value="OrderName" >주문자</option>
-                                    </select>
+                            <div class="form-group col-2">
+                                <div class="input-group">
+                                    <label class="input-group-append mt-1 ml-2" style="font-size:14px;">검색어:</label>
+                                    <input type="text" class="ml-2 form-control form-control-sm rounded-0 ml-2" name="txtSearchWord" id="txtSearchWord" placeholder="">
                                 </div>
                             </div>
-                            
-                            <div class="col-sm-2">
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control" name="txtSearchWord" id="txtSearchWord">
+                            <div class="form-group" style="justify-content: space-between !important; width: 220px;">
+                                <div class="input-group mt-1">
+                                    <label class="input-group-append ml-2" style="font-size:14px;">매칭:</label>
+                                    <div class="custom-control custom-checkbox ml-3">
+                                        <input class="custom-control-input" type="checkbox" id="chkMatchN" name="chkMatchN" value="1">
+                                        <label for="chkMatchN" style="font-size:13px;padding-top:3px;" class="custom-control-label font-weight-normal">미매칭</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox ml-3">
+                                        <input class="custom-control-input" type="checkbox" id="chkMatchY" name="chkMatchY" value="1">
+                                        <label for="chkMatchY" style="font-size:13px;padding-top:3px;" class="custom-control-label font-weight-normal">매칭완료</label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-1">
-                                <label class="float-right">마켓:</label>
-                            </div>
-                            <div class="col-sm-2">
-                            <!-- select -->
-                                <div class="form-group">
-                                    <select class="custom-select form-control-border custom-select-sm" name="selMarketIdx" id="selMarketIdx">
-                                        <option value="">==전체==</option>
+                            <div class="form-group " style="">
+                                <div class="input-group">
+                                    <label class="input-group-append mt-1 ml-2" style="font-size:14px;">마켓:</label>
+                                    <select style="width:150px" class="custom-select form-control-border custom-select-sm rounded-0 ml-3" name="selMarketId" id="selMarketId">
+                                        <option value="0">==마켓 선택==</option>
                                         @foreach ($markets as $market)
-                                            @if(count($market->marketAccounts))
-                                                <option value="{{$market->nIdx}}" >{{$market->strMarketName}}</option>
-                                            @endif
+                                            <option value="{{$market->nIdx}}" >{{$market->strMarketName}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-1">
-                                <label class="float-right">매칭:</label>
-                            </div>
-                            <div class="form-group col-1">
-                                <div class="custom-control custom-checkbox">
-                                    <input class="custom-control-input" type="checkbox" id="chkMatchN" name="chkMatchN" value="1">
-                                    <label for="chkMatchN" class="custom-control-label">미매칭</label>
-                                </div>
-                            </div>
-                            <div class="form-group col-1">
-                                <div class="custom-control custom-checkbox">
-                                    <input class="custom-control-input" type="checkbox" id="chkMatchY" name="chkMatchY" value="1">
-                                    <label for="chkMatchY" class="custom-control-label">매칭완료</label>
-                                </div>
-                            </div>
+                            
                             <div class="col">
                                 <a class="btn bg-info btn-sm float-right btnSearchData">
                                     <i class="fas fa-search"></i>
@@ -193,11 +168,11 @@
                 ajax: {
                     url: "{{ route('order.MarketOrderCollection') }}",
                     data: function ( d ) {
-                        // d.searchWord = $('#txtSearchWord').val();
+                        d.searchWord = $('#txtSearchWord').val();
                         // d.selSearchType = $('#selSearchType option:selected').val();
-                        // d.selMarketIdx = $('#selMarketIdx option:selected').val();
-                        // d.chkMatchN = $("#chkMatchN").attr("checked") ? 1 : 0;
-                        // d.chkMatchY = $("#chkMatchY").attr("checked") ? 1 : 0;
+                        d.selMarketId = $('#selMarketId option:selected').val();
+                        d.chkMatchN = $("#chkMatchN").prop("checked") ? 1 : 0;
+                        d.chkMatchY = $("#chkMatchY").prop("checked") ? 1 : 0;
                     }
                 },
                 columns: [

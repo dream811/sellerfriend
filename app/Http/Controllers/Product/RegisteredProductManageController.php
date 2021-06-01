@@ -15,6 +15,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Market;
 use App\Models\MarketAccount;
+use App\Models\MarketSettingCoupang;
 use App\Models\SuccessProduct;
 use App\Models\SuccessProductDetail;
 use App\Models\SuccessProductImage;
@@ -187,6 +188,58 @@ class RegisteredProductManageController extends Controller
                                         </a>
                                     </li>';
                     return $mainImage;
+                    })
+                    ->filter(function($query) use ($request){
+                        //마켓
+                        $query->when($request->get('selMarketId') != "", function($query2) use ($request) {
+                            $cond = $request->get('selMarketId');
+                            switch ($cond) {
+                                case '11thhouse':
+                                    $query2->where('bReg11thhouse', 1);
+                                    break;
+                                case 'auction':
+                                    $query2->where('bRegAuction', 1);
+                                    break;
+                                case 'coupang':
+                                    $query2->where('bRegCoupang', 1);
+                                    break;
+                                case 'gmarket':
+                                    $query2->where('bRegGmarket', 1);
+                                    break;
+                                case 'interpark':
+                                    $query2->where('bRegInterpark', 1);
+                                    break;
+                                case 'lotteon':
+                                    $query2->where('bRegLotteon', 1);
+                                    break;
+                                case 'tmon':
+                                    $query2->where('bRegTmon', 1);
+                                    break;
+                                case 'wemakeprice':
+                                    $query2->where('bRegWemakeprice', 1);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        })
+                        ->when($request->get('searchWord') != "", function($query2) use ($request) {
+                            $cond = $request->get('searchWord');
+                            $query2->where('strChSubName', 'like', '%'.$cond.'%')
+                                ->orWhere('strKrSubName', 'like', '%'.$cond.'%')
+                                ->orWhere('strKoOption', 'like', '%'.$cond.'%')
+                                ->orWhere('strKoOptionValue', 'like', '%'.$cond.'%')
+                                ->orWhere('strCnOption', 'like', '%'.$cond.'%')
+                                ->orWhere('strCnOptionValue', 'like', '%'.$cond.'%')
+                                ->orWhere('strCategoryCode0', 'like', '%'.$cond.'%');
+                        })
+                        ->when($request->get('selAccountId') > 0, function($query2) use ($request) {
+                            $cond = $request->get('selAccountId');
+                            $query2->whereIn('nMarketSetIdx', 
+                                    MarketSettingCoupang::where('nMarketAccIdx', $cond)
+                                    ->pluck('nIdx'))
+                                ->get();
+
+                        });
                     })
                     ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'codeInfo', 'priceInfo', 'acceptPriceInfo', 'marginInfo', 'dateInfo'])
                     ->make(true);

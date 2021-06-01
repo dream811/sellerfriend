@@ -100,9 +100,9 @@
                             <div class="form-group col-2">
                                 <div class="input-group">
                                     <select class="custom-select form-control-border custom-select-sm" name="selMarketId" id="selMarketId">
-                                        <option value="0">==쇼핑몰 선택==</option>
+                                        <option value="">==쇼핑몰 선택==</option>
                                         @foreach ($markets as $market)
-                                        <option value="{{$market->nIdx}}" >{{$market->strMarketName}}</option>
+                                        <option value="{{$market->strMarketCode}}" >{{$market->strMarketName}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -118,7 +118,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-7">
-                                <a class="btn bg-info btn-sm float-right">
+                                <a class="btn bg-info btn-sm float-right btnSearchData">
                                     <i class="fas fa-search"></i>
                                     Search
                                 </a>
@@ -134,7 +134,7 @@
                             </li>
                         </ul> --}}
                         <form id="divProductForm">
-                            <table id="example" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
+                            <table id="productTable" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
                                         <th><input type="checkbox" name="select_all" value="1" id="select_all"></th>
@@ -204,7 +204,7 @@
                 }
             );
 
-            var table = $('#example').DataTable({
+            var table = $('#productTable').DataTable({
                 stateSave: true,
                 processing: true,
                 serverSide: true,
@@ -213,7 +213,7 @@
                 ajax: {
                     url: "{{ route('product.StoppedProductManage') }}",
                     data: function ( d ) {
-                        d.txtSearchWord = $('#txtSearchWord').val();
+                        d.searchWord = $('#txtSearchWord').val();
                         d.selMarketId = $('#selMarketId').val();
                         d.selAccountId = $('#selAccountId').val();
                     }
@@ -244,7 +244,7 @@
             });
 
             // Handle click on checkbox to set state of "Select all" control
-            $('#example tbody').on('change', 'input[type="checkbox"]', function(){
+            $('#productTable tbody').on('change', 'input[type="checkbox"]', function(){
                 // If checkbox is not checked
                 if(!this.checked){
                     var el = $('#select_all').get(0);
@@ -256,6 +256,14 @@
                     }
                 }
             });
+            
+            $('body').on('click', '.btnSearchData', function (e) {
+                //table.reload();
+                var table = $('#productTable').DataTable(); 
+                table.draw();
+                e.preventDefault();
+            });
+
             $('body').on('click', '.btnAddMarketProduct', function () {
                 var form = $('#divProductForm');
 
