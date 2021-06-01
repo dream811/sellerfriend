@@ -418,7 +418,7 @@
                                                             </div>
                                                             <input type="text" name="txtFunction" id="txtFunction" value="((환율*원가*(1+구매수수료))+해외배송비)*(1+판매수수료)*(1+마진율)" class="form-control" placeholder="내설정값 없음">
                                                             <div class="input-group-append">
-                                                                <button class="btn btn-success" type="button">기본식 입력</button>
+                                                                <button class="btn btn-success btnBasicFunction" type="button">기본식 입력</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1135,6 +1135,10 @@
                 $('#frmScrap').submit();
             }
         });	
+        
+        $('body').on('click', '.btnBasicFunction', function () {
+            $('#txtFunction').val('((환율*원가*(1+구매수수료))+해외배송비)*(1+판매수수료)*(1+마진율)');
+        });
         $('body').on('click', '.btnScrapProduct', function () {
             var scrapURL = $("#txtScrapURL").val();
             if(scrapURL == ""){

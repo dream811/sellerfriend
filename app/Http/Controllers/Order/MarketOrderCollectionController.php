@@ -7,15 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 use App\Models\Product;
-use App\Models\ProductItem;
-use App\Models\ProductImage;
-use App\Models\ProductDetail;
-use App\Models\Come;
-use App\Models\Brand;
-use App\Models\Category;
 use App\Models\Market;
 use App\Models\MarketAccount;
-use App\Models\MarketSettingCoupang;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\MyLibs\CoupangConnector;
@@ -56,7 +49,8 @@ class MarketOrderCollectionController extends Controller
             ->whereIn('nOrderIdx', 
                 DB::table("tb_orders")
                 ->where('nUserId', Auth::id())
-                ->pluck('nIdx'));
+                ->pluck('nIdx')
+            );
             return DataTables::eloquent($orderItems)
                     ->addIndexColumn()
                     ->addColumn('check', function($row){
@@ -199,12 +193,12 @@ class MarketOrderCollectionController extends Controller
                         })
                         ->when($request->get('selMarketId') > 0, function($query2) use ($request) {
                             $cond = $request->get('selMarketId');
-                            // $condArr = MarketAccount::where('nMarketIdx', $cond)->pluck('nIdx');
-                            // $cond1 = Order::whereIn('nMarketAccIdx', $condArr);
-                            $query2->whereIn('nMarketAccIdx', 
-                                MarketSettingCoupang::where('nOrderIdx', $cond)
-                                ->pluck('nIdx'))
-                            ->get();
+                            $condArr = MarketAccount::where('nMarketIdx', $cond)->pluck('nIdx');
+                            //$cond1 = Order::whereIn('nMarketAccIdx', $condArr)->pluck('nIdx');
+                            $query2->whereIn('nOrderIdx', 
+                                Order::whereIn('nMarketAccIdx', $condArr)
+                                    ->pluck('nIdx'))
+                                ->get();
                         });
                     })
                     ->rawColumns(['check', 'marketInfo', 'mainImage', 'productInfo', 'ICNumber', 'orderNumber', 'OrderPayDate', 'ODInfo', 'action'])
