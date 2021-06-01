@@ -90,6 +90,9 @@ class RegisteredProductManageController extends Controller
                         $element .= '<li class="list-inline-item">
                                 '.$row->strKrSubName.'
                             </li><br>';
+                        $element .= '<li class="list-inline-item">
+                            '.$row->strKrMainName.'
+                        </li><br>';
                         //옵션
                         $options = explode("§", $row->strKoOption);
                         $optionValue = explode("§", $row->strKoOptionValue);
@@ -98,9 +101,7 @@ class RegisteredProductManageController extends Controller
                                 <span style="text-align:left;">'.$value.':</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-align:right;">'.$optionValue[$key].'</span>
                             </li><br>';
                         }
-                        $element .= '<li class="list-inline-item">
-                                '.$row->strKrMainName.'
-                            </li><br>';
+                        
                         $element .= '<li class="font-weight-light list-inline-item">
                                 '.Auth::user()->name.'['.$row->created_at.']
                             </li>';
