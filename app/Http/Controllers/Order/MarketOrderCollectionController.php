@@ -199,8 +199,8 @@ class MarketOrderCollectionController extends Controller
                         })
                         ->when($request->get('selMarketId') > 0, function($query2) use ($request) {
                             $cond = $request->get('selMarketId');
-                            $condArr = MarketAccount::where('nMarketIdx', $cond)->pluck('nIdx');
-                            $cond1 = Order::whereIn('nMarketAccIdx', $condArr);
+                            // $condArr = MarketAccount::where('nMarketIdx', $cond)->pluck('nIdx');
+                            // $cond1 = Order::whereIn('nMarketAccIdx', $condArr);
                             $query2->whereIn('nMarketAccIdx', 
                                 MarketSettingCoupang::where('nOrderIdx', $cond)
                                 ->pluck('nIdx'))
