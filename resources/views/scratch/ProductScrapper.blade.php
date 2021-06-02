@@ -1000,9 +1000,46 @@
         });
         $('#summernote').summernote({
             height: '300px',
+            code: '',
+            callbacks:{
+                onImageUpload: function(files, editor, welEditable) {
+                    var url= sendFile(files[0], editor, welEditable);
+                },
+                onMediaDelete : function(target) {
+                    deleteSNImage(target[0].src);
+                }
+            }
         });
         
-        $('#summernote').summernote('code', '');
+        function sendFile(file, editor, welEditable) {
+            data = new FormData();
+            data.append("file", file);
+            $.ajax({
+            data: data,
+            type: "POST",
+            url: "/uploadImage",
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function({success, data}) {
+                var image = $('<img>').attr('src', data ).addClass("img-fluid");
+                $('#summernote').summernote("insertNode", image[0]);
+            }
+            });
+        }
+
+        function deleteSNImage(src) {
+            $.ajax({
+                data: {file : src},
+                type: "POST",
+                url: "/deleteImage", 
+                cache: false,
+                success: function(data) {
+                    console.log(data);
+                }
+            });
+        }
+        //$('#summernote').summernote('code', '');
         //delete account
         $('body').on('click', '.btnDelItem', function () {
             var rowId = $(this).attr('data-id');
@@ -1712,7 +1749,8 @@
                                 sku_image = arrOptionComb[0][i].itemImg;
                             });
                         }
-                        optionPrice = arrOptionComb[0][i].optPrice*1 + Math.round((itemPrice-basePrice) * 26)* 10 ;
+                        optTempPrice = arrOptionComb[0][i].optPrice*1
+                        optionPrice = optTempPrice + Math.round((itemPrice-basePrice) * 26)* 10 ;
 
                         var 환율 = $('#txtExchangeRate').val()*1;
                         var 원가 = itemPrice*1;
@@ -1721,7 +1759,7 @@
                         var 구매수수료 = $('#txtBuyerMarketChargeRate').val()/100;
                         var 해외배송비 = $('#txtOverSeaDeliveryCharge').val()*1;
                         var productPrice = eval($('#txtFunction').val());
-                        var sellPrice = (Math.round(productPrice / 10) * 10);
+                        var sellPrice = (Math.round((productPrice + optTempPrice) / 10) * 10);
                         //<input name="sku_base_price[]" type="text" value="${basePrice}" class="form-control col-md-2 optBasePrice" readonly="">
                         divOptionComb += `<div class="input-group">
                                 <input name="optName_0[]" type="text" value="`+arrOptionComb[0][i].optName+`" class="form-control col" readonly="">
@@ -1764,7 +1802,8 @@
                                 sku_image = arrOptionComb[0][i].itemImg != "" ? arrOptionComb[0][i].itemImg : arrOptionComb[1][j].itemImg;
                             });
                         }
-                        optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1 + Math.round((itemPrice-basePrice) * 26)* 10;
+                        optTempPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1
+                        optionPrice = optTempPrice + Math.round((itemPrice-basePrice) * 26)* 10;
 
                         var 환율 = $('#txtExchangeRate').val()*1;
                         var 원가 = itemPrice*1;
@@ -1773,7 +1812,7 @@
                         var 구매수수료 = $('#txtBuyerMarketChargeRate').val()/100;
                         var 해외배송비 = $('#txtOverSeaDeliveryCharge').val()*1;
                         var productPrice = eval($('#txtFunction').val());
-                        var sellPrice = (Math.round(productPrice / 10) * 10);
+                        var sellPrice = (Math.round((productPrice + optTempPrice) / 10) * 10);
                         //var sumOptPrice = $('#txtExchangeRate').val();
                         //<input name="sku_base_price[]" type="text" value="${basePrice}" class="form-control col-md-2 optBasePrice" readonly="">
                         divOptionComb += `<div class="input-group">
@@ -1822,7 +1861,8 @@
                                     sku_image = arrOptionComb[0][i].itemImg != "" ? arrOptionComb[0][i].itemImg : (arrOptionComb[1][j].itemImg != "" ? arrOptionComb[1][j].itemImg : arrOptionComb[2][k].itemImg);
                                 });
                             }
-                            optionPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1 + arrOptionComb[2][k].optPrice*1 + Math.round((itemPrice-basePrice) * 26)* 10;
+                            optTempPrice = arrOptionComb[0][i].optPrice*1 + arrOptionComb[1][j].optPrice*1 + arrOptionComb[2][k].optPrice*1;
+                            optionPrice = optTempPrice + Math.round((itemPrice-basePrice) * 26)* 10;
 
                             var 환율 = $('#txtExchangeRate').val()*1;
                             var 원가 = itemPrice*1;
@@ -1831,7 +1871,7 @@
                             var 구매수수료 = $('#txtBuyerMarketChargeRate').val()/100;
                             var 해외배송비 = $('#txtOverSeaDeliveryCharge').val()*1;
                             var productPrice = eval($('#txtFunction').val());
-                            var sellPrice = (Math.round(productPrice / 10) * 10);
+                            var sellPrice = (Math.round((productPrice + optTempPrice) / 10) * 10);
                             //var sumOptPrice = $('#txtExchangeRate').val();
                             //<input name="sku_base_price[]" type="text" value="${basePrice}" class="form-control col-md-2 optBasePrice" readonly="">
                             divOptionComb += `<div class="input-group">

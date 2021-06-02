@@ -18,6 +18,8 @@ Route::get('/', function () {
 });
 Route::get('/resizeImage', [App\Http\Controllers\ImageController::class, 'resizeImage']);
 Route::post('/resizeImagePost', [App\Http\Controllers\ImageController::class, 'resizeImagePost'])->name('resizeImagePost');
+Route::post('/uploadImage', [App\Http\Controllers\ImageController::class, 'uploadImage'])->name('uploadImage');
+Route::post('/deleteImage', [App\Http\Controllers\ImageController::class, 'deleteImage'])->name('deleteImage');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 /** 수집관리 **/

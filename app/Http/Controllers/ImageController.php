@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use App\Models\DocumentImage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Image;
 
 class ImageController extends Controller
@@ -45,5 +48,30 @@ class ImageController extends Controller
         return back()
             ->with('success','Image Upload successful')
             ->with('imageName',$input['imagename']);
+    }
+
+    public function uploadImage(Request $request)
+    {
+        
+        $imageFile = $request->file('file');
+        $new_name = rand() . '.' . $imageFile->getClientOriginalExtension();
+        
+        if(!Storage::exists('/uploads/users'.Auth::id().'/temp')) {
+
+            Storage::makeDirectory('/uploads/users/'.Auth::id().'/temp', 0775, true); //creates directory
+        
+        }
+        $path = $request->file('file')->storeAs('/uploads/users/'.Auth::id().'/temp', $new_name, 'public');
+        return response()->json(["status" => "success", "data" => asset('storage/'.$path)]);
+    }
+
+    public function deleteImage(Request $request)
+    {
+        
+        $imageFile = $request->get('file');
+        Storage::delete($imageFile);
+        //$path = $request->file('file')->storeAs('uploads/document_images', $new_name, 'public');
+        
+        return response()->json(["status" => "success", "data" => asset($imageFile)]);
     }
 }

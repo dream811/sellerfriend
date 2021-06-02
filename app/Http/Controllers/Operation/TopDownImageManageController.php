@@ -72,7 +72,7 @@ class TopDownImageManageController extends Controller
         $imageFile = $request->file('fileImage');
         $new_name = rand() . '.' . $imageFile->getClientOriginalExtension();
         $old_name = $imageFile->getClientOriginalName();
-        $path = $request->file('fileImage')->storeAs('uploads/document_images', $new_name, 'public');
+        $path = $request->file('fileImage')->storeAs('uploads/users/'.Auth::id().'document_images', $new_name, 'public');
         $docImage = new DocumentImage([
             'nUserId' => Auth::id(),
             'strImageType' => $request->post('selImageType'),
@@ -104,7 +104,7 @@ class TopDownImageManageController extends Controller
             Storage::delete('public/'.$image->strImageURL);
             $new_name = rand() . '.' . $imageFile->getClientOriginalExtension();
             $old_name = $imageFile->getClientOriginalName();
-            $path = $request->file('fileImage')->storeAs('uploads/document_images', $new_name, 'public');
+            $path = $request->file('fileImage')->storeAs('uploads/users/'.Auth::id().'document_images', $new_name, 'public');
 
             //edit file info of db
             $image->strImageURL = asset('storage/'.$path);
