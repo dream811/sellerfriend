@@ -545,9 +545,9 @@ class SellPrepareCheckController extends Controller
             $coupang = new CoupangConnector($setting->marketAccount->strAPIAccessKey, $setting->marketAccount->strSecretKey, $setting->marketAccount->strVendorId, $setting->marketAccount->strAccountId);
             foreach ($products as $key2 => $product) {
 
-                //만약 상품이 쿠팡에 이미 등록되였다면 넘긴다
-                if($product->bRegCoupang == 1)
-                  continue;
+                // //만약 상품이 쿠팡에 이미 등록되였다면 넘긴다
+                // if($product->bRegCoupang == 1)
+                //   continue;
                 $start = new DateTime($setting->dtSalesPeriodStartDateTime);
                 $end = new DateTime($setting->dtSalesPeriodEndDateTime);
                 $strOption = $product->strKoOption;
