@@ -141,11 +141,11 @@
                                         <th>이미지</th>
                                         <th>상품정보</th>
                                         <th>마켓아이디</th>
-                                        <th>연동코드</th>
+                                        <th>상품ID<br>상품코드</th>
                                         <th>판매가</th>
                                         <th>적용판매가<br>할인율</th>
                                         <th>마진</th>
-                                        <th>판매기간<br>상품전송일</th>
+                                        <th>상품전송일<br>판매기간</th>
                                     </tr>
                                 </thead>
                             </table>

@@ -347,7 +347,6 @@ class RegisteredProductManageController extends Controller
             'strCategoryCode7' => $categoryName[7], 
             'strCategoryCode8' => $categoryName[8], 
             'nShareType' => $product->nShareType,
-            'nProductWorkProcess' => 2,//stopped product
             'bIsDel'=> 0
         ]);
         $product->save();

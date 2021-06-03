@@ -283,6 +283,23 @@
                 window.open('/scratchSellPrepareCheck/product/' + id + '/edit', '상품수정', 'scrollbars=1, resizable=1, width=1000, height=620');
             });
 
+            $('#productTable').on('click', '.btnDelProduct', function (e) {
+                var id = $(this).attr('data-id');
+                var url = '/scratchSellPrepareCheck/product/' + id + '/delete';
+                $.ajax({
+                    url: url,
+                    type: "DELETE",
+                    dataType: 'JSON',
+                    success: function ({status, data}) {
+                        var table = $('#productTable').DataTable(); 
+                        table.draw();
+                    },
+                    error: function (data) {
+                    }
+                });
+                    
+            });
+
             $('#productTable').on('click', '.btnViewDetail', function (e) {
                 var id = $(this).attr('data-id');
                 window.open('/scratchSellPrepareCheck/product/' + id + '/detail', '상품상세', 'scrollbars=1, resizable=1, width=1000, height=620');

@@ -92,6 +92,7 @@ class SellPrepareCheckController extends Controller
                     //$btn = '<button type="button" data-id="'.$row->nIdx.'" style="font-size:10px !important;" class="btn btn-xs btn-primary btnSellPrepare">디자인검토</button>';
                     $btn = '<button type="button" data-id="'.$row->nIdx.'" style="font-size:10px !important;" class="btn btn-xs btn-primary btnEditProduct mt-1">상품  수정</button>';
                     $btn .= '<button type="button" data-id="'.$row->nIdx.'" style="font-size:10px !important;" class="btn btn-xs btn-primary btnViewDetail mt-1">상품  상세</button>';
+                    $btn .= '<button type="button" data-id="'.$row->nIdx.'" style="font-size:10px !important;" class="btn btn-xs btn-danger btnDelProduct mt-1">상품  삭제</button>';
                     return $btn;
                 })
                 ->addColumn('images', function($row){
@@ -901,7 +902,16 @@ class SellPrepareCheckController extends Controller
             }
         }
         return view('scratch.ProductRegistResult', compact('productsCount', 'successCount', 'failedCount'));
-        
         //return view('product.MarketProductPrepare', compact('settingCoupangs', 'markets'));
+    }
+
+    public function delete($productId)
+    {
+        $product = Product::find($productId);
+        $product->delete();
+        ProductDetail::find($productId)->delete();
+        ProductItem::where('nProductIdx', $productId)->delete();
+        ProductImage::where('nProductIdx', $productId)->delete();
+        return response()->json(["status" => "success", "data" => "Successfully removed!"]);
     }
 }

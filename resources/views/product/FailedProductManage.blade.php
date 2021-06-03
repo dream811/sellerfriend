@@ -147,7 +147,9 @@
                                         <table id="productTable" class="table table-dark table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
-                                                    <th><input type="checkbox" name="select_all" value="1" id="select_all"></th>
+                                                    <th>
+                                                        <input type="checkbox" name="select_all" value="1" id="select_all">
+                                                    </th>
                                                     <th>상품정보</th>
                                                     <th></th>
                                                     <th>등록마켓관리</th>
@@ -218,6 +220,7 @@
                 stateSave: true,
                 processing: true,
                 serverSide: true,
+                searching: false,
                 scrollY: "590px",
                 //ajax: "{{ route('product.SellTargetManage') }}",
                 ajax: {

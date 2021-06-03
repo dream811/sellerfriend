@@ -1847,8 +1847,6 @@
                             var sku_image = "";
                             if(window.skus != "undefined"){
                                 window.skus.forEach((el, idx)=>{
-                                    
-                                    //var pvs = arrOptionComb[0][i].optId + arrOptionComb[1][j].optId + arrOptionComb[2][k].optId;
                                     var itemId1 = arrOptionComb[0][i].itemId;
                                     var itemId2 = arrOptionComb[1][j].itemId;
                                     var itemId3 = arrOptionComb[2][k].itemId;
