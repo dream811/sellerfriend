@@ -71,6 +71,11 @@ class BasicSettingManageController extends Controller
                 ->where('nIdx', $set_id)
                 ->where('bIsUsed', 1)
                 ->firstOrNew();
+            if($set_id == 0){
+                $newEndingDate = date("Y-m-d", strtotime(date("Y-m-d") . " + 1 year"));
+                $marketSetting->dtSalesPeriodEndDateTime = $newEndingDate;
+            }
+                
             $deliveryTypes = DeliveryType::where('bIsDel', 0)
                 ->where('nMarketIdx', $market->nIdx)
                 ->get();

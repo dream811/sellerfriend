@@ -604,7 +604,7 @@ class SellPrepareCheckController extends Controller
                       "maximumBuyCount"=> $item->nSubItemQuantity > 0 ? $item->nSubItemQuantity : $setting->nUnitQuantity,//$setting->nMaxQtyPerManDayLimit,
                       "maximumBuyForPerson"=> "0",
                       "outboundShippingTimeDay"=> $setting->nOutboundShippingTimeDay,
-                      "maximumBuyForPersonPeriod"=> $setting->nMaxQtyPerManQtyLimit,
+                      "maximumBuyForPersonPeriod"=> $setting->nMaxQtyPerManDayLimit,
                       "unitCount"=> 0,//$item->nSubItemQuantity > 0 ? $item->nSubItemQuantity : $setting->nUnitQuantity,
                       "adultOnly"=> $setting->bOnlyAdult == 0 ? "EVERYONE" : "AUDLT_ONLY",
                       "taxType"=> "TAX",
