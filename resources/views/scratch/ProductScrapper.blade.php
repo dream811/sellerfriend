@@ -169,8 +169,9 @@
                                         </small>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('{{route('scratch.ProductScrapScratch.categoryList.11thNormal')}}','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                                <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('{{route('scratch.ProductScrapScratch.categoryList.Tmon')}}','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
                             </div>
+
                             <div class="form-group row">
                                 <label class="col-form-label col-sm-2 text-sm-right">옥션</label>
                                 <div class="col-sm-8">
@@ -219,7 +220,7 @@
                                 </div>
                                 <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('{{route('scratch.ProductScrapScratch.categoryList.InterPark')}}','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
                             </div>
-                            <div class="form-group row mb-0">
+                            <div class="form-group row">
                                 <label class="col-form-label col-sm-2 text-sm-right">위메프</label>
                                 <div class="col-sm-8">
                                     <div class="input-group input-group-sm">
@@ -234,6 +235,22 @@
                                     </div>
                                 </div>
                                 <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('{{route('scratch.ProductScrapScratch.categoryList.WeMakePrice')}}','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
+                            </div>
+                            <div class="form-group row mb-0">
+                                <label class="col-form-label col-sm-2 text-sm-right">티몬</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" name="txtCategoryName[]" cate-id="4" class="form-control text-sm" placeholder="미설정">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-success btnSearchCategory" type="button"><i class="fas fa-search"></i> 검색</button>
+                                        </div>
+                                    </div>
+                                    <div class="list-group">
+                                        <small>
+                                        </small>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-xs m-1 btn-outline-success" onclick="window.open('{{route('scratch.ProductScrapScratch.categoryList.11thNormal')}}','전체카테고리','width=900,height=900,location=no,status=no,scrollbars=no')"> 전체보기</button>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-sm-2 text-sm-right"></label>
