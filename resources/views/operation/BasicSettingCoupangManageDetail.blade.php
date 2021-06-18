@@ -145,7 +145,7 @@
                                     <div class="col-sm-9 col-md-6 mt-1 mb-1">
                                         <div style="display:inline-block">
                                             <div class="input-group">
-                                                <div class="input-group-prepend mt-2 font-weight-bold" >
+                                                <div class="input-group-prepend mt-2 font-weight-bold">
                                                     시작일:
                                                 </div>
                                                 <input type="text" class="form-control form-control-sm float-right" name="txtSalesPeriodStartDateTime" id="txtSalesPeriodStartDateTime" value="{{ $marketSetting->dtSalesPeriodStartDateTime }}">
@@ -665,7 +665,7 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         $(document).ready(function () {
             $.ajaxSetup({

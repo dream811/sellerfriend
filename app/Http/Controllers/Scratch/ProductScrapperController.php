@@ -29,7 +29,9 @@ use App\Models\ProductOption;
 use App\Mylibs\ScrapperAPI;
 use DateTime;
 use Exception;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Ui\Presets\React;
+use Stringable;
 
 class ProductScrapperController extends Controller
 {
@@ -107,7 +109,7 @@ class ProductScrapperController extends Controller
         $tr->setSource('zh-cn');
         $tr->setTarget('ko');
         //ko title
-        $arrResponse['item']['titleKO'] = $tr->translate($arrResponse['item']['title']);
+        $arrResponse['item']['titleKO'] = $tr->translate($arrResponse['item']['title'] == null ? "" : $arrResponse['item']['title']);
         //ko props name
         $str_props_list = implode("|\n", $arrResponse['item']['props_list']);
         $trans_str_props_list = $tr->translate($str_props_list);
@@ -263,11 +265,6 @@ class ProductScrapperController extends Controller
         $sku_option_price = $request->post('sku_option_price');
         $sku_stock = $request->post('sku_stock');
         $sku_image = $request->post('sku_image');
-        // print_r($arrOptionAttr);
-        // print_r($sku_base_price);
-        // print_r($sku_sell_price);
-        // print_r($sku_discount_price);
-        // print_r($sku_stock);
         //
         for ($i=0; $i < $countItem; $i++) { 
 
@@ -292,24 +289,42 @@ class ProductScrapperController extends Controller
             $productItem['strSubItemName'] = $subItemName;
             $productItem->save();
         }
-        //image data
-        $countImage = count($request->post('txtImage'));
-        $arrDetailImage = $request->post('txtImage');
-        for ($i=0; $i < $countImage; $i++) { 
-            $arrImgData = explode('::', $arrDetailImage[$i]);
-            $productImage = new ProductImage([
-                'nProductIdx' => $product->nIdx,
-                'nImageCode' => $arrImgData[0],
-                'strName' => '',
-                'strURL' => $arrImgData[1],
-                'nHeight' => 0,
-                'nWidth' => 0,
-                'strNote' => '',
-                'bIsDel' => 0
-            ]);
-            $productImage->save();
+        if(!Storage::disk('public')->exists('/uploads/users/'.Auth::id().'/document_images')) {
+            Storage::disk('public')->makeDirectory('/uploads/users/'.Auth::id().'/document_images', 0775, true); //creates directory
         }
 
+        $arrImage = $request->post('imgLink');
+        $countImage = count($request->post('imgLink'));
+        for ($i=0; $i < $countImage; $i++) { 
+            if($arrImage[$i] != ""){
+                $fileLink = "";
+                if(substr($arrImage[$i], 0, 10) == "data:image"){
+                    $base64Data = $arrImage[$i];
+
+                    $extension = explode('/', explode(':', substr($base64Data, 0, strpos($base64Data, ';')))[1])[1];   // .jpg .png .pdf
+                    $replace = substr($base64Data, 0, strpos($base64Data, ',')+1); 
+                    $image = str_replace($replace, '', $base64Data); 
+                    $image = str_replace(' ', '+', $image); 
+                    $date = new DateTime('now');
+                    $path = 'uploads/users/'.Auth::id().'/document_images/' . $date->format('YmdHisv') . '.' . $extension;
+                    Storage::disk('public')->put($path, base64_decode($image));
+                    $fileLink = asset('storage/'.$path);
+                }else{
+                    $fileLink = $arrImage[$i];
+                }
+                $productImage = new ProductImage([
+                    'nProductIdx' => $product->nIdx,
+                    'nImageCode' => $i,
+                    'strName' => '',
+                    'strURL' => $fileLink,
+                    'nHeight' => 0,
+                    'nWidth' => 0,
+                    'strNote' => '',
+                    'bIsDel' => 0
+                ]);
+                $productImage->save();
+            }
+        }
         return redirect('scratchSellPrepareCheck');
     }
 

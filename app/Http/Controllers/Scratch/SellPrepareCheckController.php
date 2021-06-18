@@ -562,6 +562,7 @@ class SellPrepareCheckController extends Controller
                 
                 //notice 배렬을 만든다
                 $noticeArr = array();
+                
                 if(count($cateMetaInfo->data['noticeCategories']) < 2){
                     foreach ($cateMetaInfo->data['noticeCategories'][0]['noticeCategoryDetailNames'] as $key =>$value) {
                         $notice = array(
@@ -692,7 +693,7 @@ class SellPrepareCheckController extends Controller
                   "extraInfoMessage"=> "",
                   "manufacture"=> $product->strBrand
                 );
-                
+                //print_r($objProduct);
                 $result = $coupang->addProduct(json_encode($objProduct));
                 $response = (object)json_decode($result, true);
                 if($response->code=="SUCCESS")
@@ -901,7 +902,7 @@ class SellPrepareCheckController extends Controller
                 }
             }
         }
-        return view('scratch.ProductRegistResult', compact('productsCount', 'successCount', 'failedCount'));
+        //return view('scratch.ProductRegistResult', compact('productsCount', 'successCount', 'failedCount'));
         //return view('product.MarketProductPrepare', compact('settingCoupangs', 'markets'));
     }
 

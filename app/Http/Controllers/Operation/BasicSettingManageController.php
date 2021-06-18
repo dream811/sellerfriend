@@ -75,7 +75,7 @@ class BasicSettingManageController extends Controller
                 $newEndingDate = date("Y-m-d", strtotime(date("Y-m-d") . " + 1 year"));
                 $marketSetting->dtSalesPeriodEndDateTime = $newEndingDate;
             }
-                
+            
             $deliveryTypes = DeliveryType::where('bIsDel', 0)
                 ->where('nMarketIdx', $market->nIdx)
                 ->get();
@@ -87,9 +87,32 @@ class BasicSettingManageController extends Controller
             $documentImages = DocumentImage::where('bIsDel', 0)
                 ->where('nUserId', Auth::id())
                 ->get();
-            return view('operation.BasicSettingManageDetail', compact('marketAccounts', 'market', 'marketSetting', 'deliveryTypes', 'deliveryCompanies', 'market_id', 'set_id',  'asManuals', 'documentImages'));
+            return view('operation.BasicSettingCoupangManageDetail', compact('marketAccounts', 'market', 'marketSetting', 'deliveryTypes', 'deliveryCompanies', 'market_id', 'set_id',  'asManuals', 'documentImages'));
+        }else if($market->strMarketCode == '11thhouse'){
+            $marketSetting = MarketSettingCoupang::where('bIsDel', 0)
+                ->where('nUserId', Auth::id())
+                ->where('nIdx', $set_id)
+                ->where('bIsUsed', 1)
+                ->firstOrNew();
+            if($set_id == 0){
+                $newEndingDate = date("Y-m-d", strtotime(date("Y-m-d") . " + 1 year"));
+                $marketSetting->dtSalesPeriodEndDateTime = $newEndingDate;
+            }
+            
+            $deliveryTypes = DeliveryType::where('bIsDel', 0)
+                ->where('nMarketIdx', $market->nIdx)
+                ->get();
+            $deliveryCompanies = DeliveryCompany::where('bIsDel', 0)
+                ->where('nMarketIdx', $market->nIdx)
+                ->get();
+            $asManuals = AsManual::where('bIsDel', 0)
+                ->get(); 
+            $documentImages = DocumentImage::where('bIsDel', 0)
+                ->where('nUserId', Auth::id())
+                ->get();
+            return view('operation.BasicSetting11thhouseManageDetail', compact('marketAccounts', 'market', 'marketSetting', 'deliveryTypes', 'deliveryCompanies', 'market_id', 'set_id',  'asManuals', 'documentImages'));
         }else{
-            echo "현재 쿠팡만 운영중입니다.";
+            echo "기타 사이트는 점검중입니다.";
         }
         
         

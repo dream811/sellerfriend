@@ -27,18 +27,16 @@
                         
                         <ul class="nav float-right">
                             <li class="pull-right float-right pr-1 pt-1" style="">
-                                <a href="javascript:void(0)" class="btn btn-success btn-sm btnAdd" >새로 등록</a>
+                                <a href="javascript:void(0)" class="btn btn-success btn-sm btnAdd">새로 등록</a>
                             </li>
                         </ul>
                     </div>
                     <div class="card-body" >
                         <form id="divUserForm">
                             <table id="userTable" class="table table-dark table-hover table-bordered table-striped projects text-xs" cellspacing="0" width="100%">
-                                
                             </table>
                         </form>
                     </div>
-                        
                     <!-- /.card -->
                 </div>
             </div>

@@ -72,7 +72,11 @@ class TopDownImageManageController extends Controller
         $imageFile = $request->file('fileImage');
         $new_name = rand() . '.' . $imageFile->getClientOriginalExtension();
         $old_name = $imageFile->getClientOriginalName();
-        $path = $request->file('fileImage')->storeAs('uploads/users/'.Auth::id().'document_images', $new_name, 'public');
+        // if(!Storage::exists('/uploads/users'.Auth::id().'/temp')) {
+        //     Storage::makeDirectory('/uploads/users/'.Auth::id().'/temp', 0775, true); //creates directory
+        // }
+
+        $path = $request->file('fileImage')->storeAs('uploads/users/'.Auth::id().'/document_images', $new_name, 'public');
         $docImage = new DocumentImage([
             'nUserId' => Auth::id(),
             'strImageType' => $request->post('selImageType'),

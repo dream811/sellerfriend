@@ -1,6 +1,6 @@
 <?php
 namespace App\Mylibs;
-//지마켓과 옥션 
+
 class WeMakePriceConnector {
 
     protected $USER_ID="";

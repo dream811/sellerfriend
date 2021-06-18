@@ -601,23 +601,7 @@
                                                     </fieldset>
                                                 </div>
                                             </div>
-                                            {{-- <div class="col-md-12 form-group row mb-0">
-                                                    <div class="form-group col-md-4 mb-0 ml-0">
-                                                            <div class="btn-group btn-group-sm" role="group">
-                                                                    <button class="btn btn-success" type="button">옵션원가 적용</button>
-                                                                    <button class="btn btn-outline-success" type="button">&nbsp;할인가 적용&nbsp;</button>
-                                                            </div>
-                                                    </div>
-                                                <div class="input-group input-group-sm input-group-sm col-md-4">
-                                                    <input type="text" class="form-control">
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-success" type="button"> 옵션마진 재계산</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <hr>
-                                            </div> --}}
+                                            
                                             <span class="text-success ml-3">
                                                 옵션명 - 한글20자 특수문자 불가,   옵션값 - 한글25자 특수문자 불가,   옵션 조합형 기준 100개 이하<br>
                                                 옵션추가금 - 판매가의 50% 이내, 10원단위, 0원 기본옵션 필수<br>
@@ -780,205 +764,115 @@
                         </div>
                         <div class="card-body">
                             <fieldset style="color:">
-                                <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 text-sm-right">대표이미지</label>
-                                    <div class="col-sm-9 row mb-0">
-                                        <label class="col-form-label col-sm-12 text-sm-left text-success">jpg,png만 등록가능, 1000x1000 권장, 600x600 이상, 5000x5000 이하, 2MB이하(인터파크1MB)</label>
-                                        <div class="col-sm-4">
-                                            <span class="badge badge-primary" id="spanBaseImageInfo_0"></span>
-                                            <div class="card text-white bg-warning">
-                                                <img class="card-img-top blur baseImage" id="mainImage" data-id="0" src="https://via.placeholder.com/300/FFFFFF?text=Main Image" alt="Unsplash">
-                                                <div class="card-body">
-                                                    <p class="card-text">대표이미지</p>
-                                                    <hr>
-                                                    <fieldset>
-                                                        <button type="button" class="btn btn-success btn-sm mb-2">권장사이즈</button>
-                                                    </fieldset>
-                                                    <br>
-                                                    <span><i class="fas fa-file-upload text-danger fa-lg"></i> 이미지파일 업로드</span>
-                                                    <input type="file">
-                                                </div>
-                                            </div>
+                                <span class="text-success">이미지 리사이징(800*800)시 이지러짐현상이 나타날수 있습니다 </span>
+                                    <div id="sortable" class="sortable ui-sortable row ml-2">
+                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                            <h5 class="thumb-header">대표이미지</h5>
+                                            <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
+                                            <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
+                                            <a href="javascript:void(0);" title="삭제" class="mt-1 mb-0 ui-icon ui-icon-trash float-right btnDelImage">삭제</a>
+                                            <a href="javascript:void(0)" title="리사이징" class="mt-1 mb-0 ui-icon ui-icon-arrow-4-diag float-right btnResizeImage">리사이징</a>
+                                            <input type="hidden" value="" name="imgLink[]">
+                                            <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
                                         </div>
-                                        <div class="col-sm-4">
-                                            <span class="badge badge-primary" id="spanBaseImageInfo_1"></span>
-                                            <div class="card text-white bg-secondary">
-                                                <img class="card-img-top opacity baseImage" id="subImage1" data-id="1" src="https://via.placeholder.com/300/FFFFFF?text=Sub Image1" alt="Unsplash" style="filter:none">
-                                                <div class="card-body">
-                                                    <p class="card-text">
-                                                        추가이미지 1
-                                                        <div class="custom-control custom-switch float-right">
-                                                            <fieldset>
-                                                                <input type="checkbox" class="custom-control-input" id="customSwitchFrontImage1">
-                                                                <label class="custom-control-label" for="customSwitchFrontImage1">사용</label>
-                                                            </fieldset>
-                                                        </div>
-                                                    </p>
-                                                    <hr>
-                                                    <fieldset>
-                                                        <button type="button" class="btn btn-success btn-sm mb-2">권장사이즈</button>
-                                                    </fieldset>
-                                                    <br>
-                                                    <span><i class="fas fa-file-upload text-danger fa-lg"></i> 이미지파일 업로드</span>
-                                                        <input type="file">
-                                                </div>
-                                            </div>
+                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                            <h5 class="thumb-header">상세이미지1</h5>
+                                            <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
+                                            <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
+                                            <a href="javascript:void(0);" title="삭제" class="mt-1 mb-0 ui-icon ui-icon-trash float-right btnDelImage">삭제</a>
+                                            <a href="javascript:void(0);" title="리사이징" class="mt-1 mb-0 ui-icon ui-icon-arrow-4-diag float-right btnResizeImage">리사이징</a>
+                                            <input type="hidden" value="" name="imgLink[]">
+                                            <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
                                         </div>
-                                        <div class="col-sm-4">
-                                            <span class="badge badge-primary" id="spanBaseImageInfo_2"></span>
-                                            <div class="card text-white bg-secondary">
-                                                <img class="card-img-top opacity baseImage" id="subImage2" data-id="2" src="https://via.placeholder.com/300/FFFFFF?text=Sub Image2" alt="Unsplash" style="filter:none">
-                                                <div class="card-body">
-                                                    <p class="card-text">
-                                                        추가이미지 2
-                                                        <div class="custom-control custom-switch float-right">
-                                                                <fieldset>
-                                                                    <input type="checkbox" class="custom-control-input" id="customSwitchFrontImage2">
-                                                                    <label class="custom-control-label" for="customSwitchFrontImage2">사용</label>
-                                                                </fieldset>
-                                                        </div>
-                                                    </p>
-                                                    <hr>
-                                                    <fieldset>
-                                                        <button type="button" class="btn btn-success btn-sm mb-2">권장사이즈</button>
-                                                    </fieldset>
-                                                    <br>
-                                                    <span><i class="fas fa-file-upload text-danger fa-lg"></i> 이미지파일 업로드</span>
-                                                        <input type="file">
-                                                </div>
-                                            </div>
+                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                            <h5 class="thumb-header">상세이미지2</h5>
+                                            <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
+                                            <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
+                                            <a href="javascript:void(0);" title="삭제" class="mt-1 mb-0 ui-icon ui-icon-trash float-right btnDelImage">삭제</a>
+                                            <a href="javascript:void(0);" title="리사이징" class="mt-1 mb-0 ui-icon ui-icon-arrow-4-diag float-right btnResizeImage">리사이징</a>
+                                            <input type="hidden" value="" name="imgLink[]">
+                                            <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
                                         </div>
-                                        
+                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                            <h5 class="thumb-header">상세이미지3</h5>
+                                            <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
+                                            <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
+                                            <a href="javascript:void(0);" title="삭제" class="mt-1 mb-0 ui-icon ui-icon-trash float-right btnDelImage">삭제</a>
+                                            <a href="javascript:void(0);" title="리사이징" class="mt-1 mb-0 ui-icon ui-icon-arrow-4-diag float-right btnResizeImage">리사이징</a>
+                                            <input type="hidden" value="" name="imgLink[]">
+                                            <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
+                                        </div>
+                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                            <h5 class="thumb-header">상세이미지4</h5>
+                                            <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
+                                            <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
+                                            <a href="javascript:void(0);" title="삭제" class="mt-1 mb-0 ui-icon ui-icon-trash float-right btnDelImage">삭제</a>
+                                            <a href="javascript:void(0);" title="리사이징" class="mt-1 mb-0 ui-icon ui-icon-arrow-4-diag float-right btnResizeImage">리사이징</a>
+                                            <input type="hidden" value="" name="imgLink[]">
+                                            <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
+                                        </div>
+                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                            <h5 class="thumb-header">상세이미지5</h5>
+                                            <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
+                                            <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
+                                            <a href="javascript:void(0);" title="삭제" class="mt-1 mb-0 ui-icon ui-icon-trash float-right btnDelImage">삭제</a>
+                                            <a href="javascript:void(0);" title="리사이징" class="mt-1 mb-0 ui-icon ui-icon-arrow-4-diag float-right btnResizeImage">리사이징</a>
+                                            <input type="hidden" value="" name="imgLink[]">
+                                            <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
+                                        </div>
+                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                            <h5 class="thumb-header">상세이미지6</h5>
+                                            <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
+                                            <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
+                                            <a href="javascript:void(0);" title="삭제" class="mt-1 mb-0 ui-icon ui-icon-trash float-right btnDelImage">삭제</a>
+                                            <a href="javascript:void(0);" title="리사이징" class="mt-1 mb-0 ui-icon ui-icon-arrow-4-diag float-right btnResizeImage">리사이징</a>
+                                            <input type="hidden" value="" name="imgLink[]">
+                                            <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
+                                        </div>
+                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                            <h5 class="thumb-header">상세이미지7</h5>
+                                            <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
+                                            <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
+                                            <a href="javascript:void(0);" title="삭제" class="mt-1 mb-0 ui-icon ui-icon-trash float-right btnDelImage">삭제</a>
+                                            <a href="javascript:void(0);" title="리사이징" class="mt-1 mb-0 ui-icon ui-icon-arrow-4-diag float-right btnResizeImage">리사이징</a>
+                                            <input type="hidden" value="" name="imgLink[]">
+                                            <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
+                                        </div>
+                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                            <h5 class="thumb-header">상세이미지8</h5>
+                                            <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
+                                            <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
+                                            <a href="javascript:void(0);" title="삭제" class="mt-1 mb-0 ui-icon ui-icon-trash float-right btnDelImage">삭제</a>
+                                            <a href="javascript:void(0);" title="리사이징" class="mt-1 mb-0 ui-icon ui-icon-arrow-4-diag float-right btnResizeImage">리사이징</a>
+                                            <input type="hidden" value="" name="imgLink[]">
+                                            <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
+                                        </div>
+                                        {{-- <div class="col-1 m-1">
+                                            <a href="javascript:void(0);" title="추가" class="btn btn-xs btn-success float-right"><i class="fas fa-plus"></i></a>
+                                        </div> --}}
                                     </div>
-                                    <label class="col-form-label col-sm-2 text-sm-right"></label>
-                                    <div class="col-sm-9 row mb-0" id="imageContainer">
-                                        <div class="col-sm-2 pl-1 pr-0">
-                                            <span class="badge badge-primary"></span>
-                                            <div class="card">
-                                                <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
-                                                <div class="card-body p-0">
-                                                    <div class="text-center">
-                                                        <div class="btn-group btn-block">
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">대표</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가1</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가2</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2 pl-1 pr-0">
-                                            <span class="badge badge-primary"></span>
-                                            <div class="card">
-                                                <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
-                                                <div class="card-body p-0">
-                                                    <div class="text-center">
-                                                        <div class="btn-group btn-block">
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">대표</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가1</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가2</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2 pl-1 pr-0">
-                                            <span class="badge badge-primary"></span>
-                                            <div class="card">
-                                                <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
-                                                <div class="card-body p-0">
-                                                    <div class="text-center">
-                                                        <div class="btn-group btn-block">
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">대표</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가1</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가2</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2 pl-1 pr-0">
-                                            <span class="badge badge-primary"></span>
-                                            <div class="card">
-                                                <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
-                                                <div class="card-body p-0">
-                                                    <div class="text-center">
-                                                        <div class="btn-group btn-block">
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">대표</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가1</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가2</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2 pl-1 pr-0">
-                                            <span class="badge badge-primary"></span>
-                                            <div class="card">
-                                                <img class="card-img-top blur" src="https://via.placeholder.com/300/FFFFFF?text=No%20Image1" alt=" 사용자 업로드이미지">
-                                                <div class="card-body p-0">
-                                                    <div class="text-center">
-                                                        <div class="btn-group btn-block">
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">대표</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가1</button>
-                                                            <button class="btn btn-secondary btn-sm pl-0 pr-0">추가2</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </fieldset>
-                                {{-- <div class="form-group row ml-3">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="customSwitchTr1">
-                                        <label class="custom-control-label" for="customSwitchTr1" width="100">대표이미지</label>
-                                    </div>
-                                     
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="customSwitchTr2">
-                                        <label class="custom-control-label" for="customSwitchTr2">옵션이미지</label>
-                                    </div>
-                                </div> --}}
                             <hr>
                             <span class="text-success"> 마켓별 글자수 제한 글자잘림 유의. 공통 30000 byte 이내 권장.</span>
-
-                            <div class="alert alert-secondary mb-0 mt-2">
-                                <div class="alert-message pb-0">
-                                    <div class="form-group ml-3">
-                                        <span><i class="fas fa-file-upload text-primary fa-lg"></i> 내 이미지파일 삽입(최대2MB) &nbsp;</span>
-                                        <input type="file" multiple="">
-                                    </div>
-                                </div>
-                            </div>
                             <div class="col-md-12">
                                 <div class="mt-3">
                                     <textarea name="summernote" id="summernote">
                                     </textarea>
                                 </div>
                             </div>
-                            {{-- 
-                            <iframe id="ifSN" width="100%" height="800" src="sn.html" frameborder="0" allowfullscreen=""></iframe>
-                                    <button class="btn btn-primary btn-lg btn-block" disabled="">잠시 기다려주세요</button> --}}
-                                    <button type="button" class="btn btn-primary btn-lg btn-block btnSaveProduct"><!--!--><i class="fas fa-check"></i> 수집정보 저장</button>
+                            <button type="button" class="btn btn-primary btn-lg btn-block btnSaveProduct"><i class="fas fa-check"></i>수집정보 저장</button>
                         </div>
                     </div>
                 </fieldset>
-                {{-- <div class="row">
-                    <div class="col-12 col-lg-2">
-                        <button class="btn btn-outline-success btn-block"><i class="far fa-save"></i> 임시저장</button>
-                    </div>
-                    <div class="col-12 col-lg-2">
-                        <button class="btn btn-outline-success btn-block"><i class="far fa-share-square"></i> 임시저장 불러오기</button>
-                    </div>
-                </div> --}}
                 <input type="text" id="hdDescription" class="form-control" hidden="">
             </div>
             </form>
         </div>
     </div>
-    
+    @section('third_party_scripts')
+    <!-- jQuery UI -->
+    <script src="{{asset('js/jquery-ui/jquery-ui.min.js')}}"></script>
+    @endsection
     @section('script')
     <script>
     $(document).on({
@@ -989,6 +883,7 @@
             $("body").removeClass("loading"); 
         }    
     });
+    
     $(document).ready(function () {
         $.ajaxSetup({
             headers: {
@@ -998,6 +893,164 @@
         $( "#selBrandName" ).change(function() {
             $('#txtBrandName').val($("#selBrandName  option:selected").html());
         });
+        //이미지
+        $( "#sortable" ).sortable({ 
+            revert: true,
+            update: function( event, ui ) {
+                var basketItems = $(this).sortable('toArray').toString();
+                var values = [];
+                $('.thumb-header').each(function (index) {
+                    if(index == 0){
+                        values.push($(this).html('대표이미지'));
+                    }else{
+                        values.push($(this).html('상세이미지'+ index));
+                    }
+                });
+                
+                // $('#outputvalues').val(values);
+            }
+        });
+        $( "#sortable" ).disableSelection();
+
+        $('body').on('click', '.btnImportOptImage', function () {
+            $(this).next().click();
+        });
+        $('body').on('change', '.optImageFile', function () {
+            var ele = $(this).parent().prev();
+            data = new FormData();
+            data.append("file", this.files[0]);
+
+            $.ajax({
+                data: data,
+                type: "POST",
+                url: "/uploadImage",
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function({success, data}) {
+                    //console.log(data);
+                    ele.children(':first').attr('src', data);
+                }
+            });
+        });
+
+        $('body').on('click', '.btnDelImage', function () {
+            if(confirm("이미지를 삭제하시겠습니까?")){
+                $(this).prev().prev().attr('src', "{{asset('assets/images/system/no-image.png')}}");
+                $(this).prev().prev().removeAttr("data");//미리보기 기능 없애기
+                $(this).prev().prev().removeClass("preview");//미리보기 기능 없애기
+                $(this).next().next().val("");//이름태그
+                $(this).next().next().next().val("");//파일 
+            }
+        });
+        $('body').on('click', '.btnUploadImage', function () {
+            $(this).next().next().next().next().trigger('click'); //파일 클릭 이벤트 발생
+        });
+        $('body').on('click', '.btnResizeImage', function () {
+            //이미지가 없는 경우 
+            if($(this).next().val() == "" && $(this).prev().prev().prev().attr('src').includes('images/system/no-image.png')){
+                return false;
+            }
+            //
+            if(!confirm("사이즈를 변경하시겠습니까?")){
+                return false;
+            }
+            
+            var base64Data = $(this).next().val();
+            var img = document.createElement("img");
+            var canvas = document.createElement("canvas");
+            var ctx = canvas.getContext("2d");
+            window.el = $(this).prev().prev().prev();
+            if(!$(this).next().val().includes('data:image/')){
+                DataUrl($(this).prev().prev().prev().attr('src'), function(base64Data) {
+                    var img = document.createElement("img");
+                    
+                    img.onload = function()
+                    {        
+                        // We create a canvas and get its context.
+                        var canvas = document.createElement('canvas');
+                        var ctx = canvas.getContext('2d');
+
+                        // We set the dimensions at the wanted size.
+                        canvas.width = 800;
+                        canvas.height = 800;
+                        // We resize the image with the canvas method drawImage();
+                        ctx.drawImage(this, 0, 0, 800, 800);
+
+                        var dataURI = canvas.toDataURL();
+                        base64Data = canvas.toDataURL("image/jpeg");
+                        window.el.attr('src', base64Data);
+                        window.el.attr('data', base64Data);
+                        window.el.next().next().next().next().val(base64Data);
+                        window.el.addClass('preview');
+                    };
+                    img.src = base64Data;
+                });
+                
+            }else{
+                base64Data = $(this).next().val();
+                img.src = base64Data;
+                canvas = document.createElement("canvas");
+                ctx = canvas.getContext("2d");
+                canvas.width = 800;
+                canvas.height = 800;
+                var _scaleh = 800 / img.width;
+                var _scalew = 800 / img.height;
+                canvas.width = img.width * _scalew;
+                canvas.height = img.height * _scaleh;
+
+                var ctx = canvas.getContext("2d");
+                var cw = canvas.width;
+                var ch = canvas.height;
+                var maxW = img.width * _scalew;
+                var maxH = img.height * _scaleh;
+
+                var iw = img.width;
+                var ih = img.height;
+                var scl = Math.min((maxW / iw), (maxH / ih));
+                var iwScaled = 800;//iw * scl;
+                var ihScaled = 800;//ih * scl;
+                canvas.width = iwScaled;
+                canvas.height = ihScaled;
+                ctx.drawImage(img, 0, 0, iwScaled, ihScaled);
+                base64Data = canvas.toDataURL("image/jpeg", scl);
+                $(this).prev().prev().prev().attr('src', base64Data);
+                $(this).prev().prev().prev().attr('data', base64Data);
+                $(this).next().val(base64Data);
+                $(this).prev().prev().prev().addClass('preview');
+            }
+        });
+
+        function DataUrl(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+                var reader = new FileReader();
+                reader.onloadend = function() {
+                    callback(reader.result);
+                }
+                reader.readAsDataURL(xhr.response);
+            };
+            xhr.open('GET', url);
+            xhr.responseType = 'blob';
+            xhr.send();
+        }
+        function readURL(input, el) {
+            
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    el.prev().prev().prev().prev().prev().attr('src', e.target.result);
+                    el.prev().prev().prev().prev().prev().attr('data', e.target.result);
+                    el.prev().val(e.target.result);
+                    el.prev().prev().prev().prev().prev().addClass('preview');
+                }
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+
+        $('body').on('change', '.descImageFile', function () {
+            readURL(this, $(this));
+        });
         $('#summernote').summernote({
             height: '300px',
             code: '',
@@ -1006,11 +1059,10 @@
                     var url= sendFile(files[0], editor, welEditable);
                 },
                 onMediaDelete : function(target) {
-                    deleteSNImage(target[0].src);
+                    //deleteSNImage(target[0].src);
                 }
             }
         });
-        
         function sendFile(file, editor, welEditable) {
             data = new FormData();
             data.append("file", file);
@@ -1028,22 +1080,10 @@
             });
         }
 
-        function deleteSNImage(src) {
-            $.ajax({
-                data: {file : src},
-                type: "POST",
-                url: "/deleteImage", 
-                cache: false,
-                success: function(data) {
-                    console.log(data);
-                }
-            });
-        }
         //$('#summernote').summernote('code', '');
         //delete account
         $('body').on('click', '.btnDelItem', function () {
             var rowId = $(this).attr('data-id');
-
             $(".subItemsTable tbody").find("#row_" + rowId).remove();
         });
         //대표이미지 바꾸기
@@ -1167,7 +1207,6 @@
                 alert('입력값을 확인해주세요.');
                 return false;
             }
-
             if(confirm("수집정보를 저장하시겠습니까")){
                 $('#frmScrap').submit();
             }
@@ -1330,12 +1369,12 @@
                         });
 
                         item += `<div class="input-group">
-                                    <a href="javascript:void(0)" target="_blank">
+                                    <a href="javascript:void(0)" class="preview" data="${imageUrl}" target="_blank">
                                         <img class="rounded" src="`+ imageUrl +`" width="40" height="40">
                                     </a>
                                     <fieldset>
-                                        <button type="button" class="btn btn-info p-1 btnImportImage"><label for="inputFileOpt_`+ index +`_`+ idx +`"><i class="fas fa-file-upload fa-lg"></i></label></button>
-                                        <input type="file" id="inputFileOpt_`+ index +`_`+ idx +`" hidden="">
+                                        <button type="button" class="btn btn-info p-1 btnImportOptImage"><label for="inputFileOpt_`+ index +`_`+ idx +`"><i class="fas fa-file-upload fa-lg"></i></label></button>
+                                        <input type="file" name="optImageFile[]" class="optImageFile" id="inputFileOpt_`+ index +`_`+ idx +`" hidden="">
                                     </fieldset>
                                     <input type="text" value="`+ optValue_cn +`" name="txtCnOptionName_${index}[]" id="txtCnOptionName_${index}_${idx}" data-id="" opt-id="${index}" item-id="${idx}" class="form-control  col-md-3">
                                     <input type="text" value="`+ optValue_ko +`" name="txtKoOptionName_${index}[]"  id="txtKoOptionName_${index}_${idx}" data-id="" opt-id="${index}" item-id="${idx}" class="form-control txtOptionName ${chkLength} col-md-3">
@@ -1348,7 +1387,6 @@
                                     <input type="hidden" name="txtOptionImage_${index}[]" value="`+realImageUrl+`">
                                 </div>`;
                     });
-
                     item +=  `</div> 
                                 <button type="button" class="btn btn-success btn-block btnAddOptRow" opt-id="${index}"><i class="fas fa-plus"></i> 추가</button>
                             </div>
@@ -1359,39 +1397,44 @@
                     //이미지
                     var imgItem = "";
                     data.item_imgs.forEach( (element, index) => {
+                        var name = "대표이미지";
                         if(index == 0){
                             $('#mainImage').attr('src', element.url);
+                            name = "대표이미지";
+                        }else{
+                            name = "상세이미지"+index;
                         }
-                        if(index == 1){
-                            $('#subImage1').attr('src', element.url);
-                        }
-                        if(index == 2){
-                            $('#subImage2').attr('src', element.url);
-                        }
-
                         var img = new Image();
                         var width = 0;
                         var height = 0;
                         var size = 0;
                         img.src = element.url;
-                        imgItem +=`<div class="col-sm-2 pl-1 pr-0">
-                                        <span class="badge badge-primary" id="spanImageInfo_${index}" >적합 - `+width+`x`+height+`, `+size+`KB</span>
-                                        <div class="card">
-                                            <img class="card-img-top blur productImage" src="${element.url}" data-id="${index}" id="img_${index}" alt="Product Image" />
-                                            <input type="hidden" name="txtImage[]" id="hid_${index}" value="${index}::${element.url}"/>
-                                            <div class="card-body p-0">
-                                                <div class="text-center">
-                                                    <div class="btn-group btn-block">
-                                                        <button type="button" class="btn btn-secondary btn-sm pl-0 pr-0 btnMainImage" data-src="${element.url}">대표</button>
-                                                        <button type="button" class="btn btn-secondary btn-sm pl-0 pr-0 btnSubImage1" data-src="${element.url}">추가1</button>
-                                                        <button type="button" class="btn btn-secondary btn-sm pl-0 pr-0 btnSubImage2" data-src="${element.url}">추가2</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                        
+                        imgItem += `<div class="ui-state-default col-1 m-1 imgThumb">
+                                        <h5 class="thumb-header">${name}</h5>
+                                        <img data="${element.url}" src="${element.url}" class="preview" alt="이미지" width="100%" height="60%">
+                                        <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
+                                        <a href="javascript:void(0);" title="삭제" class="mt-1 mb-0 ui-icon ui-icon-trash float-right btnDelImage">삭제</a>
+                                        <a href="javascript:void(0);" title="리사이징" class="mt-1 mb-0 ui-icon ui-icon-arrow-4-diag float-right btnResizeImage">리사이징</a>
+                                        <input type="hidden" value="${element.url}" name="imgLink[]">
+                                        <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0;">
                                     </div>`;
                     });
-                    $('#imageContainer').html(imgItem);
+                    if(data.item_imgs.length < 9 ){
+                        for (let index = data.item_imgs.length ; index < 9 ; index++) {
+                            name = "상세이미지"+index;
+                            imgItem += `<div class="ui-state-default col-1 m-1 imgThumb">
+                                        <h5 class="thumb-header">${name}</h5>
+                                        <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
+                                        <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
+                                        <a href="javascript:void(0);" title="삭제" class="mt-1 mb-0 ui-icon ui-icon-trash float-right btnDelImage">삭제</a>
+                                        <a href="javascript:void(0);" title="리사이징" class="mt-1 mb-0 ui-icon ui-icon-arrow-4-diag float-right btnResizeImage">리사이징</a>
+                                        <input type="hidden" value="" name="imgLink[]">
+                                        <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0;">
+                                    </div>`;
+                        }
+                    }
+                    $('#sortable').html(imgItem);
 
                     var optCombination= `<div class="input-group">
                             `+ optionTags +`
@@ -1423,7 +1466,6 @@
                             if(data.props_img[el] != undefined){
                                sku_image =  data.props_img[el];
                             }
-                            
                         });
 
                         var 환율 = $('#txtExchangeRate').val()*1;
@@ -1452,12 +1494,10 @@
                     $('#divOptionCombinationBox').html(optCombination);
                     $('#summernote').summernote('code', data.desc);
                     UpdateImageInfo();
-
                 },
                 error: function (data) {
                     alert('스크래핑중 오류가 발생했습니다. 잠시후 다시 시도해주십시오.');
                 }
-
             });
         });
         var UpdateImageInfo = function () {
@@ -1547,13 +1587,14 @@
         });
         $('body').on('click', '.btnInsertOptRow', function () {
             var element = $(this).parent().parent();
+            var id = $(this).parent().parent().parent().attr('id').split('_')[1];
             var content=`<div class="input-group">
                             <a href="` + "{{asset('assets/images/system/no-image.png')}}" + `" target="_blank">
                                 <img class="rounded" src="` + "{{asset('assets/images/system/no-image.png')}}" + `" width="40" height="40">
                             </a>
                             <fieldset>
-                                <button class="btn btn-info p-1"><label for="inputFileOpt01"><i class="fas fa-file-upload fa-lg"></i></label></button>
-                                <input type="file" hidden="">
+                                <button type="button" class="btn btn-info p-1 btnImportOptImage"><label for="inputFileOpt01"><i class="fas fa-file-upload fa-lg"></i></label></button>
+                                <input type="file" name="optImageFile[]" class="optImageFile" hidden="">
                             </fieldset>
                             <input type="text" class="form-control col-md-3 ">
                             <input type="text" class="form-control col-md-3 txtOptionName">
@@ -1563,6 +1604,7 @@
                                 <button type="button" class="btn btn-primary btnInsertOptRow"><i class="fas fa-plus"></i></button>
                                 <button type="button" class="btn btn-danger btnDelOptRow"><i class="far fa-trash-alt"></i></button>
                             </div>
+                            <input type="hidden" name="txtOptionImage_${id}[]" value="">
                         </div>`;
             $(content).insertBefore(element);
         });
@@ -1594,13 +1636,14 @@
         });
         $('body').on('click', '.btnAddOptRow', function () {
             var element = $(this).prev();
+            var id = $(this).prev().attr('id').split('_')[1];
             var content=`<div class="input-group">
                             <a href="` + "{{asset('assets/images/system/no-image.png')}}" + `" target="_blank">
                                 <img class="rounded" src="` + "{{asset('assets/images/system/no-image.png')}}" + `" width="40" height="40">
                             </a>
                             <fieldset>
-                                <button class="btn btn-info p-1"><label for="inputFileOpt01"><i class="fas fa-file-upload fa-lg"></i></label></button>
-                                <input type="file" hidden="">
+                                <button type="button" class="btn btn-info p-1 btnImportOptImage"><label for="inputFileOpt01"><i class="fas fa-file-upload fa-lg"></i></label></button>
+                                <input type="file" name="optImageFile[]" class="optImageFile" hidden="">
                             </fieldset>
                             <input type="text" class="form-control col-md-3">
                             <input type="text" class="form-control col-md-3 txtOptionName">
@@ -1610,6 +1653,7 @@
                                 <button type="button" class="btn btn-primary btnInsertOptRow"><i class="fas fa-plus"></i></button>
                                 <button type="button" class="btn btn-danger btnDelOptRow"><i class="far fa-trash-alt"></i></button>
                             </div>
+                            <input type="hidden" name="txtOptionImage_${id}[]" value="">
                         </div>`;
             $(content).appendTo(element); 
         });
@@ -2046,6 +2090,37 @@
                 $(this).removeClass('is-invalid');
                 $(this).addClass('is-valid');
             }
+        });
+
+        $('body').on('mousemove', '.preview', function (e) {
+            var offset = $(this).offset();
+            var imagUrl = $(this).attr('data');
+            const img = new Image();
+            img.src = imagUrl;
+            var xOffset = 80;
+            var yOffset = 600;
+            if($('#preview').length)
+            {
+                var top = offset.top - yOffset > 0 ? offset.top - yOffset : 0; 
+                $("#preview").css({
+                    "top": top + "px",
+                    "left": (offset.left + xOffset) + "px"
+                }).fadeIn();
+            }
+            else
+            {
+                this.t = this.title,
+                this.title = "";
+                var c = (this.t != "") ? "<br/>" + this.t : "";
+                $("body").append("<p id='preview'><img style='height:600px;' src='" + imagUrl + "' alt='Image preview' />" + c + "</p>");
+                $("#preview").css({
+                    "top": (offset.top - yOffset) + "px",
+                    "left": (offset.left + xOffset) + "px"
+                }).fadeIn();
+            }
+        });
+        $('body').on('mouseout', '.preview', function (e) {
+            $("#preview").remove();
         });
     });
     function charByteSize(ch) {
