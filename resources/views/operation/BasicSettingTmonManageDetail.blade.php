@@ -211,44 +211,21 @@
                                             <label for="rdoSelTermUseYn_Y" class="custom-control-label pt-1" style="font-size:12px;">설정함</label>
                                         </div>
                                         
-                                        <div style="display:inline-block">
-                                            <select class="mb-1 custom-select form-control-border custom-select-sm" name="selSelPrdClfCd" id="selSelPrdClfCd">
-                                                <option value="">= 선택 =</option>
-                                                <option value="3">3일</option>
-                                                <option value="5">5일</option>
-                                                <option value="7">7일</option>
-                                                <option value="15">15일</option>
-                                                <option value="30">30일(1개월)</option>
-                                                <option value="60">60일(2개월)</option>
-                                                <option value="90">90일(3개월)</option>
-                                                <option value="120">120일(4개월)</option>
-                                                <option value="0">직접입력</option>
-                                            </select>
-                                        </div>
-                                        <br>
-                                        <div style="display:inline-block">
-                                            <input type="text" style="width:80px" class="form-control form-control-sm float-right text-right" name="txtAplBgnDy" id="txtAplBgnDy" value="{{ $marketSetting->dtAplBgnDy }}">
-                                        </div>
-                                        ~
-                                        <div style="display:inline-block">
-                                            <input type="text" style="width:80px" class="form-control form-control-sm float-right text-right" name="txtAplEndDy" id="txtAplEndDy" value="{{ $marketSetting->dtAplEndDy }}">
-                                        </div>
-                                        <span class="pb-2" style="margin-left:1rem; font-size:12px; color: red;">※ 2019-04-20 과 같은 형식으로 입력해 주세요.</span>
                                     </div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">최소구매수량</label>
                                     <div class="col-sm-9 col-md-10">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoSelMinLimitTypCd_00" name="rdoSelMinLimitTypCd" @if( $marketSetting->strSelMinLimitTypCd == '00' ) checked @endif value="00" >
+                                            <input class="custom-control-input" type="radio" id="rdoSelMinLimitTypCd_00" name="rdoSelMinLimitTypCd" @if( $marketSetting->strForAbrdBuyClf == '00' ) checked @endif value="00" >
                                             <label for="rdoSelMinLimitTypCd_00" class="custom-control-label pt-1" style="font-size:12px;">제한없음</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoSelMinLimitTypCd_01" name="rdoSelMinLimitTypCd" @if( $marketSetting->strSelMinLimitTypCd == '01' ) checked @endif value="01">
+                                            <input class="custom-control-input" type="radio" id="rdoSelMinLimitTypCd_01" name="rdoSelMinLimitTypCd" @if( $marketSetting->strForAbrdBuyClf == '01' ) checked @endif value="01">
                                             <label for="rdoSelMinLimitTypCd_01" class="custom-control-label pt-1" style="font-size:12px;">1회제한</label>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:50px" class="form-control form-control-sm float-right text-right" name="txtSelMinLimitQty" id="txtSelMinLimitQty" value="{{ $marketSetting->nSelMinLimitQty }}">
+                                            <input type="text" style="width:50px" class="form-control form-control-sm float-right text-right " name="txtSelMinLimitQty" id="txtSelMinLimitQty" value="{{ $marketSetting->nSelMinLimitQty }}">
                                         </div>
                                         <div style="display:inline-block; font-size:10px;">
                                             개
@@ -273,7 +250,7 @@
                                             개
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoSelLimitTypCd_02" name="rdoSelLimitTypCd" @if( $marketSetting->strSelLimitTypCd == '02' ) checked @endif value="02">
+                                            <input class="custom-control-input" type="radio" id="rdoSelLimitTypCd_02" name="rdoSelLimitTypCd" @if( $marketSetting->strSelLimitTypCd == '03' ) checked @endif value="03">
                                             <label for="rdoSelLimitTypCd_02" class="custom-control-label pt-1" style="font-size:12px;">기간제한 한ID당</label>
                                         </div>
                                         <div style="display:inline-block">
@@ -291,14 +268,27 @@
                                     </div>
                                 </div>
                                 <div class="form-group row mb-0">
+                                    <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">미성년자 구매가능<code style="color:red !important;">[필수]</code></label>
+                                    <div class="col-sm-9 col-md-6 mt-1">
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input class="custom-control-input" type="radio" id="rdoOnlyAdult0" name="rdoOnlyAdult" @if( $marketSetting->bOnlyAdult == 0 ) checked @endif value="0">
+                                            <label for="rdoOnlyAdult0" class="custom-control-label pt-1" style="font-size:12px;">가능</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input class="custom-control-input" type="radio" id="rdoOnlyAdult1" name="rdoOnlyAdult" @if( $marketSetting->bOnlyAdult == 1 ) checked @endif value="1">
+                                            <label for="rdoOnlyAdult1" class="custom-control-label pt-1" style="font-size:12px;">불가능</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-0">
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">상품명초과시 처리방법</label>
                                     <div class="col-sm-9 col-md-10 mt-1">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoOverThenPrdNmLen1" name="rdoOverThenPrdNmLen" value="ERROR"  @if( $marketSetting->strOverThenPrdNmLen == "ERROR" ) checked @endif>
+                                            <input class="custom-control-input" type="radio" id="rdoOverThenPrdNmLen1" name="rdoOverThenPrdNmLen" value="0"  @if( $marketSetting->strOverThenPrdNmLen == "ERROR" ) checked @endif>
                                             <label for="rdoOverThenPrdNmLen1" class="custom-control-label pt-1" style="font-size:12px;">에러처리</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoOverThenPrdNmLen2" name="rdoOverThenPrdNmLen" value="W100"  @if( $marketSetting->strOverThenPrdNmLen == "W100" ) checked @endif>
+                                            <input class="custom-control-input" type="radio" id="rdoOverThenPrdNmLen2" name="rdoOverThenPrdNmLen" value="1"  @if( $marketSetting->strOverThenPrdNmLen == "W100" ) checked @endif>
                                             <label for="rdoOverThenPrdNmLen2" class="custom-control-label pt-1" style="font-size:12px;">100byte로 자동등록</label>
                                             <span class="pt-1" style="margin-left:1rem; font-size:12px; color: red;">※ 한글50자 영/숫자 100자 초과시 100byte 까지만 자동 짤림 등록</span>
                                         </div>
@@ -324,10 +314,13 @@
                                         <select class="custom-select form-control-border custom-select-sm" name="selAbrdBuyPlace" id="selAbrdBuyPlace">
                                             <option value="">= 선택 =</option>
                                             <option value="A" @if ($marketSetting->strAbrdBuyPlace == "A") selected @endif>A : 해당 브랜드 정식 도매</option>
-                                            <option value="B" @if ($marketSetting->strAbrdBuyPlace == "B") selected @endif>B : 해당 브랜드 직영 온/오프라인 매장(백화점포함)</option>
-                                            <option value="C" @if ($marketSetting->strAbrdBuyPlace == "C") selected @endif>C : 오프라인 아울렛</option>
-                                            <option value="D" @if ($marketSetting->strAbrdBuyPlace == "D") selected @endif>D : 현지 온라인 쇼핑몰</option>
-                                            <option value="E" @if ($marketSetting->strAbrdBuyPlace == "E") selected @endif>E : A~D에 해당되지 않는 구입처(경매 등)</option>
+                                            {{-- @foreach ($deliveryTypes as $deliveryType)
+                                            <option value="{{$deliveryType->nIdx}}" @if ($marketSetting->nDeliveryType == $deliveryType->nIdx) selected @endif>{{$deliveryType->strDeliveryName}}</option>
+                                            @endforeach --}}
+                                            <option value="B"  @if ($marketSetting->strAbrdBuyPlace == "B") selected @endif>B : 해당 브랜드 직영 온/오프라인 매장(백화점포함)</option>
+                                            <option value="C"  @if ($marketSetting->strAbrdBuyPlace == "C") selected @endif>C : 오프라인 아울렛</option>
+                                            <option value="D"  @if ($marketSetting->strAbrdBuyPlace == "D") selected @endif>D : 현지 온라인 쇼핑몰</option>
+                                            <option value="E"  @if ($marketSetting->strAbrdBuyPlace == "E") selected @endif>E : A~D에 해당되지 않는 구입처(경매 등)</option>
                                         </select>
                                     </div>
                                 </div>
@@ -387,9 +380,9 @@
                                             <th style="width:150px;">전기용품 / 생활용품 KC 인증</th>
                                             <td style="text-align:left;">
                                                 <ul class="liListType">
-                                                    <li><input type="radio" name="rdoCrtfGrpTypCd01" value="01"  @if( $marketSetting->strCrtfGrpTypCd01 == '01' ) checked @endif> KC인증대상</li>
-                                                    <li><input type="radio" name="rdoCrtfGrpTypCd01" value="02"  @if( $marketSetting->strCrtfGrpTypCd01 == '02' ) checked @endif> KC면제대상</li>
-                                                    <li><input type="radio" name="rdoCrtfGrpTypCd01" value="03"  @if( $marketSetting->strCrtfGrpTypCd01 == '03' ) checked @endif> KC인증대상 아님</li>
+                                                    <li><input type="radio" name="selCrtfGrpTypCd01" value="01"  @if( $marketSetting->strCrtfGrpTypCd01 == '01' ) checked @endif> KC인증대상</li>
+                                                    <li><input type="radio" name="selCrtfGrpTypCd01" value="02"  @if( $marketSetting->strCrtfGrpTypCd01 == '02' ) checked @endif> KC면제대상</li>
+                                                    <li><input type="radio" name="selCrtfGrpTypCd01" value="03"  @if( $marketSetting->strCrtfGrpTypCd01 == '03' ) checked @endif> KC인증대상 아님</li>
                                                 </ul>
                                             </td>
                                         </tr>
@@ -397,8 +390,8 @@
                                             <th>어린이제품 KC인증</th>
                                             <td style="text-align:left;">
                                                 <ul class="liListType">
-                                                    <li><input type="radio" name="rdoCrtfGrpTypCd02" value="01" @if( $marketSetting->strCrtfGrpTypCd02 == '01' ) checked @endif> KC인증대상</li>
-                                                    <li><input type="radio" name="rdoCrtfGrpTypCd02" value="03" @if( $marketSetting->strCrtfGrpTypCd02 == '03' ) checked @endif> KC인증대상 아님</li>
+                                                    <li><input type="radio" name="selCrtfGrpTypCd02" value="01" @if( $marketSetting->strCrtfGrpTypCd01 == '01' ) checked @endif> KC인증대상</li>
+                                                    <li><input type="radio" name="selCrtfGrpTypCd02" value="03" @if( $marketSetting->strCrtfGrpTypCd01 == '03' ) checked @endif> KC인증대상 아님</li>
                                                 </ul>
                                             </td>
                                         </tr>
@@ -406,8 +399,8 @@
                                             <th>방송통신기자재 KC인증</th>
                                             <td style="text-align:left;">
                                                 <ul class="liListType">
-                                                    <li><input type="radio" name="rdoCrtfGrpTypCd03" value="01" @if( $marketSetting->strCrtfGrpTypCd03 == '01' ) checked @endif> KC인증대상</li>
-                                                    <li><input type="radio" name="rdoCrtfGrpTypCd03" value="03" @if( $marketSetting->strCrtfGrpTypCd03 == '03' ) checked @endif> KC인증대상 아님</li>
+                                                    <li><input type="radio" name="selCrtfGrpTypCd03" value="01" @if( $marketSetting->selCrtfGrpTypCd03 == '01' ) checked @endif> KC인증대상</li>
+                                                    <li><input type="radio" name="selCrtfGrpTypCd03" value="03" @if( $marketSetting->selCrtfGrpTypCd03 == '03' ) checked @endif> KC인증대상 아님</li>
                                                 </ul>
                                             </td>
                                         </tr>
@@ -415,8 +408,8 @@
                                             <th>위해우려제품</th>
                                             <td style="text-align:left;">
                                                 <ul class="liListType">
-                                                    <li><input type="radio" name="rdoCrtfGrpTypCd04" value="04" @if( $marketSetting->strCrtfGrpTypCd04 == '04' ) checked @endif> 위해우려제품 대상</li>
-                                                    <li><input type="radio" name="rdoCrtfGrpTypCd04" value="05" @if( $marketSetting->strCrtfGrpTypCd04 == '05' ) checked @endif> 위해우려제품 대상 아님</li>
+                                                    <li><input type="radio" name="selCrtfGrpTypCd04" value="04" @if( $marketSetting->selCrtfGrpTypCd04 == '04' ) checked @endif> 위해우려제품 대상</li>
+                                                    <li><input type="radio" name="selCrtfGrpTypCd04" value="05" @if( $marketSetting->selCrtfGrpTypCd04 == '05' ) checked @endif> 위해우려제품 대상 아님</li>
                                                 </ul>
                                             </td>
                                         </tr>
@@ -521,10 +514,10 @@
                                             <span class="pt-1" style="font-size:12px;">발송마감 기준</span>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" class="form-control form-control-sm text-right" id="txtDlvSendCloseTmpltNo" name="txtDlvSendCloseTmpltNo" value="{{ $marketSetting->strDlvSendCloseTmpltNo }}" placeholder="" >
+                                            <input type="text" class="form-control form-control-sm text-right" id="txtOutboundShippingPlaceCode" name="txtOutboundShippingPlaceCode" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block">
-                                            <a href="javascript:void(0);"  style="height:26px;" class="btn btn-primary btn-xs mt-0 btnSearchDlvSendCloseTmpltNo">
+                                            <a href="javascript:void(0);" style="height:26px;" class="btn btn-primary btn-xs mt-0 btnSearchOutboundShippingPlace">
                                                 <span style="font-size:10px;">검 색</span>
                                             </a>
                                         </div>
@@ -534,7 +527,7 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">출고지<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6">
                                         <div style="display:inline-block">
-                                            <input type="text" class="form-control form-control-sm text-right" id="txtAddrSeqOutAddr" name="txtAddrSeqOutAddr" value="{{ $marketSetting->strAddrSeqOutAddr }}" placeholder="">
+                                            <input type="text" class="form-control form-control-sm text-right" id="txtOutboundShippingPlaceCode" name="txtOutboundShippingPlaceCode" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="">
                                         </div>
                                         <div style="display:inline-block">
                                             <a href="javascript:void(0);" style="height:26px;" class="btn btn-primary btn-xs mt-0 btnSearchOutboundShippingPlace">
@@ -547,7 +540,7 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">반품지<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6">
                                         <div style="display:inline-block">
-                                            <input type="text" class="form-control form-control-sm text-right" id="txtAddrSeqInAddr" name="txtAddrSeqInAddr" value="{{ $marketSetting->strAddrSeqInAddr }}" placeholder="">
+                                            <input type="text" class="form-control form-control-sm text-right" id="txtReturnCenterCode" name="txtReturnCenterCode" value="{{ $marketSetting->strReturnCenterCode }}" placeholder="">
                                         </div>
                                         <div style="display:inline-block">
                                             <a href="javascript:void(0);" style="height:26px;" class="btn btn-primary btn-xs mt-0 btnSearchReturnShippingCenter">
@@ -578,11 +571,11 @@
                                             </tr>
                                             <tr>
                                                 <td>판매자</td>
-                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="01"> 무료</td>
+                                                <td style="text-align:left;"><input type="radio" name="mpbseDlvCstInstBasiCd" value="01"> 무료</td>
                                                 <td>0원</td>
                                                 <td>수량/주문금액에 상관없이 무조건 무료</td>
                                                 <td>
-                                                    <select name="selBndlDlvCnYn01">
+                                                    <select name="mpbseBndlDlvCnYn01">
                                                         <option value="Y">가능</option>
                                                         <option value="N">불가</option>
                                                     </select>
@@ -591,11 +584,11 @@
                                             </tr>
                                             <tr>
                                                 <td rowspan="7">구매자</td>
-                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="07"> 판매자 조건부 배송비</td>
+                                                <td style="text-align:left;"><input type="radio" name="mpbseDlvCstInstBasiCd" value="07"> 판매자 조건부 배송비</td>
                                                 <td colspan="2">판매자 조건부 배송비 설정된 금액</td>
                                                 <td>가능</td>
                                                 <td rowspan="6">
-                                                    <select name="selDlvCstPayTypCd">
+                                                    <select name="mpbseDlvCstPayTypCd">
                                                         <option value="01">선불+착불</option>
                                                         <option value="03">선불</option>
                                                         <option value="02">착불</option>
@@ -603,18 +596,18 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="08"> 출고지 조건부 배송비</td>
+                                                <td style="text-align:left;"><input type="radio" name="mpbseDlvCstInstBasiCd" value="08"> 출고지 조건부 배송비</td>
                                                 <td colspan="2">출고지 조건부 배송비 설정된 금액</td>
                                                 <td>가능</td>
                                             </tr>
                                             <tr>
-                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="03"> 상품 조건부 무료</td>
-                                                <td><input type="text" style="width:50px;" name="txtDlvCst1_03" class="cntNum" value="">원 </td>
+                                                <td style="text-align:left;"><input type="radio" name="mpbseDlvCstInstBasiCd" value="03"> 상품 조건부 무료</td>
+                                                <td><input type="text" style="width:50px;" name="mpbseDlvCst1_03" class="cntNum" value="">원 </td>
                                                 <td>이 상품<input type="text" name="mpbsePrdFrDlvBasiAmt" value="" class="cntNum">원 이상 구매시 무료</td>
                                                 <td>불가</td>
                                             </tr>
                                             <tr>
-                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="04"> 수량별 차등</td>
+                                                <td style="text-align:left;"><input type="radio" name="mpbseDlvCstInstBasiCd" value="04"> 수량별 차등</td>
                                                 <td style="vertical-align:top;">
                                                     <dl>
                                                         <dd><input type="text" name="mpbseDlvCst3[0]" value="" class="cntNum">원 </dd>
@@ -635,24 +628,24 @@
                                                     <span class="txtRed">~개 이상일때는 빈칸으로 두시면 자동입력 됩니다.</span>
                                                 </td>
                                                 <td>
-                                                    <select name="selBndlDlvCnYn04">
+                                                    <select name="mpbseBndlDlvCnYn04">
                                                         <option value="Y">가능</option>
                                                         <option value="N">불가</option>
                                                     </select>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="05"> 1개당 배송비</td>
-                                                <td><input type="text" name="txtDlvCst4" value="" class="cntNum">원</td>
+                                                <td style="text-align:left;"><input type="radio" name="mpbseDlvCstInstBasiCd" value="05"> 1개당 배송비</td>
+                                                <td><input type="text" name="mpbseDlvCst4" value="" class="cntNum">원</td>
                                                 <td>수량 1개마다 배송비 추가</td>
                                                 <td>불가</td>
                                             </tr>
                                             <tr>
-                                                <td style="text-align:left;" rowspan="2"><input type="radio" name="rdoDlvCstInstBasiCd" value="02"> 고정 배송비</td>
-                                                <td><input type="text" name="txtDlvCst1_02" value="" class="cntNum">원</td>
+                                                <td style="text-align:left;" rowspan="2"><input type="radio" name="mpbseDlvCstInstBasiCd" value="02"> 고정 배송비</td>
+                                                <td><input type="text" name="mpbseDlvCst1_02" value="" class="cntNum">원</td>
                                                 <td style="text-align:left;">수량/주문금액과 상관없이 고정 배송비</td>
                                                 <td>
-                                                    <select name="selBndlDlvCnYn02">
+                                                    <select name="mpbseBndlDlvCnYn02">
                                                         <option value="Y">가능</option>
                                                         <option value="N">불가</option>
                                                     </select>
@@ -661,7 +654,7 @@
                                             <tr>
                                                 <td colspan="4">
                                                     배송비 추가 안내
-                                                    <select name="selDlvCstInfoCd">
+                                                    <select name="mpbseDlvCstInfoCd">
                                                         <option value="">해당없음</option>
                                                         <option value="01">(상품상세참고)</option>
                                                         <option value="02">(상품별 차등 적용)</option>
@@ -673,10 +666,10 @@
                                                 </td>
                                             </tr>
                                             <tr class="etcLine">
-                                                <td colspan="2"><input type="checkbox" name="chkUseIslandJejuDlvCst" value="Y" onclick="$(this).val(this.checked ? 'Y' : 'N')">제주/도서산간 추가배송비 설정</td>
+                                                <td colspan="2"><input type="checkbox" name="mpbseUseIslandJejuDlvCst" value="Y">제주/도서산간 추가배송비 설정</td>
                                                 <td colspan="5" style="text-align:left;">
-                                                    제주 <input type="text" name="txtJejuDlvCst" value="" class="cntNum">원 &nbsp; / &nbsp;
-                                                    도서산간 <input type="text" name="txtIslandDlvCst" value="" class="cntNum">원
+                                                    제주 <input type="text" name="mpbseJejuDlvCst" value="" class="cntNum">원 &nbsp; / &nbsp;
+                                                    도서산간 <input type="text" name="mpbseIslandDlvCst" value="" class="cntNum">원
                                                 </td>
                                             </tr>
                                         </tbody></table>
@@ -689,17 +682,17 @@
                                             <span class="pt-1" style="font-size:12px;">반품 배송비 편도</span>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" class="form-control form-control-sm text-right" id="txtRtngdDlvCst" name="txtRtngdDlvCst" value="{{ $marketSetting->strRtngdDlvCst }}" placeholder="" >
+                                            <input type="text" class="form-control form-control-sm text-right" id="txtOutboundShippingPlaceCode" name="txtOutboundShippingPlaceCode" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block; font-size:12px;">
                                             원 &nbsp;&nbsp;&nbsp;&nbsp;[초기배송비 무료시 부가방법
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoRtngdDlvCd01" name="rdoRtngdDlvCd" @if ($marketSetting->strRtngdDlvCd == 0) checked @endif value="01">
-                                            <label for="rdoRtngdDlvCd01" class="custom-control-label pt-1" style="font-size:12px;">왕복(편도x2) </label>
+                                            <input class="custom-control-input" type="radio" id="rdoSendClfCdDmy2" name="rdoSendClfCdDmy" @if ($marketSetting->nRemoteAreaDeliveryType == 0) checked @endif value="0">
+                                            <label for="rdoSendClfCdDmy2" class="custom-control-label pt-1" style="font-size:12px;">왕복(편도x2) </label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline mr-0">
-                                            <input class="custom-control-input" type="radio" id="rdoRtngdDlvCd02" name="rdoRtngdDlvCd" @if ($marketSetting->strRtngdDlvCd == 0) checked @endif value="02">
+                                            <input class="custom-control-input" type="radio" id="rdoSendClfCdDmy3" name="rdoSendClfCdDmy" @if ($marketSetting->nRemoteAreaDeliveryType == 0) checked @endif value="0">
                                             <label for="rdoSendClfCdDmy3" class="custom-control-label pt-1" style="font-size:12px;">편도</label>
                                         </div>
                                         <div style="display:inline-block; font-size:12px;">
@@ -710,7 +703,7 @@
                                             <span class="pt-1" style="font-size:12px;">교환 배송비 왕복</span>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" class="form-control form-control-sm text-right" id="txtExchDlvCst" name="txtExchDlvCst" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="" >
+                                            <input type="text" class="form-control form-control-sm text-right" id="txtOutboundShippingPlaceCode" name="txtOutboundShippingPlaceCode" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block; font-size:12px;">
                                             원
@@ -729,7 +722,7 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">반품/교환 안내<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6 mt-1">
                                         <div>
-                                            <textarea class="form-control text-xs" rows="3" placeholder="" name="txtRtngExchDetail" id="txtRtngExchDetail">{{$marketSetting->strRtngExchDetail}}</textarea>
+                                            <textarea class="form-control text-xs" rows="3" placeholder="" name="txtRtngExchDetail" id="txtRtngExchDetail">{{$marketSetting->strAfterServiceGuide}}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -749,7 +742,7 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">상품홍보문구</label>
                                     <div class="col-sm-9 col-md-10">
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:250px;" class="form-control form-control-sm text-right" name="txtAdvrtStmt" id="txtAdvrtStmt" value="{{ $marketSetting->strAdvrtStmt }}">
+                                            <input type="text" style="width:250px;" class="form-control form-control-sm text-right" name="txtSelMinLimitQty" id="txtSelMinLimitQty" value="{{ $marketSetting->nSelMinLimitQty }}">
                                         </div>
                                     </div>
                                 </div>
@@ -757,12 +750,12 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">가격비교 사이트 등록</label>
                                     <div class="col-sm-9 col-md-10">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoPrcCmpExpYn_00" name="rdoPrcCmpExpYn" @if( $marketSetting->strPrcCmpExpYn == 'Y' ) checked @endif value="Y" >
-                                            <label for="rdoPrcCmpExpYn_00" class="custom-control-label pt-1" style="font-size:12px;">등록함</label>
+                                            <input class="custom-control-input" type="radio" id="rdoSelMinLimitTypCd_00" name="rdoSelMinLimitTypCd" @if( $marketSetting->strForAbrdBuyClf == '00' ) checked @endif value="00" >
+                                            <label for="rdoSelMinLimitTypCd_00" class="custom-control-label pt-1" style="font-size:12px;">등록함</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoPrcCmpExpYn_01" name="rdoPrcCmpExpYn" @if( $marketSetting->strPrcCmpExpYn == 'N' ) checked @endif value="N">
-                                            <label for="rdoPrcCmpExpYn_01" class="custom-control-label pt-1" style="font-size:12px;">등록안함</label>
+                                            <input class="custom-control-input" type="radio" id="rdoSelMinLimitTypCd_01" name="rdoSelMinLimitTypCd" @if( $marketSetting->strForAbrdBuyClf == '01' ) checked @endif value="01">
+                                            <label for="rdoSelMinLimitTypCd_01" class="custom-control-label pt-1" style="font-size:12px;">등록안함</label>
                                         </div>
                                     </div>
                                 </div>
@@ -770,16 +763,16 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">상품리뷰/구매후기</label>
                                     <div class="col-sm-9 col-md-10">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoReviewDispYn_00" name="rdoReviewDispYn" @if( $marketSetting->strForAbrdBuyClf == '00' ) checked @endif value="00" >
-                                            <label for="rdoReviewDispYn_00" class="custom-control-label pt-1" style="font-size:12px;">노출함</label>
+                                            <input class="custom-control-input" type="radio" id="rdoSelMinLimitTypCd_00" name="rdoSelMinLimitTypCd" @if( $marketSetting->strForAbrdBuyClf == '00' ) checked @endif value="00" >
+                                            <label for="rdoSelMinLimitTypCd_00" class="custom-control-label pt-1" style="font-size:12px;">노출함</label>
                                         </div>
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" name="chkReviewOptDispYn" id="chkReviewOptDispYn" onclick="$(this).val(this.checked ? 1 : 0)">
+                                            <input class="custom-control-input" type="checkbox" id="customCheckbox3" >
                                             <label for="customCheckbox3" style="font-size:12px;" class="custom-control-label pt-1">옵션비노출</label>
-                                        </div>
+                                          </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoReviewDispYn_01" name="rdoReviewDispYn" @if( $marketSetting->strForAbrdBuyClf == '01' ) checked @endif value="01">
-                                            <label for="rdoReviewDispYn_01" class="custom-control-label pt-1" style="font-size:12px;">노출안함</label>
+                                            <input class="custom-control-input" type="radio" id="rdoSelMinLimitTypCd_01" name="rdoSelMinLimitTypCd" @if( $marketSetting->strForAbrdBuyClf == '01' ) checked @endif value="01">
+                                            <label for="rdoSelMinLimitTypCd_01" class="custom-control-label pt-1" style="font-size:12px;">노출안함</label>
                                         </div>
                                     </div>
                                 </div>
@@ -787,7 +780,7 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">기본즉시할인</label>
                                     <div class="col-sm-9 col-md-10 bg-light">
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" name="chkCuponcheck" id="chkCuponcheck" onclick="$(this).val(this.checked ? 1 : 0)">
+                                            <input class="custom-control-input" type="checkbox" id="customCheckbox3" >
                                             <label for="customCheckbox3" class="custom-control-label">설정함</label>
                                         </div>
                                         <br>
@@ -795,10 +788,10 @@
                                             <span class="pt-1" style="font-size:12px;">판매가에서</span>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtDscAmtPercnt" name="txtDscAmtPercnt" value="{{ $marketSetting->strDscAmtPercnt }}" placeholder="" >
+                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtOutboundShippingPlaceCode" name="txtOutboundShippingPlaceCode" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block">
-                                            <select class="mb-1 custom-select form-control-border custom-select-sm" name="selCupnDscMthdCd" id="selCupnDscMthdCd">
+                                            <select class="mb-1 custom-select form-control-border custom-select-sm" name="selDlvEtprsCd" id="selDlvEtprsCd">
                                                 <option value="02">%</option>
                                                 <option value="01">원</option>
                                                 
@@ -809,22 +802,22 @@
                                         </div>
                                         <br>
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" name="chkCupnUseLmtDyYn" id="chkCupnUseLmtDyYn" onclick="$(this).val(this.checked ? 'Y' : 'N')">
-                                            <label for="chkCupnUseLmtDyYn" class="custom-control-label pt-1" style="font-size:12px;">쿠폰 지급기간 설정</label>
+                                            <input class="custom-control-input" type="checkbox" id="customCheckbox3" >
+                                            <label for="customCheckbox3" class="custom-control-label pt-1" style="font-size:12px;">쿠폰 지급기간 설정</label>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:100px;" class="form-control form-control-sm text-right" id="txtCupnIssStartDy" name="txtCupnIssStartDy" value="{{ $marketSetting->strCupnIssStartDy }}" placeholder="" >
+                                            <input type="text" style="width:100px;" class="form-control form-control-sm text-right" id="txtOutboundShippingPlaceCode" name="txtOutboundShippingPlaceCode" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="" >
                                         </div>
                                         ~
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:100px;" class="form-control form-control-sm text-right" id="txtCupnIssEndDy" name="txtCupnIssEndDy" value="{{ $marketSetting->strCupnIssEndDy }}" placeholder="" >
+                                            <input type="text" style="width:100px;" class="form-control form-control-sm text-right" id="txtOutboundShippingPlaceCode" name="txtOutboundShippingPlaceCode" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="" >
                                         </div>
                                         <br>
                                         <div style="display:inline-block">
                                             <span class="pt-1" style="font-size:12px;">적용금액이 </span>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtCupnMinPrice" name="txtCupnMinPrice" value="{{ $marketSetting->strCupnMinPrice }}" placeholder="" >
+                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtOutboundShippingPlaceCode" name="txtOutboundShippingPlaceCode" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block">
                                             <span class="pt-1" style="font-size:12px;">원 보다 작을경우 이 금액으로 전송 </span>
@@ -836,7 +829,7 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">SK pay point 지급</label>
                                     <div class="col-sm-9 col-md-10 bg-light mt-1">
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" name="chkPay11YN" id="chkPay11YN" onclick="$(this).val(this.checked ? 'Y' : 'N')">
+                                            <input class="custom-control-input" type="checkbox" id="customCheckbox3" >
                                             <label for="customCheckbox3" class="custom-control-label pt-1" style="font-size:12px;">설정함</label>
                                         </div>
                                         <br>
@@ -844,10 +837,10 @@
                                             <span class="pt-1" style="font-size:12px;">판매가에서</span>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtPay11Value" name="txtPay11Value" value="{{ $marketSetting->chkPay11Value }}" placeholder="" >
+                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtOutboundShippingPlaceCode" name="txtOutboundShippingPlaceCode" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block">
-                                            <select class="mb-1 custom-select form-control-border custom-select-sm" name="selPay11WyCd" id="selPay11WyCd">
+                                            <select class="mb-1 custom-select form-control-border custom-select-sm" name="selDlvEtprsCd" id="selDlvEtprsCd">
                                                 <option value="02">%</option>
                                                 <option value="01">원</option>
                                             </select>
@@ -861,8 +854,8 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">무이자 할부 제공</label>
                                     <div class="col-sm-9 col-md-10">
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" name="chkIntFreeYN" id="chkIntFreeYN" onclick="$(this).val(this.checked ? 'Y' : 'N')">
-                                            <label for="chkIntFreeYN" style="font-size:12px;" class="custom-control-label pt-1">설정함</label>
+                                            <input class="custom-control-input" type="checkbox" id="customCheckbox3" >
+                                            <label for="customCheckbox3" style="font-size:12px;" class="custom-control-label pt-1">설정함</label>
                                         </div>
                                     </div>
                                 </div>
@@ -870,42 +863,35 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">복수구매할인</label>
                                     <div class="col-sm-9 col-md-10 bg-light">
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" name="chkPluYN" id="chkPluYN" onclick="$(this).val(this.checked ? 'Y' : 'N')">
-                                            <label for="chkPluYN" style="font-size:12px;" class="custom-control-label pt-1">설정함</label>
+                                            <input class="custom-control-input" type="checkbox" id="customCheckbox3">
+                                            <label for="customCheckbox3" style="font-size:12px;" class="custom-control-label pt-1">설정함</label>
                                         </div>
                                         <br>
                                         <div style="display:inline-block">
-                                            <select class="mb-1 custom-select form-control-border custom-select-sm" name="selPluDscBasis" id="selPluDscBasis">
+                                            <select class="mb-1 custom-select form-control-border custom-select-sm" name="selDlvEtprsCd" id="selDlvEtprsCd">
                                                 <option value="01">수량기준</option>
                                                 <option value="02">금액기준</option>
                                             </select>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtPluDscBasis" name="txtPluDscBasis" value="{{ $marketSetting->strtxtPluDscBasis }}" placeholder="" >
+                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtOutboundShippingPlaceCode" name="txtOutboundShippingPlaceCode" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block">
                                             <span class="pt-1" style="font-size:12px;">개 이상 구매시 판매가(+옵션가)에서 개당</span>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtPluDscAmtPercnt" name="txtPluDscAmtPercnt" value="{{ $marketSetting->strtxtPluDscAmtPercnt }}" placeholder="" >
+                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtOutboundShippingPlaceCode" name="txtOutboundShippingPlaceCode" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block">
-                                            <select class="mb-1 custom-select form-control-border custom-select-sm" name="selPluDscMthdCd" id="selPluDscMthdCd">
-                                                <option value="02">원</option>
-                                                <option value="01">%</option>
+                                            <select class="mb-1 custom-select form-control-border custom-select-sm" name="selDlvEtprsCd" id="selDlvEtprsCd">
+                                                <option value="02">%</option>
+                                                <option value="01">원</option>
                                             </select>
                                         </div>
                                         <br>
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" name="chkPluUseLmtDyYn" id="chkPluUseLmtDyYn" onclick="$(this).val(this.checked ? 'Y' : 'N')">
-                                            <label for="chkPluUseLmtDyYn" class="custom-control-label pt-1" style="font-size:12px;">할인 적용기간 설정</label>
-                                        </div>
-                                        <div style="display:inline-block">
-                                            <input type="text" style="width:100px;" class="form-control form-control-sm text-right" id="txtPluIssStartDy" name="txtPluIssStartDy" value="{{ $marketSetting->strPluIssStartDy }}" placeholder="" >
-                                        </div>
-                                        ~
-                                        <div style="display:inline-block">
-                                            <input type="text" style="width:100px;" class="form-control form-control-sm text-right" id="txtPluIssEndDy" name="txtPluIssEndDy" value="{{ $marketSetting->strPluIssEndDy }}" placeholder="" >
+                                            <input class="custom-control-input" type="checkbox" id="customCheckbox3">
+                                            <label for="customCheckbox3" class="custom-control-label pt-1" style="font-size:12px;">할인 적용기간 설정</label>
                                         </div>
                                     </div>
                                 </div>
@@ -913,7 +899,7 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">희망후원 설정</label>
                                     <div class="col-sm-9 col-md-10 bg-light mt-1">
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" name="chkHopeShpYn" id="chkHopeShpYn" onclick="$(this).val(this.checked ? 'Y' : 'N')">
+                                            <input class="custom-control-input" type="checkbox" id="customCheckbox3" >
                                             <label for="customCheckbox3" style="font-size:12px;" class="custom-control-label pt-1">설정함</label>
                                         </div>
                                         <br>
@@ -921,12 +907,12 @@
                                             <span class="pt-1" style="font-size:12px;">판매가에서</span>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtHopeShpPnt" name="txtHopeShpPnt" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="" >
+                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtOutboundShippingPlaceCode" name="txtOutboundShippingPlaceCode" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block">
-                                            <select class="mb-1 custom-select form-control-border custom-select-sm" name="selHopeShpWyCd" id="selHopeShpWyCd">
-                                                <option value="01">원</option>
+                                            <select class="mb-1 custom-select form-control-border custom-select-sm" name="selDlvEtprsCd" id="selDlvEtprsCd">
                                                 <option value="02">%</option>
+                                                <option value="01">원</option>
                                             </select>
                                         </div>
                                         <div style="display:inline-block">
@@ -937,7 +923,7 @@
                                             <span class="pt-1" style="font-size:12px;">적용금액이</span>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtHopeShpMinPrice" name="txtHopeShpMinPrice" value="{{ $marketSetting->strHopeShpMinPrice }}" placeholder="" >
+                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtOutboundShippingPlaceCode" name="txtOutboundShippingPlaceCode" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block">
                                             <span class="pt-1" style="font-size:12px;">원 보다 작을경우 이 금액으로 전송</span>
@@ -1092,141 +1078,105 @@
                     alert('버전을 선택해주세요!');
                     return false;
                 }
-                var nickName = $("#txtSelMnbdNckNm").val();
-                if(nickName == ""){
-                    alert('닉네임을 입력해주세요!');
+                var salesAgentRate = $("#txtSalesAgentRate").val();
+                if(salesAgentRate == ""){
+                    alert('판매대행 수수료를 입력해주세요!');
                     return false;
                 }
-                var selMth = $("input[name='rdoSelMthdCd']:checked").val();
-                if(selMth == undefined){
-                    alert('판매방식을 선택해주세요!');
+                var txtSalesPeriodStartDateTime = $("#txtSalesPeriodStartDateTime").val();
+                if(txtSalesPeriodStartDateTime == ""){
+                    alert('판매요청 시작일을 입력해주세요!');
                     return false;
                 }
-                var selPrdTypCd = $('#selPrdTypCd option:selected').val();
-                if(selPrdTypCd == ""){
-                    alert('서비스상품을 선택해주세요!');
+                var txtSalesPeriodEndDateTime = $("#txtSalesPeriodEndDateTime").val();
+                if(txtSalesPeriodEndDateTime == ""){
+                    alert('판매요청 종료일을 입력해주세요!');
                     return false;
                 }
-
-                var rdoForAbrdBuyClf = $("input[name='rdoForAbrdBuyClf']:checked").val();
-                if(rdoForAbrdBuyClf == undefined){
-                    alert('해외구매대행상품을 선택해주세요!');
+                var txtUnityQuantity = $("#txtUnityQuantity").val();
+                if(txtUnityQuantity == ""){
+                    alert('단위수량을 입력해주세요!');
                     return false;
                 }
-
-                var rdoPrdStatCd = $("input[name='rdoPrdStatCd']:checked").val();
-                if(rdoPrdStatCd == undefined){
-                    alert('상품상태를 선택해주세요!');
+                var txtMaxQtyPerManDayLimit = $("#txtMaxQtyPerManDayLimit").val();
+                var txtMaxQtyPerManQtyLimit = $("#txtMaxQtyPerManQtyLimit").val();
+                if(txtMaxQtyPerManDayLimit == "" || txtMaxQtyPerManQtyLimit == ""){
+                    alert('인구당최대구매수량을 입력해주세요!');
                     return false;
                 }
-
-                var rdoSelTermUseYn = $("input[name='rdoSelTermUseYn']:checked").val();
-                if(rdoSelTermUseYn == undefined){
-                    alert('판매기간을 선택해주세요!');
-                    return false;
-                }else if(rdoSelTermUseYn == "Y"){
-                    var selSelPrdClfCd = $('#selSelPrdClfCd option:selected').val();
-                    if(selSelPrdClfCd == ""){
-                        alert('날짜범위를 선택해주세요!');
-                        return false;
-                    }else if(selSelPrdClfCd == "0"){
-                        if($("#txtAplBgnDy").val() == "" || $("#txtAplEndDy").val() == ""){
-                            alert('날짜범위를 선택해주세요!');
-                            return false;
-                        }
-                    }
-                }
-                
-                var cond = $("input[name='rdoSelMinLimitTypCd']:checked").val();
-                if(cond == undefined){
-                    alert('최소구매수량을 선택해주세요!');
-                    return false;
-                }else if(cond=="01"){
-                    if($("#txtSelMinLimitQty").val() == ""){
-                        alert('구매수량을 입력해주세요!');
-                        return false;
-                    }
-                }
-
-                cond = $("input[name='rdoSelLimitTypCd']:checked").val();
-                if(cond == undefined){
-                    alert('최대구매수량을 선택해주세요!');
-                    return false;
-                }else if(cond=="01"){
-                    if($("#txtSelLimitQty").val() == ""){
-                        alert('구매수량을 입력해주세요!');
-                        return false;
-                    }
-                }else if(cond=="02"){
-                    if($("#txtTownSelLmtDy").val() == "" || $("#txtTownSelLmtQty").val() == ""){
-                        alert('구매수량을 입력해주세요!');
-                        return false;
-                    }
-                }
-
-                cond = $('#selAbrdBuyPlace option:selected').val();
-                if(cond == ""){
-                    alert('구입처를 선택해주세요!');
+                var rdoParallelImport = $("input[name='rdoParallelImport']:checked").val();
+                if(rdoParallelImport == undefined){
+                    alert('병행수입여부를 선택해주세요!');
                     return false;
                 }
-
-                cond = $('#selDlvCnAreaCd option:selected').val();
-                if(cond == ""){
-                    alert('배송가능지역을 선택해주세요!');
-                    return false;
-                }
-
-                cond = $('#selDlvWyCd option:selected').val();
-                if(cond == ""){
+                var selDeliveryType = $('#selDeliveryType option:selected').val();
+                if(selDeliveryType == ""){
                     alert('배송방법을 선택해주세요!');
                     return false;
                 }
-
-                cond = $('#selDlvEtprsCd option:selected').val();
-                if(cond == ""){
-                    alert('발송택배사를 선택해주세요!');
+                var selUnionDeliveryType = $('#selUnionDeliveryType option:selected').val();
+                var txtUnionDeliveryQty = $("#txtUnionDeliveryQty").val();
+                if(selUnionDeliveryType == "" || txtUnionDeliveryQty == ""){
+                    alert('묶음배송정보를 입력해주세요!');
                     return false;
                 }
-
-                cond = $("input[name='rdoSendClfCdDmy']:checked").val();
-                if(cond == undefined){
-                    alert('발송방법을 선택해주세요!');
+                var txtOutboundShippingTimeDay = $("#txtOutboundShippingTimeDay").val();
+                if(txtOutboundShippingTimeDay == ""){
+                    alert('출고소요시간을 입력해주세요!');
                     return false;
-                }else if(cond == "03"){
-                    if($("txtDlvSendCloseTmpltNo").val() == ""){
-                        alert('발송마감기준값을 입력해주세요!');
-                        return false;
-                    }
                 }
-
-                if($("txtAddrSeqOutAddr").val() == ""){
+                var txtOutboundShippingPlaceCode = $("#txtOutboundShippingPlaceCode").val();
+                if(txtOutboundShippingPlaceCode == ""){
                     alert('출고지를 입력해주세요!');
                     return false;
                 }
-
-                cond = $("txtAddrSeqInAddr").val();
-                if(cond == ""){
-                    alert('반품지를 선택해주세요!');
+                var selDeliveryCompanyCode = $("#selDeliveryCompanyCode option:selected").val();
+                if(selDeliveryCompanyCode == ""){
+                    alert('택배사를 선택해주세요!');
                     return false;
                 }
-
-                if($("txtRtngdDlvCst").val() || $("txtExchDlvCst").val()){
-                    alert('반품/교환지주소를 입력해주세요!');
+                var selDeliveryChargeType = $("#selDeliveryChargeType option:selected").val();
+                if(selDeliveryChargeType == ""){
+                    alert('배송비종류를 선택해주세요!');
                     return false;
                 }
-
-                if($("txtRtngdDlvCst").val() || $("txtExchDlvCst").val()){
-                    alert('반품/교환지주소를 입력해주세요!');
+                var txtDeliveryCharge = $("#txtDeliveryCharge").val();
+                var txtFreeShipOverAmount = $("#txtFreeShipOverAmount").val();
+                var txtDeliveryChargeOnReturn = $("#txtDeliveryChargeOnReturn").val();
+                var txtReturnDeliveryCharge = $("#txtReturnDeliveryCharge").val();
+                var txtJejuDeliveryCharge = $("#txtJejuDeliveryCharge").val();
+                var txtNotJejuDeliveryCharge = $("#txtNotJejuDeliveryCharge").val();
+                if(txtDeliveryCharge == "" || txtFreeShipOverAmount == "" || txtDeliveryChargeOnReturn == "" || txtReturnDeliveryCharge == "" || txtJejuDeliveryCharge == "" || txtNotJejuDeliveryCharge == ""){
+                    alert('배송비를 입력해주세요!');
                     return false;
                 }
-                
-                var txtAsDetail = $("txtarea#txtAsDetail").val();
-                if(txtAsDetail == ""){
+                var txtReturnCenterCode = $("#txtReturnCenterCode").val();
+                var txtReturnSellerName = $("#txtReturnSellerName").val();
+                var txtCompanyContactNumber = $("#txtCompanyContactNumber").val();
+                var txtReturnZipCode = $("#txtReturnZipCode").val();
+                var txtReturnAddress = $("#txtReturnAddress").val();
+                var txtReturnAddressDetail = $("#txtReturnAddressDetail").val();
+                if(txtReturnCenterCode == "" || txtReturnSellerName == "" || txtCompanyContactNumber == "" || txtReturnZipCode == "" || txtReturnAddress == "" || txtReturnAddressDetail == ""){
+                    alert('반품지를 입력해주세요!');
+                    return false;
+                }
+                var rdoExchangeType = $("input[name='rdoExchangeType']:checked").val();
+                if(rdoExchangeType == undefined){
+                    alert('교환방법을 선택해주세요!');
+                    return false;
+                }
+                var rdoReturnChargeVendorType = $("input[name='rdoReturnChargeVendorType']:checked").val();
+                if(rdoReturnChargeVendorType == undefined){
+                    alert('착불여부정보를 선택해주세요!');
+                    return false;
+                }
+                var txtAfterServiceGuide = $("txtarea#txtAfterServiceGuide").val();
+                if(txtAfterServiceGuide == ""){
                     alert('A/S안내 내용을 입력해주세요!');
                     return false;
                 }
-                var txtRtngExchDetail = $("#txtRtngExchDetail").val();
-                if(txtRtngExchDetail == ""){
+                var txtAfterServiceContactNumber = $("#txtAfterServiceContactNumber").val();
+                if(txtAfterServiceContactNumber == ""){
                     alert('A/S전화번호를 입력해주세요!');
                     return false;
                 }
@@ -1238,20 +1188,6 @@
                 var set_id = $('#set_id').val();
                 window.close();
             });
-            //발송 마감 기준 템플렛 선택
-            $('body').on('click', '.btnSearchDlvSendCloseTmpltNo', function () {
-                var market_id = $("#market_id").val();
-                var account_id = $('#selAccountId option:selected').val();
-                if(account_id == ""){
-                    alert('등록하려는 계정을 선택해주세요!');
-                    return false;
-                }
-                window.open('/operationBasicSettingManage/Search11thSendCloseTpl/' + market_id + '/account/' + account_id, '출고지선택', 'scrollbars=1, resizable=1, width=1076, height=500');
-                return false;
-            });
-            $.SetOutboundShippingPlace = function(outboudCode=0){
-                $("#txtAddrSeqOutAddr").val(outboudCode);
-            }
             //출고지 선택
             $('body').on('click', '.btnSearchOutboundShippingPlace', function () {
                 var market_id = $("#market_id").val();
@@ -1263,8 +1199,8 @@
                 window.open('/operationBasicSettingManage/SearchOutboundShippingPlace/' + market_id + '/account/' + account_id, '출고지선택', 'scrollbars=1, resizable=1, width=1076, height=500');
                 return false;
             });
-            $.SetSendCloseTpl = function(sendCloseTplCode=0){
-                $("#txtDlvSendCloseTmpltNo").val(sendCloseTplCode);
+            $.SetOutboundShippingPlace = function(outboudCode=0){
+                $("#txtOutboundShippingPlaceCode").val(outboudCode);
             }
             //반품지 선택
             $('body').on('click', '.btnSearchReturnShippingCenter', function () {
@@ -1278,7 +1214,12 @@
                 return false;
             });
             $.SetReturnCenter = function(returnCode=0, returnSellerName, companyContactNumber, returnZipCode, returnAddress, returnAddressDetail){
-                $("#txtAddrSeqInAddr").val(returnCode);
+                $("#txtReturnCenterCode").val(returnCode);
+                $("#txtReturnSellerName").val(returnSellerName);
+                $("#txtCompanyContactNumber").val(companyContactNumber);
+                $("#txtReturnZipCode").val(returnZipCode);
+                $("#txtReturnAddress").val(returnAddress);
+                $("#txtReturnAddressDetail").val(returnAddressDetail);
             }
             
         });
@@ -1287,9 +1228,6 @@
         }
         function SetReturnShippingCenter(returnCode=0, returnName="name", returnContact = "contact", returnZip="111", returnAddress="address", returnDetail="detail address"){
             $.SetReturnCenter(returnCode, returnName, returnContact, returnZip, returnAddress, returnDetail);
-        }
-        function SetSendCloseTpl(sendCloseTplCode=0){
-            $.SetSendCloseTpl(sendCloseTplCode);
         }
     </script>
 </body>

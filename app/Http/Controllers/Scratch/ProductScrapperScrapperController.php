@@ -288,8 +288,7 @@ class ProductScrapperController extends Controller
             foreach ($arrResponse['images'] as $key => $value) {
                 $arrResponse['images'][$key] = $value['original'];
             }
-            //print_r($arrResponse['images']);
-            //print_r($arrResponse);
+            
             $resTransArr = array_keys($arrResponse['detailData']['sku']['skuMap']);
             $transData = implode('||||', array_values($resTransArr));
             $transData = str_replace("&gt;","***", $transData);
@@ -298,8 +297,7 @@ class ProductScrapperController extends Controller
             $transResult = preg_replace('/\s+/', '', str_replace(' ', '', $trnasResult));
 
             $skuProp = explode('||||', $transResult);
-            //echo $transData;
-            //print_r($skuProp);
+            
             $idx = 0;
             foreach ($arrResponse['detailData']['sku']['skuMap'] as $key => $value) {
                 

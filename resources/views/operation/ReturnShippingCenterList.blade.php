@@ -33,34 +33,64 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($returnCenters as $returnCenters)
-                                    <td>
-                                        <a href="javascript:void(0);" 
-                                            data-code="{{ $returnCenters['returnCenterCode'] }}" 
-                                            data-name="{{ $returnCenters['shippingPlaceName'] }}" 
-                                            data-contact="{{ $returnCenters['placeAddresses'][0]['companyContactNumber'] }}" 
-                                            data-zip="{{ $returnCenters['placeAddresses'][0]['returnZipCode'] }}" 
-                                            data-address="{{ $returnCenters['placeAddresses'][0]['returnAddress'] }}" 
-                                            data-detail="{{ $returnCenters['placeAddresses'][0]['returnAddressDetail'] }}" 
-                                            class="btn btn-primary btn-xs btnSetReturnShippingCenter">
-                                            <span style="font-size:10px;">{{ $returnCenters['shippingPlaceName'] }}</span>
-                                        </a>
-                                    </td>
-                                    <td>[{{ $returnCenters['placeAddresses'][0]['addressType'] }}]
-                                        [{{ $returnCenters['placeAddresses'][0]['returnZipCode'] }}]
-                                        {{ $returnCenters['placeAddresses'][0]['returnAddress'] }}
-                                        <br>
-                                        {{ $returnCenters['placeAddresses'][0]['returnAddressDetail'] }}
-                                        <br>
-                                        {{ $returnCenters['placeAddresses'][0]['companyContactNumber'] }}
-                                        <br>
-                                        {{ $returnCenters['placeAddresses'][0]['phoneNumber2'] }}
-                                    </td>
-                                    <td>{{ $returnCenters['deliverName'] }}</td>
-                                    <td>{{ date("Y-m-d", $returnCenters['createdAt'] / 1000) }}</td>
-                                    <td>{{ $returnCenters['goodsflowStatus'] }}</td>
+                                @if($strMarketCode == "coupang")
+                                    @foreach ($returnCenters as $returnCenters)
+                                        <tr>    
+                                            <td>
+                                                <a href="javascript:void(0);" 
+                                                    data-code="{{ $returnCenters['returnCenterCode'] }}" 
+                                                    data-name="{{ $returnCenters['shippingPlaceName'] }}" 
+                                                    data-contact="{{ $returnCenters['placeAddresses'][0]['companyContactNumber'] }}" 
+                                                    data-zip="{{ $returnCenters['placeAddresses'][0]['returnZipCode'] }}" 
+                                                    data-address="{{ $returnCenters['placeAddresses'][0]['returnAddress'] }}" 
+                                                    data-detail="{{ $returnCenters['placeAddresses'][0]['returnAddressDetail'] }}" 
+                                                    class="btn btn-primary btn-xs btnSetReturnShippingCenter">
+                                                    <span style="font-size:10px;">{{ $returnCenters['shippingPlaceName'] }}</span>
+                                                </a>
+                                            </td>
+                                            <td>[{{ $returnCenters['placeAddresses'][0]['addressType'] }}]
+                                                [{{ $returnCenters['placeAddresses'][0]['returnZipCode'] }}]
+                                                {{ $returnCenters['placeAddresses'][0]['returnAddress'] }}
+                                                <br>
+                                                {{ $returnCenters['placeAddresses'][0]['returnAddressDetail'] }}
+                                                <br>
+                                                {{ $returnCenters['placeAddresses'][0]['companyContactNumber'] }}
+                                                <br>
+                                                {{ $returnCenters['placeAddresses'][0]['phoneNumber2'] }}
+                                            </td>
+                                            <td>{{ $returnCenters['deliverName'] }}</td>
+                                            <td>{{ date("Y-m-d", $returnCenters['createdAt'] / 1000) }}</td>
+                                            <td>{{ $returnCenters['goodsflowStatus'] }}</td>
+                                        </tr>
+                                    @endforeach
+                                @elseif($strMarketCode == "11thhouse")
+                                    @foreach ($returnCenters as $returnCenters)
+                                    <tr>
+                                        <td>
+                                            <a href="javascript:void(0);" 
+                                                data-code="{{ $returnCenters['memNo'] }}" 
+                                                data-name="" 
+                                                data-contact="" 
+                                                data-zip="" 
+                                                data-address="" 
+                                                data-detail="" 
+                                                class="btn btn-primary btn-xs btnSetReturnShippingCenter">
+                                                <span style="font-size:10px;">{{ $returnCenters['addrNm'] }}</span>
+                                            </a>
+                                        </td>
+                                        <td>{{ $returnCenters['addr'] }}
+                                            <br>
+                                            {{ $returnCenters['gnrlTlphnNo'] }}
+                                            <br>
+                                            {{ $returnCenters['prtblTlphnNo'] }}
+                                            
+                                        </td>
+                                        <td>{{ $returnCenters['rcvrNm'] }}</td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
-                                @endforeach
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>

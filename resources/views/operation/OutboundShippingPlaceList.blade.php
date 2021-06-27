@@ -33,27 +33,51 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($outbouds as $outboud)
-                                    <td>
-                                        <a href="javascript:void(0);" data-code="{{ $outboud['outboundShippingPlaceCode'] }}" class="btn btn-primary btn-xs btnSetOutboundShippingPlace">
-                                            <span style="font-size:10px;">{{ $outboud['shippingPlaceName'] }}</span>
-                                        </a>
-                                    </td>
-                                    <td>[{{ $outboud['placeAddresses'][0]['addressType'] }}]
-                                        [{{ $outboud['placeAddresses'][0]['returnZipCode'] }}]
-                                        {{ $outboud['placeAddresses'][0]['returnAddress'] }}
-                                        <br>
-                                        {{ $outboud['placeAddresses'][0]['returnAddressDetail'] }}
-                                        <br>
-                                        {{ $outboud['placeAddresses'][0]['companyContactNumber'] }}
-                                        <br>
-                                        {{ $outboud['placeAddresses'][0]['phoneNumber2'] }}
-                                    </td>
-                                    <td></td>
-                                    <td>{{ $outboud['createDate'] }}</td>
-                                    <td></td>
-                                    </tr>
-                                @endforeach
+                                @if( $strMarketCode == "coupang" )
+                                    @foreach ($outbouds as $outboud)
+                                        <tr>
+                                            <td>
+                                                <a href="javascript:void(0);" data-code="{{ $outboud['outboundShippingPlaceCode'] }}" class="btn btn-primary btn-xs btnSetOutboundShippingPlace">
+                                                    <span style="font-size:10px;">{{ $outboud['shippingPlaceName'] }}</span>
+                                                </a>
+                                            </td>
+                                            <td>[{{ $outboud['placeAddresses'][0]['addressType'] }}]
+                                                [{{ $outboud['placeAddresses'][0]['returnZipCode'] }}]
+                                                {{ $outboud['placeAddresses'][0]['returnAddress'] }}
+                                                <br>
+                                                {{ $outboud['placeAddresses'][0]['returnAddressDetail'] }}
+                                                <br>
+                                                {{ $outboud['placeAddresses'][0]['companyContactNumber'] }}
+                                                <br>
+                                                {{ $outboud['placeAddresses'][0]['phoneNumber2'] }}
+                                            </td>
+                                            <td></td>
+                                            <td>{{ $outboud['createDate'] }}</td>
+                                            <td></td>
+                                        </tr>
+                                    @endforeach
+                                @elseif( $strMarketCode == "11thhouse" )
+                                    @foreach ($outbouds as $outboud)
+                                        <tr>
+                                            <td>
+                                                <a href="javascript:void(0);" data-code="{{ $outboud['memNo'] }}" class="btn btn-primary btn-xs btnSetOutboundShippingPlace">
+                                                    <span style="font-size:10px;">{{ $outboud['addrNm'] }}</span>
+                                                </a>
+                                            </td>
+                                            <td>{{ $outboud['addr'] }}
+                                                <br>
+                                                {{ $outboud['gnrlTlphnNo']}}
+                                                <br>
+                                                {{ $outboud['memNo'] }}
+                                                <br>
+                                                {{ $outboud['prtblTlphnNo']}}
+                                            </td>
+                                            <td>{{ $outboud['rcvrNm'] }}</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>

@@ -541,9 +541,8 @@ class SellPrepareCheckController extends Controller
         $successCount = 0;
         $failedCount = 0;
         foreach ($settingCoupangs as $key1 => $setting) {
-            
+            $coupang = new CoupangConnector($setting->marketAccount->strAPIAccessKey, $setting->marketAccount->strSecretKey, $setting->marketAccount->strVendorId, $setting->marketAccount->strAccountId);
             if($setting->marketIdx == 3){//쿠팡{}
-                $coupang = new CoupangConnector($setting->marketAccount->strAPIAccessKey, $setting->marketAccount->strSecretKey, $setting->marketAccount->strVendorId, $setting->marketAccount->strAccountId);
                 foreach ($products as $key2 => $product) {
 
                     // //만약 상품이 쿠팡에 이미 등록되였다면 넘긴다
@@ -904,8 +903,10 @@ class SellPrepareCheckController extends Controller
                 }
             }else if($setting->marketIdx == 1){//11번가
                 $successCount++;
+
             }else if($setting->marketIdx == 8){//티몬
                 $successCount++;
+
             }
         }
         //return view('scratch.ProductRegistResult', compact('productsCount', 'successCount', 'failedCount'));

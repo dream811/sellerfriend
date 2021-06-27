@@ -14,9 +14,12 @@ class MarketSettingCoupang extends Model
                             'bOverSeaPurchaseAgent', 'bOnlyAdult', 'nImageProcessType', 'nDeliveryType', 'nPersonPassingCodeType', 'strUnionDeliveryType', 'nUnionDeliveryQty', 'nRemoteAreaDeliveryType', 'nOutboundShippingTimeDay', 'strOutboundShippingPlaceCode', 'strDeliveryCompanyCode',
                             'strDeliveryChargeType', 'nDeliveryCharge', 'nFreeShipOverAmount', 'nDeliveryChargeOnReturn', 'nReturnDeliveryCharge', 'nJejuDeliveryCharge', 'nNotJejuDeliveryCharge', 'strReturnCenterCode', 'strReturnSellerName', 'strCompanyContactNumber', 'strReturnZipCode', 
                             'strReturnAddress', 'strReturnAddressDetail', 'strExchangeType', 'strReturnChargeVendorType', 'strAfterServiceGuideType', 'strAfterServiceGuide', 'strAfterServiceContactNumber', 'nRequireDocument1', 'nRequireDocument2', 'nRequireDocument3', 'nRequireDocument4', 'nRequireDocument5', 'nRequireDocument6',
-                            'nTopImageIdx', 'nDownImageIdx', 'created_at', 'updated_at', 'bIsUsed', 'bIsDel'
+                            'nTopImageIdx', 'nDownImageIdx', 'created_at', 'updated_at', 'bIsUsed',
+                            
+                            'strOverThenPrdNmLen','strOverThenPrdNmLen',
+                            'bIsDel'
                         ];
-    
+
     public function marketAccount()
     {
         return $this->belongsTo(MarketAccount::class, 'nMarketAccIdx', 'nIdx');

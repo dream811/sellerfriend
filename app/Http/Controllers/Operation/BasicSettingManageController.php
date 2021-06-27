@@ -14,6 +14,7 @@ use App\Models\DeliveryType;
 use App\Models\DeliveryCompany;
 use App\Models\DocumentImage;
 use App\Mylibs\CoupangConnector;
+use App\Mylibs\EleventhConnector;
 
 class BasicSettingManageController extends Controller
 {
@@ -89,6 +90,66 @@ class BasicSettingManageController extends Controller
                 ->get();
             return view('operation.BasicSettingCoupangManageDetail', compact('marketAccounts', 'market', 'marketSetting', 'deliveryTypes', 'deliveryCompanies', 'market_id', 'set_id',  'asManuals', 'documentImages'));
         }else if($market->strMarketCode == '11thhouse'){
+            $marketSetting = MarketSettingCoupang::where('bIsDel', 0)
+                ->where('nUserId', Auth::id())
+                ->where('nIdx', $set_id)
+                ->where('bIsUsed', 1)
+                ->firstOrNew();
+            if($set_id == 0){
+                $marketSetting->nSupportOption = 1;
+                $marketSetting->nVersion = 2;
+                $newEndingDate = date("Y-m-d", strtotime(date("Y-m-d") . " + 1 year"));
+                $marketSetting->dtSalesPeriodEndDateTime = $newEndingDate;
+                $marketSetting->strSelMinLimitTypCd = "00";
+                $marketSetting->strSelLimitTypCd = "00";
+                $marketSetting->strOverThenPrdNmLen = "W100";
+                $marketSetting->strCrtfGrpTypCd01 = "03";
+                $marketSetting->strCrtfGrpTypCd02 = "03";
+                $marketSetting->strCrtfGrpTypCd03 = "03";
+                $marketSetting->strCrtfGrpTypCd04 = "05";
+            }
+            
+            $deliveryTypes = DeliveryType::where('bIsDel', 0)
+                ->where('nMarketIdx', $market->nIdx)
+                ->get();
+            $deliveryCompanies = DeliveryCompany::where('bIsDel', 0)
+                ->where('nMarketIdx', $market->nIdx)
+                ->get();
+            $asManuals = AsManual::where('bIsDel', 0)
+                ->get(); 
+            $documentImages = DocumentImage::where('bIsDel', 0)
+                ->where('nUserId', Auth::id())
+                ->get();
+            //
+            $eleConnector = new EleventhConnector();
+            //$result = $eleConnector->getCategoryListInfo();
+            // $result = $eleConnector->getCategoryInfo();
+            // $result = $eleConnector->getOutboundListInfo();
+            return view('operation.BasicSetting11thhouseManageDetail', compact('marketAccounts', 'market', 'marketSetting', 'deliveryTypes', 'deliveryCompanies', 'market_id', 'set_id',  'asManuals', 'documentImages'));
+        }else if($market->strMarketCode == 'tmon'){
+            $marketSetting = MarketSettingCoupang::where('bIsDel', 0)
+                ->where('nUserId', Auth::id())
+                ->where('nIdx', $set_id)
+                ->where('bIsUsed', 1)
+                ->firstOrNew();
+            if($set_id == 0){
+                $newEndingDate = date("Y-m-d", strtotime(date("Y-m-d") . " + 1 year"));
+                $marketSetting->dtSalesPeriodEndDateTime = $newEndingDate;
+            }
+            
+            $deliveryTypes = DeliveryType::where('bIsDel', 0)
+                ->where('nMarketIdx', $market->nIdx)
+                ->get();
+            $deliveryCompanies = DeliveryCompany::where('bIsDel', 0)
+                ->where('nMarketIdx', $market->nIdx)
+                ->get();
+            $asManuals = AsManual::where('bIsDel', 0)
+                ->get(); 
+            $documentImages = DocumentImage::where('bIsDel', 0)
+                ->where('nUserId', Auth::id())
+                ->get();
+            return view('operation.BasicSetting11thhouseManageDetail', compact('marketAccounts', 'market', 'marketSetting', 'deliveryTypes', 'deliveryCompanies', 'market_id', 'set_id',  'asManuals', 'documentImages'));
+        }else if($market->strMarketCode == 'wemakeprice'){
             $marketSetting = MarketSettingCoupang::where('bIsDel', 0)
                 ->where('nUserId', Auth::id())
                 ->where('nIdx', $set_id)
@@ -197,8 +258,26 @@ class BasicSettingManageController extends Controller
             $set_id = $settingCoupang->nIdx;
             return redirect("/operationBasicSettingManage/{$market_id}/setting/{$set_id}");
             //return view('operation.BasicSettingManageDetail', compact('marketAccounts', 'market', 'marketSetting', 'deliveryTypes', 'deliveryCompanies', 'market_id', 'set_id',  'asManuals', 'documentImages'));
+        }else if ($market_id == 3){
+            $settingCoupang = MarketSettingCoupang::updateOrCreate(
+                ['nIdx' => $set_id],
+                [
+                    'nMarketIdx' => $request->post('market_id'),
+                    'nUserId' => Auth::id(),
+                    'nMarketAccIdx' => $request->post('selAccountId'),
+                    'strTitle'=> $request->post('txtTitle'),
+                    'nSupportOption'=> $request->post('rdoSupportOption'),
+                    'nVersion'=> $request->post('rdoVersion'),
+                    'strSelMnbdNckNm' => $request->post('txtSelMnbdNckNm'),
+                    'strSelMthdCd' => $request->post('rdoSelMthdCd'),
+                    'strPrdTypCd' => $request->post('selPrdTypCd'),
+                    'strSelMnbdNckNm' => $request->post('txtSelMnbdNckNm'),
+                    'bIsDel'=> 0,
+                ]
+            );
+            $set_id = $settingCoupang->nIdx;
+            return redirect("/operationBasicSettingManage/{$market_id}/setting/{$set_id}");
         }
-        
     }
     
     /**
@@ -207,15 +286,25 @@ class BasicSettingManageController extends Controller
      */
     public function searchOutboundShippingPlace($market_id = 0, $accountId = 0)
     {
-        //출고상품
-        $market = Market::where('nIdx', $market_id);
+        //출고지 목록
+        $market = Market::where('nIdx', $market_id)->first();
         $marketAccount  = MarketAccount::where('nIdx', $accountId)->first();
-        $coupang = new CoupangConnector($marketAccount->strAPIAccessKey, $marketAccount->strSecretKey, $marketAccount->strVendorId, $marketAccount->strAccountId);
-        $result = $coupang->getOutboundShippingCenterList();
-        $resArr = (array)json_decode($result, true);
-        $outbouds = $resArr['content'];
+        $outbouds = array();
+        $strMarketCode = $market->strMarketCode;
+        if($market->strMarketCode == "coupang"){
+            $coupang = new CoupangConnector($marketAccount->strAPIAccessKey, $marketAccount->strSecretKey, $marketAccount->strVendorId, $marketAccount->strAccountId);
+            $result = $coupang->getOutboundShippingCenterList();
+            $resArr = (array)json_decode($result, true);
+            $outbouds = $resArr['content'];
+        }else{
+            $_11thhouse = new EleventhConnector($marketAccount->strAPIAccessKey);
+            //$outbouds = $_11thhouse->getOutboundListInfo();
+            $_11thhouse->addProduct();
+            //$resArr = (array)json_decode($result, true);
+            //$outbouds = $resArr['content'];
+        }
         // return response()->json(["status" => "success", "data" => $resArr]);
-        return view('operation.OutboundShippingPlaceList', compact('outbouds'));
+        return view('operation.OutboundShippingPlaceList', compact('strMarketCode', 'outbouds'));
     }
 
     /**
@@ -225,17 +314,38 @@ class BasicSettingManageController extends Controller
     public function searchReturnShippingCenter($market_id = 0, $accountId = 0)
     {
         //반품지목록
-        $market = Market::where('nIdx', $market_id);
+        $market = Market::where('nIdx', $market_id)->first();
         $marketAccount  = MarketAccount::where('nIdx', $accountId)->first();
-        $coupang = new CoupangConnector($marketAccount->strAPIAccessKey, $marketAccount->strSecretKey, $marketAccount->strVendorId, $marketAccount->strAccountId);
-        $result = $coupang->getReturnShippingCenterList();
-        $resArr = (array)json_decode($result, true);
-        $returnCenters = $resArr['data']['content'];
-        // $mil = $resArr['data']['content'];
-// $seconds = $mil / 1000;
-// echo date("d-m-Y", $seconds);
-        // return response()->json(["status" => "success", "data" => $resArr]);
-        return view('operation.ReturnShippingCenterList', compact('returnCenters'));
+        $returnCenters = array();
+        $strMarketCode = $market->strMarketCode;
+        if($market->strMarketCode == "coupang"){
+            $coupang = new CoupangConnector($marketAccount->strAPIAccessKey, $marketAccount->strSecretKey, $marketAccount->strVendorId, $marketAccount->strAccountId);
+            $result = $coupang->getReturnShippingCenterList();
+            $resArr = (array)json_decode($result, true);
+            $returnCenters = $resArr['data']['content'];
+        }else if($market->strMarketCode == "11thhouse"){
+            $_11thhouse = new EleventhConnector($marketAccount->strAPIAccessKey);
+            $returnCenters = $_11thhouse->getInboundListInfo();
+        }
+        return view('operation.ReturnShippingCenterList', compact('strMarketCode', 'returnCenters'));
+    }
+
+    /**
+     * 11번가 발송 템플렛
+     *
+     */
+    public function search11thSendCloseTpl($market_id = 0, $accountId = 0)
+    {
+        //발송템플렛
+        $market = Market::where('nIdx', $market_id)->first();
+        $marketAccount  = MarketAccount::where('nIdx', $accountId)->first();
+        $sendCloseTpls = array();
+        $strMarketCode = $market->strMarketCode;
+        if($market->strMarketCode == "11thhouse"){
+            $_11thhouse = new EleventhConnector($marketAccount->strAPIAccessKey);
+            $sendCloseTpls = $_11thhouse->getSendCloseTplListInfo();
+        }
+        return view('operation.SendCloseTplList', compact('strMarketCode', 'sendCloseTpls'));
     }
 
     public function accountUpdate($marketId=0, $accountId=0, Request $request)

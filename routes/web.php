@@ -41,10 +41,6 @@ Route::get('/scratchProductScrap/category/listTmon', [App\Http\Controllers\Scrat
 Route::get('/scratchProductScrap/category/listSolution', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'categoryListSolution'])->name('scratch.ProductScrapScratch.categoryList.Solution');
 Route::get('/scratchProductScrap/category/select/{cateId}', [App\Http\Controllers\Scratch\ProductScrapperController::class, 'categorySelect'])->name('scratch.ProductScrapScratch.categoryList.Select');
 
-
-// Route::get('/scratchProductScrap', [App\Http\Controllers\Scratch\ProductScrapController::class, 'index'])->name('scratch.ProductScrap');
-// Route::post('/scratchProductScrap', [App\Http\Controllers\Scratch\ProductScrapController::class, 'save'])->name('scratch.ProductScrap');
-// Route::get('/scratchProductScrap/scratch', [App\Http\Controllers\Scratch\ProductScrapController::class, 'scratch'])->name('scratch.ProductScrapScratch');
 //2
 Route::get('/scratchProductGetManage', [App\Http\Controllers\Scratch\ProductGetManageController::class, 'index'])->name('scratch.ProductGetManage');
 Route::put('/scratchProductGetManage/{productId}', [App\Http\Controllers\Scratch\ProductGetManageController::class, 'update'])->name('scratch.ProductGetManage.update');
@@ -173,6 +169,8 @@ Route::get('/operationOpenMarketManage/{marketId}/AccountDelete/{accountId}', [A
 Route::get('/operationBasicSettingManage', [App\Http\Controllers\Operation\BasicSettingManageController::class, 'index'])->name('operation.BasicSettingManage');
 Route::get('/operationBasicSettingManage/{market_code}/setting/{set_id}', [App\Http\Controllers\Operation\BasicSettingManageController::class, 'setting'])->name('operation.BasicSettingManageSetting');
 Route::get('/operationBasicSettingManage/{market_code}/settingDelete/{set_id}', [App\Http\Controllers\Operation\BasicSettingManageController::class, 'settingDelete'])->name('operation.BasicSettingManageSettingDelete');
+//발송템플렛 정보(11번가)
+Route::get('/operationBasicSettingManage/Search11thSendCloseTpl/{market_id}/account/{account_id}', [App\Http\Controllers\Operation\BasicSettingManageController::class, 'search11thSendCloseTpl'])->name('operation.BasicSettingManageSetting.Search11thSendCloseTpl');
 //출고지 정보
 Route::get('/operationBasicSettingManage/SearchOutboundShippingPlace/{market_id}/account/{account_id}', [App\Http\Controllers\Operation\BasicSettingManageController::class, 'searchOutboundShippingPlace'])->name('operation.BasicSettingManageSetting.SearchOutboundShippingPlace');
 //반품지 정보
