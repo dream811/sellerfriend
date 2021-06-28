@@ -121,7 +121,7 @@ class BasicSettingManageController extends Controller
                 ->where('nUserId', Auth::id())
                 ->get();
             //
-            $eleConnector = new EleventhConnector();
+            // $eleConnector = new EleventhConnector();
             //$result = $eleConnector->getCategoryListInfo();
             // $result = $eleConnector->getCategoryInfo();
             // $result = $eleConnector->getOutboundListInfo();
@@ -366,7 +366,7 @@ class BasicSettingManageController extends Controller
                 ]
             );
             $set_id = $settingCoupang->nIdx;
-            //return redirect("/operationBasicSettingManage/{$market_id}/setting/{$set_id}");
+            return redirect("/operationBasicSettingManage/{$market_id}/setting/{$set_id}");
         }
     }
     
@@ -387,7 +387,7 @@ class BasicSettingManageController extends Controller
             $resArr = (array)json_decode($result, true);
             $outbouds = $resArr['content'];
         }else{
-            $_11thhouse = new EleventhConnector($marketAccount->strAPIAccessKey);
+            $_11thhouse = new EleventhConnector($marketAccount->strAPIAccessKey, $marketAccount->marketAccount->strAccountId, $marketAccount->marketAccount->strAccountPwd);
             //$outbouds = $_11thhouse->getOutboundListInfo();
             $_11thhouse->addProduct();
             //$resArr = (array)json_decode($result, true);
@@ -414,7 +414,7 @@ class BasicSettingManageController extends Controller
             $resArr = (array)json_decode($result, true);
             $returnCenters = $resArr['data']['content'];
         }else if($market->strMarketCode == "11thhouse"){
-            $_11thhouse = new EleventhConnector($marketAccount->strAPIAccessKey);
+            $_11thhouse = new EleventhConnector($marketAccount->strAPIAccessKey, $marketAccount->marketAccount->strAccountId, $marketAccount->marketAccount->strAccountPwd);
             $returnCenters = $_11thhouse->getInboundListInfo();
         }
         return view('operation.ReturnShippingCenterList', compact('strMarketCode', 'returnCenters'));
@@ -432,7 +432,7 @@ class BasicSettingManageController extends Controller
         $sendCloseTpls = array();
         $strMarketCode = $market->strMarketCode;
         if($market->strMarketCode == "11thhouse"){
-            $_11thhouse = new EleventhConnector($marketAccount->strAPIAccessKey);
+            $_11thhouse = new EleventhConnector($marketAccount->strAPIAccessKey, $marketAccount->marketAccount->strAccountId, $marketAccount->marketAccount->strAccountPwd);
             $sendCloseTpls = $_11thhouse->getSendCloseTplListInfo();
         }
         return view('operation.SendCloseTplList', compact('strMarketCode', 'sendCloseTpls'));

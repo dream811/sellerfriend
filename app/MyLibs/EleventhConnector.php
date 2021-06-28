@@ -4,7 +4,7 @@ namespace App\Mylibs;
 use SimpleXMLElement;
 use XMLParser;
 
-//지마켓과 옥션 
+//11번가 
 class EleventhConnector {
 
     protected $USER_ID="songfh0502";
@@ -16,7 +16,7 @@ class EleventhConnector {
      *
      * @return void
      */
-    public function __construct($userId="C00235119", $pwd="c00235119", $accessApiKey="21f79033b93db3ab96d43792a6f36a59")
+    public function __construct($accessApiKey="21f79033b93db3ab96d43792a6f36a59", $userId="C00235119", $pwd="c00235119")
     {
         $this->USER_ID=$userId;
         $this->USER_PWD=$pwd;
@@ -30,9 +30,10 @@ class EleventhConnector {
      * 상품등록(post)
      */
     public function addProduct($data = "") {
-        // if(empty($strjson)){
-        //     return false;
-        // }
+        if(empty($data)){
+            return false;
+        }
+/*
         $data = <<<_EOT_
 <?xml version="1.0" encoding="euc-kr" ?>
 <Product>
@@ -40,7 +41,7 @@ class EleventhConnector {
     <abrdSizetableDispYn>Y</abrdSizetableDispYn>
     <selMnbdNckNm>SongFa</selMnbdNckNm>
     <selMthdCd>01</selMthdCd>
-    <dispCtgrNo>test</dispCtgrNo>
+    <dispCtgrNo>1011958</dispCtgrNo>
     <prdTypCd>01</prdTypCd>
     <hsCode>1233</hsCode>
     <prdNm>tsss</prdNm>
@@ -220,7 +221,7 @@ class EleventhConnector {
     <islandDlvCst>12200</islandDlvCst>
     <addrSeqOut>12000</addrSeqOut>
     <outsideYnOut>Y</outsideYnOut>
-    <visitDlvYn>1222</visitDlvYn>
+    <visitDlvYn>N</visitDlvYn>
     <visitDlvAddrSeq>12122</visitDlvAddrSeq>
     <addrSeqOutMemNo>1212</addrSeqOutMemNo>
     <addrSeqIn>12112</addrSeqIn>
@@ -267,6 +268,7 @@ class EleventhConnector {
     </ProductTag>
 </Product>
 _EOT_;
+*/
         $method = "POST";
         $curl = curl_init();
         $headers = array("Content-type: text/xml; charset=EUC-KR", "openapikey:".$this->ACCESS_API_KEY); //SampleKey 사용불가
@@ -281,9 +283,8 @@ _EOT_;
         $xml = new SimpleXMLElement($result);
         $retData = $xml->xpath('//ClientMessage');
         
-        
         $response = json_decode(json_encode((array)$retData), TRUE);
-        //print_r($arrCategorys);
+        print_r($response);
         
         return($response);
     }

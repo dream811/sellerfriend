@@ -60,7 +60,7 @@
                         <h5 class="card-title mb-0" style="font-weight: bold;">Step 2. 카테고리</h5>
                     </div>
                     <div class="card-body">
-                        <fieldset>
+                        {{-- <fieldset>
                             <div class="form-group row mb-0">
                                     <label class="col-form-label col-sm-2 text-sm-right">등록진행마켓</label>
                                 <div class="col-sm-10 row">
@@ -82,7 +82,7 @@
                                 <label class="col-form-label col-sm-2 text-sm-right"></label>
                                 <span class="text-success"> 내설정에 등록된 마켓</span>
                             </div>
-                        </fieldset>
+                        </fieldset> --}}
 
                         <fieldset style="color:" >
                             <div class="form-group row mb-0">
