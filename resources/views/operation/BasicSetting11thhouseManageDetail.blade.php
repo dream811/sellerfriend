@@ -186,15 +186,15 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">상품상태<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-10 mt-1">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoPrdStatCd_01" name="rdoPrdStatCd" @if( $marketSetting->strForAbrdBuyClf == '01' ) checked @endif value="01" >
+                                            <input class="custom-control-input" type="radio" id="rdoPrdStatCd_01" name="rdoPrdStatCd" @if( $marketSetting->strPrdStatCd == '01' ) checked @endif value="01" >
                                             <label for="rdoPrdStatCd_01" class="custom-control-label pt-1" style="font-size:12px;">신상품</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoForAbrdBuyClf_03" name="rdoPrdStatCd" @if( $marketSetting->strForAbrdBuyClf == '03' ) checked @endif value="03">
+                                            <input class="custom-control-input" type="radio" id="rdoForAbrdBuyClf_03" name="rdoPrdStatCd" @if( $marketSetting->strPrdStatCd == '03' ) checked @endif value="03">
                                             <label for="rdoForAbrdBuyClf_03" class="custom-control-label pt-1" style="font-size:12px;">재고상품</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoForAbrdBuyClf_10" name="rdoPrdStatCd" @if( $marketSetting->strForAbrdBuyClf == '10' ) checked @endif value="10">
+                                            <input class="custom-control-input" type="radio" id="rdoForAbrdBuyClf_10" name="rdoPrdStatCd" @if( $marketSetting->strPrdStatCd == '10' ) checked @endif value="10">
                                             <label for="rdoForAbrdBuyClf_10" class="custom-control-label pt-1" style="font-size:12px;">주문제작상품</label>
                                         </div>
                                     </div>
@@ -207,22 +207,22 @@
                                             <label for="rdoSelTermUseYn_N" class="custom-control-label pt-1" style="font-size:12px;">설정안함</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoSelTermUseYn_Y" name="rdoSelTermUseYn" @if( $marketSetting->rdoSelTermUseYn == 'Y' ) checked @endif value="Y">
+                                            <input class="custom-control-input" type="radio" id="rdoSelTermUseYn_Y" name="rdoSelTermUseYn" @if( $marketSetting->strSelTermUseYn == 'Y' ) checked @endif value="Y">
                                             <label for="rdoSelTermUseYn_Y" class="custom-control-label pt-1" style="font-size:12px;">설정함</label>
                                         </div>
                                         
                                         <div style="display:inline-block">
                                             <select class="mb-1 custom-select form-control-border custom-select-sm" name="selSelPrdClfCd" id="selSelPrdClfCd">
                                                 <option value="">= 선택 =</option>
-                                                <option value="3">3일</option>
-                                                <option value="5">5일</option>
-                                                <option value="7">7일</option>
-                                                <option value="15">15일</option>
-                                                <option value="30">30일(1개월)</option>
-                                                <option value="60">60일(2개월)</option>
-                                                <option value="90">90일(3개월)</option>
-                                                <option value="120">120일(4개월)</option>
-                                                <option value="0">직접입력</option>
+                                                <option value="3:101" @if ($marketSetting->strSelPrdClfCd == '3:101') selected @endif>3일</option>
+                                                <option value="5:102" @if ($marketSetting->strSelPrdClfCd == '5:102') selected @endif>5일</option>
+                                                <option value="7:103" @if ($marketSetting->strSelPrdClfCd == '7:103') selected @endif>7일</option>
+                                                <option value="15:104" @if ($marketSetting->strSelPrdClfCd == '15:104') selected @endif>15일</option>
+                                                <option value="30:105" @if ($marketSetting->strSelPrdClfCd == '30:105') selected @endif>30일(1개월)</option>
+                                                <option value="60:106" @if ($marketSetting->strSelPrdClfCd == '60:106') selected @endif>60일(2개월)</option>
+                                                <option value="90:107" @if ($marketSetting->strSelPrdClfCd == '90:107') selected @endif>90일(3개월)</option>
+                                                <option value="120:108" @if ($marketSetting->strSelPrdClfCd == '120:108') selected @endif>120일(4개월)</option>
+                                                <option value="0:400" @if ($marketSetting->strSelPrdClfCd == '0:400') selected @endif>직접입력</option>
                                             </select>
                                         </div>
                                         <br>
@@ -440,32 +440,32 @@
                                     <div class="col-sm-9 col-md-2">
                                         <select class="custom-select form-control-border custom-select-sm" name="selDlvCnAreaCd" id="selDlvCnAreaCd">
                                             <option value="">= 선택 =</option>
-                                            <option value="01">전국</option>
-                                            <option value="02">*전국(제주 도서산간지역 제외)</option>
-                                            <option value="03">서울</option>
-                                            <option value="04">인천</option>
-                                            <option value="05">광주</option>
-                                            <option value="06">대구</option>
-                                            <option value="07">대전</option>
-                                            <option value="08">부산</option>
-                                            <option value="09">울산</option>
-                                            <option value="10">경기</option>
-                                            <option value="11">강원</option>
-                                            <option value="12">충남</option>
-                                            <option value="13">충북</option>
-                                            <option value="14">경남</option>
-                                            <option value="15">경북</option>
-                                            <option value="16">전남</option>
-                                            <option value="17">전북</option>
-                                            <option value="18">제주</option>
-                                            <option value="19">서울/경기</option>
-                                            <option value="20">서울/경기/대전</option>
-                                            <option value="21">충북/충남</option>
-                                            <option value="22">경북/경남</option>
-                                            <option value="23">전북/전남</option>
-                                            <option value="24">부산/울산</option>
-                                            <option value="25">서울/경기/제주도서산간 제외지역</option>
-                                            <option value="26">일부지역불가</option>
+                                            <option value="01" @if ($marketSetting->strDlvCnAreaCd == "01") selected @endif>전국</option>
+                                            <option value="02" @if ($marketSetting->strDlvCnAreaCd == "02") selected @endif>*전국(제주 도서산간지역 제외)</option>
+                                            <option value="03" @if ($marketSetting->strDlvCnAreaCd == "03") selected @endif>서울</option>
+                                            <option value="04" @if ($marketSetting->strDlvCnAreaCd == "04") selected @endif>인천</option>
+                                            <option value="05" @if ($marketSetting->strDlvCnAreaCd == "05") selected @endif>광주</option>
+                                            <option value="06" @if ($marketSetting->strDlvCnAreaCd == "06") selected @endif>대구</option>
+                                            <option value="07" @if ($marketSetting->strDlvCnAreaCd == "07") selected @endif>대전</option>
+                                            <option value="08" @if ($marketSetting->strDlvCnAreaCd == "08") selected @endif>부산</option>
+                                            <option value="09" @if ($marketSetting->strDlvCnAreaCd == "09") selected @endif>울산</option>
+                                            <option value="10" @if ($marketSetting->strDlvCnAreaCd == "10") selected @endif>경기</option>
+                                            <option value="11" @if ($marketSetting->strDlvCnAreaCd == "11") selected @endif>강원</option>
+                                            <option value="12" @if ($marketSetting->strDlvCnAreaCd == "12") selected @endif>충남</option>
+                                            <option value="13" @if ($marketSetting->strDlvCnAreaCd == "13") selected @endif>충북</option>
+                                            <option value="14" @if ($marketSetting->strDlvCnAreaCd == "14") selected @endif>경남</option>
+                                            <option value="15" @if ($marketSetting->strDlvCnAreaCd == "15") selected @endif>경북</option>
+                                            <option value="16" @if ($marketSetting->strDlvCnAreaCd == "16") selected @endif>전남</option>
+                                            <option value="17" @if ($marketSetting->strDlvCnAreaCd == "17") selected @endif>전북</option>
+                                            <option value="18" @if ($marketSetting->strDlvCnAreaCd == "18") selected @endif>제주</option>
+                                            <option value="19" @if ($marketSetting->strDlvCnAreaCd == "19") selected @endif>서울/경기</option>
+                                            <option value="20" @if ($marketSetting->strDlvCnAreaCd == "20") selected @endif>서울/경기/대전</option>
+                                            <option value="21" @if ($marketSetting->strDlvCnAreaCd == "21") selected @endif>충북/충남</option>
+                                            <option value="22" @if ($marketSetting->strDlvCnAreaCd == "22") selected @endif>경북/경남</option>
+                                            <option value="23" @if ($marketSetting->strDlvCnAreaCd == "23") selected @endif>전북/전남</option>
+                                            <option value="24" @if ($marketSetting->strDlvCnAreaCd == "24") selected @endif>부산/울산</option>
+                                            <option value="25" @if ($marketSetting->strDlvCnAreaCd == "25") selected @endif>서울/경기/제주도서산간 제외지역</option>
+                                            <option value="26" @if ($marketSetting->strDlvCnAreaCd == "26") selected @endif>일부지역불가</option>
                                             {{-- @foreach ($deliveryTypes as $deliveryType)
                                             <option value="{{$deliveryType->nIdx}}" @if ($marketSetting->nDeliveryType == $deliveryType->nIdx) selected @endif>{{$deliveryType->strDeliveryName}}</option>
                                             @endforeach --}}
@@ -477,11 +477,11 @@
                                     <div class="col-sm-9 col-md-2">
                                         <select class="custom-select form-control-border custom-select-sm" name="selDlvWyCd" id="selDlvWyCd">
                                             <option value="">= 선택 =</option>
-                                            <option value="01">택배</option>
-                                            <option value="02">우편(소포/등기)</option>
-                                            <option value="03">직접전달(화물배달)</option>
-                                            <option value="04">퀵서비스</option>
-                                            <option value="05">배송필요없음</option>
+                                            <option value="01"  @if ($marketSetting->strDlvWyCd == "01") selected @endif>택배</option>
+                                            <option value="02"  @if ($marketSetting->strDlvWyCd == "02") selected @endif>우편(소포/등기)</option>
+                                            <option value="03"  @if ($marketSetting->strDlvWyCd == "03") selected @endif>직접전달(화물배달)</option>
+                                            <option value="04"  @if ($marketSetting->strDlvWyCd == "04") selected @endif>퀵서비스</option>
+                                            <option value="05"  @if ($marketSetting->strDlvWyCd == "05") selected @endif>배송필요없음</option>
                                             {{-- @foreach ($deliveryTypes as $deliveryType)
                                             <option value="{{$deliveryType->nIdx}}" @if ($marketSetting->nDeliveryType == $deliveryType->nIdx) selected @endif>{{$deliveryType->strDeliveryName}}</option>
                                             @endforeach --}}
@@ -493,7 +493,7 @@
                                     <div class="col-sm-9 col-md-2">
                                         <select class="custom-select form-control-border custom-select-sm" name="selDlvEtprsCd" id="selDlvEtprsCd">
                                             <option value="">= 선택 =</option>
-                                            <option value="00034">CJ대한통운</option>
+                                            <option value="00034" @if ($marketSetting->strDlvEtprsCd == "00034") selected @endif>CJ대한통운</option>
                                             {{-- @foreach ($deliveryTypes as $deliveryType)
                                             <option value="{{$deliveryType->nIdx}}" @if ($marketSetting->nDeliveryType == $deliveryType->nIdx) selected @endif>{{$deliveryType->strDeliveryName}}</option>
                                             @endforeach --}}
@@ -505,15 +505,15 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">발송방법<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6 mt-1">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoSendClfCdDmy1" name="rdoSendClfCdDmy" @if ($marketSetting->nRemoteAreaDeliveryType == 1) checked @endif value="1">
+                                            <input class="custom-control-input" type="radio" id="rdoSendClfCdDmy1" name="rdoSendClfCdDmy" @if ($marketSetting->strSendClfCdDmy == '01') checked @endif value="01">
                                             <label for="rdoSendClfCdDmy1" class="custom-control-label pt-1" style="font-size:12px;">오늘발송</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoSendClfCdDmy2" name="rdoSendClfCdDmy" @if ($marketSetting->nRemoteAreaDeliveryType == 0) checked @endif value="0">
+                                            <input class="custom-control-input" type="radio" id="rdoSendClfCdDmy2" name="rdoSendClfCdDmy" @if ($marketSetting->strSendClfCdDmy == '02') checked @endif value="02">
                                             <label for="rdoSendClfCdDmy2" class="custom-control-label pt-1" style="font-size:12px;">일반발송</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoSendClfCdDmy3" name="rdoSendClfCdDmy" @if ($marketSetting->nRemoteAreaDeliveryType == 0) checked @endif value="0">
+                                            <input class="custom-control-input" type="radio" id="rdoSendClfCdDmy3" name="rdoSendClfCdDmy" @if ($marketSetting->strSendClfCdDmy == '03') checked @endif value="03">
                                             <label for="rdoSendClfCdDmy3" class="custom-control-label pt-1" style="font-size:12px;">재고확인후 순차발송</label>
                                         </div>
                                         </br>
@@ -578,83 +578,83 @@
                                             </tr>
                                             <tr>
                                                 <td>판매자</td>
-                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="01"> 무료</td>
+                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="01" @if ($marketSetting->strDlvCstInstBasiCd == '01') checked @endif> 무료</td>
                                                 <td>0원</td>
                                                 <td>수량/주문금액에 상관없이 무조건 무료</td>
                                                 <td>
                                                     <select name="selBndlDlvCnYn01">
-                                                        <option value="Y">가능</option>
-                                                        <option value="N">불가</option>
+                                                        <option value="Y" @if ($marketSetting->strBndlDlvCnYn01 == "Y") selected @endif>가능</option>
+                                                        <option value="N" @if ($marketSetting->strBndlDlvCnYn01 == "N") selected @endif>불가</option>
                                                     </select>
                                                 </td>
                                                 <td>-</td>
                                             </tr>
                                             <tr>
                                                 <td rowspan="7">구매자</td>
-                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="07"> 판매자 조건부 배송비</td>
+                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="07"  @if ($marketSetting->strDlvCstInstBasiCd == '07') checked @endif> 판매자 조건부 배송비</td>
                                                 <td colspan="2">판매자 조건부 배송비 설정된 금액</td>
                                                 <td>가능</td>
                                                 <td rowspan="6">
                                                     <select name="selDlvCstPayTypCd">
-                                                        <option value="01">선불+착불</option>
-                                                        <option value="03">선불</option>
-                                                        <option value="02">착불</option>
+                                                        <option value="01" @if ($marketSetting->strDlvCstPayTypCd == "01") selected @endif>선불+착불</option>
+                                                        <option value="03" @if ($marketSetting->strDlvCstPayTypCd == "02") selected @endif>선불</option>
+                                                        <option value="02" @if ($marketSetting->strDlvCstPayTypCd == "03") selected @endif>착불</option>
                                                     </select>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="08"> 출고지 조건부 배송비</td>
+                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="08"  @if ($marketSetting->strDlvCstInstBasiCd == '08') checked @endif> 출고지 조건부 배송비</td>
                                                 <td colspan="2">출고지 조건부 배송비 설정된 금액</td>
                                                 <td>가능</td>
                                             </tr>
                                             <tr>
-                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="03"> 상품 조건부 무료</td>
-                                                <td><input type="text" style="width:50px;" name="txtDlvCst1_03" class="cntNum" value="">원 </td>
-                                                <td>이 상품<input type="text" name="mpbsePrdFrDlvBasiAmt" value="" class="cntNum">원 이상 구매시 무료</td>
+                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="03"  @if ($marketSetting->strDlvCstInstBasiCd == '03') checked @endif> 상품 조건부 무료</td>
+                                                <td><input type="text" style="width:50px;" name="txtDlvCst1_03" class="cntNum" value="{{$marketSetting->nDlvCst1_03}}">원 </td>
+                                                <td>이 상품<input type="text" name="txtPrdFrDlvBasiAmt" value="{{$marketSetting->nPrdFrDlvBasiAmt}}" class="cntNum">원 이상 구매시 무료</td>
                                                 <td>불가</td>
                                             </tr>
                                             <tr>
-                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="04"> 수량별 차등</td>
+                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="04"  @if ($marketSetting->strDlvCstInstBasiCd == '04') checked @endif> 수량별 차등</td>
                                                 <td style="vertical-align:top;">
                                                     <dl>
-                                                        <dd><input type="text" name="mpbseDlvCst3[0]" value="" class="cntNum">원 </dd>
-                                                        <dd><input type="text" name="mpbseDlvCst3[1]" value="" class="cntNum">원 </dd>
-                                                        <dd><input type="text" name="mpbseDlvCst3[2]" value="" class="cntNum">원 </dd>
-                                                        <dd><input type="text" name="mpbseDlvCst3[3]" value="" class="cntNum">원 </dd>
-                                                        <dd><input type="text" name="mpbseDlvCst3[4]" value="" class="cntNum">원 </dd>
+                                                        <dd><input type="text" name="txtDlvCst3[0]" value="{{$marketSetting->nDlvCst3_0}}" class="cntNum">원 </dd>
+                                                        <dd><input type="text" name="txtDlvCst3[1]" value="{{$marketSetting->nDlvCst3_1}}" class="cntNum">원 </dd>
+                                                        <dd><input type="text" name="txtDlvCst3[2]" value="{{$marketSetting->nDlvCst3_2}}" class="cntNum">원 </dd>
+                                                        <dd><input type="text" name="txtDlvCst3[3]" value="{{$marketSetting->nDlvCst3_3}}" class="cntNum">원 </dd>
+                                                        <dd><input type="text" name="txtDlvCst3[4]" value="{{$marketSetting->nDlvCst3_4}}" class="cntNum">원 </dd>
                                                     </dl>
                                                 </td>
                                                 <td style="vertical-align:top;">
                                                     <dl>
-                                                        <dd><input type="hidden" name="mpbseDlvCnt1[0]" value="1" class="cntNum"><span class="cntNumTxt">1개</span> ~ <input type="text" name="mpbseDlvCnt2[0]" value="" class="cntNum">개</dd>
-                                                        <dd><input type="text" name="mpbseDlvCnt1[1]" value="" class="cntNum">개 ~ <input type="text" name="mpbseDlvCnt2[1]" value="" class="cntNum">개</dd>
-                                                        <dd><input type="text" name="mpbseDlvCnt1[2]" value="" class="cntNum">개 ~ <input type="text" name="mpbseDlvCnt2[2]" value="" class="cntNum">개</dd>
-                                                        <dd><input type="text" name="mpbseDlvCnt1[3]" value="" class="cntNum">개 ~ <input type="text" name="mpbseDlvCnt2[3]" value="" class="cntNum">개</dd>
-                                                        <dd><input type="text" name="mpbseDlvCnt1[4]" value="" class="cntNum">개 ~ <input type="text" name="mpbseDlvCnt2[4]" value="" class="cntNum">개</dd>
+                                                        <dd><input type="hidden" name="txtDlvCnt1[0]" value="1" class="cntNum"><span class="cntNumTxt">1개</span> ~ <input type="text" name="txtDlvCnt2[0]" value="{{$marketSetting->nDlvCnt2_0}}" class="cntNum">개</dd>
+                                                        <dd><input type="text" name="txtDlvCnt1[1]" value="{{$marketSetting->nDlvCnt1_1}}" class="cntNum">개 ~ <input type="text" name="txtDlvCnt2[1]" value="{{$marketSetting->nDlvCnt2_1}}" class="cntNum">개</dd>
+                                                        <dd><input type="text" name="txtDlvCnt1[2]" value="{{$marketSetting->nDlvCnt1_2}}" class="cntNum">개 ~ <input type="text" name="txtDlvCnt2[2]" value="{{$marketSetting->nDlvCnt2_2}}" class="cntNum">개</dd>
+                                                        <dd><input type="text" name="txtDlvCnt1[3]" value="{{$marketSetting->nDlvCnt1_3}}" class="cntNum">개 ~ <input type="text" name="txtDlvCnt2[3]" value="{{$marketSetting->nDlvCnt2_3}}" class="cntNum">개</dd>
+                                                        <dd><input type="text" name="txtDlvCnt1[4]" value="{{$marketSetting->nDlvCnt1_4}}" class="cntNum">개 ~ <input type="text" name="txtDlvCnt2[4]" value="{{$marketSetting->nDlvCnt2_4}}" class="cntNum">개</dd>
                                                     </dl>
                                                     <span class="txtRed">~개 이상일때는 빈칸으로 두시면 자동입력 됩니다.</span>
                                                 </td>
                                                 <td>
                                                     <select name="selBndlDlvCnYn04">
-                                                        <option value="Y">가능</option>
-                                                        <option value="N">불가</option>
+                                                        <option value="Y" @if ($marketSetting->strBndlDlvCnYn04 == "Y") selected @endif>가능</option>
+                                                        <option value="N" @if ($marketSetting->strBndlDlvCnYn04 == "N") selected @endif>불가</option>
                                                     </select>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="05"> 1개당 배송비</td>
-                                                <td><input type="text" name="txtDlvCst4" value="" class="cntNum">원</td>
+                                                <td style="text-align:left;"><input type="radio" name="rdoDlvCstInstBasiCd" value="05"  @if ($marketSetting->strDlvCstInstBasiCd == '05') checked @endif> 1개당 배송비</td>
+                                                <td><input type="text" name="txtDlvCst4" value="{{$marketSetting->nDlvCst4}}" class="cntNum">원</td>
                                                 <td>수량 1개마다 배송비 추가</td>
                                                 <td>불가</td>
                                             </tr>
                                             <tr>
-                                                <td style="text-align:left;" rowspan="2"><input type="radio" name="rdoDlvCstInstBasiCd" value="02"> 고정 배송비</td>
-                                                <td><input type="text" name="txtDlvCst1_02" value="" class="cntNum">원</td>
+                                                <td style="text-align:left;" rowspan="2"><input type="radio" name="rdoDlvCstInstBasiCd" value="02"  @if ($marketSetting->strDlvCstInstBasiCd == '02') checked @endif> 고정 배송비</td>
+                                                <td><input type="text" name="txtDlvCst1_02" value="{{$marketSetting->nDlvCst1_02}}" class="cntNum">원</td>
                                                 <td style="text-align:left;">수량/주문금액과 상관없이 고정 배송비</td>
                                                 <td>
                                                     <select name="selBndlDlvCnYn02">
-                                                        <option value="Y">가능</option>
-                                                        <option value="N">불가</option>
+                                                        <option value="Y" @if ($marketSetting->strBndlDlvCnYn02 == "Y") selected @endif>가능</option>
+                                                        <option value="N" @if ($marketSetting->strBndlDlvCnYn02 == "N") selected @endif>불가</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -663,20 +663,20 @@
                                                     배송비 추가 안내
                                                     <select name="selDlvCstInfoCd">
                                                         <option value="">해당없음</option>
-                                                        <option value="01">(상품상세참고)</option>
-                                                        <option value="02">(상품별 차등 적용)</option>
-                                                        <option value="03">(지역별 차등 적용)</option>
-                                                        <option value="04">(상품/지역별 차등)</option>
-                                                        <option value="06">(서울/경기 무료, 이외 추가비용)</option>
+                                                        <option value="01" @if ($marketSetting->strDlvCstInfoCd == "01") selected @endif>(상품상세참고)</option>
+                                                        <option value="02" @if ($marketSetting->strDlvCstInfoCd == "02") selected @endif>(상품별 차등 적용)</option>
+                                                        <option value="03" @if ($marketSetting->strDlvCstInfoCd == "03") selected @endif>(지역별 차등 적용)</option>
+                                                        <option value="04" @if ($marketSetting->strDlvCstInfoCd == "04") selected @endif>(상품/지역별 차등)</option>
+                                                        <option value="06" @if ($marketSetting->strDlvCstInfoCd == "06") selected @endif>(서울/경기 무료, 이외 추가비용)</option>
                                                     </select>
                                                     (선결제 불가만 설정 가능)
                                                 </td>
                                             </tr>
                                             <tr class="etcLine">
-                                                <td colspan="2"><input type="checkbox" name="chkUseIslandJejuDlvCst" value="Y" onclick="$(this).val(this.checked ? 'Y' : 'N')">제주/도서산간 추가배송비 설정</td>
+                                                <td colspan="2"><input type="checkbox" name="chkUseIslandJejuDlvCst" value="Y" @if($marketSetting->strUseIslandJejuDlvCst == "Y") checked @endif>제주/도서산간 추가배송비 설정</td>
                                                 <td colspan="5" style="text-align:left;">
-                                                    제주 <input type="text" name="txtJejuDlvCst" value="" class="cntNum">원 &nbsp; / &nbsp;
-                                                    도서산간 <input type="text" name="txtIslandDlvCst" value="" class="cntNum">원
+                                                    제주 <input type="text" name="txtJejuDlvCst" value="{{$marketSetting->nJejuDlvCst}}" class="cntNum">원 &nbsp; / &nbsp;
+                                                    도서산간 <input type="text" name="txtIslandDlvCst" value="{{$marketSetting->nIslandDlvCst}}" class="cntNum">원
                                                 </td>
                                             </tr>
                                         </tbody></table>
@@ -689,17 +689,17 @@
                                             <span class="pt-1" style="font-size:12px;">반품 배송비 편도</span>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" class="form-control form-control-sm text-right" id="txtRtngdDlvCst" name="txtRtngdDlvCst" value="{{ $marketSetting->strRtngdDlvCst }}" placeholder="" >
+                                            <input type="text" class="form-control form-control-sm text-right" id="txtRtngdDlvCst" name="txtRtngdDlvCst" value="{{ $marketSetting->nRtngdDlvCst }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block; font-size:12px;">
                                             원 &nbsp;&nbsp;&nbsp;&nbsp;[초기배송비 무료시 부가방법
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoRtngdDlvCd01" name="rdoRtngdDlvCd" @if ($marketSetting->strRtngdDlvCd == 0) checked @endif value="01">
+                                            <input class="custom-control-input" type="radio" id="rdoRtngdDlvCd01" name="rdoRtngdDlvCd" @if ($marketSetting->strRtngdDlvCd == '01') checked @endif value="01">
                                             <label for="rdoRtngdDlvCd01" class="custom-control-label pt-1" style="font-size:12px;">왕복(편도x2) </label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline mr-0">
-                                            <input class="custom-control-input" type="radio" id="rdoRtngdDlvCd02" name="rdoRtngdDlvCd" @if ($marketSetting->strRtngdDlvCd == 0) checked @endif value="02">
+                                            <input class="custom-control-input" type="radio" id="rdoRtngdDlvCd02" name="rdoRtngdDlvCd" @if ($marketSetting->strRtngdDlvCd == '02') checked @endif value="02">
                                             <label for="rdoSendClfCdDmy3" class="custom-control-label pt-1" style="font-size:12px;">편도</label>
                                         </div>
                                         <div style="display:inline-block; font-size:12px;">
@@ -710,7 +710,7 @@
                                             <span class="pt-1" style="font-size:12px;">교환 배송비 왕복</span>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" class="form-control form-control-sm text-right" id="txtExchDlvCst" name="txtExchDlvCst" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="" >
+                                            <input type="text" class="form-control form-control-sm text-right" id="txtExchDlvCst" name="txtExchDlvCst" value="{{ $marketSetting->nExchDlvCst }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block; font-size:12px;">
                                             원
@@ -770,15 +770,15 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">상품리뷰/구매후기</label>
                                     <div class="col-sm-9 col-md-10">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoReviewDispYn_00" name="rdoReviewDispYn" @if( $marketSetting->strForAbrdBuyClf == '00' ) checked @endif value="00" >
+                                            <input class="custom-control-input" type="radio" id="rdoReviewDispYn_00" name="rdoReviewDispYn" @if( $marketSetting->strReviewDispYn == '00' ) checked @endif value="00" >
                                             <label for="rdoReviewDispYn_00" class="custom-control-label pt-1" style="font-size:12px;">노출함</label>
                                         </div>
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" name="chkReviewOptDispYn" id="chkReviewOptDispYn" onclick="$(this).val(this.checked ? 1 : 0)">
-                                            <label for="customCheckbox3" style="font-size:12px;" class="custom-control-label pt-1">옵션비노출</label>
+                                            <input class="custom-control-input" type="checkbox" name="chkReviewOptDispYn" id="chkReviewOptDispYn" @if($marketSetting->strReviewOptDispYn == "Y") checked @endif>
+                                            <label for="chkReviewOptDispYn" style="font-size:12px;" class="custom-control-label pt-1">옵션비노출</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoReviewDispYn_01" name="rdoReviewDispYn" @if( $marketSetting->strForAbrdBuyClf == '01' ) checked @endif value="01">
+                                            <input class="custom-control-input" type="radio" id="rdoReviewDispYn_01" name="rdoReviewDispYn" @if( $marketSetting->strReviewDispYn == '01' ) checked @endif value="01">
                                             <label for="rdoReviewDispYn_01" class="custom-control-label pt-1" style="font-size:12px;">노출안함</label>
                                         </div>
                                     </div>
@@ -787,20 +787,21 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">기본즉시할인</label>
                                     <div class="col-sm-9 col-md-10 bg-light">
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" name="chkCuponcheck" id="chkCuponcheck" onclick="$(this).val(this.checked ? 1 : 0)">
-                                            <label for="customCheckbox3" class="custom-control-label">설정함</label>
+                                            <input class="custom-control-input" type="checkbox" name="chkCuponcheck" id="chkCuponcheck" @if( $marketSetting->strCuponcheck == 'Y' ) checked @endif>
+                                            <label for="chkCuponcheck" class="custom-control-label">설정함</label>
                                         </div>
                                         <br>
                                         <div style="display:inline-block">
                                             <span class="pt-1" style="font-size:12px;">판매가에서</span>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtDscAmtPercnt" name="txtDscAmtPercnt" value="{{ $marketSetting->strDscAmtPercnt }}" placeholder="" >
+                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtDscAmtPercnt" name="txtDscAmtPercnt" value="{{ $marketSetting->nDscAmtPercnt }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block">
                                             <select class="mb-1 custom-select form-control-border custom-select-sm" name="selCupnDscMthdCd" id="selCupnDscMthdCd">
-                                                <option value="02">%</option>
-                                                <option value="01">원</option>
+                                                
+                                                <option value="01"  @if ($marketSetting->strCupnDscMthdCd == '01') selected @endif>원</option>
+                                                <option value="02"  @if ($marketSetting->strCupnDscMthdCd == '02') selected @endif>%</option>
                                                 
                                             </select>
                                         </div>
@@ -809,22 +810,22 @@
                                         </div>
                                         <br>
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" name="chkCupnUseLmtDyYn" id="chkCupnUseLmtDyYn" onclick="$(this).val(this.checked ? 'Y' : 'N')">
+                                            <input class="custom-control-input" type="checkbox" name="chkCupnUseLmtDyYn" id="chkCupnUseLmtDyYn" @if( $marketSetting->strCupnUseLmtDyYn == 'Y' ) checked @endif>
                                             <label for="chkCupnUseLmtDyYn" class="custom-control-label pt-1" style="font-size:12px;">쿠폰 지급기간 설정</label>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:100px;" class="form-control form-control-sm text-right" id="txtCupnIssStartDy" name="txtCupnIssStartDy" value="{{ $marketSetting->strCupnIssStartDy }}" placeholder="" >
+                                            <input type="text" style="width:100px;" class="form-control form-control-sm text-right" id="txtCupnIssStartDy" name="txtCupnIssStartDy" value="{{ $marketSetting->dtCupnIssStartDy }}" placeholder="" >
                                         </div>
                                         ~
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:100px;" class="form-control form-control-sm text-right" id="txtCupnIssEndDy" name="txtCupnIssEndDy" value="{{ $marketSetting->strCupnIssEndDy }}" placeholder="" >
+                                            <input type="text" style="width:100px;" class="form-control form-control-sm text-right" id="txtCupnIssEndDy" name="txtCupnIssEndDy" value="{{ $marketSetting->dtCupnIssEndDy }}" placeholder="" >
                                         </div>
                                         <br>
                                         <div style="display:inline-block">
                                             <span class="pt-1" style="font-size:12px;">적용금액이 </span>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtCupnMinPrice" name="txtCupnMinPrice" value="{{ $marketSetting->strCupnMinPrice }}" placeholder="" >
+                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtCupnMinPrice" name="txtCupnMinPrice" value="{{ $marketSetting->nCupnMinPrice }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block">
                                             <span class="pt-1" style="font-size:12px;">원 보다 작을경우 이 금액으로 전송 </span>
@@ -836,20 +837,20 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">SK pay point 지급</label>
                                     <div class="col-sm-9 col-md-10 bg-light mt-1">
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" name="chkPay11YN" id="chkPay11YN" onclick="$(this).val(this.checked ? 'Y' : 'N')">
-                                            <label for="customCheckbox3" class="custom-control-label pt-1" style="font-size:12px;">설정함</label>
+                                            <input class="custom-control-input" type="checkbox" name="chkPay11YN" id="chkPay11YN" @if( $marketSetting->strPay11YN == 'Y' ) checked @endif >
+                                            <label for="chkPay11YN" class="custom-control-label pt-1" style="font-size:12px;">설정함</label>
                                         </div>
                                         <br>
                                         <div style="display:inline-block">
                                             <span class="pt-1" style="font-size:12px;">판매가에서</span>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtPay11Value" name="txtPay11Value" value="{{ $marketSetting->chkPay11Value }}" placeholder="" >
+                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtPay11Value" name="txtPay11Value" value="{{ $marketSetting->nPay11Value }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block">
                                             <select class="mb-1 custom-select form-control-border custom-select-sm" name="selPay11WyCd" id="selPay11WyCd">
-                                                <option value="02">%</option>
-                                                <option value="01">원</option>
+                                                <option value="01" @if ($marketSetting->strPay11WyCd == '01') selected @endif>원</option>
+                                                <option value="02" @if ($marketSetting->strPay11WyCd == '02') selected @endif>%</option>
                                             </select>
                                         </div>
                                         <div style="display:inline-block">
@@ -861,7 +862,7 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">무이자 할부 제공</label>
                                     <div class="col-sm-9 col-md-10">
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" name="chkIntFreeYN" id="chkIntFreeYN" onclick="$(this).val(this.checked ? 'Y' : 'N')">
+                                            <input class="custom-control-input" type="checkbox" name="chkIntFreeYN" id="chkIntFreeYN"  @if( $marketSetting->strIntFreeYN == 'Y' ) checked @endif>
                                             <label for="chkIntFreeYN" style="font-size:12px;" class="custom-control-label pt-1">설정함</label>
                                         </div>
                                     </div>
@@ -870,42 +871,42 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">복수구매할인</label>
                                     <div class="col-sm-9 col-md-10 bg-light">
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" name="chkPluYN" id="chkPluYN" onclick="$(this).val(this.checked ? 'Y' : 'N')">
+                                            <input class="custom-control-input" type="checkbox" name="chkPluYN" id="chkPluYN" @if( $marketSetting->strPluYN == 'Y' ) checked @endif>
                                             <label for="chkPluYN" style="font-size:12px;" class="custom-control-label pt-1">설정함</label>
                                         </div>
                                         <br>
                                         <div style="display:inline-block">
                                             <select class="mb-1 custom-select form-control-border custom-select-sm" name="selPluDscBasis" id="selPluDscBasis">
-                                                <option value="01">수량기준</option>
-                                                <option value="02">금액기준</option>
+                                                <option value="01" @if ($marketSetting->strPluDscBasis == '01') selected @endif>수량기준</option>
+                                                <option value="02" @if ($marketSetting->strPluDscBasis == '02') selected @endif>금액기준</option>
                                             </select>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtPluDscBasis" name="txtPluDscBasis" value="{{ $marketSetting->strtxtPluDscBasis }}" placeholder="" >
+                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtPluDscBasis" name="txtPluDscBasis" value="{{ $marketSetting->strPluDscBasis }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block">
                                             <span class="pt-1" style="font-size:12px;">개 이상 구매시 판매가(+옵션가)에서 개당</span>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtPluDscAmtPercnt" name="txtPluDscAmtPercnt" value="{{ $marketSetting->strtxtPluDscAmtPercnt }}" placeholder="" >
+                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtPluDscAmtPercnt" name="txtPluDscAmtPercnt" value="{{ $marketSetting->nPluDscAmtPercnt }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block">
                                             <select class="mb-1 custom-select form-control-border custom-select-sm" name="selPluDscMthdCd" id="selPluDscMthdCd">
-                                                <option value="02">원</option>
-                                                <option value="01">%</option>
+                                                <option value="01" @if ($marketSetting->strPluDscMthdCd == '01') selected @endif>원</option>
+                                                <option value="02" @if ($marketSetting->strPluDscMthdCd == '02') selected @endif>%</option>
                                             </select>
                                         </div>
                                         <br>
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" name="chkPluUseLmtDyYn" id="chkPluUseLmtDyYn" onclick="$(this).val(this.checked ? 'Y' : 'N')">
+                                            <input class="custom-control-input" type="checkbox" name="chkPluUseLmtDyYn" id="chkPluUseLmtDyYn" @if( $marketSetting->strPluUseLmtDyYn == 'Y' ) checked @endif >
                                             <label for="chkPluUseLmtDyYn" class="custom-control-label pt-1" style="font-size:12px;">할인 적용기간 설정</label>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:100px;" class="form-control form-control-sm text-right" id="txtPluIssStartDy" name="txtPluIssStartDy" value="{{ $marketSetting->strPluIssStartDy }}" placeholder="" >
+                                            <input type="text" style="width:100px;" class="form-control form-control-sm text-right" id="txtPluIssStartDy" name="txtPluIssStartDy" value="{{ $marketSetting->dtPluIssStartDy }}" placeholder="" >
                                         </div>
                                         ~
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:100px;" class="form-control form-control-sm text-right" id="txtPluIssEndDy" name="txtPluIssEndDy" value="{{ $marketSetting->strPluIssEndDy }}" placeholder="" >
+                                            <input type="text" style="width:100px;" class="form-control form-control-sm text-right" id="txtPluIssEndDy" name="txtPluIssEndDy" value="{{ $marketSetting->dtPluIssEndDy }}" placeholder="" >
                                         </div>
                                     </div>
                                 </div>
@@ -913,20 +914,20 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">희망후원 설정</label>
                                     <div class="col-sm-9 col-md-10 bg-light mt-1">
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" name="chkHopeShpYn" id="chkHopeShpYn" onclick="$(this).val(this.checked ? 'Y' : 'N')">
-                                            <label for="customCheckbox3" style="font-size:12px;" class="custom-control-label pt-1">설정함</label>
+                                            <input class="custom-control-input" type="checkbox" name="chkHopeShpYn" id="chkHopeShpYn" @if( $marketSetting->strHopeShpYn == 'Y' ) checked @endif >
+                                            <label for="chkHopeShpYn" style="font-size:12px;" class="custom-control-label pt-1">설정함</label>
                                         </div>
                                         <br>
                                         <div style="display:inline-block">
                                             <span class="pt-1" style="font-size:12px;">판매가에서</span>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtHopeShpPnt" name="txtHopeShpPnt" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="" >
+                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtHopeShpPnt" name="txtHopeShpPnt" value="{{ $marketSetting->nHopeShpPnt }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block">
                                             <select class="mb-1 custom-select form-control-border custom-select-sm" name="selHopeShpWyCd" id="selHopeShpWyCd">
-                                                <option value="01">원</option>
-                                                <option value="02">%</option>
+                                                <option value="01" @if ($marketSetting->strHopeShpWyCd == '01') selected @endif>원</option>
+                                                <option value="02" @if ($marketSetting->strHopeShpWyCd == '02') selected @endif>%</option>
                                             </select>
                                         </div>
                                         <div style="display:inline-block">
@@ -937,7 +938,7 @@
                                             <span class="pt-1" style="font-size:12px;">적용금액이</span>
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtHopeShpMinPrice" name="txtHopeShpMinPrice" value="{{ $marketSetting->strHopeShpMinPrice }}" placeholder="" >
+                                            <input type="text" style="width:50px;" class="form-control form-control-sm text-right" id="txtHopeShpMinPrice" name="txtHopeShpMinPrice" value="{{ $marketSetting->nHopeShpMinPrice }}" placeholder="" >
                                         </div>
                                         <div style="display:inline-block">
                                             <span class="pt-1" style="font-size:12px;">원 보다 작을경우 이 금액으로 전송</span>
@@ -1042,9 +1043,6 @@
                 if(!this.checked){
                     $('#select_all').prop('checked', false);
                 }
-                // Get all rows with search applied
-                // Check/uncheck checkboxes for all rows in the table
-                //$('input[type="checkbox"]').prop('checked', this.checked);
             });
             $('#selAfterServiceGuideType').change(function(){ 
                 var content = $('#selAfterServiceGuideType option:selected' ).text();
