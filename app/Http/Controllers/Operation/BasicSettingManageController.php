@@ -459,9 +459,9 @@ class BasicSettingManageController extends Controller
     {
         //
         $market = Market::find($marketId);
-        if($market->strMarketCode == 'coupang'){
+        //if($market->strMarketCode == 'coupang'){
             MarketSettingCoupang::find($setId)->delete();
             return response()->json(["status" => "success", "data" => "Successfully removed!"]);
-        }
+        //}
     }
 }
