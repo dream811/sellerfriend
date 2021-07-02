@@ -135,10 +135,14 @@
             $('body').on('click', '.btnDeleteMarketAccount', function () {
                 var market_id = $(this).attr('market-id');
                 var set_id = $(this).attr('set-id');
-                $.get('operationBasicSettingManage/' + market_id +'/settingDelete/' + set_id, function ({status, data}) {
-                    //$(".marketAccountsTable tbody tr").removeClass("selectedAccount");
-                    $(".marketSettingTable tbody").find("#" + set_id).remove();
-                })
+                if(confirm("삭제한 자료는 되살릴수 없습니다, 정말 삭제하시겠습니까?")){
+                    $.get('operationBasicSettingManage/' + market_id +'/settingDelete/' + set_id, function ({status, data}) {
+                        //$(".marketAccountsTable tbody tr").removeClass("selectedAccount");
+                        $(".marketSettingTable tbody").find("#" + set_id).remove();
+                        //location.reload();
+                    });
+                }
+                
             });
 
             $('body').on('click', '.btnEdit', function () {

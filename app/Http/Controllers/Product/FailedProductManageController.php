@@ -58,7 +58,7 @@ class FailedProductManageController extends Controller
         if ($request->ajax()) {
             $products = FailedProduct::where('bIsDel', 0)
                 ->where('nUserId', Auth::id())
-                ->orderBy('nIdx');
+                ->orderBy('nIdx', 'DESC');
 
             return DataTables::eloquent($products)
                 ->addIndexColumn()
@@ -149,7 +149,7 @@ class FailedProductManageController extends Controller
                         '.$strCode.'
                         </li><br>';
                     $marketInfo = '<li class="list-inline-item">
-                        '.$row->productMarketSetting->marketAccount->strAccountId.'
+                        '.$row->strMarketAccId.'
                         </li><br>';
                     $marketInfo = '<li class="list-inline-item">
                         '.$row->strSolutionId.'
@@ -179,6 +179,15 @@ class FailedProductManageController extends Controller
                                         </span>
                                     </a>
                                 </li>';
+                    $arrCode = explode(":", $row->strId);
+                    $strCode = "";
+                    //c이면 쿠팡
+                    if($arrCode[0]=="C"){
+                        $strCode = "쿠팡";
+                    }else if($arrCode[0]=="11"){
+                        $strCode = "11번가";
+                    }
+                    $mainImage .= '<br><li class="list-inline-item text-center">'.$strCode.'</li>';
                     return $mainImage;
                 })
                 ->rawColumns(['check', 'productInfo', 'mainImage', 'marketInfo', 'priceInfo', 'marginInfo', 'codeInfo'])

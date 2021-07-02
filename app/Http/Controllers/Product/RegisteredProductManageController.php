@@ -157,7 +157,7 @@ class RegisteredProductManageController extends Controller
                                 '.$row->created_at.'
                             </li><br>';
                         $element .= '<li class="list-inline-item">
-                            '.date("Y-m-d", strtotime($row->dtSellStartDate))  .' ~ '.date("Y-m-d", strtotime($row->dtSellEndDate)).'
+                            '.date("Y-m-d", strtotime($row->dtSellStartDate)).' ~ '.date("Y-m-d", strtotime($row->dtSellEndDate)).'
                             </li>';
                         $element .= '</ul>';
                         return $element;
@@ -168,13 +168,15 @@ class RegisteredProductManageController extends Controller
                         //c이면 쿠팡
                         if($arrCode[0]=="C"){
                             $strCode = "쿠팡";
+                        }else if($arrCode[0]=="11"){
+                            $strCode = "11번가";
                         }
                         $marketInfo = '<ul class="list-inline" style="width:100px;">
                             <li class="list-inline-item">
                             '.$strCode.'
                             </li><br>';
                         $marketInfo .= '<li class="list-inline-item">
-                            '.$row->productMarketSetting->marketAccount->strAccountId.'
+                            '.$row->strMarketAccId.'
                             </li></ul>';
                         return $marketInfo;
                     })

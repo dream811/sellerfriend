@@ -13,6 +13,8 @@ use App\Models\MarketSettingCoupang;
 use App\Models\DeliveryType;
 use App\Models\DeliveryCompany;
 use App\Models\DocumentImage;
+use App\Models\MarketSetting;
+use App\Models\MarketSetting11thhouse;
 use App\Mylibs\CoupangConnector;
 use App\Mylibs\EleventhConnector;
 
@@ -39,7 +41,7 @@ class BasicSettingManageController extends Controller
         $tr = new GoogleTranslate(); // Translates to 'en' from auto-detected language by default
 
         $title = "기초설정관리";
-        $settingCoupangs = MarketSettingCoupang::where('nUserId', Auth::id())
+        $settingCoupangs = MarketSetting::where('nUserId', Auth::id())
                 ->where('bIsDel', 0)
                 ->get();
         $markets = Market::where('bIsDel', 0)
@@ -66,15 +68,20 @@ class BasicSettingManageController extends Controller
             ->where('nIdx', $market_id)
             ->where('bIsUsed', 1)
             ->first();
+        $marketSetting = MarketSetting::where('bIsDel', 0)
+            ->where('nUserId', Auth::id())
+            ->where('nIdx', $set_id)
+            ->where('bIsUsed', 1)
+            ->firstOrNew();
         if($market->strMarketCode == 'coupang'){
-            $marketSetting = MarketSettingCoupang::where('bIsDel', 0)
-                ->where('nUserId', Auth::id())
-                ->where('nIdx', $set_id)
-                ->where('bIsUsed', 1)
-                ->firstOrNew();
+            
             if($set_id == 0){
+                $marketSetting->detail = MarketSettingCoupang::where('nSettingIdx', $set_id)->firstOrNew();
+                $marketSetting->nSupportOption = 1;
+                $marketSetting->nVersion = 2;
+                $marketSetting->bIsUsed = 1;
                 $newEndingDate = date("Y-m-d", strtotime(date("Y-m-d") . " + 1 year"));
-                $marketSetting->dtSalesPeriodEndDateTime = $newEndingDate;
+                $marketSetting->detail->dtSalesPeriodEndDateTime = $newEndingDate;
             }
             
             $deliveryTypes = DeliveryType::where('bIsDel', 0)
@@ -90,33 +97,22 @@ class BasicSettingManageController extends Controller
                 ->get();
             return view('operation.BasicSettingCoupangManageDetail', compact('marketAccounts', 'market', 'marketSetting', 'deliveryTypes', 'deliveryCompanies', 'market_id', 'set_id',  'asManuals', 'documentImages'));
         }else if($market->strMarketCode == '11thhouse'){
-            $marketSetting = MarketSettingCoupang::where('bIsDel', 0)
-                ->where('nUserId', Auth::id())
-                ->where('nIdx', $set_id)
-                ->where('bIsUsed', 1)
-                ->firstOrNew();
+            
             if($set_id == 0){
+
                 $marketSetting->nSupportOption = 1;
                 $marketSetting->nVersion = 2;
+                $marketSetting->bIsUsed = 1;
+                $marketSetting->detail = MarketSetting11thhouse::where('nSettingIdx', $set_id)->firstOrNew();
                 $newEndingDate = date("Y-m-d", strtotime(date("Y-m-d") . " + 1 year"));
-                $marketSetting->dtSalesPeriodEndDateTime = $newEndingDate;
-                $marketSetting->strSelMinLimitTypCd = "00";
-                $marketSetting->strSelLimitTypCd = "00";
-                $marketSetting->strOverThenPrdNmLen = "W100";
-                $marketSetting->strCrtfGrpTypCd01 = "03";
-                $marketSetting->strCrtfGrpTypCd02 = "03";
-                $marketSetting->strCrtfGrpTypCd03 = "03";
-                $marketSetting->strCrtfGrpTypCd04 = "05";
+                $marketSetting->detail->strSelMinLimitTypCd = "00";
+                $marketSetting->detail->strSelLimitTypCd = "00";
+                $marketSetting->detail->strOverThenPrdNmLen = "W100";
+                $marketSetting->detail->strCrtfGrpTypCd01 = "03";
+                $marketSetting->detail->strCrtfGrpTypCd02 = "03";
+                $marketSetting->detail->strCrtfGrpTypCd03 = "03";
+                $marketSetting->detail->strCrtfGrpTypCd04 = "05";
             }
-            
-            $deliveryTypes = DeliveryType::where('bIsDel', 0)
-                ->where('nMarketIdx', $market->nIdx)
-                ->get();
-            $deliveryCompanies = DeliveryCompany::where('bIsDel', 0)
-                ->where('nMarketIdx', $market->nIdx)
-                ->get();
-            $asManuals = AsManual::where('bIsDel', 0)
-                ->get(); 
             $documentImages = DocumentImage::where('bIsDel', 0)
                 ->where('nUserId', Auth::id())
                 ->get();
@@ -125,7 +121,7 @@ class BasicSettingManageController extends Controller
             //$result = $eleConnector->getCategoryListInfo();
             // $result = $eleConnector->getCategoryInfo();
             // $result = $eleConnector->getOutboundListInfo();
-            return view('operation.BasicSetting11thhouseManageDetail', compact('marketAccounts', 'market', 'marketSetting', 'deliveryTypes', 'deliveryCompanies', 'market_id', 'set_id',  'asManuals', 'documentImages'));
+            return view('operation.BasicSetting11thhouseManageDetail', compact('marketAccounts', 'market', 'marketSetting', 'market_id', 'set_id', 'documentImages'));
         }else if($market->strMarketCode == 'tmon'){
             $marketSetting = MarketSettingCoupang::where('bIsDel', 0)
                 ->where('nUserId', Auth::id())
@@ -196,17 +192,27 @@ class BasicSettingManageController extends Controller
         //     ->where('nIdx', $market_id)
         //     ->where('bIsUsed', 1)
         //     ->first();
-        
+        $setting = MarketSetting::updateOrCreate(
+            ['nIdx' => $set_id],
+            [
+                'nMarketIdx' => $request->post('market_id'),
+                'nUserId' => Auth::id(),
+                'nMarketAccIdx' => $request->post('selAccountId'),
+                'strTitle'=> $request->post('txtTitle'),
+                'nSupportOption'=> $request->post('rdoSupportOption'),
+                'nVersion'=> $request->post('rdoVersion'),
+                'nImageProcessType'=> $request->post('rdoImageProcessType'),
+                'nTopImageIdx'=> $request->post('selTopImage'),
+                'nDownImageIdx'=> $request->post('selDownImage'),
+                'bIsUsed'=> $request->post('rdoIsUsed'),
+                'bIsDel'=> 0,
+            ]
+        );
         if($market_id == 3){
-            $settingCoupang = MarketSettingCoupang::updateOrCreate(
-                ['nIdx' => $set_id],
+            $settingDetail = MarketSettingCoupang::updateOrCreate(
+                ['nSettingIdx' => $set_id],
                 [
-                    'nMarketIdx' => $request->post('market_id'),
-                    'nUserId' => Auth::id(),
-                    'nMarketAccIdx' => $request->post('selAccountId'),
-                    'strTitle'=> $request->post('txtTitle'),
-                    'nSupportOption'=> $request->post('rdoSupportOption'),
-                    'nVersion'=> $request->post('rdoVersion'),
+                    'nSettingIdx'=> $setting->nIdx,
                     'nSalesAgentRate'=> $request->post('txtSalesAgentRate'),
                     'dtSalesPeriodStartDateTime'=> $request->post('txtSalesPeriodStartDateTime'),
                     'dtSalesPeriodEndDateTime'=> $request->post('txtSalesPeriodEndDateTime'),
@@ -216,7 +222,6 @@ class BasicSettingManageController extends Controller
                     'bParallelImport'=> $request->post('rdoParallelImport'),
                     'bOverSeaPurchaseAgent'=> $request->post('rdoOverSeaPurchaseAgent'),///????
                     'bOnlyAdult'=> $request->post('rdoOnlyAdult'),
-                    'nImageProcessType'=> $request->post('rdoImageProcessType'),
                     'nDeliveryType'=> $request->post('selDeliveryType'),
                     'nPersonPassingCodeType'=> $request->post('rdoPersonPassingCodeType'),
                     'strUnionDeliveryType'=> $request->post('selUnionDeliveryType'),
@@ -248,32 +253,18 @@ class BasicSettingManageController extends Controller
                     'nRequireDocument3'=> $request->post('selRequireDocument3'),
                     'nRequireDocument4'=> $request->post('selRequireDocument4'),
                     'nRequireDocument5'=> $request->post('selRequireDocument5'),
-                    'nRequireDocument6'=> $request->post('selRequireDocument6'),
-                    'nTopImageIdx'=> $request->post('selTopImage'),
-                    'nDownImageIdx'=> $request->post('selDownImage'),
-                    'bIsUsed'=> $request->post('rdoIsUsed'),
-                    'bIsDel'=> 0,
+                    'nRequireDocument6'=> $request->post('selRequireDocument6')
                 ]
             );
-            $set_id = $settingCoupang->nIdx;
+            $set_id = $setting->nIdx;
             return redirect("/operationBasicSettingManage/{$market_id}/setting/{$set_id}");
             //return view('operation.BasicSettingManageDetail', compact('marketAccounts', 'market', 'marketSetting', 'deliveryTypes', 'deliveryCompanies', 'market_id', 'set_id',  'asManuals', 'documentImages'));
         }else if ($market_id == 1){//11번가
-            print_r($request->input());
-            $settingCoupang = MarketSettingCoupang::updateOrCreate(
-                ['nIdx' => $set_id],
+            
+            $settingDetail = MarketSetting11thhouse::updateOrCreate(
+                ['nSettingIdx' => $set_id],
                 [
-                    'nMarketIdx' => $request->post('market_id'),
-                    'nUserId' => Auth::id(),
-                    'nMarketAccIdx' => $request->post('selAccountId'),
-                    'strTitle'=> $request->post('txtTitle'),
-                    'nSupportOption'=> $request->post('rdoSupportOption'),
-                    'nVersion'=> $request->post('rdoVersion'),
-                    'nImageProcessType' => $request->post('rdoImageProcessType'),
-                    'nTopImageIdx'=> $request->post('selTopImage'),
-                    'nDownImageIdx'=> $request->post('selDownImage'),
-                    'bIsUsed'=> $request->post('rdoIsUsed'),
-                    'bIsDel'=> 0,
+                    'nSettingIdx'=> $setting->nIdx,
                     'strSelMnbdNckNm' => $request->post('txtSelMnbdNckNm'),
                     'strSelMthdCd' => $request->post('rdoSelMthdCd'),
                     'strPrdTypCd' => $request->post('selPrdTypCd'),
@@ -365,7 +356,7 @@ class BasicSettingManageController extends Controller
                     'nHopeShpMinPrice' => $request->post('txtHopeShpMinPrice'),
                 ]
             );
-            $set_id = $settingCoupang->nIdx;
+            $set_id = $setting->nIdx;
             return redirect("/operationBasicSettingManage/{$market_id}/setting/{$set_id}");
         }
     }
@@ -387,9 +378,9 @@ class BasicSettingManageController extends Controller
             $resArr = (array)json_decode($result, true);
             $outbouds = $resArr['content'];
         }else{
-            $_11thhouse = new EleventhConnector($marketAccount->strAPIAccessKey, $marketAccount->marketAccount->strAccountId, $marketAccount->marketAccount->strAccountPwd);
-            //$outbouds = $_11thhouse->getOutboundListInfo();
-            $_11thhouse->addProduct();
+            $_11thhouse = new EleventhConnector($marketAccount->strAPIAccessKey, $marketAccount->strAccountId, $marketAccount->strAccountPwd);
+            $outbouds = $_11thhouse->getOutboundListInfo();
+            
             //$resArr = (array)json_decode($result, true);
             //$outbouds = $resArr['content'];
         }
@@ -414,7 +405,7 @@ class BasicSettingManageController extends Controller
             $resArr = (array)json_decode($result, true);
             $returnCenters = $resArr['data']['content'];
         }else if($market->strMarketCode == "11thhouse"){
-            $_11thhouse = new EleventhConnector($marketAccount->strAPIAccessKey, $marketAccount->marketAccount->strAccountId, $marketAccount->marketAccount->strAccountPwd);
+            $_11thhouse = new EleventhConnector($marketAccount->strAPIAccessKey, $marketAccount->strAccountId, $marketAccount->strAccountPwd);
             $returnCenters = $_11thhouse->getInboundListInfo();
         }
         return view('operation.ReturnShippingCenterList', compact('strMarketCode', 'returnCenters'));
@@ -432,7 +423,7 @@ class BasicSettingManageController extends Controller
         $sendCloseTpls = array();
         $strMarketCode = $market->strMarketCode;
         if($market->strMarketCode == "11thhouse"){
-            $_11thhouse = new EleventhConnector($marketAccount->strAPIAccessKey, $marketAccount->marketAccount->strAccountId, $marketAccount->marketAccount->strAccountPwd);
+            $_11thhouse = new EleventhConnector($marketAccount->strAPIAccessKey, $marketAccount->strAccountId, $marketAccount->strAccountPwd);
             $sendCloseTpls = $_11thhouse->getSendCloseTplListInfo();
         }
         return view('operation.SendCloseTplList', compact('strMarketCode', 'sendCloseTpls'));
@@ -460,7 +451,9 @@ class BasicSettingManageController extends Controller
         //
         $market = Market::find($marketId);
         //if($market->strMarketCode == 'coupang'){
-            MarketSettingCoupang::find($setId)->delete();
+            $marketSetting = MarketSetting::find($setId);
+            $marketSetting->detail->delete();
+            $marketSetting->delete();
             return response()->json(["status" => "success", "data" => "Successfully removed!"]);
         //}
     }

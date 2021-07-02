@@ -37,12 +37,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($settingCoupangs as $coupang)
-                                        <tr id="{{ $coupang->nIdx }}">
-                                        <td><input class="chkMarcketAccount" type="checkbox" name="chkAccount[]"  value="{{ $coupang->nIdx }}" ></td>{{-- onclick="$(this).val(this.checked ? 1 : 0)"  --}}
+                                    @foreach ($settings as $setting)
+                                        <tr id="{{ $setting->nIdx }}">
+                                        <td><input class="chkMarcketAccount" type="checkbox" name="chkAccount[]"  value="{{ $setting->nIdx }}" ></td>{{-- onclick="$(this).val(this.checked ? 1 : 0)"  --}}
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $coupang->market->strMarketName }}</td>
-                                        <td>{{ $coupang->marketAccount->strAccountId }}</td>
+                                        <td>{{ $setting->market->strMarketName }}</td>
+                                        <td>{{ $setting->marketAccount->strAccountId }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

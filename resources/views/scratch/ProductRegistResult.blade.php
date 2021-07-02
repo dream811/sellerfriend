@@ -1,48 +1,85 @@
-<html>
-  <head>
-    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap" rel="stylesheet">
-  </head>
-    <style>
-      body {
-        text-align: center;
-        padding: 40px 0;
-        background: #EBF0F5;
-      }
-      h1 {
-        color: #88B04B;
-        font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
-        font-weight: 900;
-        font-size: 30px;
-        margin-bottom: 10px;
-      }
-      p {
-        color: #404F5E;
-        font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
-        font-size:20px;
-        margin: 0;
-      }
-      i {
-        color: #9ABC66;
-        font-size: 100px;
-        line-height: 200px;
-        margin-left:-15px;
-      }
-      .card {
-        background: white;
-        padding: 60px;
-        border-radius: 4px;
-        box-shadow: 0 2px 3px #C8D0D8;
-        display: inline-block;
-        margin: 0 auto;
-      }
-    </style>
-    <body>
-        <div class="card">
-            <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
-                <i class="checkmark">✓</i>
+@extends('layouts.window')
+@section('content')
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0" style="font-size:16px; font-weight:700;">상품등록 결과</h1>
+            </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <div class="container">
+      <div class="card card-primary card-outline">
+        <div class="row m-2">
+          @foreach ( $uploadResults as $result)
+            <div class="col-md-4 col-sm-6 col-12">
+              <div class="info-box @if($result['allProduct'] == $result['successProduct']) bg-gradient-success @elseif( $result['successProduct'] > 0 ) bg-gradient-warning @else bg-gradient-danger @endif ">
+                <span class="info-box-icon"><i class=" @if($result['allProduct'] == $result['successProduct'])far fa-thumbs-up @elseif( $result['successProduct'] > 0 ) icon fas fa-exclamation-triangle @else far fa-thumbs-down @endif"></i></span>
+
+                <div class="info-box-content">
+                  <span class="info-box-number text-sm">마 켓 : {{$result['marketName']}}</span>
+                  <span class="info-box-text text-sm">아이디: {{$result['marketAccount']}}</span>
+
+                  <div class="progress">
+                    <div class="progress-bar" style="width: {{ number_format($result['successProduct']/$result['allProduct']*100) }}%"></div>
+                  </div>
+                  <span class="progress-description">
+                    {{$result['allProduct']}} 개중 {{$result['successProduct']}} 개 등록 성공 {{$result['failedProduct']}} 개 실패
+                  </span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
             </div>
-            <h1>상품등록결과</h1> 
-            <p style="font-size:16px; font-family:'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'">{{$productsCount}}상품중 {{$successCount}}개 등록성공/{{$failedCount}}개 등록실패</p>
+          @endforeach
         </div>
-    </body>
-</html>
+      </div>
+    </div>
+@endsection
+@section('script')    
+    <script>
+        $(document).ready(function () {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('#select_all').on('click', function(){
+                // Get all rows with search applied
+                // Check/uncheck checkboxes for all rows in the table
+                $('input[type="checkbox"]').prop('checked', this.checked);
+            });
+            $('.chkMarcketAccount').on('change', function(){
+                if(!this.checked){
+                    $('#select_all').prop('checked', false);
+                }
+                // Get all rows with search applied
+                // Check/uncheck checkboxes for all rows in the table
+                //$('input[type="checkbox"]').prop('checked', this.checked);
+            });
+            // $('#marketAccountTable tbody').on('change', 'input[type="checkbox"]', function(){
+            //     if(!this.checked){
+            //         var el = $('#select_all');
+            //         // If Select all" control is checked and has 'indeterminate' property
+            //         if(el && el.checked){
+            //             //el.checked = false;
+            //         }
+            //     }
+            // });
+            $('body').on('click', '.btnSubmitAccount', function () {
+                var account = [];
+                $.each($("input[name='chkAccount[]']:checked"), function(){
+                    account.push($(this).val());
+                });
+                if(account.length <= 0)
+                {
+                    alert("계정을 하나이상 선택해주세요!");
+                    return false;
+                }
+                $( "#manageMarketAccount" ).submit();
+            });
+        });	  
+    </script>
+@endsection
+

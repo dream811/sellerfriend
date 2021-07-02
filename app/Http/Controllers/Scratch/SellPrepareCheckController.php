@@ -29,6 +29,7 @@ use App\Models\FailedProductImage;
 use App\Models\FailedProductItem;
 use App\Models\Market;
 use App\Models\MarketAccount;
+use App\Models\MarketSetting;
 use App\Models\MarketSettingCoupang;
 use App\Models\SuccessProduct;
 use App\Models\SuccessProductDetail;
@@ -38,6 +39,7 @@ use App\MyLibs\CoupangConnector;
 use App\Mylibs\EleventhConnector;
 use DateTime;
 use Exception;
+use Illuminate\Support\Facades\Storage;
 use SimpleXMLElement;
 use Yajra\DataTables\DataTables;
 
@@ -476,21 +478,53 @@ class SellPrepareCheckController extends Controller
         }
         
         ProductImage::where('nProductIdx',$product->nIdx)->delete();
-        $countImage = count($request->post('txtImage'));
-        $arrDetailImage = $request->post('txtImage');
+        // $countImage = count($request->post('txtImage'));
+        // $arrDetailImage = $request->post('txtImage');
+        // for ($i=0; $i < $countImage; $i++) { 
+        //     $arrImgData = explode('::', $arrDetailImage[$i]);
+        //     $productImage = new ProductImage([
+        //         'nProductIdx' => $product->nIdx,
+        //         'nImageCode' => $arrImgData[0],
+        //         'strName' => '',
+        //         'strURL' => $arrImgData[1],
+        //         'nHeight' => 0,
+        //         'nWidth' => 0,
+        //         'strNote' => '',
+        //         'bIsDel' => 0
+        //     ]);
+        //     $productImage->save();
+        // }
+        $arrImage = $request->post('imgLink');
+        $countImage = count($request->post('imgLink'));
         for ($i=0; $i < $countImage; $i++) { 
-            $arrImgData = explode('::', $arrDetailImage[$i]);
-            $productImage = new ProductImage([
-                'nProductIdx' => $product->nIdx,
-                'nImageCode' => $arrImgData[0],
-                'strName' => '',
-                'strURL' => $arrImgData[1],
-                'nHeight' => 0,
-                'nWidth' => 0,
-                'strNote' => '',
-                'bIsDel' => 0
-            ]);
-            $productImage->save();
+            if($arrImage[$i] != ""){
+                $fileLink = "";
+                if(substr($arrImage[$i], 0, 10) == "data:image"){
+                    $base64Data = $arrImage[$i];
+
+                    $extension = explode('/', explode(':', substr($base64Data, 0, strpos($base64Data, ';')))[1])[1];   // .jpg .png .pdf
+                    $replace = substr($base64Data, 0, strpos($base64Data, ',')+1); 
+                    $image = str_replace($replace, '', $base64Data); 
+                    $image = str_replace(' ', '+', $image); 
+                    $date = new DateTime('now');
+                    $path = 'uploads/users/'.Auth::id().'/document_images/' . $date->format('YmdHisv') . '.' . $extension;
+                    Storage::disk('public')->put($path, base64_decode($image));
+                    $fileLink = asset('storage/'.$path);
+                }else{
+                    $fileLink = $arrImage[$i];
+                }
+                $productImage = new ProductImage([
+                    'nProductIdx' => $product->nIdx,
+                    'nImageCode' => $i,
+                    'strName' => '',
+                    'strURL' => $fileLink,
+                    'nHeight' => 0,
+                    'nWidth' => 0,
+                    'strNote' => '',
+                    'bIsDel' => 0
+                ]);
+                $productImage->save();
+            }
         }
 
         $data = '<script>alert("수정이 완료되었습니다.");window.opener.location.reload();window.close();</script>';
@@ -512,11 +546,11 @@ class SellPrepareCheckController extends Controller
         $products = $request->get('products');
         // $marketAccounts = MarketAccount::where('nUserId', Auth::id())
         //                                 ->get();
-        $settingCoupangs = MarketSettingCoupang::where('nUserId', Auth::id())
+        $settings = MarketSetting::where('nUserId', Auth::id())
                                         ->where('bIsDel', 0)
                                         ->get();
 
-        return view('scratch.MarketAccountList', compact('settingCoupangs', 'products'));
+        return view('scratch.MarketAccountList', compact('settings', 'products'));
     }
 
     //상품등록을 위한 마켓계정 선택(post)
@@ -525,7 +559,7 @@ class SellPrepareCheckController extends Controller
     {
         $chkAccount = $request->post('chkAccount');
         $strProduct = $request->post('products');
-        $settingCoupangs = MarketSettingCoupang::where('nUserId', Auth::id())
+        $settings = MarketSetting::where('nUserId', Auth::id())
                                         ->whereIn('nIdx', $chkAccount)
                                         ->get();
         
@@ -540,11 +574,17 @@ class SellPrepareCheckController extends Controller
             ->get();
 
         $productsCount = count($products);
-        $successCount = 0;
-        $failedCount = 0;
         
-        foreach ($settingCoupangs as $key1 => $setting) {
-            if($setting->nMarketIdx == 13){//쿠팡{}
+        $uploadResults = array(); 
+        foreach ($settings as $setting) {
+            $settingResult = array();
+            $settingResult['marketAccount'] = $setting->marketAccount->strAccountId;
+            $settingResult['allProduct'] = $productsCount;
+            $settingResult['successProduct'] = 0;
+            $settingResult['failedProduct'] = 0;
+            if($setting->nMarketIdx == 3){//쿠팡
+                $settingResult['marketName'] = "쿠팡";
+                
                 $coupang = new CoupangConnector($setting->marketAccount->strAPIAccessKey, $setting->marketAccount->strSecretKey, $setting->marketAccount->strVendorId, $setting->marketAccount->strAccountId);
                 foreach ($products as $key2 => $product) {
 
@@ -607,14 +647,14 @@ class SellPrepareCheckController extends Controller
                         "salePrice"=> $item->nSubItemSellPrice,
                         "maximumBuyCount"=> $item->nSubItemQuantity > 0 ? $item->nSubItemQuantity : $setting->nUnitQuantity,//$setting->nMaxQtyPerManDayLimit,
                         "maximumBuyForPerson"=> "0",
-                        "outboundShippingTimeDay"=> $setting->nOutboundShippingTimeDay,
-                        "maximumBuyForPersonPeriod"=> $setting->nMaxQtyPerManDayLimit,
-                        "unitCount"=> 0,//$item->nSubItemQuantity > 0 ? $item->nSubItemQuantity : $setting->nUnitQuantity,
-                        "adultOnly"=> $setting->bOnlyAdult == 0 ? "EVERYONE" : "AUDLT_ONLY",
+                        "outboundShippingTimeDay"=> $setting->detail->nOutboundShippingTimeDay,
+                        "maximumBuyForPersonPeriod"=> $setting->detail->nMaxQtyPerManDayLimit,
+                        "unitCount"=> 0,//$item->nSubItemQuantity > 0 ? $item->nSubItemQuantity : $setting->detail->nUnitQuantity,
+                        "adultOnly"=> $setting->detail->bOnlyAdult == 0 ? "EVERYONE" : "AUDLT_ONLY",
                         "taxType"=> "TAX",
-                        "parallelImported"=> $setting->bParallelImport == 1 ? "PARALLEL_IMPORTED" : "NOT_PARALLEL_IMPORTED",
-                        "overseasPurchased"=> $setting->bOverSeaPurchaseAgent == 1 ? "OVERSEAS_PURCHASED" :"NOT_OVERSEAS_PURCHASED",
-                        "pccNeeded"=> $setting->nPersonPassingCodeType == 1 ? "true" : "false",
+                        "parallelImported"=> $setting->detail->bParallelImport == 1 ? "PARALLEL_IMPORTED" : "NOT_PARALLEL_IMPORTED",
+                        "overseasPurchased"=> $setting->detail->bOverSeaPurchaseAgent == 1 ? "OVERSEAS_PURCHASED" :"NOT_OVERSEAS_PURCHASED",
+                        "pccNeeded"=> $setting->detail->nPersonPassingCodeType == 1 ? "true" : "false",
                         "externalVendorSku"=> "0001",
                         "barcode"=> "",
                         "emptyBarcode"=> true,
@@ -665,25 +705,25 @@ class SellPrepareCheckController extends Controller
                     "brand" => $product->strBrand,
                     "generalProductName" => $product->strKrMainName,
                     "productGroup" => $strCategoryNames[count($strCategoryNames)-1],
-                    "deliveryMethod" => $setting->deliveryType->strDeliveryCode,
-                    "deliveryCompanyCode" => $setting->strDeliveryCompanyCode,
-                    "deliveryChargeType" => $setting->strDeliveryChargeType,
-                    "deliveryCharge" => $setting->nDeliveryCharge,
-                    "freeShipOverAmount" => $setting->nFreeShipOverAmount,
-                    "deliveryChargeOnReturn" => $setting->nDeliveryChargeOnReturn,
-                    "remoteAreaDeliverable" => $setting->nRemoteAreaDeliveryType == 1 ? "Y" : "N",
-                    "unionDeliveryType" => $setting->strUnionDeliveryType,
-                    "returnCenterCode" => $setting->strReturnCenterCode,
-                    "returnChargeName" => $setting->strReturnSellerName,
-                    "companyContactNumber" => $setting->strCompanyContactNumber,
-                    "returnZipCode" => $setting->strReturnZipCode,
-                    "returnAddress" => $setting->strReturnAddress,
-                    "returnAddressDetail" => $setting->strReturnAddressDetail,
-                    "returnCharge" => $setting->nReturnDeliveryCharge,
-                    "returnChargeVendor" => $setting->strReturnChargeVendorType,
-                    "afterServiceInformation" => $setting->strAfterServiceGuide,
-                    "afterServiceContactNumber" => $setting->strAfterServiceContactNumber,
-                    "outboundShippingPlaceCode" => $setting->strOutboundShippingPlaceCode,
+                    "deliveryMethod" => $setting->detail->deliveryType->strDeliveryCode,
+                    "deliveryCompanyCode" => $setting->detail->strDeliveryCompanyCode,
+                    "deliveryChargeType" => $setting->detail->strDeliveryChargeType,
+                    "deliveryCharge" => $setting->detail->nDeliveryCharge,
+                    "freeShipOverAmount" => $setting->detail->nFreeShipOverAmount,
+                    "deliveryChargeOnReturn" => $setting->detail->nDeliveryChargeOnReturn,
+                    "remoteAreaDeliverable" => $setting->detail->nRemoteAreaDeliveryType == 1 ? "Y" : "N",
+                    "unionDeliveryType" => $setting->detail->strUnionDeliveryType,
+                    "returnCenterCode" => $setting->detail->strReturnCenterCode,
+                    "returnChargeName" => $setting->detail->strReturnSellerName,
+                    "companyContactNumber" => $setting->detail->strCompanyContactNumber,
+                    "returnZipCode" => $setting->detail->strReturnZipCode,
+                    "returnAddress" => $setting->detail->strReturnAddress,
+                    "returnAddressDetail" => $setting->detail->strReturnAddressDetail,
+                    "returnCharge" => $setting->detail->nReturnDeliveryCharge,
+                    "returnChargeVendor" => $setting->detail->strReturnChargeVendorType,
+                    "afterServiceInformation" => $setting->detail->strAfterServiceGuide,
+                    "afterServiceContactNumber" => $setting->detail->strAfterServiceContactNumber,
+                    "outboundShippingPlaceCode" => $setting->detail->strOutboundShippingPlaceCode,
                     "vendorUserId" => $setting->marketAccount->strAccountId,
                     "requested" => false,
                     "items" => $arrItems,
@@ -701,266 +741,449 @@ class SellPrepareCheckController extends Controller
                     $response = (object)json_decode($result, true);
                     if($response->code=="SUCCESS")
                     {
-                        $successCount++;
+                        $settingResult['successProduct']++;
                         $product->update(['bRegCoupang' => 1]);
                         //상품등록 성공으로 추가
-                        $successProduct = new SuccessProduct([
-                            'nUserId' => Auth::id(),
-                            'nMarketSetIdx' => $setting->nIdx,
-                            'strId' => "C:".$response->data,
-                            'strSolutionId' => $product->strSolutionId,
-                            'strURL' => $product->strURL, 
-                            'strMainName' => $product->strMainName,
-                            'strSubName' => $product->strSubName,
-                            'nBrandType' => $product->nBrandType,
-                            'strBrand' => $product->strBrand,
-                            'strKeyword' => $product->strKeyword,
-                            'strKoOption' => $product->strKoOption,
-                            'strKoOptionValue' => $product->strKoOptionValue,
-                            'strCnOption' => $product->strCnOption,
-                            'strCnOptionValue' => $product->strCnOptionValue,
-                            'strOptionPrice' => $product->strOptionPrice,
-                            'blobOptionImage' => $product->blobOptionImage,
-                            'strChMainName' => $product->strChMainName,
-                            'strKrMainName' => $product->strKrMainName,
-                            'strChSubName' => $product->strChSubName,
-                            'strKrSubName' => $product->strKrSubName,
-                            'strComeCode' => $product->strComeCode,
-                            'strCategoryCode0' => $product->strCategoryCode0,
-                            'strCategoryCode1' => $product->strCategoryCode1,
-                            'strCategoryCode2' => $product->strCategoryCode2,
-                            'strCategoryCode3' => $product->strCategoryCode3,
-                            'strCategoryCode4' => $product->strCategoryCode4,
-                            'strCategoryCode5' => $product->strCategoryCode5,
-                            'strCategoryCode6' => $product->strCategoryCode6,
-                            'strCategoryCode7' => $product->strCategoryCode7,
-                            'strCategoryCode8' => $product->strCategoryCode8,
-                            'nShareType' => $product->nShareType,
-                            'nProductWorkProcess' => 1,
-                            'bRegCoupang' => 1,
-                            'dtSellStartDate' => $start->format('Y-m-d'),
-                            'dtSellEndDate' => $end->format('Y-m-d'),
-                            'bIsDel'=> 0
-                        ]);
-                        $successProduct->save();
-
-                        $productDetail = new SuccessProductDetail([
-                            'nProductIdx' => $successProduct->nIdx,
-                            'nProductPrice' => $product->productDetail->nProductPrice,
-                            'nBasePrice' => $product->productDetail->nBasePrice,
-                            'nDiscountPrice' => $product->productDetail->nDiscountPrice,
-                            'nExchangeRate' => $product->productDetail->nExchangeRate,
-                            'nExpectedRevenue' => $product->productDetail->nExpectedRevenue,
-                            'nMarginRate' => $product->productDetail->nMarginRate,
-                            'nSellerMarketChargeRate' => $product->productDetail->nSellerMarketChargeRate,
-                            'nBuyerMarketChargeRate' => $product->productDetail->nBuyerMarketChargeRate,
-                            'nOverSeaDeliveryCharge' => $product->productDetail->nOverSeaDeliveryCharge,
-                            'strFunction' => $product->productDetail->strFunction,
-                            'nDeliverCharge' => $product->productDetail->nDeliverCharge,
-                            'nReturnDeliverCharge' => $product->productDetail->nReturnDeliverCharge,
-                            'nExchangeDeliveryCharge' => $product->productDetail->nExchangeDeliveryCharge,
-                            'nOptionSellPrice' => $product->productDetail->nOptionSellPrice,
-                            'nOptionBasePrice' => $product->productDetail->nOptionBasePrice,
-                            'nOptionDiscountPrice' => $product->productDetail->nOptionDiscountPrice,
-                            'nOptionSSPrice' => $product->productDetail->nOptionSSPrice,
-                            'nOptionESMPrice' => $product->productDetail->nOptionESMPrice,
-                            'nOptionSellDiscountPrice' => $product->productDetail->nOptionSellDiscountPrice,
-                            'nOptionESMDeliveryCharge' => $product->productDetail->nOptionESMDeliveryCharge,
-                            'blobNote' => $product->productDetail->blobNote,
-                            'bIsDel'=> 0
-                        ]);
-                        $productDetail->save();
-
-                        foreach ($product->productImages as $key => $image) {
-                            $productImage = new SuccessProductImage([
-                                'nProductIdx' => $successProduct->nIdx,
-                                'nImageCode' => $image->nImageCode,
-                                'strName' => $image->strName,
-                                'strURL' => $image->strURL,
-                                'nHeight' => $image->nHeight,
-                                'nWidth' => $image->nWidth,
-                                'strNote' => $image->strNote,
-                                'bIsDel' => 0
-                            ]);
-                            $productImage->save();
-                        }
-
-                        foreach ($product->productItems as $key => $item) {
-                            $productImage = new SuccessProductItem([
-                                'nProductIdx' => $successProduct->nIdx,
-                                'strSubItemName' => $item->strSubItemName,
-                                'nSubItemOptionPrice' => $item->nSubItemOptionPrice,
-                                'nSubItemBasePrice' => $item->nSubItemBasePrice,
-                                'nSubItemSellPrice' => $item->nSubItemSellPrice,
-                                'nSubItemDiscountPrice' => $item->nSubItemDiscountPrice,
-                                'nSubItemQuantity' => $item->nSubItemQuantity,
-                                'strSubItemImage' => $item->strSubItemImage,
-                                'strSubItemKoOptionPattern0' => $item->strSubItemKoOptionPattern0,
-                                'strSubItemKoOptionPattern1' => $item->strSubItemKoOptionPattern1,
-                                'strSubItemKoOptionPattern2' => $item->strSubItemKoOptionPattern2,
-                                'bIsDel' => 0
-                            ]);
-                            $productImage->save();
-                        }
-
+                        $uploadedProdId = "C:".$response->data;
+                        $this->procSuccessUpload($product, $setting, $start, $end, $uploadedProdId);
                     }else{
-                        $failedCount++;
+                        $settingResult['failedProduct']++;
+                        $failedProdId = "C:FAILED";
+                        $this->procFailedUpload($product, $setting, $response->message, $failedProdId);
                         
-                        //상품등록 실패로 추가
-                        $failedProduct = new FailedProduct([
-                            'nUserId' => Auth::id(),
-                            'strSolutionId' => $product->strSolutionId,
-                            'nMarketSetIdx' => $setting->nIdx,
-                            'strURL' => $product->strURL, 
-                            'strMainName' => $product->strMainName,
-                            'strSubName' => $product->strSubName,
-                            'nBrandType' => $product->nBrandType,
-                            'strBrand' => $product->strBrand,
-                            'strKeyword' => $product->strKeyword,
-                            'strKoOption' => $product->strKoOption,
-                            'strKoOptionValue' => $product->strKoOptionValue,
-                            'strCnOption' => $product->strCnOption,
-                            'strCnOptionValue' => $product->strCnOptionValue,
-                            'strOptionPrice' => $product->strOptionPrice,
-                            'blobOptionImage' => $product->blobOptionImage,
-                            'strChMainName' => $product->strChMainName,
-                            'strKrMainName' => $product->strKrMainName,
-                            'strChSubName' => $product->strChSubName,
-                            'strKrSubName' => $product->strKrSubName,
-                            'strComeCode' => $product->strComeCode,
-                            'strCategoryCode0' => $product->strCategoryCode0,
-                            'strCategoryCode1' => $product->strCategoryCode1,
-                            'strCategoryCode2' => $product->strCategoryCode2,
-                            'strCategoryCode3' => $product->strCategoryCode3,
-                            'strCategoryCode4' => $product->strCategoryCode4,
-                            'strCategoryCode5' => $product->strCategoryCode5,
-                            'strCategoryCode6' => $product->strCategoryCode6,
-                            'strCategoryCode7' => $product->strCategoryCode7,
-                            'strCategoryCode8' => $product->strCategoryCode8,
-                            'nShareType' => $product->nShareType,
-                            'nProductWorkProcess' => 0,
-                            'strReason' => (strPos($response->message, "'") !== false ? "알수없는 오류가 발생했습니다." : $response->message),
-                            'bIsDel'=> 0
-                        ]);
-                        $failedProduct->save();
-
-                        $productDetail = new FailedProductDetail([
-                            'nProductIdx' => $failedProduct->nIdx,
-                            'nProductPrice' => $product->productDetail->nProductPrice,
-                            'nBasePrice' => $product->productDetail->nBasePrice,
-                            'nDiscountPrice' => $product->productDetail->nDiscountPrice,
-                            'nExchangeRate' => $product->productDetail->nExchangeRate,
-                            'nExpectedRevenue' => $product->productDetail->nExpectedRevenue,
-                            'nMarginRate' => $product->productDetail->nMarginRate,
-                            'nSellerMarketChargeRate' => $product->productDetail->nSellerMarketChargeRate,
-                            'nBuyerMarketChargeRate' => $product->productDetail->nBuyerMarketChargeRate,
-                            'nOverSeaDeliveryCharge' => $product->productDetail->nOverSeaDeliveryCharge,
-                            'strFunction' => $product->productDetail->strFunction,
-                            'nDeliverCharge' => $product->productDetail->nDeliverCharge,
-                            'nReturnDeliverCharge' => $product->productDetail->nReturnDeliverCharge,
-                            'nExchangeDeliveryCharge' => $product->productDetail->nExchangeDeliveryCharge,
-                            'nOptionSellPrice' => $product->productDetail->nOptionSellPrice,
-                            'nOptionBasePrice' => $product->productDetail->nOptionBasePrice,
-                            'nOptionDiscountPrice' => $product->productDetail->nOptionDiscountPrice,
-                            'nOptionSSPrice' => $product->productDetail->nOptionSSPrice,
-                            'nOptionESMPrice' => $product->productDetail->nOptionESMPrice,
-                            'nOptionSellDiscountPrice' => $product->productDetail->nOptionSellDiscountPrice,
-                            'nOptionESMDeliveryCharge' => $product->productDetail->nOptionESMDeliveryCharge,
-                            'blobNote' => $product->productDetail->blobNote,
-                            'bIsDel'=> 0
-                        ]);
-                        $productDetail->save();
-
-                        foreach ($product->productImages as $key => $image) {
-                            $productImage = new FailedProductImage([
-                                'nProductIdx' => $failedProduct->nIdx,
-                                'nImageCode' => $image->nImageCode,
-                                'strName' => $image->strName,
-                                'strURL' => $image->strURL,
-                                'nHeight' => $image->nHeight,
-                                'nWidth' => $image->nWidth,
-                                'strNote' => $image->strNote,
-                                'bIsDel' => 0
-                            ]);
-                            $productImage->save();
-                        }
-
-                        foreach ($product->productItems as $key => $item) {
-                            $productImage = new FailedProductItem([
-                                'nProductIdx' => $failedProduct->nIdx,
-                                'strSubItemName' => $item->strSubItemName,
-                                'nSubItemOptionPrice' => $item->nSubItemOptionPrice,
-                                'nSubItemBasePrice' => $item->nSubItemBasePrice,
-                                'nSubItemSellPrice' => $item->nSubItemSellPrice,
-                                'nSubItemDiscountPrice' => $item->nSubItemDiscountPrice,
-                                'nSubItemQuantity' => $item->nSubItemQuantity,
-                                'strSubItemImage' => $item->strSubItemImage,
-                                'strSubItemKoOptionPattern0' => $item->strSubItemKoOptionPattern0,
-                                'strSubItemKoOptionPattern1' => $item->strSubItemKoOptionPattern1,
-                                'strSubItemKoOptionPattern2' => $item->strSubItemKoOptionPattern2,
-                                'bIsDel' => 0
-                            ]);
-                            $productImage->save();
-                        }
                     }
                 }
             }else if($setting->nMarketIdx == 1){//11번가
+                $settingResult['marketName'] = "11번가";
                 $_11thhouse = new EleventhConnector($setting->marketAccount->strAPIAccessKey, $setting->marketAccount->strAccountId, $setting->marketAccount->strAccountPwd);
                 foreach ($products as $key2 => $product) {
+                    $strCategory = $product->strCategoryCode3;
+                    $arrCategory = mb_split(" : ", $strCategory);
+                    $strCategoryCode = $arrCategory[0];
+{/** */
                     $data= new SimpleXMLElement('<?xml version="1.0" encoding="euc-kr" ?><Product/>');
-                    $data->addChild('abrdBuyPlace', "A");
-                    $data->addChild('abrdSizetableDispYn', "Y");
-                    $data->addChild('selMnbdNckNm', "SongFa");
-                    $data->addChild('selMthdCd', "01");
-                    $data->addChild('dispCtgrNo', "1011958");
-                    $data->addChild('prdTypCd', "01");
-                    $data->addChild('hsCode', "1233");
-                    $data->addChild('prdNm', "tsss");
-                    $data->addChild('prdNmEng', "asdf");
-                    $data->addChild('advrtStmt', "asdf");
-                    $data->addChild('brand', "asdf");
-                    $data->addChild('apiPrdAttrBrandCd', "asdf");
-                    $data->addChild('rmaterialTypCd', "01");
-                    $data->addChild('orgnTypCd', "01");
-                    $data->addChild('orgnTypDtlsCd', "asdf");
-                    $data->addChild('orgnNmVal', "asdf");
-                    $ProductRmaterial = $data->addChild('ProductRmaterial');
-                        $ProductRmaterial->addChild('rmaterialNm', 'asdf');
-                        $ProductRmaterial->addChild('ingredNm', 'asdf');
-                        $ProductRmaterial->addChild('orgnCountry', 'asdf');
-                        $ProductRmaterial->addChild('content', 'asdf');
-                    $data->addChild('orgnNmVal', "asdf");
-                    
-$data = <<<_EOT_
-<?xml version="1.0" encoding="euc-kr" ?>
-<Product>
-    <ProductTag>
-        <tagName>12</tagName>
-    </ProductTag>
-</Product>
-_EOT_;
-                    $retData = $_11thhouse->addProduct($data);
-                    if(isset($retData[0]['productNo'])){
-                        echo "success";
-                    }else{
-                        echo "failed";
+                    // $data->addChild('abrdBuyPlace', "A");
+                    // $data->addChild('abrdSizetableDispYn', "Y");
+                    $data->addChild('selMnbdNckNm', $setting->detail->strSelMnbdNckNm);
+                    $data->addChild('selMthdCd', $setting->detail->strSelMthdCd);
+                    $data->addChild('dispCtgrNo', $strCategoryCode);
+                    $data->addChild('prdTypCd', $setting->detail->strPrdTypCd);
+                    //$data->addChild('hsCode', "1233");
+                    $data->addChild('prdNm', "<![CDATA[".$product->strKrMainName."]]>");
+                    //$data->addChild('prdNmEng', "asdf");
+                    $data->addChild('advrtStmt', "<![CDATA[".$setting->detail->strAdvrtStmt."]]>");
+                    $data->addChild('brand', "&#39;알수없음&#39;");
+                    //$data->addChild('apiPrdAttrBrandCd', "asdf");
+                    $data->addChild('rmaterialTypCd', "05");
+                    $data->addChild('orgnTypCd', "03");
+                    //$data->addChild('orgnTypDtlsCd', "");
+                    $data->addChild('orgnNmVal', "중국");
+                    // $ProductRmaterial = $data->addChild('ProductRmaterial');
+                    //     $ProductRmaterial->addChild('rmaterialNm', 'asdf');
+                    //     $ProductRmaterial->addChild('ingredNm', 'asdf');
+                    //     $ProductRmaterial->addChild('orgnCountry', 'asdf');
+                    //     $ProductRmaterial->addChild('content', 'asdf');
+                    $data->addChild('beefTraceStat', "03");
+                    //$data->addChild('beefTraceNo', "03");
+                    $data->addChild('sellerPrdCd', $product->strSolutionId);
+                    $data->addChild('suplDtyfrPrdClfCd', $setting->detail->strSuplDtyfrPrdClfCd);
+                    $data->addChild('yearEndTaxYn', "N");
+                    $data->addChild('forAbrdBuyClf', $setting->detail->strForAbrdBuyClf);
+                    $data->addChild('importFeeCd', "03");
+                    $data->addChild('prdStatCd', $setting->detail->strPrdStatCd);
+                    if($setting->detail->strSelMthdCd == "05"){
+                        $data->addChild('useMon', "99999");
+                        $data->addChild('paidSelPrc', "5000");
+                        $data->addChild('exteriorSpecialNote', "<![CDATA[중고판매]]>");
                     }
-                }
-                    
-/***************** */                    
-                    // //만약 상품이 쿠팡에 이미 등록되였다면 넘긴다
-                    // if($product->bRegCoupang == 1)
-                    //   continue;
-                    
+                    $data->addChild('minorSelCnYn', "Y");//미성년자 구매 가능
+                    $data->addChild('prdImage01', $product->productMainImage[0]->strURL);
+                    // $data->addChild('prdImage02', "https://img.alicdn.com/imgextra/i2/2207918533633/O1CN01HoIFGY1chxVxNh2lN_!!2207918533633.jpg");
+                    // $data->addChild('prdImage03', "https://img.alicdn.com/imgextra/i2/2207918533633/O1CN01HoIFGY1chxVxNh2lN_!!2207918533633.jpg");
+                    // $data->addChild('prdImage04', "https://img.alicdn.com/imgextra/i2/2207918533633/O1CN01HoIFGY1chxVxNh2lN_!!2207918533633.jpg");
+                    // $data->addChild('prdImage05', "https://img.alicdn.com/imgextra/i2/2207918533633/O1CN01HoIFGY1chxVxNh2lN_!!2207918533633.jpg");
+                    // $data->addChild('prdImage09', "https://img.alicdn.com/imgextra/i2/2207918533633/O1CN01HoIFGY1chxVxNh2lN_!!2207918533633.jpg");
+                    $data->addChild('htmlDetail', "<![CDATA[".$product->productDetail->blobNote."]]>");
+                    $ProductCertGroup = $data->addChild('ProductCertGroup');
+                        $ProductCertGroup->addChild('crtfGrpTypCd', '');
+                        $ProductCertGroup->addChild('crtfGrpObjClfCd', '03');
+                        $ProductCertGroup->addChild('crtfGrpExptTypCd', '03');
+                        $ProductCert = $ProductCertGroup->addChild('ProductCert');
+                            $ProductCert->addChild('certTypeCd', '134');
+                            $ProductCert->addChild('certTypeCd', '13411');
+                    // $ProductMedical = $data->addChild('ProductMedical');
+                    //     $ProductMedical->addChild('MedicalKey', '01');
+                    //     $ProductMedical->addChild('MedicalRetail', '01');
+                    //     $ProductMedical->addChild('MedicalAd', '01');
+                    // $data->addChild('reviewDispYn', "Y");
+                    // $data->addChild('reviewOptDispYn', "Y");
+                    // $data->addChild('selPrdClfCd', "0:100");
+                    $data->addChild('aplBgnDy', date_format(date_create($setting->detail->dtAplBgnDy),"Y/m/d"));
+                    $data->addChild('aplEndDy', date_format(date_create($setting->detail->dtAplEndDy),"Y/m/d"));
+                    $data->addChild('setFpSelTermYn', "N");
+                    $data->addChild('selTermUseYn', "N");
+                    $data->addChild('selPrdClfFpCd', "3y:110");
+                    $data->addChild('wrhsPlnDy', "2025/12/31");
+                    $data->addChild('contractCd', "01");
+                    $data->addChild('chargeCd', "1231111");
+                    $data->addChild('periodCd', "01");
+                    $data->addChild('phonePrc', "60000");
+                    $data->addChild('maktPrc', "60000");
+                    $data->addChild('selPrc', number_format($product->productDetail->nProductPrice, 0));
+                    $data->addChild('cuponcheck', "Y");
+                    $data->addChild('dscAmtPercnt', "100");
+                    $data->addChild('cupnDscMthdCd', "01");
+                    $data->addChild('cupnUseLmtDyYn', "Y");
+                    $data->addChild('cupnIssEndDy', "2021/08/06");
+                    $data->addChild('pay11YN', "N");
+                    $data->addChild('pay11Value', "1000");
+                    $data->addChild('pay11WyCd', "01");
+                    $data->addChild('intFreeYN', "Y");
+                    $data->addChild('intfreeMonClfCd', "05");
+                    $data->addChild('pluYN', "Y");
+                    $data->addChild('pluDscCd', "01");
+                    $data->addChild('pluDscBasis', "1000");
+                    $data->addChild('pluDscAmtPercnt', "10");
+                    $data->addChild('pluDscMthdCd', "%");
+                    $data->addChild('pluUseLmtDyYn', "Y");
+                    $data->addChild('pluIssStartDy', "2021/07/08");
+                    $data->addChild('pluIssEndDy', "2021/08/08");
+                    $data->addChild('hopeShpYn', "Y");
+                    $data->addChild('hopeShpPnt', "10");
+                    $data->addChild('hopeShpWyCd', "01");
+                    $data->addChild('optSelectYn', "Y");
+                    $data->addChild('txtColCnt', "1");
+                    $data->addChild('optionAllQty', "9999");
+                    $data->addChild('optionAllAddPrc', "0");
+                    $data->addChild('optionAllAddWght', "200");
+                    $data->addChild('prdExposeClfCd', "01");
+                    $data->addChild('optMixYn', "Y");
+                    $ProductOption = $data->addChild('ProductOption');
+                        $ProductOption->addChild('useYn', "Y");
+                        $ProductOption->addChild('colOptPrice', "0");
+                        $ProductOption->addChild('colValue0', "레드");
+                        $ProductOption->addChild('colCount', "100");
+                        $ProductOption->addChild('colSellerStockCd', "101001");
+                    $ProductRootOption = $data->addChild('ProductRootOption');
+                        $ProductRootOption->addChild('colTitle', "색상");
+                        $productOption = $ProductRootOption->addChild('ProductOption');
+                            $productOption->addChild('colOptPrice', "0");
+                            $productOption->addChild('colValue0', "검정색");
+                    $ProductOptionExt = $data->addChild('ProductOptionExt');
+                        $productOption = $ProductOptionExt->addChild('ProductOption');
+                            $productOption->addChild('useYn', "Y");
+                            $productOption->addChild('colOptPrice', "0");
+                            $productOption->addChild('colOptCount', "10");
+                            $productOption->addChild('colCount', "10");
+                            $productOption->addChild('optWght', "10");
+                            $productOption->addChild('colSellerStockCd', "11110");
+                            $productOption->addChild('optionMappingKey', "옵션값2");
+                    $ProductCustOption = $data->addChild('ProductCustOption');
+                        $ProductCustOption->addChild('colOptName', "색상");
+                        $ProductCustOption->addChild('colOptUseYn', "Y");
+                    $data->addChild('useOptCalc', "N");
+                    $data->addChild('optCalcTranType', "reg");
+                    $data->addChild('optTypCd', "계산형옵션값");
+                    $data->addChild('gblDlvYn', "N");
+                    $data->addChild('dlvCnAreaCd', $setting->detail->strDlvCnAreaCd);
+                    $data->addChild('dlvWyCd', $setting->detail->strDlvWyCd);
+                    $data->addChild('dlvEtprsCd', $setting->detail->strDlvEtprsCd);
+                    $data->addChild('dlvSendCloseTmpltNo', $setting->detail->strDlvSendCloseTmpltNo);
+                    $data->addChild('dlvCstInstBasiCd', $setting->detail->strDlvCstInstBasiCd);
+                    $data->addChild('dlvCst1', "2500");
+                    $data->addChild('dlvCst3', "2500");
+                    $data->addChild('dlvCst4', "2500");
+                    $data->addChild('dlvCstInfoCd', "01");
+                    $data->addChild('PrdFrDlvBasiAmt', "5000");
+                    $data->addChild('dlvCnt1', "2");
+                    $data->addChild('dlvCnt2', "2");
+                    $data->addChild('bndlDlvCnYn', "N");
+                    $data->addChild('dlvCstPayTypCd', "01");
+                    $data->addChild('jejuDlvCst', "2500");
+                    $data->addChild('islandDlvCst', "2500");
+                    $data->addChild('addrSeqOut', $setting->detail->strAddrSeqOutAddr);
+                    $data->addChild('outsideYnOut', "N");
+                    $data->addChild('visitDlvYn', "N");
+                    $data->addChild('visitDlvAddrSeq', "11121");
+                    $data->addChild('addrSeqOutMemNo', "123123");
+                    $data->addChild('addrSeqIn', $setting->detail->strAddrSeqInAddr);
+                    $data->addChild('outsideYnIn', "N");
+                    $data->addChild('addrSeqInMemNo', "67417413");
+                    $data->addChild('abrdCnDlvCst', "600");
+                    $data->addChild('rtngdDlvCst', $setting->detail->nRtngdDlvCst);
+                    $data->addChild('exchDlvCst', $setting->detail->nExchDlvCst);
+                    $data->addChild('rtngdDlvCd', $setting->detail->strRtngdDlvCd);
+                    $data->addChild('asDetail', $setting->detail->strAsDetail);
+                    $data->addChild('rtngExchDetail', $setting->detail->strRtngExchDetail);
+                    $data->addChild('dlvClf', "02");
+                    $data->addChild('abrdInCd', "03");
+                    $data->addChild('prdWght', "200");
+                    $data->addChild('ntShortNm', "CN");
+                    $data->addChild('globalOutAddrSeq', "012311");
+                    $data->addChild('mbAddrLocation05', "01");
+                    $data->addChild('globalInAddrSeq', "67417413");
+                    $data->addChild('mbAddrLocation06', "01");
+                    $data->addChild('mnfcDy', "2020/02/02");
+                    $data->addChild('eftvDy', "2024/02/02");
+                    $data->addChild('eftvDy', "2024/02/02");
+                    $ProductNotification = $data->addChild('ProductNotification');
+                        $ProductNotification->addChild('type', "qwaqqq");
+                        $item = $ProductNotification->addChild('item');
+                            $item->addChild('code', "1231111");
+                            $item->addChild('name', "qeqqq");
+                    $data->addChild('company', "없음");
+                    $data->addChild('modelNm', "없음");
+                    $data->addChild('modelCd', "SQBAB9401");
+                    $data->addChild('mnfcDy', "2020/02/02");
+                    $data->addChild('mainTitle', "도서");
+                    $data->addChild('artist', "도서");
+                    $data->addChild('mudvdLabel', "도서");
+                    $data->addChild('maker', "도서");
+                    $data->addChild('albumNm', "도서");
+                    $data->addChild('bcktExYn', "N");
+                    $data->addChild('prcCmpExpYn', "Y");
+                    $data->addChild('stdPrdYn', "N");
+                    $ProductTag = $data->addChild('ProductTag');
+                        $ProductTag->addChild('tagName', "qwaqqq");
+}/** */                        
+                    $data = $data->asXML();
+                    $response = $_11thhouse->addProduct($data);
+                    if(isset($response[0]['productNo'])){
+                        $settingResult['successProduct']++;
+                        $start = new DateTime($setting->detail->dtAplBgnDy);
+                        $end = new DateTime($setting->detail->dtAplEndDy);
+                        $product->update(['bReg11thhouse' => 1]);
+                        $uploadedProdId = "11:".$response[0]['productNo'];
+                        $this->procSuccessUpload($product, $setting, $start, $end, $uploadedProdId);
+                    }else{
+                        $settingResult['failedProduct']++;
+                        $failedProdId = "11:FAILED";
+                        $this->procFailedUpload($product, $setting, $response[0]['message'], $failedProdId);
+                        
+                    }
+                }                    
             }else if($setting->nMarketIdx == 8){//티몬
-                $successCount++;
+                //$successCount++;
 
             }
+            $uploadResults[] = $settingResult;
         }
-        //return view('scratch.ProductRegistResult', compact('productsCount', 'successCount', 'failedCount'));
+        return view('scratch.ProductRegistResult', compact('uploadResults'));
         //return view('product.MarketProductPrepare', compact('settingCoupangs', 'markets'));
     }
 
+    public function procSuccessUpload($product, $setting, $start, $end, $uploadedProdId)
+    {
+        // $product = Product::where('bIsDel', 0)
+        //     ->where('nUserId', Auth::id())
+        //     ->where('nIdx', $productId)
+        //     ->orderBy('nIdx')
+        //     ->first();
+        
+        $product->update(['bRegCoupang' => 1]);
+        //상품등록 성공으로 추가
+        $successProduct = new SuccessProduct([
+            'nUserId' => Auth::id(),
+            'nMarketSetIdx' => $setting->nIdx,
+            'strMarketAccId' => $setting->marketAccount->strAccountId,
+            'strId' => $uploadedProdId,
+            'strSolutionId' => $product->strSolutionId,
+            'strURL' => $product->strURL, 
+            'strMainName' => $product->strMainName,
+            'strSubName' => $product->strSubName,
+            'nBrandType' => $product->nBrandType,
+            'strBrand' => $product->strBrand,
+            'strKeyword' => $product->strKeyword,
+            'strKoOption' => $product->strKoOption,
+            'strKoOptionValue' => $product->strKoOptionValue,
+            'strCnOption' => $product->strCnOption,
+            'strCnOptionValue' => $product->strCnOptionValue,
+            'strOptionPrice' => $product->strOptionPrice,
+            'blobOptionImage' => $product->blobOptionImage,
+            'strChMainName' => $product->strChMainName,
+            'strKrMainName' => $product->strKrMainName,
+            'strChSubName' => $product->strChSubName,
+            'strKrSubName' => $product->strKrSubName,
+            'strComeCode' => $product->strComeCode,
+            'strCategoryCode0' => $product->strCategoryCode0,
+            'strCategoryCode1' => $product->strCategoryCode1,
+            'strCategoryCode2' => $product->strCategoryCode2,
+            'strCategoryCode3' => $product->strCategoryCode3,
+            'strCategoryCode4' => $product->strCategoryCode4,
+            'strCategoryCode5' => $product->strCategoryCode5,
+            'strCategoryCode6' => $product->strCategoryCode6,
+            'strCategoryCode7' => $product->strCategoryCode7,
+            'strCategoryCode8' => $product->strCategoryCode8,
+            'nShareType' => $product->nShareType,
+            'nProductWorkProcess' => 1,
+            'bRegCoupang' => 1,
+            'dtSellStartDate' => $start->format('Y-m-d'),
+            'dtSellEndDate' => $end->format('Y-m-d'),
+            'bIsDel'=> 0
+        ]);
+        $successProduct->save();
+
+        $productDetail = new SuccessProductDetail([
+            'nProductIdx' => $successProduct->nIdx,
+            'nProductPrice' => $product->productDetail->nProductPrice,
+            'nBasePrice' => $product->productDetail->nBasePrice,
+            'nDiscountPrice' => $product->productDetail->nDiscountPrice,
+            'nExchangeRate' => $product->productDetail->nExchangeRate,
+            'nExpectedRevenue' => $product->productDetail->nExpectedRevenue,
+            'nMarginRate' => $product->productDetail->nMarginRate,
+            'nSellerMarketChargeRate' => $product->productDetail->nSellerMarketChargeRate,
+            'nBuyerMarketChargeRate' => $product->productDetail->nBuyerMarketChargeRate,
+            'nOverSeaDeliveryCharge' => $product->productDetail->nOverSeaDeliveryCharge,
+            'strFunction' => $product->productDetail->strFunction,
+            'nDeliverCharge' => $product->productDetail->nDeliverCharge,
+            'nReturnDeliverCharge' => $product->productDetail->nReturnDeliverCharge,
+            'nExchangeDeliveryCharge' => $product->productDetail->nExchangeDeliveryCharge,
+            'nOptionSellPrice' => $product->productDetail->nOptionSellPrice,
+            'nOptionBasePrice' => $product->productDetail->nOptionBasePrice,
+            'nOptionDiscountPrice' => $product->productDetail->nOptionDiscountPrice,
+            'nOptionSSPrice' => $product->productDetail->nOptionSSPrice,
+            'nOptionESMPrice' => $product->productDetail->nOptionESMPrice,
+            'nOptionSellDiscountPrice' => $product->productDetail->nOptionSellDiscountPrice,
+            'nOptionESMDeliveryCharge' => $product->productDetail->nOptionESMDeliveryCharge,
+            'blobNote' => $product->productDetail->blobNote,
+            'bIsDel'=> 0
+        ]);
+        $productDetail->save();
+
+        foreach ($product->productImages as $key => $image) {
+            $productImage = new SuccessProductImage([
+                'nProductIdx' => $successProduct->nIdx,
+                'nImageCode' => $image->nImageCode,
+                'strName' => $image->strName,
+                'strURL' => $image->strURL,
+                'nHeight' => $image->nHeight,
+                'nWidth' => $image->nWidth,
+                'strNote' => $image->strNote,
+                'bIsDel' => 0
+            ]);
+            $productImage->save();
+        }
+
+        foreach ($product->productItems as $key => $item) {
+            $productImage = new SuccessProductItem([
+                'nProductIdx' => $successProduct->nIdx,
+                'strSubItemName' => $item->strSubItemName,
+                'nSubItemOptionPrice' => $item->nSubItemOptionPrice,
+                'nSubItemBasePrice' => $item->nSubItemBasePrice,
+                'nSubItemSellPrice' => $item->nSubItemSellPrice,
+                'nSubItemDiscountPrice' => $item->nSubItemDiscountPrice,
+                'nSubItemQuantity' => $item->nSubItemQuantity,
+                'strSubItemImage' => $item->strSubItemImage,
+                'strSubItemKoOptionPattern0' => $item->strSubItemKoOptionPattern0,
+                'strSubItemKoOptionPattern1' => $item->strSubItemKoOptionPattern1,
+                'strSubItemKoOptionPattern2' => $item->strSubItemKoOptionPattern2,
+                'bIsDel' => 0
+            ]);
+            $productImage->save();
+        }
+    }
+
+    public function procFailedUpload($product, $setting, $reason, $failedProdId)
+    {
+        $failedProduct = new FailedProduct([
+            'nUserId' => Auth::id(),
+            'strSolutionId' => $product->strSolutionId,
+            'nMarketSetIdx' => $setting->nIdx,
+            'strMarketAccId' => $setting->marketAccount->strAccountId,
+            'strId' => $failedProdId,
+            'strURL' => $product->strURL, 
+            'strMainName' => $product->strMainName,
+            'strSubName' => $product->strSubName,
+            'nBrandType' => $product->nBrandType,
+            'strBrand' => $product->strBrand,
+            'strKeyword' => $product->strKeyword,
+            'strKoOption' => $product->strKoOption,
+            'strKoOptionValue' => $product->strKoOptionValue,
+            'strCnOption' => $product->strCnOption,
+            'strCnOptionValue' => $product->strCnOptionValue,
+            'strOptionPrice' => $product->strOptionPrice,
+            'blobOptionImage' => $product->blobOptionImage,
+            'strChMainName' => $product->strChMainName,
+            'strKrMainName' => $product->strKrMainName,
+            'strChSubName' => $product->strChSubName,
+            'strKrSubName' => $product->strKrSubName,
+            'strComeCode' => $product->strComeCode,
+            'strCategoryCode0' => $product->strCategoryCode0,
+            'strCategoryCode1' => $product->strCategoryCode1,
+            'strCategoryCode2' => $product->strCategoryCode2,
+            'strCategoryCode3' => $product->strCategoryCode3,
+            'strCategoryCode4' => $product->strCategoryCode4,
+            'strCategoryCode5' => $product->strCategoryCode5,
+            'strCategoryCode6' => $product->strCategoryCode6,
+            'strCategoryCode7' => $product->strCategoryCode7,
+            'strCategoryCode8' => $product->strCategoryCode8,
+            'nShareType' => $product->nShareType,
+            'nProductWorkProcess' => 0,
+            'strReason' =>  $reason,
+            'bIsDel'=> 0
+        ]);
+        $failedProduct->save();
+
+        $productDetail = new FailedProductDetail([
+            'nProductIdx' => $failedProduct->nIdx,
+            'nProductPrice' => $product->productDetail->nProductPrice,
+            'nBasePrice' => $product->productDetail->nBasePrice,
+            'nDiscountPrice' => $product->productDetail->nDiscountPrice,
+            'nExchangeRate' => $product->productDetail->nExchangeRate,
+            'nExpectedRevenue' => $product->productDetail->nExpectedRevenue,
+            'nMarginRate' => $product->productDetail->nMarginRate,
+            'nSellerMarketChargeRate' => $product->productDetail->nSellerMarketChargeRate,
+            'nBuyerMarketChargeRate' => $product->productDetail->nBuyerMarketChargeRate,
+            'nOverSeaDeliveryCharge' => $product->productDetail->nOverSeaDeliveryCharge,
+            'strFunction' => $product->productDetail->strFunction,
+            'nDeliverCharge' => $product->productDetail->nDeliverCharge,
+            'nReturnDeliverCharge' => $product->productDetail->nReturnDeliverCharge,
+            'nExchangeDeliveryCharge' => $product->productDetail->nExchangeDeliveryCharge,
+            'nOptionSellPrice' => $product->productDetail->nOptionSellPrice,
+            'nOptionBasePrice' => $product->productDetail->nOptionBasePrice,
+            'nOptionDiscountPrice' => $product->productDetail->nOptionDiscountPrice,
+            'nOptionSSPrice' => $product->productDetail->nOptionSSPrice,
+            'nOptionESMPrice' => $product->productDetail->nOptionESMPrice,
+            'nOptionSellDiscountPrice' => $product->productDetail->nOptionSellDiscountPrice,
+            'nOptionESMDeliveryCharge' => $product->productDetail->nOptionESMDeliveryCharge,
+            'blobNote' => $product->productDetail->blobNote,
+            'bIsDel'=> 0
+        ]);
+        $productDetail->save();
+
+        foreach ($product->productImages as $key => $image) {
+            $productImage = new FailedProductImage([
+                'nProductIdx' => $failedProduct->nIdx,
+                'nImageCode' => $image->nImageCode,
+                'strName' => $image->strName,
+                'strURL' => $image->strURL,
+                'nHeight' => $image->nHeight,
+                'nWidth' => $image->nWidth,
+                'strNote' => $image->strNote,
+                'bIsDel' => 0
+            ]);
+            $productImage->save();
+        }
+
+        foreach ($product->productItems as $key => $item) {
+            $productImage = new FailedProductItem([
+                'nProductIdx' => $failedProduct->nIdx,
+                'strSubItemName' => $item->strSubItemName,
+                'nSubItemOptionPrice' => $item->nSubItemOptionPrice,
+                'nSubItemBasePrice' => $item->nSubItemBasePrice,
+                'nSubItemSellPrice' => $item->nSubItemSellPrice,
+                'nSubItemDiscountPrice' => $item->nSubItemDiscountPrice,
+                'nSubItemQuantity' => $item->nSubItemQuantity,
+                'strSubItemImage' => $item->strSubItemImage,
+                'strSubItemKoOptionPattern0' => $item->strSubItemKoOptionPattern0,
+                'strSubItemKoOptionPattern1' => $item->strSubItemKoOptionPattern1,
+                'strSubItemKoOptionPattern2' => $item->strSubItemKoOptionPattern2,
+                'bIsDel' => 0
+            ]);
+            $productImage->save();
+        }
+    }
+    
     public function delete($productId)
     {
         $product = Product::find($productId);

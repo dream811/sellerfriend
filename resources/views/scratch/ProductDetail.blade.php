@@ -11,12 +11,14 @@
 
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <script src="{{ mix('js/app.js') }}"></script>
+    <link rel="stylesheet" href="{{asset('css/custom.css')}}">
     <link rel="stylesheet" href="{{asset('js/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
     <link rel="stylesheet" href="{{asset('js/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
     <link rel="stylesheet" href="{{asset('js/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
     <!-- summernote -->
     <link rel="stylesheet" href="{{asset('js/summernote/summernote-bs4.min.css')}}">
-
+    <!-- image preview -->
+    <link rel="stylesheet" href="{{asset('js/image-preview/style.min.css')}}">
     <!-- DataTables  & Plugins -->
     <script src="{{asset('js/datatables/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('js/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
@@ -32,6 +34,10 @@
     <script src="{{asset('js/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
     <!-- Summernote -->
     <script src="{{asset('js/summernote/summernote-bs4.min.js')}}"></script>
+    <!-- image preview -->
+    <script src="{{asset('js/image-preview/imagepreview.js')}}"></script>
+    <!-- jQuery UI -->
+    <script src="{{asset('js/jquery-ui/jquery-ui.min.js')}}"></script>
     @yield('third_party_stylesheets')
 
     @stack('page_css')
@@ -761,7 +767,7 @@
                             <h5 class="card-title mb-0" style="font-weight: bold;">Step 5. 상품 대표이미지 및 상세설명</h5>
                         </div>
                         <div class="card-body">
-                            <fieldset style="color:">
+                            {{-- <fieldset style="color:">
                                 <div class="form-group row">
                                     <label class="col-form-label col-sm-2 text-sm-right">대표이미지</label>
                                     <div class="col-sm-9 row mb-0">
@@ -854,6 +860,35 @@
                                         @endforeach
                                     </div>
                                 </div>
+                            </fieldset> --}}
+                            <fieldset style="color:">
+                                <span class="text-success">이미지 리사이징(800*800)시 이지러짐현상이 나타날수 있습니다 </span>
+                                <div id="sortable" class="sortable ui-sortable row ">
+                                    @foreach ($product->productImages as $key => $image)
+                                    <div class="ui-state-default m-1 imgThumb @if(count($product->productImages) > 8) col-2  @else col @endif">
+                                        <h5 class="thumb-header">@if($loop->index == 0) 대표이미지 @else 상세이미지{{$loop->index}} @endif</h5>
+                                        <img data="{{ $image->strURL }}" src="{{ $image->strURL }}" class="preview" alt="이미지" width="100%" height="60%">
+                                        <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
+                                        <a href="javascript:void(0);" title="삭제" class="mt-1 mb-0 ui-icon ui-icon-trash float-right btnDelImage">삭제</a>
+                                        <a href="javascript:void(0)" title="리사이징" class="mt-1 mb-0 ui-icon ui-icon-arrow-4-diag float-right btnResizeImage">리사이징</a>
+                                        <input type="hidden" value="{{ $image->strURL }}" name="imgLink[]">
+                                        <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
+                                    </div>
+                                    @endforeach
+                                    @if(count($product->productImages) < 8)
+                                        @for ($i = count($product->productImages); $i < 9; $i++)
+                                        <div class="ui-state-default m-1 imgThumb @if(count($product->productImages) > 8 ) col-2  @else col @endif">
+                                            <h5 class="thumb-header">@if($i == 0) 대표이미지 @else 상세이미지{{$i}} @endif</h5>
+                                            <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
+                                            <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
+                                            <a href="javascript:void(0);" title="삭제" class="mt-1 mb-0 ui-icon ui-icon-trash float-right btnDelImage">삭제</a>
+                                            <a href="javascript:void(0)" title="리사이징" class="mt-1 mb-0 ui-icon ui-icon-arrow-4-diag float-right btnResizeImage">리사이징</a>
+                                            <input type="hidden" value="" name="imgLink[]">
+                                            <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
+                                        </div>
+                                        @endfor
+                                    @endif
+                                </div>
                             </fieldset>
                                 {{-- <div class="form-group row ml-3">
                                     <div class="custom-control custom-switch">
@@ -885,8 +920,6 @@
                         <button class="btn btn-outline-success btn-block"><i class="far fa-share-square"></i> 임시저장 불러오기</button>
                     </div>
                 </div> --}}
-                <input type="text" id="hdDescription" class="form-control" hidden="">
-                <input type="hidden" id="txtDesc" class="form-control" value="{{$product->productDetail->blobNote}}">
             </div>
             </form>
         </div>
@@ -977,115 +1010,185 @@
         $( "#selBrandName" ).change(function() {
             $('#txtBrandName').val($("#selBrandName  option:selected").html());
         });
+        //이미지
+        $( "#sortable" ).sortable({ 
+            revert: true,
+            update: function( event, ui ) {
+                var basketItems = $(this).sortable('toArray').toString();
+                var values = [];
+                $('.thumb-header').each(function (index) {
+                    if(index == 0){
+                        values.push($(this).html('대표이미지'));
+                    }else{
+                        values.push($(this).html('상세이미지'+ index));
+                    }
+                });
+                
+                // $('#outputvalues').val(values);
+            }
+        });
+        $( "#sortable" ).disableSelection();
+
+        $('body').on('click', '.btnImportOptImage', function () {
+            $(this).next().click();
+        });
+        $('body').on('change', '.optImageFile', function () {
+            var ele = $(this).parent().prev();
+            data = new FormData();
+            data.append("file", this.files[0]);
+
+            $.ajax({
+                data: data,
+                type: "POST",
+                url: "/uploadImage",
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function({success, data}) {
+                    //console.log(data);
+                    ele.children(':first').attr('src', data);
+                }
+            });
+        });
+
+        $('body').on('click', '.btnDelImage', function () {
+            if(confirm("이미지를 삭제하시겠습니까?")){
+                $(this).prev().prev().attr('src', "{{asset('assets/images/system/no-image.png')}}");
+                $(this).prev().prev().removeAttr("data");//미리보기 기능 없애기
+                $(this).prev().prev().removeClass("preview");//미리보기 기능 없애기
+                $(this).next().next().val("");//이름태그
+                $(this).next().next().next().val("");//파일 
+            }
+        });
+        $('body').on('click', '.btnUploadImage', function () {
+            $(this).next().next().next().next().trigger('click'); //파일 클릭 이벤트 발생
+        });
+        $('body').on('click', '.btnResizeImage', function () {
+            //이미지가 없는 경우 
+            if($(this).next().val() == "" && $(this).prev().prev().prev().attr('src').includes('images/system/no-image.png')){
+                return false;
+            }
+            //
+            if(!confirm("사이즈를 변경하시겠습니까?")){
+                return false;
+            }
+            
+            var base64Data = $(this).next().val();
+            var img = document.createElement("img");
+            var canvas = document.createElement("canvas");
+            var ctx = canvas.getContext("2d");
+            window.el = $(this).prev().prev().prev();
+            if(!$(this).next().val().includes('data:image/')){
+                DataUrl($(this).prev().prev().prev().attr('src'), function(base64Data) {
+                    var img = document.createElement("img");
+                    
+                    img.onload = function()
+                    {        
+                        // We create a canvas and get its context.
+                        var canvas = document.createElement('canvas');
+                        var ctx = canvas.getContext('2d');
+
+                        // We set the dimensions at the wanted size.
+                        canvas.width = 800;
+                        canvas.height = 800;
+                        // We resize the image with the canvas method drawImage();
+                        ctx.drawImage(this, 0, 0, 800, 800);
+
+                        var dataURI = canvas.toDataURL();
+                        base64Data = canvas.toDataURL("image/jpeg");
+                        window.el.attr('src', base64Data);
+                        window.el.attr('data', base64Data);
+                        window.el.next().next().next().next().val(base64Data);
+                        window.el.addClass('preview');
+                    };
+                    img.src = base64Data;
+                });
+                
+            }else{
+                base64Data = $(this).next().val();
+                img.src = base64Data;
+                canvas = document.createElement("canvas");
+                ctx = canvas.getContext("2d");
+                canvas.width = 800;
+                canvas.height = 800;
+                var _scaleh = 800 / img.width;
+                var _scalew = 800 / img.height;
+                canvas.width = img.width * _scalew;
+                canvas.height = img.height * _scaleh;
+
+                var ctx = canvas.getContext("2d");
+                var cw = canvas.width;
+                var ch = canvas.height;
+                var maxW = img.width * _scalew;
+                var maxH = img.height * _scaleh;
+
+                var iw = img.width;
+                var ih = img.height;
+                var scl = Math.min((maxW / iw), (maxH / ih));
+                var iwScaled = 800;//iw * scl;
+                var ihScaled = 800;//ih * scl;
+                canvas.width = iwScaled;
+                canvas.height = ihScaled;
+                ctx.drawImage(img, 0, 0, iwScaled, ihScaled);
+                base64Data = canvas.toDataURL("image/jpeg", scl);
+                $(this).prev().prev().prev().attr('src', base64Data);
+                $(this).prev().prev().prev().attr('data', base64Data);
+                $(this).next().val(base64Data);
+                $(this).prev().prev().prev().addClass('preview');
+            }
+        });
+        $('body').on('change', '.descImageFile', function () {
+            readURL(this, $(this));
+        });
+        function readURL(input, el) {
+            
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    el.prev().prev().prev().prev().prev().attr('src', e.target.result);
+                    el.prev().prev().prev().prev().prev().attr('data', e.target.result);
+                    el.prev().val(e.target.result);
+                    el.prev().prev().prev().prev().prev().addClass('preview');
+                }
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+        
         $('#summernote').summernote({
             height: '300px',
-            width: 900
+            callbacks:{
+                onImageUpload: function(files, editor, welEditable) {
+                    var url= sendFile(files[0], editor, welEditable);
+                },
+                onMediaDelete : function(target) {
+                    //deleteSNImage(target[0].src);
+                }
+            }
         });
-        $('#summernote').summernote('code', $('#txtDesc').val());
+        $('#summernote').summernote('code', {!! json_encode($product->productDetail->blobNote) !!});
+        function sendFile(file, editor, welEditable) {
+            data = new FormData();
+            data.append("file", file);
+            $.ajax({
+            data: data,
+            type: "POST",
+            url: "/uploadImage",
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function({success, data}) {
+                var image = $('<img>').attr('src', data ).addClass("img-fluid");
+                $('#summernote').summernote("insertNode", image[0]);
+            }
+            });
+        }
         //delete account
         $('body').on('click', '.btnDelItem', function () {
             var rowId = $(this).attr('data-id');
 
             $(".subItemsTable tbody").find("#row_" + rowId).remove();
         });
-        //대표이미지 바꾸기
-        $('body').on('click', '.btnMainImage', function () {
-            var img_src = $(this).attr('data-src');
-            $('#mainImage').attr('src', img_src);
-            $("input[name='txtImage[]']").each(function(index){
-                var strVal = $(this).val();
-                var arrTemp = strVal.split('::');
-                if(arrTemp[0] == 0){
-                    $(this).val(index+"::"+arrTemp[1]);
-                }
-            });
-            $(this).parent().parent().parent().prev().val("0::"+img_src);
-            $('#mainImage').one('load', function() {
-                var width= this.naturalWidth;
-                var height = this.naturalHeight;
-                var blob = null;
-                var xhr = new XMLHttpRequest(); 
-                xhr.open('GET', $(this).attr('src'), true); 
-                xhr.responseType = 'blob';
-                //$('#spanImageInfo_' + index).html('적합 - '+width+'x'+height+', ' + 'KB');
-                xhr.onload = function() 
-                {
-                    blob = xhr.response;
-                    $('#spanBaseImageInfo_0').html('적합 - '+width+'x'+height+', ' + Math.round(blob.size/1024) + 'KB');
-                }
-                xhr.send();
-            }).each(function() {
-                if(this.complete) $(this).load();
-            });
-            return false;
-        });	
-        // 첨부이미지 1 바꾸기
-        $('body').on('click', '.btnSubImage1', function () {
-            var img_src = $(this).attr('data-src');
-            $('#subImage1').attr('src', img_src);
-            $("input[name='txtImage[]']").each(function(index){
-                var strVal = $(this).val();
-                var arrTemp = strVal.split('::');
-                if(arrTemp[0] == 1){
-                    $(this).val(index+"::"+arrTemp[1]);
-                }
-            });
-            $(this).parent().parent().parent().prev().val("1::"+img_src);
-            $('#subImage1').one('load', function() {
-                var width= this.naturalWidth;
-                var height = this.naturalHeight;
-                var blob = null;
-                var xhr = new XMLHttpRequest(); 
-                xhr.open('GET', $(this).attr('src'), true); 
-                xhr.responseType = 'blob';
-                //$('#spanImageInfo_' + index).html('적합 - '+width+'x'+height+', ' + 'KB');
-                xhr.onload = function() 
-                {
-                    blob = xhr.response;
-                    $('#spanBaseImageInfo_1').html('적합 - '+width+'x'+height+', ' + Math.round(blob.size/1024) + 'KB');
-                }
-                xhr.send();
-            }).each(function() {
-                if(this.complete) $(this).load();
-            });
-            return false;
-        });	
-        // 첨부이미지 2 바꾸기
-        $('body').on('click', '.btnSubImage2', function () {
-            var img_src = $(this).attr('data-src');
-            $('#subImage2').attr('src', img_src);
-            $("input[name='txtImage[]']").each(function(index){
-                var strVal = $(this).val();
-                var arrTemp = strVal.split('::');
-                if(arrTemp[0] == 2){
-                    $(this).val(index+"::"+arrTemp[1]);
-                }
-            });
-            $(this).parent().parent().parent().prev().val("2::"+img_src);
-            $('#subImage2').one('load', function() {
-                var width= this.naturalWidth;
-                var height = this.naturalHeight;
-                var blob = null;
-                var xhr = new XMLHttpRequest(); 
-                xhr.open('GET', $(this).attr('src'), true); 
-                xhr.responseType = 'blob';
-                //$('#spanImageInfo_' + index).html('적합 - '+width+'x'+height+', ' + 'KB');
-                xhr.onload = function() 
-                {
-                    blob = xhr.response;
-                    console.log(width);
-                    console.log(height);
-                    console.log(blob.size);
-                    console.log($(this).attr("data-id"));
-                    $('#spanBaseImageInfo_2').html('적합 - '+width+'x'+height+', ' + Math.round(blob.size/1024) + 'KB');
-                }
-                xhr.send();
-            }).each(function() {
-                if(this.complete) $(this).load();
-            });
-            return false;
-        });	
-
+        
         $('body').on('click', '.btnUpdateProduct', function () {
             
             if(confirm("수집정보를 저장하시겠습니까")){
@@ -1687,6 +1790,37 @@
                 $(this).removeClass('is-invalid');
                 $(this).addClass('is-valid');
             }
+        });
+        $('body').on('mousemove', '.preview', function (e) {
+            var offset = $(this).offset();
+            var imagUrl = $(this).attr('data');
+            const img = new Image();
+            img.src = imagUrl;
+            var xOffset = 80;
+            var yOffset = 600;
+            if($('#preview').length)
+            {
+                var top = offset.top - yOffset > 0 ? offset.top - yOffset : 0; 
+                var left = offset.left + xOffset > windo.width ? window.width - xOffset : 0; 
+                $("#preview").css({
+                    "top": top + "px",
+                    "left": (offset.left + xOffset) + "px"
+                }).fadeIn();
+            }
+            else
+            {
+                this.t = this.title,
+                this.title = "";
+                var c = (this.t != "") ? "<br/>" + this.t : "";
+                $("body").append("<p id='preview'><img style='height:600px;' src='" + imagUrl + "' alt='Image preview' />" + c + "</p>");
+                $("#preview").css({
+                    "top": (offset.top - yOffset) + "px",
+                    "left": (offset.left + xOffset) + "px"
+                }).fadeIn();
+            }   
+        });
+        $('body').on('mouseout', '.preview', function (e) {
+            $("#preview").remove();
         });
     });
     function charByteSize(ch) {

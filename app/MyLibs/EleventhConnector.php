@@ -284,7 +284,7 @@ _EOT_;
         $retData = $xml->xpath('//ClientMessage');
         
         $response = json_decode(json_encode((array)$retData), TRUE);
-        print_r($response);
+        //print_r($response);
         
         return($response);
     }

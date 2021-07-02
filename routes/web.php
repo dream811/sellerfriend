@@ -55,7 +55,7 @@ Route::post('/scratchSellPrepareCheck/registProduct', [App\Http\Controllers\Scra
 Route::get('/scratchSellPrepareCheck/product/{prodcutId}/edit', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'editProduct'])->name('scratch.SellPrepareCheck.edit');
 Route::get('/scratchSellPrepareCheck/product/{prodcutId}/detail', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'detailProduct'])->name('scratch.SellPrepareCheck.detail');
 Route::post('/scratchSellPrepareCheck/product/{productId}/update', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'update'])->name('scratch.SellPrepareCheck.update');
-Route::delete('/scratchSellPrepareCheck/product/{productId}/delete', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'delete'])->name('scratch.SellPrepareCheck.update');
+Route::delete('/scratchSellPrepareCheck/product/{productId}/delete', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'delete'])->name('scratch.SellPrepareCheck.delete');
 Route::post('/scratchSellPrepareCheck/product/{productId}/updateDescription', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'updateDescription'])->name('scratch.SellPrepareCheck.updateDescription');
 //4
 Route::get('/scratchDesignCheck', [App\Http\Controllers\Scratch\DesignCheckController::class, 'index'])->name('scratch.DesignCheck');

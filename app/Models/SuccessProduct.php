@@ -10,7 +10,7 @@ class SuccessProduct extends Model
     use HasFactory;
     protected $table = 'tb_success_products';
     protected $primaryKey = 'nIdx';
-    protected $fillable = ['strId', 'strSolutionId', 'strURL', 'strMainName', 'strSubName', 'nUserId', 'nMarketSetIdx', 'nBrandType', 'strBrand', 
+    protected $fillable = ['strId', 'strSolutionId', 'strURL', 'strMainName', 'strSubName', 'nUserId', 'nMarketSetIdx', 'strMarketAccId', 'nBrandType', 'strBrand', 
     'strKeyword', 'strKoOption', 'strKoOptionValue', 'strCnOption', 'strCnOptionValue', 'strOptionPrice', 'blobOptionImage', 'strChMainName', 'strKrMainName', 
     'strChSubName', 'strKrSubName', 'strComeCode', 'strCategoryCode0', 'strCategoryCode1', 'strCategoryCode2', 'strCategoryCode3', 'strCategoryCode4', 
     'strCategoryCode5', 'strCategoryCode6', 'strCategoryCode7', 'strCategoryCode8', 'nShareType', 'nProductWorkProcess', 
@@ -32,19 +32,17 @@ class SuccessProduct extends Model
     // {
     //     return $this->hasMany(SuccessProductImage::class, 'nProductIdx', 'nIdx')->where('nImageCode', 2)->first();
     // }
-
     // public function options()
     // {
     //     return $this->hasMany(SuccessProductOption::class, 'nProductIdx', 'nIdx');
     // }
-
     public function productDetail()
     {
         return $this->hasOne(SuccessProductDetail::class, 'nProductIdx', 'nIdx');
     }
     public function productMarketSetting()
     {
-        return $this->belongsTo(MarketSettingCoupang::class, 'nMarketSetIdx', 'nIdx');
+        return $this->belongsTo(MarketSetting::class, 'nMarketSetIdx', 'nIdx');
     }
     public function productRegCoupang()
     {

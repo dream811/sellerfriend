@@ -232,7 +232,7 @@
                 },
                 columns: [
                     {data: 'check', name: 'check', orderable: false},
-                    {data: 'mainImage', name: 'mainImage'},
+                    {data: 'mainImage', name: 'mainImage', className: "text-center" },
                     {data: 'productInfo', name: 'productInfo'},
                     {data: 'codeInfo', name: 'codeInfo'},
                     {data: 'priceInfo', name: 'priceInfo'},

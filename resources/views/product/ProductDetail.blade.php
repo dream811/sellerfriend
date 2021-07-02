@@ -32,6 +32,8 @@
     <script src="{{asset('js/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
     <!-- Summernote -->
     <script src="{{asset('js/summernote/summernote-bs4.min.js')}}"></script>
+    <!-- image preview -->
+    <script src="{{asset('js/image-preview/imagepreview.js')}}"></script>
     @yield('third_party_stylesheets')
 
     @stack('page_css')
@@ -1767,7 +1769,38 @@
                 $(this).addClass('is-valid');
             }
         });
+        $('body').on('mousemove', '.preview', function (e) {
+            var offset = $(this).offset();
+            var imagUrl = $(this).attr('data');
+            const img = new Image();
+            img.src = imagUrl;
+            var xOffset = 80;
+            var yOffset = 600;
+            if($('#preview').length)
+            {
+                var top = offset.top - yOffset > 0 ? offset.top - yOffset : 0; 
+                $("#preview").css({
+                    "top": top + "px",
+                    "left": (offset.left + xOffset) + "px"
+                }).fadeIn();
+            }
+            else
+            {
+                this.t = this.title,
+                this.title = "";
+                var c = (this.t != "") ? "<br/>" + this.t : "";
+                $("body").append("<p id='preview'><img style='height:600px;' src='" + imagUrl + "' alt='Image preview' />" + c + "</p>");
+                $("#preview").css({
+                    "top": (offset.top - yOffset) + "px",
+                    "left": (offset.left + xOffset) + "px"
+                }).fadeIn();
+            }
+        });
+        $('body').on('mouseout', '.preview', function (e) {
+            $("#preview").remove();
+        });
     });
+    
     function charByteSize(ch) {
         if (ch == null || ch.length == 0) {
             return 0;

@@ -135,7 +135,7 @@
                                     <label for="" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">판매대행 수수료(%)</label>
                                     <div class="col-sm-9 col-md-6">
                                         <div style="display:inline-block">
-                                            <input type="number" class="form-control form-control-sm text-right" id="txtSalesAgentRate" name="txtSalesAgentRate" value="{{ $marketSetting->nSalesAgentRate }}"  step="0.01" placeholder="0~100까지의 수값을 입력하세요.">
+                                            <input type="number" class="form-control form-control-sm text-right" id="txtSalesAgentRate" name="txtSalesAgentRate" value="{{ $marketSetting->detail->nSalesAgentRate }}"  step="0.01" placeholder="0~100까지의 수값을 입력하세요.">
                                         </div>
                                         <div style="display:inline-block">%</div>
                                     </div>
@@ -148,7 +148,7 @@
                                                 <div class="input-group-prepend mt-2 font-weight-bold">
                                                     시작일:
                                                 </div>
-                                                <input type="text" class="form-control form-control-sm float-right" name="txtSalesPeriodStartDateTime" id="txtSalesPeriodStartDateTime" value="{{ $marketSetting->dtSalesPeriodStartDateTime }}">
+                                                <input type="text" class="form-control form-control-sm float-right" name="txtSalesPeriodStartDateTime" id="txtSalesPeriodStartDateTime" value="{{ $marketSetting->detail->dtSalesPeriodStartDateTime }}">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">
                                                         <i class="far fa-calendar-alt"></i>
@@ -163,7 +163,7 @@
                                                 <div class="input-group-prepend mt-2 font-weight-bold" >
                                                     종료일:
                                                 </div>
-                                                <input type="text" class="form-control form-control-sm float-right" name="txtSalesPeriodEndDateTime" id="txtSalesPeriodEndDateTime"  value="{{ $marketSetting->dtSalesPeriodEndDateTime }}">
+                                                <input type="text" class="form-control form-control-sm float-right" name="txtSalesPeriodEndDateTime" id="txtSalesPeriodEndDateTime"  value="{{ $marketSetting->detail->dtSalesPeriodEndDateTime }}">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">
                                                         <i class="far fa-calendar-alt"></i>
@@ -178,7 +178,7 @@
                                     <label for="txtUnityQuantity" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">단위수량<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6">
                                         <div style="display:inline-block">
-                                            <input type="number" class="form-control form-control-sm float-right text-right" id="txtUnityQuantity" name="txtUnityQuantity" value="{{ $marketSetting->nUnitQuantity }}" placeholder="">
+                                            <input type="number" class="form-control form-control-sm float-right text-right" id="txtUnityQuantity" name="txtUnityQuantity" value="{{ $marketSetting->detail->nUnitQuantity }}" placeholder="">
                                         </div>
                                     </div>
                                 </div>
@@ -186,13 +186,13 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">인당최대구매수량<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-10">
                                         <div style="display:inline-block">
-                                            <input type="text" class="form-control form-control-sm float-right text-right" name="txtMaxQtyPerManDayLimit" id="txtMaxQtyPerManDayLimit" value="{{ $marketSetting->nMaxQtyPerManDayLimit }}">
+                                            <input type="text" class="form-control form-control-sm float-right text-right" name="txtMaxQtyPerManDayLimit" id="txtMaxQtyPerManDayLimit" value="{{ $marketSetting->detail->nMaxQtyPerManDayLimit }}">
                                         </div>
                                         <div style="display:inline-block">
                                             일
                                         </div>
                                         <div style="display:inline-block">
-                                            <input type="text" class="form-control form-control-sm float-right text-right" name="txtMaxQtyPerManQtyLimit" id="txtMaxQtyPerManQtyLimit" value="{{ $marketSetting->nMaxQtyPerManQtyLimit }}">
+                                            <input type="text" class="form-control form-control-sm float-right text-right" name="txtMaxQtyPerManQtyLimit" id="txtMaxQtyPerManQtyLimit" value="{{ $marketSetting->detail->nMaxQtyPerManQtyLimit }}">
                                         </div>
                                         <div style="display:inline-block">
                                             개<span style="margin-left:1rem; font-size:12px; color: red;">※ 0개는 무한대</span>
@@ -203,11 +203,11 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">병행수입 여부<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-10 mt-1">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoParallelImportY" name="rdoParallelImport" @if( $marketSetting->bParallelImport == 1 ) checked @endif value="1" >
+                                            <input class="custom-control-input" type="radio" id="rdoParallelImportY" name="rdoParallelImport" @if( $marketSetting->detail->bParallelImport == 1 ) checked @endif value="1" >
                                             <label for="rdoParallelImportY" class="custom-control-label pt-1" style="font-size:12px;">병행수입</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoParallelImportN" name="rdoParallelImport" @if( $marketSetting->bParallelImport == 0 ) checked @endif value="0">
+                                            <input class="custom-control-input" type="radio" id="rdoParallelImportN" name="rdoParallelImport" @if( $marketSetting->detail->bParallelImport == 0 ) checked @endif value="0">
                                             <label for="rdoParallelImportN" class="custom-control-label pt-1" style="font-size:12px;">비병행수입</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
@@ -219,11 +219,11 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">해외구매대행 여부<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6 mt-1">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoOverSeaPurchaseAgentY" name="rdoOverSeaPurchaseAgent" @if( $marketSetting->bOverSeaPurchaseAgent == 1 ) checked @endif value="1">
+                                            <input class="custom-control-input" type="radio" id="rdoOverSeaPurchaseAgentY" name="rdoOverSeaPurchaseAgent" @if( $marketSetting->detail->bOverSeaPurchaseAgent == 1 ) checked @endif value="1">
                                             <label for="rdoOverSeaPurchaseAgentY" class="custom-control-label pt-1" style="font-size:12px;">예</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoOverSeaPurchaseAgentN" name="rdoOverSeaPurchaseAgent" @if( $marketSetting->bOverSeaPurchaseAgent == 0 ) checked @endif value="0">
+                                            <input class="custom-control-input" type="radio" id="rdoOverSeaPurchaseAgentN" name="rdoOverSeaPurchaseAgent" @if( $marketSetting->detail->bOverSeaPurchaseAgent == 0 ) checked @endif value="0">
                                             <label for="rdoOverSeaPurchaseAgentN" class="custom-control-label pt-1" style="font-size:12px;">아니</label>
                                         </div>
                                     </div>
@@ -232,11 +232,11 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">미성년 구매<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6 mt-1">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoOnlyAdultY" name="rdoOnlyAdult" @if( $marketSetting->bOnlyAdult == 0 ) checked @endif value="0">
+                                            <input class="custom-control-input" type="radio" id="rdoOnlyAdultY" name="rdoOnlyAdult" @if( $marketSetting->detail->bOnlyAdult == 0 ) checked @endif value="0">
                                             <label for="rdoOnlyAdultY" class="custom-control-label pt-1" style="font-size:12px;">가능</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoOnlyAdultN" name="rdoOnlyAdult" @if( $marketSetting->bOnlyAdult == 1 ) checked @endif value="1">
+                                            <input class="custom-control-input" type="radio" id="rdoOnlyAdultN" name="rdoOnlyAdult" @if( $marketSetting->detail->bOnlyAdult == 1 ) checked @endif value="1">
                                             <label for="rdoOnlyAdultN" class="custom-control-label pt-1" style="font-size:12px;">불가능</label>
                                         </div>
                                     </div>
@@ -275,7 +275,7 @@
                                         <select class="custom-select form-control-border custom-select-sm" name="selDeliveryType" id="selDeliveryType">
                                             <option value="">= 선택 =</option>
                                             @foreach ($deliveryTypes as $deliveryType)
-                                            <option value="{{$deliveryType->nIdx}}{{--{{$deliveryType->strDeliveryCode}}--}}" @if ($marketSetting->nDeliveryType == $deliveryType->nIdx) selected @endif>{{$deliveryType->strDeliveryName}}</option>
+                                            <option value="{{$deliveryType->nIdx}}{{--{{$deliveryType->strDeliveryCode}}--}}" @if ($marketSetting->detail->nDeliveryType == $deliveryType->nIdx) selected @endif>{{$deliveryType->strDeliveryName}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -284,11 +284,11 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">개인통관부호필수<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6 mt-1">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoPersonPassingCodeType1" name="rdoPersonPassingCodeType" value="1" @if ($marketSetting->nPersonPassingCodeType == 1) checked @endif>
+                                            <input class="custom-control-input" type="radio" id="rdoPersonPassingCodeType1" name="rdoPersonPassingCodeType" value="1" @if ($marketSetting->detail->nPersonPassingCodeType == 1) checked @endif>
                                             <label for="rdoPersonPassingCodeType1" class="custom-control-label pt-1" style="font-size:12px;">필수</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoPersonPassingCodeType2" name="rdoPersonPassingCodeType" value="0" @if ($marketSetting->nPersonPassingCodeType == 0) checked @endif>
+                                            <input class="custom-control-input" type="radio" id="rdoPersonPassingCodeType2" name="rdoPersonPassingCodeType" value="0" @if ($marketSetting->detail->nPersonPassingCodeType == 0) checked @endif>
                                             <label for="rdoPersonPassingCodeType2" class="custom-control-label pt-1" style="font-size:12px;">비필수</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
@@ -305,15 +305,15 @@
                                         <div class="col">
                                             <select class="custom-select custom-select-sm" name="selUnionDeliveryType" id="selUnionDeliveryType">
                                                 <option value="">= 선택 =</option>
-                                                <option value="UNION_DELIVERY" @if ($marketSetting->strUnionDeliveryType == "UNION_DELIVERY") selected @endif>묶음배송</option>
-                                                <option value="NOT_UNION_DELIVERY" @if ($marketSetting->strUnionDeliveryType == "NOT_UNION_DELIVERY") selected @endif>묶음배송불가</option>
+                                                <option value="UNION_DELIVERY" @if ($marketSetting->detail->strUnionDeliveryType == "UNION_DELIVERY") selected @endif>묶음배송</option>
+                                                <option value="NOT_UNION_DELIVERY" @if ($marketSetting->detail->strUnionDeliveryType == "NOT_UNION_DELIVERY") selected @endif>묶음배송불가</option>
                                             </select>
                                         </div>
                                         <div class="col text-right mt-2 font-weight-bold" style="font-size:12px;">
                                             묶음배송수량
                                         </div>
                                         <div class="col">
-                                            <input type="text" class="form-control form-control-sm text-right" name="txtUnionDeliveryQty" id="txtUnionDeliveryQty" value="{{$marketSetting->nUnionDeliveryQty}}">
+                                            <input type="text" class="form-control form-control-sm text-right" name="txtUnionDeliveryQty" id="txtUnionDeliveryQty" value="{{$marketSetting->detail->nUnionDeliveryQty}}">
                                         </div>
                                         <div class="col mt-2 font-weight-bold" style="font-size:12px;">
                                             개
@@ -326,11 +326,11 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">도서산간배송여부<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6 mt-1">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoRemoteAreaDeliveryType0" name="rdoRemoteAreaDeliveryType" @if ($marketSetting->nRemoteAreaDeliveryType == 1) checked @endif value="1">
+                                            <input class="custom-control-input" type="radio" id="rdoRemoteAreaDeliveryType0" name="rdoRemoteAreaDeliveryType" @if ($marketSetting->detail->nRemoteAreaDeliveryType == 1) checked @endif value="1">
                                             <label for="rdoRemoteAreaDeliveryType0" class="custom-control-label pt-1" style="font-size:12px;">가능</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoRemoteAreaDeliveryType1" name="rdoRemoteAreaDeliveryType" @if ($marketSetting->nRemoteAreaDeliveryType == 0) checked @endif value="0">
+                                            <input class="custom-control-input" type="radio" id="rdoRemoteAreaDeliveryType1" name="rdoRemoteAreaDeliveryType" @if ($marketSetting->detail->nRemoteAreaDeliveryType == 0) checked @endif value="0">
                                             <label for="rdoRemoteAreaDeliveryType1" class="custom-control-label pt-1" style="font-size:12px;">불가</label>
                                         </div>
                                     </div>
@@ -339,7 +339,7 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">출고소요시간 <code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6">
                                         <div style="display:inline-block">
-                                            <input type="number" class="form-control form-control-sm text-right" id="txtOutboundShippingTimeDay" name="txtOutboundShippingTimeDay" value="{{ $marketSetting->nOutboundShippingTimeDay }}" placeholder="">
+                                            <input type="number" class="form-control form-control-sm text-right" id="txtOutboundShippingTimeDay" name="txtOutboundShippingTimeDay" value="{{ $marketSetting->detail->nOutboundShippingTimeDay }}" placeholder="">
                                         </div>
                                         <div style="display:inline-block">일</div>
                                     </div>
@@ -348,7 +348,7 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">출고지<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6">
                                         <div style="display:inline-block">
-                                            <input type="text" class="form-control form-control-sm text-right" id="txtOutboundShippingPlaceCode" name="txtOutboundShippingPlaceCode" value="{{ $marketSetting->strOutboundShippingPlaceCode }}" placeholder="" readonly>
+                                            <input type="text" class="form-control form-control-sm text-right" id="txtOutboundShippingPlaceCode" name="txtOutboundShippingPlaceCode" value="{{ $marketSetting->detail->strOutboundShippingPlaceCode }}" placeholder="" readonly>
                                         </div>
                                         <div style="display:inline-block">
                                             <a href="javascript:void(0);" style="height:26px;" class="btn btn-primary btn-xs mt-0 btnSearchOutboundShippingPlace">
@@ -363,7 +363,7 @@
                                         <select class="custom-select custom-select-sm" name="selDeliveryCompanyCode" id="selDeliveryCompanyCode">
                                             <option value="">= 선택 =</option>
                                             @foreach ($deliveryCompanies as $company)
-                                            <option value="{{$company->strCompanyCode}}" @if ($marketSetting->strDeliveryCompanyCode == $company->strCompanyCode) selected @endif>{{$company->strCompanyName}}</option>
+                                            <option value="{{$company->strCompanyCode}}" @if ($marketSetting->detail->strDeliveryCompanyCode == $company->strCompanyCode) selected @endif>{{$company->strCompanyName}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -373,10 +373,10 @@
                                     <div class="col-sm-9 col-md-3">
                                         <select class="custom-select custom-select-sm" name="selDeliveryChargeType" id="selDeliveryChargeType">
                                             <option value="">= 선택 =</option>
-                                            <option value="FREE" @if ($marketSetting->strDeliveryChargeType == "FREE") selected @endif>무료배송</option>
-                                            <option value="NOT_FREE" @if ($marketSetting->strDeliveryChargeType == "NOT_FREE") selected @endif>유료배송</option>
-                                            <option value="CHARGE_RECEIVED" @if ($marketSetting->strDeliveryChargeType == "CHARGE_RECEIVED") selected @endif>착불배송</option>
-                                            <option value="FREE_DELIVERY_OVER" @if ($marketSetting->strDeliveryChargeType == "FREE_DELIVERY_OVER") selected @endif>조건부무료배송</option>
+                                            <option value="FREE" @if ($marketSetting->detail->strDeliveryChargeType == "FREE") selected @endif>무료배송</option>
+                                            <option value="NOT_FREE" @if ($marketSetting->detail->strDeliveryChargeType == "NOT_FREE") selected @endif>유료배송</option>
+                                            <option value="CHARGE_RECEIVED" @if ($marketSetting->detail->strDeliveryChargeType == "CHARGE_RECEIVED") selected @endif>착불배송</option>
+                                            <option value="FREE_DELIVERY_OVER" @if ($marketSetting->detail->strDeliveryChargeType == "FREE_DELIVERY_OVER") selected @endif>조건부무료배송</option>
                                             {{-- @foreach ($categories_2 as $category_2)
                                             <option value="{{$category_2->nIdx}}" >{{$category_2->strCategoryName}}</option>
                                             @endforeach --}}
@@ -388,7 +388,7 @@
                                     <div class="bg-light col-sm-9 col-md-7 pt-2 mb-1 row">
                                         <dt class="col-sm-5 text-sm-right mt-1">기본배송비</dt>
                                         <dd class="col-sm-6" >
-                                            <input type="number" class="form-control form-control-sm text-right" id="txtDeliveryCharge" name="txtDeliveryCharge" value="{{ $marketSetting->nDeliveryCharge }}" placeholder="">
+                                            <input type="number" class="form-control form-control-sm text-right" id="txtDeliveryCharge" name="txtDeliveryCharge" value="{{ $marketSetting->detail->nDeliveryCharge }}" placeholder="">
                                         </dd>
                                         <dd class="col-sm-1 mt-1" >
                                             <span >원</span>
@@ -396,14 +396,14 @@
                                     
                                         <dt class="col-sm-5 text-sm-right mt-1">조건부무료</dt>
                                         <dd class="col-sm-6" >
-                                            <input type="number" class="form-control form-control-sm text-right" id="txtFreeShipOverAmount" name="txtFreeShipOverAmount" value="{{ $marketSetting->nFreeShipOverAmount }}" placeholder="">
+                                            <input type="number" class="form-control form-control-sm text-right" id="txtFreeShipOverAmount" name="txtFreeShipOverAmount" value="{{ $marketSetting->detail->nFreeShipOverAmount }}" placeholder="">
                                         </dd>
                                         <dd class="col-sm-1 mt-1" >
                                             <span >원</span>
                                         </dd>
                                         <dt class="col-sm-5 text-sm-right mt-1">초도반품배송비(편도)</dt>
                                         <dd class="col-6" >
-                                            <input type="number" class="form-control form-control-sm text-right" id="txtDeliveryChargeOnReturn" name="txtDeliveryChargeOnReturn" value="{{ $marketSetting->nDeliveryChargeOnReturn }}" placeholder="">
+                                            <input type="number" class="form-control form-control-sm text-right" id="txtDeliveryChargeOnReturn" name="txtDeliveryChargeOnReturn" value="{{ $marketSetting->detail->nDeliveryChargeOnReturn }}" placeholder="">
                                         </dd>
                                         <dd class="col-sm-1 mt-1" >
                                             <span >원</span>
@@ -411,7 +411,7 @@
                                     
                                         <dt class="col-sm-5 text-sm-right mt-1">반품배송비(편도)</dt>
                                         <dd class="col-sm-6" >
-                                            <input type="number" class="form-control form-control-sm text-right" id="txtReturnDeliveryCharge" name="txtReturnDeliveryCharge" value="{{ $marketSetting->nReturnDeliveryCharge }}" placeholder="">
+                                            <input type="number" class="form-control form-control-sm text-right" id="txtReturnDeliveryCharge" name="txtReturnDeliveryCharge" value="{{ $marketSetting->detail->nReturnDeliveryCharge }}" placeholder="">
                                         </dd>
                                         <dd class="col-sm-1 mt-1" >
                                             <span >원</span>
@@ -419,7 +419,7 @@
                                     
                                         <dt class="col-sm-5 text-sm-right mt-1">도서산간 추가배송비(제주지역)</dt>
                                         <dd class="col-sm-6" >
-                                            <input type="number" class="form-control form-control-sm text-right" id="txtJejuDeliveryCharge" name="txtJejuDeliveryCharge" value="{{ $marketSetting->nJejuDeliveryCharge }}" placeholder="">
+                                            <input type="number" class="form-control form-control-sm text-right" id="txtJejuDeliveryCharge" name="txtJejuDeliveryCharge" value="{{ $marketSetting->detail->nJejuDeliveryCharge }}" placeholder="">
                                         </dd>
                                         <dd class="col-sm-1 mt-1" >
                                             <span >원</span>
@@ -427,7 +427,7 @@
                                    
                                         <dt class="col-sm-5 text-sm-right mt-1">도서산간 추가배송비(제주외지역)</dt>
                                         <dd class="col-sm-6" >
-                                            <input type="number" class="form-control form-control-sm text-right" id="txtNotJejuDeliveryCharge" name="txtNotJejuDeliveryCharge" value="{{ $marketSetting->nNotJejuDeliveryCharge }}" placeholder="">
+                                            <input type="number" class="form-control form-control-sm text-right" id="txtNotJejuDeliveryCharge" name="txtNotJejuDeliveryCharge" value="{{ $marketSetting->detail->nNotJejuDeliveryCharge }}" placeholder="">
                                         </dd>
                                         <dd class="col-sm-1 mt-1" >
                                             <span >원</span>
@@ -448,7 +448,7 @@
                                     <div class="bg-light col-sm-9 col-md-7 pt-2 mb-1 row">
                                         <dt class="col-sm-5 text-sm-right mt-1">반품지</dt>
                                         <dd class="col-sm-6" >
-                                            <input type="text" class="form-control form-control-sm" id="txtReturnCenterCode" name="txtReturnCenterCode" value="{{ $marketSetting->strReturnCenterCode }}" placeholder="" readonly>
+                                            <input type="text" class="form-control form-control-sm" id="txtReturnCenterCode" name="txtReturnCenterCode" value="{{ $marketSetting->detail->strReturnCenterCode }}" placeholder="" readonly>
                                         </dd>
                                         <dd class="col-sm-1 mt-1" >
                                             <a href="javascript:void(0);" style="height:26px;" class="btn btn-primary btn-xs mt-0 btnSearchReturnShippingCenter">
@@ -457,23 +457,23 @@
                                         </dd>
                                         <dt class="col-sm-5 text-sm-right mt-1">판매자명</dt>
                                         <dd class="col-sm-7" >
-                                            <input type="text" class="form-control form-control-sm" id="txtReturnSellerName" name="txtReturnSellerName" value="{{ $marketSetting->strReturnSellerName }}" placeholder="">
+                                            <input type="text" class="form-control form-control-sm" id="txtReturnSellerName" name="txtReturnSellerName" value="{{ $marketSetting->detail->strReturnSellerName }}" placeholder="">
                                         </dd>
                                         <dt class="col-sm-5 text-sm-right mt-1">판매자전화</dt>
                                         <dd class="col-sm-7" >
-                                            <input type="text" class="form-control form-control-sm" id="txtCompanyContactNumber" name="txtCompanyContactNumber" value="{{ $marketSetting->strCompanyContactNumber }}" placeholder="">
+                                            <input type="text" class="form-control form-control-sm" id="txtCompanyContactNumber" name="txtCompanyContactNumber" value="{{ $marketSetting->detail->strCompanyContactNumber }}" placeholder="">
                                         </dd>
                                         <dt class="col-sm-5 text-sm-right mt-1">우편번호</dt>
                                         <dd class="col-sm-7" >
-                                            <input type="text" class="form-control form-control-sm" id="txtReturnZipCode" name="txtReturnZipCode" value="{{ $marketSetting->strReturnZipCode }}" placeholder="">
+                                            <input type="text" class="form-control form-control-sm" id="txtReturnZipCode" name="txtReturnZipCode" value="{{ $marketSetting->detail->strReturnZipCode }}" placeholder="">
                                         </dd>
                                         <dt class="col-sm-5 text-sm-right mt-1">주소</dt>
                                         <dd class="col-sm-7" >
-                                            <input type="text" class="form-control form-control-sm" id="txtReturnAddress" name="txtReturnAddress" value="{{ $marketSetting->strReturnAddress }}" placeholder="">
+                                            <input type="text" class="form-control form-control-sm" id="txtReturnAddress" name="txtReturnAddress" value="{{ $marketSetting->detail->strReturnAddress }}" placeholder="">
                                         </dd>
                                         <dt class="col-sm-5 text-sm-right mt-1">상세주소</dt>
                                         <dd class="col-sm-7" >
-                                            <input type="text" class="form-control form-control-sm" id="txtReturnAddressDetail" name="txtReturnAddressDetail" value="{{ $marketSetting->strReturnAddressDetail }}" placeholder="">
+                                            <input type="text" class="form-control form-control-sm" id="txtReturnAddressDetail" name="txtReturnAddressDetail" value="{{ $marketSetting->detail->strReturnAddressDetail }}" placeholder="">
                                         </dd>
                                     </div>
                                 </div>
@@ -481,23 +481,23 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">교환방법<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6 mt-1">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoExchangeType0" name="rdoExchangeType" value="A" @if ($marketSetting->strExchangeType == "A") checked @endif>
+                                            <input class="custom-control-input" type="radio" id="rdoExchangeType0" name="rdoExchangeType" value="A" @if ($marketSetting->detail->strExchangeType == "A") checked @endif>
                                             <label for="rdoExchangeType0" class="custom-control-label pt-1" style="font-size:12px;">선교환</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoExchangeType1" name="rdoExchangeType" value="B" @if ($marketSetting->strExchangeType == "B") checked @endif>
+                                            <input class="custom-control-input" type="radio" id="rdoExchangeType1" name="rdoExchangeType" value="B" @if ($marketSetting->detail->strExchangeType == "B") checked @endif>
                                             <label for="rdoExchangeType1" class="custom-control-label pt-1" style="font-size:12px;">후교환</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoExchangeType2" name="rdoExchangeType" value="C" @if ($marketSetting->strExchangeType == "C") checked @endif>
+                                            <input class="custom-control-input" type="radio" id="rdoExchangeType2" name="rdoExchangeType" value="C" @if ($marketSetting->detail->strExchangeType == "C") checked @endif>
                                             <label for="rdoExchangeType2" class="custom-control-label pt-1" style="font-size:12px;">맞교환</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoExchangeType3" name="rdoExchangeType" value="D" @if ($marketSetting->strExchangeType == "D") checked @endif>
+                                            <input class="custom-control-input" type="radio" id="rdoExchangeType3" name="rdoExchangeType" value="D" @if ($marketSetting->detail->strExchangeType == "D") checked @endif>
                                             <label for="rdoExchangeType3" class="custom-control-label pt-1" style="font-size:12px;">후교환(업체직송)</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoExchangeType4" name="rdoExchangeType" value="X" @if ($marketSetting->strExchangeType == "X") checked @endif>
+                                            <input class="custom-control-input" type="radio" id="rdoExchangeType4" name="rdoExchangeType" value="X" @if ($marketSetting->detail->strExchangeType == "X") checked @endif>
                                             <label for="rdoExchangeType4" class="custom-control-label pt-1" style="font-size:12px;">교환불가</label>
                                         </div>
                                     </div>
@@ -506,11 +506,11 @@
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">착불여부<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6 mt-1">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoReturnChargeVendorType0" name="rdoReturnChargeVendorType" value="N" @if ($marketSetting->strReturnChargeVendorType == "N") checked @endif>
+                                            <input class="custom-control-input" type="radio" id="rdoReturnChargeVendorType0" name="rdoReturnChargeVendorType" value="N" @if ($marketSetting->detail->strReturnChargeVendorType == "N") checked @endif>
                                             <label for="rdoReturnChargeVendorType0" class="custom-control-label pt-1" style="font-size:12px;">선불</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input class="custom-control-input" type="radio" id="rdoReturnChargeVendorType1" name="rdoReturnChargeVendorType" value="Y" @if ($marketSetting->strReturnChargeVendorType == "Y") checked @endif>
+                                            <input class="custom-control-input" type="radio" id="rdoReturnChargeVendorType1" name="rdoReturnChargeVendorType" value="Y" @if ($marketSetting->detail->strReturnChargeVendorType == "Y") checked @endif>
                                             <label for="rdoReturnChargeVendorType1" class="custom-control-label pt-1" style="font-size:12px;">착불</label>
                                         </div>
                                     </div>
@@ -522,19 +522,19 @@
                                             <select class="custom-select form-control-border custom-select-sm" name="selAfterServiceGuideType" id="selAfterServiceGuideType">
                                                 <option value="">= 선택 =</option>
                                                 @foreach ($asManuals as $asManual)
-                                                <option value="{{$asManual->strAsCode}}" @if ($marketSetting->strAfterServiceGuideType == $asManual->strAsCode) selected @endif >{{$asManual->strAsContent}}</option>
+                                                <option value="{{$asManual->strAsCode}}" @if ($marketSetting->detail->strAfterServiceGuideType == $asManual->strAsCode) selected @endif >{{$asManual->strAsContent}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div>
-                                            <textarea class="form-control text-xs" rows="3" placeholder="" name="txtAfterServiceGuide" id="txtAfterServiceGuide">{{$marketSetting->strAfterServiceGuide}}</textarea>
+                                            <textarea class="form-control text-xs" rows="3" placeholder="" name="txtAfterServiceGuide" id="txtAfterServiceGuide">{{$marketSetting->detail->strAfterServiceGuide}}</textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <label for="inputEmail3" class="text-left text-sm-right col-sm-3 col-md-2 col-form-label">A/S전화번호<code style="color:red !important;">[필수]</code></label>
                                     <div class="col-sm-9 col-md-6 mt-1">
-                                        <input type="text" class="form-control form-control-sm" id="txtAfterServiceContactNumber" name="txtAfterServiceContactNumber" value="{{ $marketSetting->strAfterServiceContactNumber }}" placeholder="전화번호">
+                                        <input type="text" class="form-control form-control-sm" id="txtAfterServiceContactNumber" name="txtAfterServiceContactNumber" value="{{ $marketSetting->detail->strAfterServiceContactNumber }}" placeholder="전화번호">
                                     </div>
                                 </div>
                             </div>
@@ -557,7 +557,7 @@
                                             <select class="custom-select form-control-border custom-select-sm" name="selRequireDocument1" id="selRequireDocument1">
                                                 <option value="">= 선택 =</option>
                                                 @foreach ($documentImages as $image)
-                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->nRequireDocument1 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
+                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->detail->nRequireDocument1 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
                                                 @endforeach
                                             </select>
                                         </dd>
@@ -566,7 +566,7 @@
                                             <select class="custom-select form-control-border custom-select-sm" name="selRequireDocument2" id="selRequireDocument2">
                                                 <option value="">= 선택 =</option>
                                                 @foreach ($documentImages as $image)
-                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->nRequireDocument2 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
+                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->detail->nRequireDocument2 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
                                                 @endforeach
                                             </select>
                                         </dd>
@@ -575,7 +575,7 @@
                                             <select class="custom-select form-control-border custom-select-sm" name="selRequireDocument3" id="selRequireDocument3">
                                                 <option value="">= 선택 =</option>
                                                 @foreach ($documentImages as $image)
-                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->nRequireDocument3 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
+                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->detail->nRequireDocument3 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
                                                 @endforeach
                                             </select>
                                         </dd>
@@ -584,7 +584,7 @@
                                             <select class="custom-select form-control-border custom-select-sm" name="selRequireDocument4" id="selRequireDocument4">
                                                 <option value="">= 선택 =</option>
                                                 @foreach ($documentImages as $image)
-                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->nRequireDocument4 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
+                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->detail->nRequireDocument4 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
                                                 @endforeach
                                             </select>
                                         </dd>
@@ -593,7 +593,7 @@
                                             <select class="custom-select form-control-border custom-select-sm" name="selRequireDocument5" id="selRequireDocument5">
                                                 <option value="">= 선택 =</option>
                                                 @foreach ($documentImages as $image)
-                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->nRequireDocument5 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
+                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->detail->nRequireDocument5 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
                                                 @endforeach
                                             </select>
                                         </dd>
@@ -602,7 +602,7 @@
                                             <select class="custom-select form-control-border custom-select-sm" name="selRequireDocument6" id="selRequireDocument6">
                                                 <option value="">= 선택 =</option>
                                                 @foreach ($documentImages as $image)
-                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->nRequireDocument6 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
+                                                <option value="{{$image->nIdx}}" @if($marketSetting->topImage && $marketSetting->detail->nRequireDocument6 == $image->nIdx) selected @endif>{{$image->strImageName}}</option>
                                                 @endforeach
                                             </select>
                                         </dd>
@@ -863,6 +863,7 @@
                 }
 
                 $( "#manageMarketAccount" ).submit();
+                window.opener.location.reload();
             });
             $('body').on('click', '.btnClose', function () {
                 var market_id = $('#market_id').val();

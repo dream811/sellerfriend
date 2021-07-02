@@ -24,8 +24,8 @@ class Product extends Model
     {
         //return $this->hasMany(ProductImage::class, 'nProductIdx', 'nIdx')->where('nImageCode', 0);
 
-        $instance = $this->hasMany(ProductImage::class, 'nProductIdx', 'nIdx');
-        $instance->getQuery()->where('nImageCode','=', 0);
+        $instance = $this->hasMany(ProductImage::class, 'nProductIdx', 'nIdx')->where('nImageCode','=', 0);
+        //$instance->getQuery()->where('nImageCode','=', 0)->take(1);
         return $instance;
     }
     // public function productSubImage1()

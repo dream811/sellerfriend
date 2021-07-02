@@ -782,8 +782,8 @@
                         <div class="card-body">
                             <fieldset style="color:">
                                 <span class="text-success">이미지 리사이징(800*800)시 이지러짐현상이 나타날수 있습니다 </span>
-                                    <div id="sortable" class="sortable ui-sortable row ml-2">
-                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                    <div id="sortable" class="sortable ui-sortable row ">
+                                        <div class="ui-state-default col m-1 imgThumb">
                                             <h5 class="thumb-header">대표이미지</h5>
                                             <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
                                             <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
@@ -792,7 +792,7 @@
                                             <input type="hidden" value="" name="imgLink[]">
                                             <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
                                         </div>
-                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                        <div class="ui-state-default col m-1 imgThumb">
                                             <h5 class="thumb-header">상세이미지1</h5>
                                             <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
                                             <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
@@ -801,7 +801,7 @@
                                             <input type="hidden" value="" name="imgLink[]">
                                             <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
                                         </div>
-                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                        <div class="ui-state-default col m-1 imgThumb">
                                             <h5 class="thumb-header">상세이미지2</h5>
                                             <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
                                             <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
@@ -810,7 +810,7 @@
                                             <input type="hidden" value="" name="imgLink[]">
                                             <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
                                         </div>
-                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                        <div class="ui-state-default col m-1 imgThumb">
                                             <h5 class="thumb-header">상세이미지3</h5>
                                             <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
                                             <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
@@ -819,7 +819,7 @@
                                             <input type="hidden" value="" name="imgLink[]">
                                             <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
                                         </div>
-                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                        <div class="ui-state-default col m-1 imgThumb">
                                             <h5 class="thumb-header">상세이미지4</h5>
                                             <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
                                             <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
@@ -828,7 +828,7 @@
                                             <input type="hidden" value="" name="imgLink[]">
                                             <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
                                         </div>
-                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                        <div class="ui-state-default col m-1 imgThumb">
                                             <h5 class="thumb-header">상세이미지5</h5>
                                             <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
                                             <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
@@ -837,7 +837,7 @@
                                             <input type="hidden" value="" name="imgLink[]">
                                             <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
                                         </div>
-                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                        <div class="ui-state-default col m-1 imgThumb">
                                             <h5 class="thumb-header">상세이미지6</h5>
                                             <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
                                             <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
@@ -846,7 +846,7 @@
                                             <input type="hidden" value="" name="imgLink[]">
                                             <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
                                         </div>
-                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                        <div class="ui-state-default col m-1 imgThumb">
                                             <h5 class="thumb-header">상세이미지7</h5>
                                             <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
                                             <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
@@ -855,7 +855,7 @@
                                             <input type="hidden" value="" name="imgLink[]">
                                             <input type="file" name="fileImage[]" class="descImageFile" accept=".jpg, .png, .gif;" style="width:0; height:0; display:0">
                                         </div>
-                                        <div class="ui-state-default col-1 m-1 imgThumb">
+                                        <div class="ui-state-default col m-1 imgThumb">
                                             <h5 class="thumb-header">상세이미지8</h5>
                                             <img src="{{asset('assets/images/system/no-image.png')}}" alt="이미지" width="100%" height="60%">
                                             <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
@@ -871,7 +871,7 @@
                             </fieldset>
                             <hr>
                             <span class="text-success"> 마켓별 글자수 제한 글자잘림 유의. 공통 30000 byte 이내 권장.</span>
-                            <div class="col-md-12">
+                            <div class="col-12 pl-0 pr-0">
                                 <div class="mt-3">
                                     <textarea name="summernote" id="summernote">
                                     </textarea>
@@ -930,7 +930,11 @@
         $( "#sortable" ).disableSelection();
 
         $('body').on('click', '.btnImportOptImage', function () {
-            $(this).next().click();
+            //$(this).next().attr('name'));
+            $(this).next().trigger('click');
+            
+            //this.nextSibling.click();
+            //console.log($(this).html());
         });
         $('body').on('change', '.optImageFile', function () {
             var ele = $(this).parent().prev();
@@ -946,7 +950,9 @@
                 processData: false,
                 success: function({success, data}) {
                     //console.log(data);
-                    ele.children(':first').attr('src', data);
+                    ele.attr('src', data);
+                    ele.addClass('preview');
+                    ele.next().next().next().next().next().next().val(data);
                 }
             });
         });
@@ -1057,7 +1063,7 @@
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     el.prev().prev().prev().prev().prev().attr('src', e.target.result);
-                    el.prev().prev().prev().prev().prev().attr('data', e.target.result);
+                    //el.prev().prev().prev().prev().prev().attr('data', e.target.result);
                     el.prev().val(e.target.result);
                     el.prev().prev().prev().prev().prev().addClass('preview');
                 }
@@ -1374,6 +1380,7 @@
                         }
                         var imageUrl = "{{asset('assets/images/system/no-image.png')}}";
                         var realImageUrl = "";
+                        var previewClass = "";
                         // if(el[3].trim() != ""){
                         //     imageUrl=el[3];
                         // }
@@ -1382,16 +1389,16 @@
                             if(el.properties == idx){
                                 imageUrl=el.url;
                                 realImageUrl=el.url;
+                                previewClass="preview";
+
                             }
                         });
 
                         item += `<div class="input-group">
-                                    <a href="javascript:void(0)" class="preview" data="${imageUrl}" target="_blank">
-                                        <img class="rounded" src="`+ imageUrl +`" width="40" height="40">
-                                    </a>
+                                    <img class="rounded ${previewClass}" src="`+ imageUrl +`" width="40" height="40">
                                     <fieldset>
-                                        <button type="button" class="btn btn-info p-1 btnImportOptImage"><label for="inputFileOpt_`+ index +`_`+ idx +`"><i class="fas fa-file-upload fa-lg"></i></label></button>
-                                        <input type="file" name="optImageFile[]" class="optImageFile" id="inputFileOpt_`+ index +`_`+ idx +`" hidden="">
+                                        <button type="button" class="btn btn-info p-1 btnImportOptImage"><label ><i class="fas fa-file-upload fa-lg"></i></label></button>
+                                        <input type="file" name="optImageFile[]" class="optImageFile" id="inputFileOpt_`+ index +`_`+ idx +`" style="display:none;">
                                     </fieldset>
                                     <input type="text" value="`+ optValue_cn +`" name="txtCnOptionName_${index}[]" id="txtCnOptionName_${index}_${idx}" data-id="" opt-id="${index}" item-id="${idx}" class="form-control  col-md-3">
                                     <input type="text" value="`+ optValue_ko +`" name="txtKoOptionName_${index}[]"  id="txtKoOptionName_${index}_${idx}" data-id="" opt-id="${index}" item-id="${idx}" class="form-control txtOptionName ${chkLength} col-md-3">
@@ -1429,7 +1436,7 @@
                         
                         imgItem += `<div class="ui-state-default col-1 m-1 imgThumb">
                                         <h5 class="thumb-header">${name}</h5>
-                                        <img data="${element.url}" src="${element.url}" class="preview" alt="이미지" width="100%" height="60%">
+                                        <img  src="${element.url}" class="preview" alt="이미지" width="100%" height="60%">
                                         <a href="javascript:void(0);" title="수정" class="mt-1 mb-0 ui-icon ui-icon-plus float-left btnUploadImage">수정</a>
                                         <a href="javascript:void(0);" title="삭제" class="mt-1 mb-0 ui-icon ui-icon-trash float-right btnDelImage">삭제</a>
                                         <a href="javascript:void(0);" title="리사이징" class="mt-1 mb-0 ui-icon ui-icon-arrow-4-diag float-right btnResizeImage">리사이징</a>
@@ -1606,12 +1613,10 @@
             var element = $(this).parent().parent();
             var id = $(this).parent().parent().parent().attr('id').split('_')[1];
             var content=`<div class="input-group">
-                            <a href="` + "{{asset('assets/images/system/no-image.png')}}" + `" target="_blank">
-                                <img class="rounded" src="` + "{{asset('assets/images/system/no-image.png')}}" + `" width="40" height="40">
-                            </a>
+                            <img class="rounded" src="` + "{{asset('assets/images/system/no-image.png')}}" + `" width="40" height="40">
                             <fieldset>
-                                <button type="button" class="btn btn-info p-1 btnImportOptImage"><label for="inputFileOpt01"><i class="fas fa-file-upload fa-lg"></i></label></button>
-                                <input type="file" name="optImageFile[]" class="optImageFile" hidden="">
+                                <button type="button" class="btn btn-info p-1 btnImportOptImage"><label><i class="fas fa-file-upload fa-lg"></i></label></button>
+                                <input type="file" name="optImageFile[]" class="optImageFile" style="display:none">
                             </fieldset>
                             <input type="text" class="form-control col-md-3 ">
                             <input type="text" class="form-control col-md-3 txtOptionName">
@@ -1655,12 +1660,10 @@
             var element = $(this).prev();
             var id = $(this).prev().attr('id').split('_')[1];
             var content=`<div class="input-group">
-                            <a href="` + "{{asset('assets/images/system/no-image.png')}}" + `" target="_blank">
-                                <img class="rounded" src="` + "{{asset('assets/images/system/no-image.png')}}" + `" width="40" height="40">
-                            </a>
+                            <img class="rounded" src="` + "{{asset('assets/images/system/no-image.png')}}" + `" width="40" height="40">
                             <fieldset>
-                                <button type="button" class="btn btn-info p-1 btnImportOptImage"><label for="inputFileOpt01"><i class="fas fa-file-upload fa-lg"></i></label></button>
-                                <input type="file" name="optImageFile[]" class="optImageFile" hidden="">
+                                <button type="button" class="btn btn-info p-1 btnImportOptImage"><label><i class="fas fa-file-upload fa-lg"></i></label></button>
+                                <input type="file" name="optImageFile[]" class="optImageFile" style="display:none">
                             </fieldset>
                             <input type="text" class="form-control col-md-3">
                             <input type="text" class="form-control col-md-3 txtOptionName">
@@ -2111,7 +2114,7 @@
 
         $('body').on('mousemove', '.preview', function (e) {
             var offset = $(this).offset();
-            var imagUrl = $(this).attr('data');
+            var imagUrl = $(this).attr('src');
             const img = new Image();
             img.src = imagUrl;
             var xOffset = 80;
@@ -2134,7 +2137,7 @@
                     "top": (offset.top - yOffset) + "px",
                     "left": (offset.left + xOffset) + "px"
                 }).fadeIn();
-            }
+            }   
         });
         $('body').on('mouseout', '.preview', function (e) {
             $("#preview").remove();

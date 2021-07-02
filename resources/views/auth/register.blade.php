@@ -13,9 +13,14 @@
           crossorigin="anonymous"/>
 
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-
+    <style>
+        .bgimg-1 {
+            background-image: url('{{asset('assets/images/home.jpeg')}}');
+            background-size: cover;
+        }
+    </style>
 </head>
-<body class="hold-transition register-page">
+<body class="bgimg-1 hold-transition register-page">
 <div class="register-box">
     <div class="register-logo">
         <a href="{{ url('/home') }}"><b>{{ config('app.name') }}</b></a>
@@ -23,19 +28,17 @@
 
     <div class="card">
         <div class="card-body register-card-body">
-            <p class="login-box-msg">Register a new membership</p>
-
+            <p class="login-box-msg">회원 가입</p>
             <form method="post" action="{{ route('register') }}">
                 @csrf
-
                 <div class="input-group mb-3">
                     <input type="text"
                            name="name"
-                           class="form-control @error('name') is-invalid @enderror"
+                           class="rounded-0 form-control @error('name') is-invalid @enderror"
                            value="{{ old('name') }}"
-                           placeholder="Full name">
+                           placeholder="이름">
                     <div class="input-group-append">
-                        <div class="input-group-text"><span class="fas fa-user"></span></div>
+                        <div class="rounded-0 input-group-text"><span class="fas fa-user"></span></div>
                     </div>
                     @error('name')
                     <span class="invalid-feedback" role="alert">
@@ -48,10 +51,10 @@
                     <input type="email"
                            name="email"
                            value="{{ old('email') }}"
-                           class="form-control @error('email') is-invalid @enderror"
-                           placeholder="Email">
+                           class="rounded-0 form-control @error('email') is-invalid @enderror"
+                           placeholder="이메일">
                     <div class="input-group-append">
-                        <div class="input-group-text"><span class="fas fa-envelope"></span></div>
+                        <div class="rounded-0 input-group-text"><span class="fas fa-envelope"></span></div>
                     </div>
                     @error('email')
                     <span class="invalid-feedback" role="alert">
@@ -63,10 +66,10 @@
                 <div class="input-group mb-3">
                     <input type="password"
                            name="password"
-                           class="form-control @error('password') is-invalid @enderror"
-                           placeholder="Password">
+                           class="rounded-0 form-control @error('password') is-invalid @enderror"
+                           placeholder="비밀번호">
                     <div class="input-group-append">
-                        <div class="input-group-text"><span class="fas fa-lock"></span></div>
+                        <div class="rounded-0 input-group-text"><span class="fas fa-lock"></span></div>
                     </div>
                     @error('password')
                     <span class="invalid-feedback" role="alert">
@@ -78,31 +81,29 @@
                 <div class="input-group mb-3">
                     <input type="password"
                            name="password_confirmation"
-                           class="form-control"
-                           placeholder="Retype password">
+                           class="rounded-0 form-control"
+                           placeholder="비밀번호 재확인">
                     <div class="input-group-append">
-                        <div class="input-group-text"><span class="fas fa-lock"></span></div>
+                        <div class="rounded-0 input-group-text"><span class="fas fa-lock"></span></div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-8">
                         <div class="icheck-primary">
                             <input type="checkbox" id="agreeTerms" name="terms" value="agree">
-                            <label for="agreeTerms">
-                                I agree to the <a href="#">terms</a>
+                            <label style="font-size:12px;" for="agreeTerms">
+                                <a href="#">이용약관</a>에 동의합니다
                             </label>
                         </div>
                     </div>
                     <!-- /.col -->
                     <div class="col-4">
-                        <button type="submit" class="btn btn-primary btn-block">Register</button>
+                        <button type="submit" style="font-size:12px;" class="btn btn-primary btn-block rounded-0">회원가입</button>
                     </div>
                     <!-- /.col -->
                 </div>
             </form>
-
-            <a href="{{ route('login') }}" class="text-center">I already have a membership</a>
+            <a href="{{ route('login') }}" style="font-size:12px;" class="text-center">로그인페이지로 가기</a>
         </div>
         <!-- /.form-box -->
     </div><!-- /.card -->

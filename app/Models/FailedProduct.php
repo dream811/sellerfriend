@@ -10,7 +10,7 @@ class FailedProduct extends Model
     use HasFactory;
     protected $table = 'tb_failed_products';
     protected $primaryKey = 'nIdx';
-    protected $fillable = ['strId', 'strSolutionId', 'strURL', 'strMainName', 'strSubName', 'nUserId', 'nMarketSetIdx', 'nBrandType', 'strBrand', 'strKeyword', 
+    protected $fillable = ['strId', 'strSolutionId', 'strURL', 'strMainName', 'strSubName', 'nUserId', 'nMarketSetIdx', 'strMarketAccId', 'nBrandType', 'strBrand', 'strKeyword', 
     'strKoOption', 'strKoOptionValue', 'strCnOption', 'strCnOptionValue', 'strOptionPrice', 'blobOptionImage', 'strChMainName', 'strKrMainName', 'strChSubName', 'strKrSubName', 
     'strComeCode', 'strCategoryCode0', 'strCategoryCode1', 'strCategoryCode2', 'strCategoryCode3', 'strCategoryCode4', 'strCategoryCode5', 'strCategoryCode6', 
     'strCategoryCode7', 'strCategoryCode8', 'nShareType', 'nProductWorkProcess', 'bReg11thhouse', 'bRegAuction', 'bRegCoupang', 'bRegGmarket', 'bRegInterpark', 
@@ -26,7 +26,7 @@ class FailedProduct extends Model
     }
     public function productMarketSetting()
     {
-        return $this->belongsTo(MarketSettingCoupang::class, 'nMarketSetIdx', 'nIdx');
+        return $this->belongsTo(MarketSetting::class, 'nMarketSetIdx', 'nIdx');
     }
     public function productRegCoupang()
     {
