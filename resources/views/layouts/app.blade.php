@@ -114,6 +114,11 @@
         -->
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
+                <a class="nav-link" href="{{asset('assets/app/SellerFriend.zip')}}">
+                    <i class="fas fa-th-large"></i>다운로드
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
                     <i class="fas fa-th-large"></i>
                 </a>

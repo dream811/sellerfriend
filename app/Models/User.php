@@ -35,6 +35,7 @@ class User extends Authenticatable
         'business_address1',
         'business_address2',
         'bIsUsed',
+        'api_token',
         'bIsDel',
     ];
 
@@ -47,6 +48,7 @@ class User extends Authenticatable
         'password',
         'bIsDel',
         'remember_token',
+        'api_token',
     ];
 
     /**

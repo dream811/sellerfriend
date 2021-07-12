@@ -25,7 +25,7 @@
     <!-- /.content-header -->
     <div class="container-fluid">
         <div class="row">
-            {{-- <div class="col-md-3">
+            <div class="col-md-3">
                 <div class="sticky-top mb-3">
                     <div class="card">
                         <div class="card-header">
@@ -34,11 +34,11 @@
                         <div class="card-body">
                         <!-- the events -->
                         <div id="external-events">
-                            <div class="external-event bg-success">Lunch</div>
-                            <div class="external-event bg-warning">Go home</div>
-                            <div class="external-event bg-info">Do homework</div>
-                            <div class="external-event bg-primary">Work on UI design</div>
-                            <div class="external-event bg-danger">Sleep tight</div>
+                            <div class="external-event bg-success">배송완료</div>
+                            <div class="external-event bg-warning">교환요청</div>
+                            <div class="external-event bg-info">주문요청</div>
+                            <div class="external-event bg-primary">주문완료</div>
+                            <div class="external-event bg-danger">반품요청</div>
                             <div class="checkbox">
                             <label for="drop-remove">
                                 <input type="checkbox" id="drop-remove">
@@ -61,7 +61,7 @@
                             <li><a class="text-warning" href="#"><i class="fas fa-square"></i></a></li>
                             <li><a class="text-success" href="#"><i class="fas fa-square"></i></a></li>
                             <li><a class="text-danger" href="#"><i class="fas fa-square"></i></a></li>
-                            <li><a class="text-muted" href="#"><i class="fas fa-square"></i></a></li>
+                            <li><a class="text-gray" href="#"><i class="fas fa-square"></i></a></li>
                             </ul>
                         </div>
                         <!-- /btn-group -->
@@ -69,7 +69,7 @@
                             <input id="new-event" type="text" class="form-control" placeholder="Event Title">
 
                             <div class="input-group-append">
-                            <button id="add-new-event" type="button" class="btn btn-primary">Add</button>
+                            <button id="add-new-event" type="button" class="btn btn-primary">추가</button>
                             </div>
                             <!-- /btn-group -->
                         </div>
@@ -77,9 +77,9 @@
                         </div>
                     </div>
                 </div>
-            </div> --}}
+            </div>
             <!-- /.col -->
-            <div class="col-md-12">
+            <div class="col-md-9">
                 <div class="card card-primary">
                 <div class="card-body p-0">
                     <!-- THE CALENDAR -->
@@ -110,28 +110,28 @@
             });
             /* initialize the external events
             -----------------------------------------------------------------*/
-            // function ini_events(ele) {
-            //     ele.each(function () {
+            function ini_events(ele) {
+                ele.each(function () {
 
-            //         // create an Event Object (https://fullcalendar.io/docs/event-object)
-            //         // it doesn't need to have a start or end
-            //         var eventObject = {
-            //         title: $.trim($(this).text()) // use the element's text as the event title
-            //         }
+                    // create an Event Object (https://fullcalendar.io/docs/event-object)
+                    // it doesn't need to have a start or end
+                    var eventObject = {
+                    title: $.trim($(this).text()) // use the element's text as the event title
+                    }
 
-            //         // store the Event Object in the DOM element so we can get to it later
-            //         $(this).data('eventObject', eventObject)
+                    // store the Event Object in the DOM element so we can get to it later
+                    $(this).data('eventObject', eventObject)
 
-            //         // make the event draggable using jQuery UI
-            //         $(this).draggable({
-            //         zIndex        : 1070,
-            //         revert        : true, // will cause the event to go back to its
-            //         revertDuration: 0  //  original position after the drag
-            //         })
-            //     })
-            // }
+                    // make the event draggable using jQuery UI
+                    $(this).draggable({
+                    zIndex        : 1070,
+                    revert        : true, // will cause the event to go back to its
+                    revertDuration: 0  //  original position after the drag
+                    })
+                })
+            }
 
-            //ini_events($('#external-events div.external-event'))
+            ini_events($('#external-events div.external-event'))
 
             /* initialize the calendar
             -----------------------------------------------------------------*/
@@ -151,17 +151,17 @@
             // initialize the external events
             // -----------------------------------------------------------------
 
-            // new Draggable(containerEl, {
-            // itemSelector: '.external-event',
-            // eventData: function(eventEl) {
-            //     return {
-            //     title: eventEl.innerText,
-            //     backgroundColor: window.getComputedStyle( eventEl ,null).getPropertyValue('background-color'),
-            //     borderColor: window.getComputedStyle( eventEl ,null).getPropertyValue('background-color'),
-            //     textColor: window.getComputedStyle( eventEl ,null).getPropertyValue('color'),
-            //     };
-            // }
-            // });
+            new Draggable(containerEl, {
+            itemSelector: '.external-event',
+            eventData: function(eventEl) {
+                return {
+                title: eventEl.innerText,
+                backgroundColor: window.getComputedStyle( eventEl ,null).getPropertyValue('background-color'),
+                borderColor: window.getComputedStyle( eventEl ,null).getPropertyValue('background-color'),
+                textColor: window.getComputedStyle( eventEl ,null).getPropertyValue('color'),
+                };
+            }
+            });
 
             var calendar = new Calendar(calendarEl, {
                 locale: 'ko',
@@ -170,55 +170,69 @@
                     center: 'title',
                     right : 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
-                themeSystem: 'jquery',
+                themeSystem: 'standard',
                 buttonText: {
                     today:    '오늘',
                     month:    '월통계',
                     week:     '주통계',
                     day:      '일통계',
                 },
-            //Random default events
-            // events: [
-            //     {
-            //     title          : 'All Day Event',
-            //     start          : new Date(y, m, 1),
-            //     backgroundColor: '#f56954', //red
-            //     borderColor    : '#f56954', //red
-            //     allDay         : true
-            //     },
-            //     {
-            //     title          : 'Long Event',
-            //     start          : new Date(y, m, d - 5),
-            //     end            : new Date(y, m, d - 2),
-            //     backgroundColor: '#f39c12', //yellow
-            //     borderColor    : '#f39c12' //yellow
-            //     },
-            //     {
-            //     title          : 'Meeting',
-            //     start          : new Date(y, m, d, 10, 30),
-            //     allDay         : false,
-            //     backgroundColor: '#0073b7', //Blue
-            //     borderColor    : '#0073b7' //Blue
-            //     },
-            //     {
-            //     title          : 'Lunch',
-            //     start          : new Date(y, m, d, 12, 0),
-            //     end            : new Date(y, m, d, 14, 0),
-            //     allDay         : false,
-            //     backgroundColor: '#00c0ef', //Info (aqua)
-            //     borderColor    : '#00c0ef' //Info (aqua)
-            //     }
-                
-            // ],
-            //editable  : true,
-            //droppable : true, // this allows things to be dropped onto the calendar !!!
-            // drop      : function(info) {
-            //     // is the "remove after drop" checkbox checked?
-            //     if (checkbox.checked) {
-            //     // if so, remove the element from the "Draggable Events" list
-            //     info.draggedEl.parentNode.removeChild(info.draggedEl);
-            //     }
-            // }
+                //Random default events
+                events: [
+                    {
+                    title          : 'All Day Event',
+                    description    : 'description for Repeating Event',
+                    start          : new Date(y, m, 1),
+                    backgroundColor: '#f56954', //red
+                    borderColor    : '#f56954', //red
+                    allDay         : true
+                    },
+                    {
+                    title          : 'Long Event',
+                    start          : new Date(y, m, d - 5),
+                    end            : new Date(y, m, d - 2),
+                    backgroundColor: '#f39c12', //yellow
+                    borderColor    : '#f39c12' //yellow
+                    },
+                    {
+                    title          : 'Meeting',
+                    start          : new Date(y, m, d, 10, 30),
+                    allDay         : false,
+                    backgroundColor: '#0073b7', //Blue
+                    borderColor    : '#0073b7' //Blue
+                    },
+                    {
+                    title          : 'Lunch',
+                    start          : new Date(y, m, d, 12, 0),
+                    end            : new Date(y, m, d, 14, 0),
+                    allDay         : false,
+                    backgroundColor: '#00c0ef', //Info (aqua)
+                    borderColor    : '#00c0ef' //Info (aqua)
+                    }
+                    
+                ],
+                editable  : true,
+                droppable : true, // this allows things to be dropped onto the calendar !!!
+                drop      : function(info) {
+                    // is the "remove after drop" checkbox checked?
+                    if (checkbox.checked) {
+                    // if so, remove the element from the "Draggable Events" list
+                    info.draggedEl.parentNode.removeChild(info.draggedEl);
+                    }
+                },
+                // eventDoubleClick: function (calEvent, jsEvent, view) {
+                //     calEvent.event.remove();
+                // },
+                eventDidMount: function(info){
+                    console.log('ggg');
+                    info.el.ondblclick = (()=>{alert('ondblclick event')});
+                    // var tooltip = new Tooltip(info.el, {
+                    //     title: info.event.extendedProps.description,
+                    //     placement: 'top',
+                    //     trigger: 'hover',
+                    //     container: 'body'
+                    // });
+                }
             });
 
             calendar.render();

@@ -234,7 +234,9 @@
             });
             $('body').on('click', '.openWindow', function(){
                 var id = $(this).attr('data-id');
-                window.open('/productStoppedProductManage/'+id+'/edit','상품수정','width=900,height=900,location=no,status=no,scrollbars=no');
+                //window.open('/productStoppedProductManage/'+id+'/edit','상품수정','width=900,height=900,location=no,status=no,scrollbars=no');
+                var editType = 2;//판매중지상품 수정
+                window.open('/scratchSellPrepareCheck/product/' + id + '/edit/'+ editType, '상품수정', 'scrollbars=1, resizable=1, width=1000, height=900');
             })
             // Handle click on "Select all" control
             $('#select_all').on('click', function(){

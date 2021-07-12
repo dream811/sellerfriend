@@ -52,7 +52,7 @@ Route::get('/scratchSellPrepareCheck/marketAccountList', [App\Http\Controllers\S
 //상품 대행사에 등록
 Route::post('/scratchSellPrepareCheck/registProduct', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'registProduct'])->name('scratch.SellPrepareCheck.registProduct');
 //상품 수정
-Route::get('/scratchSellPrepareCheck/product/{prodcutId}/edit', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'editProduct'])->name('scratch.SellPrepareCheck.edit');
+Route::get('/scratchSellPrepareCheck/product/{prodcutId}/edit/{editType}', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'editProduct'])->name('scratch.SellPrepareCheck.edit');
 Route::get('/scratchSellPrepareCheck/product/{prodcutId}/detail', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'detailProduct'])->name('scratch.SellPrepareCheck.detail');
 Route::post('/scratchSellPrepareCheck/product/{productId}/update', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'update'])->name('scratch.SellPrepareCheck.update');
 Route::delete('/scratchSellPrepareCheck/product/{productId}/delete', [App\Http\Controllers\Scratch\SellPrepareCheckController::class, 'delete'])->name('scratch.SellPrepareCheck.delete');
@@ -79,7 +79,7 @@ Route::get('/productSearchMarketOptionMapping/{marketCode}/category/{categoryCod
 //2
 Route::get('/productRegisteredProductManage', [App\Http\Controllers\Product\RegisteredProductManageController::class, 'index'])->name('product.RegisteredProductManage');
 Route::get('/productRegisteredProductManage/{productId}/edit', [App\Http\Controllers\Product\RegisteredProductManageController::class, 'edit'])->name('product.RegisteredProductManage.edit');
-Route::post('/productRegisteredProductManage/{productId}/update', [App\Http\Controllers\Product\RegisteredProductManageController::class, 'update'])->name('product.RegisteredProductManage.update');
+//Route::post('/productRegisteredProductManage/{productId}/update', [App\Http\Controllers\Product\RegisteredProductManageController::class, 'update'])->name('product.RegisteredProductManage.update');
 Route::get('/productRegisteredProductManage/{productId}/getStopInfo', [App\Http\Controllers\Product\RegisteredProductManageController::class, 'getStopInfo'])->name('product.RegisteredProductManage.getStopInfo');
 Route::post('/productRegisteredProductManage/{productId}/saveStopInfo', [App\Http\Controllers\Product\RegisteredProductManageController::class, 'saveStopInfo'])->name('product.RegisteredProductManage.saveStopInfo');
 //3
@@ -219,13 +219,3 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(
     Route::get('product/categoryManage', [App\Http\Controllers\Admin\Product\CategoryManageController::class, 'index'])->name('product.CategoryManage');
 });
 
-Route::group(
-    [           
-        'namespace' => 'Api\V1',
-        'prefix' => 'v1',
-    ], function(){
-
-        // Route::get('posts', ['uses'=>'PostsApiController@index']);
-        // Route::get('posts/{id}', ['uses'=>'PostsAPIController@show']);
-
-});

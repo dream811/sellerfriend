@@ -12,6 +12,7 @@ use App\Models\MarketAccount;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\MyLibs\CoupangConnector;
+use App\Mylibs\EleventhConnector;
 use Yajra\DataTables\Facades\DataTables;
 use DateTime;
 use Illuminate\Support\Facades\DB;
@@ -257,96 +258,192 @@ class MarketOrderCollectionController extends Controller
 
         $coupang = new CoupangConnector();
         foreach ($accounts as $key1 => $account) {
-            $coupang = new CoupangConnector($account->strAPIAccessKey, $account->strSecretKey, $account->strVendorId, $account->strAccountId);
-            $date = new DateTime('now');
-            $start_date = $date->format('Y-m-d H:i:s');
-            $date->modify('+1 day');
-            $end_date = $date->format('Y-m-d H:i:s');
-            $res =  (object)json_decode($coupang->getOrderSheetsDayList($start_date, $end_date, 50), false);
-            
-            if($res->code == "200"){
-                $cnt = count($res->data);
-                foreach ($res->data as $key2 => $order) {
-                    
-                    $orderM = new Order([
-                        'nUserId'                             => Auth::id(),
-                        'nMarketAccIdx'                       => $account->nIdx,
-                        'strShipmentBoxId'                    => $order->shipmentBoxId,
-                        'strOrderId'                          => $order->orderId,
-                        'dtOrderedAt'                         => $order->orderedAt,
-                        'strOrdererName'                      => $order->orderer->name,
-                        'strOrdererEmail'                     => $order->orderer->email,
-                        'strOrdererSafeNumber'                => $order->orderer->safeNumber,
-                        'strOrdererNumber'                    => $order->orderer->ordererNumber,
-                        'dtPaidAt'                            => $order->paidAt,
-                        'strStatus'                           => $order->status,
-                        'nShippingPrice'                      => $order->shippingPrice,
-                        'nRemotePrice'                        => $order->remotePrice,
-                        'bRemoteArea'                         => $order->remoteArea,
-                        'strParcelPrintMessage'               => $order->parcelPrintMessage,
-                        'bSplitShipping'                      => $order->splitShipping,
-                        'bAbleSplitShipping'                  => $order->ableSplitShipping,
-                        'strReceiverName'                     => $order->receiver->name,
-                        'strReceiverSafeNumber'               => $order->receiver->safeNumber,
-                        'strReceiverNumber'                   => $order->receiver->receiverNumber,
-                        'strReceiverAddr1'                    => $order->receiver->addr1,
-                        'strReceiverAddr2'                    => $order->receiver->addr2,
-                        'strPostCode'                         => $order->receiver->postCode,
-                        'strOSIDPersonalCustomClearanceCode'  => $order->overseaShippingInfoDto->personalCustomsClearanceCode,
-                        'strOSIDOrdererSsn'                   => $order->overseaShippingInfoDto->ordererSsn,
-                        'strOSIDOrdererPhoneNumber'           => $order->overseaShippingInfoDto->ordererPhoneNumber,
-                        'strDeliveryCompanyName'              => $order->deliveryCompanyName,
-                        'strInvoiceNumber'                    => $order->invoiceNumber,
-                        'dtInTrasitDateTime'                  => $order->inTrasitDateTime,
-                        'dtDeliveredDate'                     => $order->deliveredDate,
-                        'strReferer'                          => $order->refer,
-                        'bIsDel'                              => 0
-                    ]);
-
-                    $orderM->save();
-                    
-                    foreach ($order->orderItems as $key3 => $orderItem) {
+            if($account->market->strMarketCode == "coupang"){//쿠팡이면
+                $coupang = new CoupangConnector($account->strAPIAccessKey, $account->strSecretKey, $account->strVendorId, $account->strAccountId);
+                $date = new DateTime('now');
+                $start_date = $date->format('Y-m-d H:i:s');
+                $date->modify('+1 day');
+                $end_date = $date->format('Y-m-d H:i:s');
+                $res =  (object)json_decode($coupang->getOrderSheetsDayList($start_date, $end_date, 50), false);
+                
+                if($res->code == "200"){
+                    $cnt = count($res->data);
+                    foreach ($res->data as $key2 => $order) {
                         
-                        $strEtcInfoValues = implode("|", $orderItem->etcInfoValues);
+                        $orderM = new Order([
+                            'nUserId'                             => Auth::id(),
+                            'nMarketAccIdx'                       => $account->nIdx,
+                            'strShipmentBoxId'                    => $order->shipmentBoxId,
+                            'strOrderId'                          => $order->orderId,
+                            'dtOrderedAt'                         => $order->orderedAt,
+                            'strOrdererName'                      => $order->orderer->name,
+                            'strOrdererEmail'                     => $order->orderer->email,
+                            'strOrdererSafeNumber'                => $order->orderer->safeNumber,
+                            'strOrdererNumber'                    => $order->orderer->ordererNumber,
+                            'dtPaidAt'                            => $order->paidAt,
+                            'strStatus'                           => $order->status,
+                            'nShippingPrice'                      => $order->shippingPrice,
+                            'nRemotePrice'                        => $order->remotePrice,
+                            'bRemoteArea'                         => $order->remoteArea,
+                            'strParcelPrintMessage'               => $order->parcelPrintMessage,
+                            'bSplitShipping'                      => $order->splitShipping,
+                            'bAbleSplitShipping'                  => $order->ableSplitShipping,
+                            'strReceiverName'                     => $order->receiver->name,
+                            'strReceiverSafeNumber'               => $order->receiver->safeNumber,
+                            'strReceiverNumber'                   => $order->receiver->receiverNumber,
+                            'strReceiverAddr1'                    => $order->receiver->addr1,
+                            'strReceiverAddr2'                    => $order->receiver->addr2,
+                            'strPostCode'                         => $order->receiver->postCode,
+                            'strOSIDPersonalCustomClearanceCode'  => $order->overseaShippingInfoDto->personalCustomsClearanceCode,
+                            'strOSIDOrdererSsn'                   => $order->overseaShippingInfoDto->ordererSsn,
+                            'strOSIDOrdererPhoneNumber'           => $order->overseaShippingInfoDto->ordererPhoneNumber,
+                            'strDeliveryCompanyName'              => $order->deliveryCompanyName,
+                            'strInvoiceNumber'                    => $order->invoiceNumber,
+                            'dtInTrasitDateTime'                  => $order->inTrasitDateTime,
+                            'dtDeliveredDate'                     => $order->deliveredDate,
+                            'strReferer'                          => $order->refer,
+                            'bIsDel'                              => 0
+                        ]);
+    
+                        $orderM->save();
+                        
+                        foreach ($order->orderItems as $key3 => $orderItem) {
+                            
+                            $strEtcInfoValues = implode("|", $orderItem->etcInfoValues);
+                            $item = new OrderItem([
+                                'nOrderIdx'                      => $orderM->nIdx,
+                                'strVendorItemPackageId'         => $orderItem->vendorItemPackageId,
+                                'strVendorItemPackageName'       => $orderItem->vendorItemPackageName,
+                                'strProductId'                   => $orderItem->productId,
+                                'strVendorItemId'                => $orderItem->vendorItemId,
+                                'strVendorItemName'              => $orderItem->vendorItemName,
+                                'nShippingCount'                 => $orderItem->shippingCount,
+                                'nSalesPrice'                    => $orderItem->salesPrice,
+                                'nOrderPrice'                    => $orderItem->orderPrice,
+                                'nDiscountPrice'                 => $orderItem->discountPrice,
+                                'nInstantCouponDiscount'         => $orderItem->instantCouponDiscount,
+                                'nDownloadableCouponDiscount'    => $orderItem->downloadableCouponDiscount,
+                                'nCoupangDiscount'               => $orderItem->coupangDiscount,
+                                'strExternalVendorSkuCode'       => $orderItem->externalVendorSkuCode,
+                                'strEtcInfoHeader'               => $orderItem->etcInfoHeader,
+                                'strEtcInfoValue'                => $orderItem->etcInfoValue,
+                                'strEtcInfoValues'               => $strEtcInfoValues,//$orderItem->strEtcInfoValues,
+                                'strSellerProductId'             => $orderItem->sellerProductId,
+                                'strSellerProductName'           => $orderItem->sellerProductName,
+                                'strSellerProductItemName'       => $orderItem->sellerProductItemName,
+                                'strFirstSellerProductItemName'  => $orderItem->firstSellerProductItemName,
+                                'nCancelCount'                   => $orderItem->cancelCount,
+                                'nHoldCountForCancel'            => $orderItem->holdCountForCancel,
+                                'dtEstimatedShippingDate'        => $orderItem->estimatedShippingDate == "" ? "0000-00-00 00:00:00" : $orderItem->estimatedShippingDate,
+                                'dtPlannedShippingDate'          => $orderItem->plannedShippingDate == "" ? "0000-00-00 00:00:00" : $orderItem->plannedShippingDate,
+                                'dtInvoiceNumberUploadDate'      => $orderItem->invoiceNumberUploadDate,
+                                'strExtraProperties'             => "",//$orderItem->extraProperties
+                                'bPricingBadge'                  => $orderItem->pricingBadge,
+                                'bUsedProduct'                   => $orderItem->usedProduct,
+                                'dtConfirmDate'                  => $orderItem->confirmDate,
+                                'strDeliveryChargeTypeName'      => $orderItem->deliveryChargeTypeName,
+                                'bCanceled'                      => $orderItem->canceled,
+                                'bIsDel'                         => 0
+                            ]);
+                            $item->save();
+                        }
+                    }
+                }
+            }else if($account->market->strMarketCode == "11thhouse"){
+                // echo $account->strAPIAccessKey;
+                $_11th = new EleventhConnector($account->strAPIAccessKey, $account->strAccountId, $account->strAccountPwd);
+                $date = new DateTime('now');
+                $end_date = $date->format('Ymdhi');
+                $date->modify('-7 day');
+                $start_date = $date->format('YmdHi');
+                $res =  $_11th->getOrderServiceListInfo($start_date, $end_date);
+                //$res =  $_11th->getCategoryListInfo();
+                print_r($res);
+                if(count($res) > 0){
+                    $cnt = count($res);
+                    foreach ($res as $key2 => $order) {
+                        
+                        $orderM = new Order([
+                            'nUserId'                             => Auth::id(),
+                            'nMarketAccIdx'                       => $account->nIdx,
+                            'strShipmentBoxId'                    => $order->dlvNo,
+                            'strOrderId'                          => $order->ordNo,
+                            'dtOrderedAt'                         => $order->ordDt,
+                            'strOrdererName'                      => $order->ordNm,
+                            'strOrdererEmail'                     => $order->ordMailNo,
+                            'strOrdererSafeNumber'                => $order->ordPrtblTel,
+                            'strOrdererNumber'                    => $order->ordTlphnNo,
+                            'dtPaidAt'                            => $order->ordDt,
+                            'strStatus'                           => $order->status,
+                            'nShippingPrice'                      => $order->shippingPrice,
+                            'nRemotePrice'                        => $order->remotePrice,
+                            'bRemoteArea'                         => $order->remoteArea,
+                            'strParcelPrintMessage'               => $order->parcelPrintMessage,
+                            'bSplitShipping'                      => $order->splitShipping,
+                            'bAbleSplitShipping'                  => $order->ableSplitShipping,
+                            'strReceiverName'                     => $order->rcvrNm,
+                            'strReceiverSafeNumber'               => $order->rcvrPrtblNo,
+                            'strReceiverNumber'                   => $order->rcvrTlphn,
+                            'strReceiverAddr1'                    => $order->rcvrBaseAddr,
+                            'strReceiverAddr2'                    => $order->rcvrDtlsAddr,
+                            'strPostCode'                         => $order->rcvrMailNo,
+                            'strOSIDPersonalCustomClearanceCode'  => $order->overseaShippingInfoDto->personalCustomsClearanceCode,
+                            'strOSIDOrdererSsn'                   => $order->overseaShippingInfoDto->ordererSsn,
+                            'strOSIDOrdererPhoneNumber'           => $order->overseaShippingInfoDto->ordererPhoneNumber,
+                            'strDeliveryCompanyName'              => $order->dlvEtprsCd,
+                            'strInvoiceNumber'                    => $order->invoiceNumber,
+                            'dtInTrasitDateTime'                  => $order->dlvSndDue,
+                            'dtDeliveredDate'                     => $order->delaySendDt,
+                            'strReferer'                          => $order->refer,
+                            'bIsDel'                              => 0
+                        ]);
+    
+                        $orderM->save();
+                        
+                        
+                            
+                        $strEtcInfoValues = "";//implode("|", $order->etcInfoValues);
                         $item = new OrderItem([
                             'nOrderIdx'                      => $orderM->nIdx,
-                            'strVendorItemPackageId'         => $orderItem->vendorItemPackageId,
-                            'strVendorItemPackageName'       => $orderItem->vendorItemPackageName,
-                            'strProductId'                   => $orderItem->productId,
-                            'strVendorItemId'                => $orderItem->vendorItemId,
-                            'strVendorItemName'              => $orderItem->vendorItemName,
-                            'nShippingCount'                 => $orderItem->shippingCount,
-                            'nSalesPrice'                    => $orderItem->salesPrice,
-                            'nOrderPrice'                    => $orderItem->orderPrice,
-                            'nDiscountPrice'                 => $orderItem->discountPrice,
-                            'nInstantCouponDiscount'         => $orderItem->instantCouponDiscount,
-                            'nDownloadableCouponDiscount'    => $orderItem->downloadableCouponDiscount,
-                            'nCoupangDiscount'               => $orderItem->coupangDiscount,
-                            'strExternalVendorSkuCode'       => $orderItem->externalVendorSkuCode,
-                            'strEtcInfoHeader'               => $orderItem->etcInfoHeader,
-                            'strEtcInfoValue'                => $orderItem->etcInfoValue,
-                            'strEtcInfoValues'               => $strEtcInfoValues,//$orderItem->strEtcInfoValues,
-                            'strSellerProductId'             => $orderItem->sellerProductId,
-                            'strSellerProductName'           => $orderItem->sellerProductName,
-                            'strSellerProductItemName'       => $orderItem->sellerProductItemName,
-                            'strFirstSellerProductItemName'  => $orderItem->firstSellerProductItemName,
-                            'nCancelCount'                   => $orderItem->cancelCount,
-                            'nHoldCountForCancel'            => $orderItem->holdCountForCancel,
-                            'dtEstimatedShippingDate'        => $orderItem->estimatedShippingDate == "" ? "0000-00-00 00:00:00" : $orderItem->estimatedShippingDate,
-                            'dtPlannedShippingDate'          => $orderItem->plannedShippingDate == "" ? "0000-00-00 00:00:00" : $orderItem->plannedShippingDate,
-                            'dtInvoiceNumberUploadDate'      => $orderItem->invoiceNumberUploadDate,
+                            'strVendorItemPackageId'         => $order->bndlDlvSeq,
+                            'strVendorItemPackageName'       => $order->prdNm,
+                            'strProductId'                   => $order->prdNo,
+                            'strVendorItemId'                => $order->sellerPrdCd,
+                            'strVendorItemName'              => $order->slctPrdOptNm,
+                            'nShippingCount'                 => $order->ordQty,
+                            'nSalesPrice'                    => $order->selPrc,
+                            'nOrderPrice'                    => $order->ordPayAmt,
+                            'nDiscountPrice'                 => $order->sellerDscPrc,
+                            'nInstantCouponDiscount'         => $order->instantCouponDiscount,
+                            'nDownloadableCouponDiscount'    => $order->downloadableCouponDiscount,
+                            'nCoupangDiscount'               => $order->lstTmallDscPrc,
+                            'strExternalVendorSkuCode'       => "",
+                            'strEtcInfoHeader'               => "",
+                            'strEtcInfoValue'                => "",
+                            'strEtcInfoValues'               => "",//$orderItem->strEtcInfoValues,
+                            'strSellerProductId'             => $order->sellerPrdCd,
+                            'strSellerProductName'           => $order->prdNm,
+                            'strSellerProductItemName'       => $order->prdNm.$order->slctPrdOptNm,
+                            'strFirstSellerProductItemName'  => $order->slctPrdOptNm,
+                            'nCancelCount'                   => $order->ordCnQty,
+                            'nHoldCountForCancel'            => $order->holdCountForCancel,
+                            'dtEstimatedShippingDate'        => $order->estimatedShippingDate == "" ? "0000-00-00 00:00:00" : $order->estimatedShippingDate,
+                            'dtPlannedShippingDate'          => $order->plannedShippingDate == "" ? "0000-00-00 00:00:00" : $order->plannedShippingDate,
+                            'dtInvoiceNumberUploadDate'      => $order->psnCscUniqNo,
                             'strExtraProperties'             => "",//$orderItem->extraProperties
-                            'bPricingBadge'                  => $orderItem->pricingBadge,
-                            'bUsedProduct'                   => $orderItem->usedProduct,
-                            'dtConfirmDate'                  => $orderItem->confirmDate,
-                            'strDeliveryChargeTypeName'      => $orderItem->deliveryChargeTypeName,
-                            'bCanceled'                      => $orderItem->canceled,
+                            'bPricingBadge'                  => $order->pricingBadge,
+                            'bUsedProduct'                   => $order->usedProduct,
+                            'dtConfirmDate'                  => $order->confirmDate,
+                            'strDeliveryChargeTypeName'      => $order->deliveryChargeTypeName,
+                            'bCanceled'                      => $order->canceled,
                             'bIsDel'                         => 0
                         ]);
                         $item->save();
+                       
                     }
                 }
             }
+            
             
         }
           

@@ -1417,7 +1417,6 @@
                         </div>
                     </div>`;
                     $('#divOptionField').html(item);
-                    //console.log(item);
                     //이미지
                     var imgItem = "";
                     data.item_imgs.forEach( (element, index) => {

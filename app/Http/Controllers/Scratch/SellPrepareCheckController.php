@@ -37,6 +37,7 @@ use App\Models\SuccessProductImage;
 use App\Models\SuccessProductItem;
 use App\MyLibs\CoupangConnector;
 use App\Mylibs\EleventhConnector;
+use App\Mylibs\Snoopy;
 use DateTime;
 use Exception;
 use Illuminate\Support\Facades\Storage;
@@ -301,11 +302,24 @@ class SellPrepareCheckController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function editProduct($productId = 0)
+    public function editProduct($productId = 0, $editType = 0)
     {
-        $product = Product::where('bIsDel', 0)
+        
+        $product = null;
+        if($editType == 0){
+            $product = Product::where('bIsDel', 0)
+                ->where('nIdx', $productId)
+                ->first();
+        }else if($editType == 1 || $editType == 2){//등록상품이거나 판매중지상품
+            $product = SuccessProduct::where('bIsDel', 0)
             ->where('nIdx', $productId)
             ->first();
+        }else if($editType == 3){//등록실패상품
+            $product = FailedProduct::where('bIsDel', 0)
+            ->where('nIdx', $productId)
+            ->first();
+        }
+
         $product->productMainImage = $product->productImages->where('nImageCode',0)->first() == null ? new SuccessProductImage() : $product->productImages->where('nImageCode',0)->first();
         $product->productSubImage1 = $product->productImages->where('nImageCode',1)->first() == null ? new SuccessProductImage() : $product->productImages->where('nImageCode',1)->first();
         $product->productSubImage2 = $product->productImages->where('nImageCode',2)->first() == null ? new SuccessProductImage() : $product->productImages->where('nImageCode',2)->first();
@@ -329,7 +343,7 @@ class SellPrepareCheckController extends Controller
             $arrOptionPrice[] = explode('¶', array_key_exists($key, $koOptPrice) == true ? $koOptPrice[$key] : ""); 
             $arrOptionImage[] = explode('¶', array_key_exists($key, $OptImage) == true ? $OptImage[$key] : ""); 
         }
-        return view('scratch.ProductDetail', compact('product', 'koOptions', 'arrKoOption', 'cnOptions', 'arrCnOption', 'arrOptionPrice', 'arrOptionImage'));
+        return view('scratch.ProductDetail', compact('product', 'editType', 'koOptions', 'arrKoOption', 'cnOptions', 'arrCnOption', 'arrOptionPrice', 'arrOptionImage'));
 
     }
 
@@ -354,7 +368,9 @@ class SellPrepareCheckController extends Controller
      */
     public function update($productId, Request $request)
     {
-        $val = $request->post('txtChMainName');
+
+        //$val = $request->post('txtChMainName');
+        $editType = $request->post('txtEditType');
         
         //옵션명
         $arrKoOptName = $request->post('txtOptionAttr');
@@ -381,7 +397,16 @@ class SellPrepareCheckController extends Controller
         $strCnOptionValue = implode("§", $arrCnOptionValue);
         $strOptionPrice = implode("§", $arrOptionPrice);
         $strOptionImage = implode("§", $arrOptionImage);
-        $product = Product::where('nIdx', $productId)->first();
+        
+        $product = null;
+        if($editType == 0){
+            $product = Product::where('nIdx', $productId)->first();
+        }else if($editType == 1 || $editType == 2){//등록상품 이거나 판매중지상품
+            $product = SuccessProduct::where('nIdx', $productId)->first();
+        }else if($editType == 3){//등록실패상품
+            $product = FailedProduct::where('nIdx', $productId)->first();
+        }
+        //$product = Product::where('nIdx', $productId)->first();
 
         $product->update([
             'nUserId' => Auth::id(),
@@ -412,7 +437,7 @@ class SellPrepareCheckController extends Controller
             'strCategoryCode7' => $categoryName[7], 
             'strCategoryCode8' => $categoryName[8], 
             'nShareType' => $product->nShareType,
-            'nProductWorkProcess' => 0,//stopped product
+            // 'nProductWorkProcess' => 0,//stopped product
             'bIsDel'=> 0
         ]);
         //$product->save();
@@ -455,19 +480,54 @@ class SellPrepareCheckController extends Controller
         $sku_image = $request->post('sku_image');
         
         //$product->productItems->delete();
-        ProductItem::where('nProductIdx',$product->nIdx)->delete();
+        if($editType == 0){
+            ProductItem::where('nProductIdx',$product->nIdx)->delete();
+        }else if($editType == 1 || $editType == 2){//등록상품 이거나 판매중지상품
+            SuccessProductItem::where('nProductIdx',$product->nIdx)->delete();
+        }else if($editType == 3){//등록실패상품
+            FailedProductItem::where('nProductIdx',$product->nIdx)->delete();
+        }
+        
         for ($i=0; $i < $countItem; $i++) { 
-
-            $productItem = new ProductItem([
-                'nProductIdx' => $product->nIdx,
-                'nSubItemOptionPrice' => $sku_option_price[$i],
-                'nSubItemBasePrice' => $sku_base_price[$i],
-                'nSubItemSellPrice' => $sku_sell_price[$i],
-                'nSubItemDiscountPrice' => $sku_discount_price[$i],
-                'nSubItemQuantity' => $sku_stock[$i],
-                'strSubItemImage' => $sku_image[$i],
-                'bIsDel' => 0
-            ]);
+            $productItem = null;
+            if($editType == 0){
+                //ProductItem::where('nProductIdx',$product->nIdx)->delete();
+                $productItem = new ProductItem([
+                    'nProductIdx' => $product->nIdx,
+                    'nSubItemOptionPrice' => $sku_option_price[$i],
+                    'nSubItemBasePrice' => $sku_base_price[$i],
+                    'nSubItemSellPrice' => $sku_sell_price[$i],
+                    'nSubItemDiscountPrice' => $sku_discount_price[$i],
+                    'nSubItemQuantity' => $sku_stock[$i],
+                    'strSubItemImage' => $sku_image[$i],
+                    'bIsDel' => 0
+                ]);
+            }else if($editType == 1 || $editType == 2){//등록상품 이거나 판매중지상품
+                //SuccessProductItem::where('nProductIdx',$product->nIdx)->delete();
+                $productItem = new SuccessProductItem([
+                    'nProductIdx' => $product->nIdx,
+                    'nSubItemOptionPrice' => $sku_option_price[$i],
+                    'nSubItemBasePrice' => $sku_base_price[$i],
+                    'nSubItemSellPrice' => $sku_sell_price[$i],
+                    'nSubItemDiscountPrice' => $sku_discount_price[$i],
+                    'nSubItemQuantity' => $sku_stock[$i],
+                    'strSubItemImage' => $sku_image[$i],
+                    'bIsDel' => 0
+                ]);
+            }else if($editType == 3){//등록실패상품
+                //FailedProductItem::where('nProductIdx',$product->nIdx)->delete();
+                $productItem = new FailedProductItem([
+                    'nProductIdx' => $product->nIdx,
+                    'nSubItemOptionPrice' => $sku_option_price[$i],
+                    'nSubItemBasePrice' => $sku_base_price[$i],
+                    'nSubItemSellPrice' => $sku_sell_price[$i],
+                    'nSubItemDiscountPrice' => $sku_discount_price[$i],
+                    'nSubItemQuantity' => $sku_stock[$i],
+                    'strSubItemImage' => $sku_image[$i],
+                    'bIsDel' => 0
+                ]);
+            }
+            
             $subItemName = "";
             for ($j=0; $j < $cntOptionName; $j++) {
                 $productItem['strSubItemKoOptionPattern'.$j] = $arrOptionAttr[$j][$i];
@@ -477,23 +537,14 @@ class SellPrepareCheckController extends Controller
             $productItem->save();
         }
         
-        ProductImage::where('nProductIdx',$product->nIdx)->delete();
-        // $countImage = count($request->post('txtImage'));
-        // $arrDetailImage = $request->post('txtImage');
-        // for ($i=0; $i < $countImage; $i++) { 
-        //     $arrImgData = explode('::', $arrDetailImage[$i]);
-        //     $productImage = new ProductImage([
-        //         'nProductIdx' => $product->nIdx,
-        //         'nImageCode' => $arrImgData[0],
-        //         'strName' => '',
-        //         'strURL' => $arrImgData[1],
-        //         'nHeight' => 0,
-        //         'nWidth' => 0,
-        //         'strNote' => '',
-        //         'bIsDel' => 0
-        //     ]);
-        //     $productImage->save();
-        // }
+        
+        if($editType == 0){
+            ProductImage::where('nProductIdx',$product->nIdx)->delete();
+        }else if($editType == 1 || $editType == 2){//등록상품 이거나 판매중지상품
+            SuccessProductImage::where('nProductIdx',$product->nIdx)->delete();
+        }else if($editType == 3){//등록실패상품
+            FailedProductImage::where('nProductIdx',$product->nIdx)->delete();
+        }
         $arrImage = $request->post('imgLink');
         $countImage = count($request->post('imgLink'));
         for ($i=0; $i < $countImage; $i++) { 
@@ -513,16 +564,43 @@ class SellPrepareCheckController extends Controller
                 }else{
                     $fileLink = $arrImage[$i];
                 }
-                $productImage = new ProductImage([
-                    'nProductIdx' => $product->nIdx,
-                    'nImageCode' => $i,
-                    'strName' => '',
-                    'strURL' => $fileLink,
-                    'nHeight' => 0,
-                    'nWidth' => 0,
-                    'strNote' => '',
-                    'bIsDel' => 0
-                ]);
+
+                $productImage = null;
+                if($editType == 0){
+                    $productImage = new ProductImage([
+                        'nProductIdx' => $product->nIdx,
+                        'nImageCode' => $i,
+                        'strName' => '',
+                        'strURL' => $fileLink,
+                        'nHeight' => 0,
+                        'nWidth' => 0,
+                        'strNote' => '',
+                        'bIsDel' => 0
+                    ]);
+                }else if($editType == 1 || $editType == 2){//등록상품 이거나 판매중지상품
+                    $productImage = new SuccessProductImage([
+                        'nProductIdx' => $product->nIdx,
+                        'nImageCode' => $i,
+                        'strName' => '',
+                        'strURL' => $fileLink,
+                        'nHeight' => 0,
+                        'nWidth' => 0,
+                        'strNote' => '',
+                        'bIsDel' => 0
+                    ]);
+                }else if($editType == 3){//등록실패상품
+                    $productImage = new FailedProductImage([
+                        'nProductIdx' => $product->nIdx,
+                        'nImageCode' => $i,
+                        'strName' => '',
+                        'strURL' => $fileLink,
+                        'nHeight' => 0,
+                        'nWidth' => 0,
+                        'strNote' => '',
+                        'bIsDel' => 0
+                    ]);
+                }
+                
                 $productImage->save();
             }
         }
@@ -582,7 +660,7 @@ class SellPrepareCheckController extends Controller
             $settingResult['allProduct'] = $productsCount;
             $settingResult['successProduct'] = 0;
             $settingResult['failedProduct'] = 0;
-            if($setting->nMarketIdx == 3){//쿠팡
+            if($setting->nMarketIdx == 33){//쿠팡
                 $settingResult['marketName'] = "쿠팡";
                 
                 $coupang = new CoupangConnector($setting->marketAccount->strAPIAccessKey, $setting->marketAccount->strSecretKey, $setting->marketAccount->strVendorId, $setting->marketAccount->strAccountId);
@@ -720,12 +798,12 @@ class SellPrepareCheckController extends Controller
                     "returnAddress" => $setting->detail->strReturnAddress,
                     "returnAddressDetail" => $setting->detail->strReturnAddressDetail,
                     "returnCharge" => $setting->detail->nReturnDeliveryCharge,
-                    "returnChargeVendor" => $setting->detail->strReturnChargeVendorType,
-                    "afterServiceInformation" => $setting->detail->strAfterServiceGuide,
-                    "afterServiceContactNumber" => $setting->detail->strAfterServiceContactNumber,
+                    //"returnChargeVendor" => $setting->detail->strReturnChargeVendorType,
+                    //"afterServiceInformation" => $setting->detail->strAfterServiceGuide,
+                    //"afterServiceContactNumber" => $setting->detail->strAfterServiceContactNumber,
                     "outboundShippingPlaceCode" => $setting->detail->strOutboundShippingPlaceCode,
                     "vendorUserId" => $setting->marketAccount->strAccountId,
-                    "requested" => false,
+                    "requested" => true,
                     "items" => $arrItems,
                     "requiredDocuments"=> array(
                         array(
@@ -753,7 +831,7 @@ class SellPrepareCheckController extends Controller
                         
                     }
                 }
-            }else if($setting->nMarketIdx == 1){//11번가
+            }else if($setting->nMarketIdx == 31){//11번가
                 $settingResult['marketName'] = "11번가";
                 $_11thhouse = new EleventhConnector($setting->marketAccount->strAPIAccessKey, $setting->marketAccount->strAccountId, $setting->marketAccount->strAccountPwd);
                 foreach ($products as $key2 => $product) {
@@ -945,7 +1023,7 @@ class SellPrepareCheckController extends Controller
                     $data->addChild('stdPrdYn', "N");
                     $ProductTag = $data->addChild('ProductTag');
                         $ProductTag->addChild('tagName', "qwaqqq");
-}/** */                        
+}/** */             
                     $data = $data->asXML();
                     $response = $_11thhouse->addProduct($data);
                     if(isset($response[0]['productNo'])){
@@ -959,16 +1037,43 @@ class SellPrepareCheckController extends Controller
                         $settingResult['failedProduct']++;
                         $failedProdId = "11:FAILED";
                         $this->procFailedUpload($product, $setting, $response[0]['message'], $failedProdId);
-                        
                     }
-                }                    
-            }else if($setting->nMarketIdx == 8){//티몬
-                //$successCount++;
+                }
+            }else if($setting->nMarketIdx == 3){// ($setting->nMarketIdx == 2 || $setting->nMarketIdx == 4){//esmplus(옥션과 지마켓)
+                $snoopy = new Snoopy;
+                $snoopy->agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";
+                //login
+                $loginUri = 'https://www.esmplus.com/Member/SignIn/Authenticate';
+
+                $snoopy->httpmethod = "POST";
+                //$auth['id'] = $setting->marketAccount->strAccountId;
+                $auth['Id'] = "songfh0502";
+                //$auth['password'] = $setting->marketAccount->strAccountPwd;
+                $auth['Password'] = "Putongba159!@";
+                $auth['ReturnUrl'] = "/Home/Home";
+                $auth['RememberMe'] = "false";
+                $snoopy->submit($loginUri, $auth);
+
+                $snoopy->setcookies();	//로그인에 쿠키를 사용하는 경우가 있으니 쿠키정보를 저장
+                $snoopy->results;
+                $loginResult = json_decode($snoopy->results);
+                //print_r($loginResult);
+                $settingResult['marketName'] = "11번가";
+                $settingResult['failedProduct']++;
+                $settingResult['successProduct']++;
+                //$report_data = array();
+            }else if($setting->nMarketIdx == 5){//인터파크
+
+            }else if($setting->nMarketIdx == 6){//롯데온
+
+            }else if($setting->nMarketIdx == 7){//스마트스토어
+
+            }else if($setting->nMarketIdx == 8){//위메프
 
             }
             $uploadResults[] = $settingResult;
         }
-        return view('scratch.ProductRegistResult', compact('uploadResults'));
+        //return view('scratch.ProductRegistResult', compact('uploadResults'));
         //return view('product.MarketProductPrepare', compact('settingCoupangs', 'markets'));
     }
 
@@ -1065,7 +1170,7 @@ class SellPrepareCheckController extends Controller
         }
 
         foreach ($product->productItems as $key => $item) {
-            $productImage = new SuccessProductItem([
+            $productItem = new SuccessProductItem([
                 'nProductIdx' => $successProduct->nIdx,
                 'strSubItemName' => $item->strSubItemName,
                 'nSubItemOptionPrice' => $item->nSubItemOptionPrice,
@@ -1079,7 +1184,7 @@ class SellPrepareCheckController extends Controller
                 'strSubItemKoOptionPattern2' => $item->strSubItemKoOptionPattern2,
                 'bIsDel' => 0
             ]);
-            $productImage->save();
+            $productItem->save();
         }
     }
 
@@ -1166,7 +1271,7 @@ class SellPrepareCheckController extends Controller
         }
 
         foreach ($product->productItems as $key => $item) {
-            $productImage = new FailedProductItem([
+            $productItem = new FailedProductItem([
                 'nProductIdx' => $failedProduct->nIdx,
                 'strSubItemName' => $item->strSubItemName,
                 'nSubItemOptionPrice' => $item->nSubItemOptionPrice,
@@ -1180,7 +1285,7 @@ class SellPrepareCheckController extends Controller
                 'strSubItemKoOptionPattern2' => $item->strSubItemKoOptionPattern2,
                 'bIsDel' => 0
             ]);
-            $productImage->save();
+            $productItem->save();
         }
     }
     

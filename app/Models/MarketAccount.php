@@ -17,8 +17,8 @@ class MarketAccount extends Model
         return $this->belongsTo(Market::class, 'nMarketIdx', 'nIdx');
     }
 
-    public function detailCoupang()
+    public function detail()
     {
-        return $this->hasMany(MarketSettingCoupang::class, 'nMarketAccIdx', 'nIdx');
+        return $this->hasMany(MarketSetting::class, 'nMarketAccIdx', 'nIdx');
     }
 }

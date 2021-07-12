@@ -453,8 +453,10 @@ class RegisteredProductManageController extends Controller
             'strStopReason' => $stopReason
         ]);
         
-        return response()->json(["status" => "success", "data" => $productDetail]);
+        //return response()->json(["status" => "success", "data" => $productDetail]);
         //return view('product.MarketAccountList', compact('marketAccounts'));
+        $data = '<script>alert("상품이 판매중지되었습니다.");window.opener.location.reload();window.close();</script>';
+        return view('test', compact('data'));
     }
     /**
      * Show the application dashboard.

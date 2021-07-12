@@ -280,7 +280,8 @@
 
             $('#productTable').on('click', '.btnEditProduct', function (e) {
                 var id = $(this).attr('data-id');
-                window.open('/scratchSellPrepareCheck/product/' + id + '/edit', '상품수정', 'scrollbars=1, resizable=1, width=1000, height=620');
+                var editType = 0;//판매준비검토 수정
+                window.open('/scratchSellPrepareCheck/product/' + id + '/edit/'+ editType, '상품수정', 'scrollbars=1, resizable=1, width=1000, height=900');
             });
 
             $('#productTable').on('click', '.btnDelProduct', function (e) {

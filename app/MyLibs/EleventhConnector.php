@@ -401,7 +401,7 @@ _EOT_;
         
         // print_r($retData);
         $arrCategorys = json_decode(json_encode((array)$retData), TRUE);
-        // print_r($arrCategorys);
+        print_r($arrCategorys);
 
         // $simplexml= new SimpleXMLElement($xml_str);
         // creating object of SimpleXMLElement
@@ -518,6 +518,107 @@ _EOT_;
 
         $arrInbounds = json_decode(json_encode((array)$retData), TRUE);
         return $arrInbounds;
+    }
+
+    /**
+     * 반품지 목록 조회(get)
+     */
+    public function getOrderServiceListInfo($startDate, $endDate) {
+        // if(empty($data)){
+        //     return false;
+        // }
+        
+        $method = "GET";
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, "https://api.11st.co.kr/rest/ordservices/complete/".$startDate."/".$endDate);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        $headers = array("Content-type: text/xml;charset=euc-kr", "openapikey:".$this->ACCESS_API_KEY); //SampleKey 사용불가
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $result = curl_exec($curl);
+        $result = <<<XML
+<?xml version='1.0' encoding='euc-kr' standalone='yes'?>
+<ns2orders>
+    <ns2order>
+    <addPrdNo>0</addPrdNo>
+    <addPrdYn>N</addPrdYn>
+    <bndlDlvSeq>4506571</bndlDlvSeq>
+    <bndlDlvYN>Y</bndlDlvYN>
+    <custGrdNm/>
+    <dlvCst>0</dlvCst>
+    <dlvCstType>03</dlvCstType>
+    <bmDlvCst>4500</bmDlvCst>
+    <bmDlvCstType>04</bmDlvCstType>
+    <dlvNo>40860365</dlvNo>
+    <gblDlvYn>N</gblDlvYn>
+    <giftCd/>
+    <memID>test11st</memID>
+    <memNo>1111111</memNo>
+    <ordAmt>19000</ordAmt>
+    <ordBaseAddr>충북 청주시 상당구 용암동</ordBaseAddr>
+    <ordDlvReqCont>null</ordDlvReqCont>
+    <ordDt>2010-01-10 04:07:11</ordDt>
+    <ordDtlsAddr>00번지</ordDtlsAddr>
+    <ordMailNo>360100</ordMailNo>
+    <ordNm>홍길동</ordNm>
+    <ordNo>201001108318120</ordNo>
+    <ordOptWonStl>0</ordOptWonStl>
+    <ordPayAmt>16310</ordPayAmt>
+    <ordPrdSeq>1</ordPrdSeq>
+    <ordPrtblTel>010-9999-9999</ordPrtblTel>
+    <ordQty>1</ordQty>
+    <ordStlEndDt>2010-01-12 16:20:59</ordStlEndDt>
+    <ordTlphnNo>070-9999-9999</ordTlphnNo>
+    <prdNm>셔링 브이넥 니트 티셔츠</prdNm>
+    <prdNo>29370295</prdNo>
+    <prdStckNo>999999999</prdStckNo>
+    <rcvrBaseAddr>충북 청주시 상당구 용암동</rcvrBaseAddr>
+    <rcvrDtlsAddr>00번지 8809호</rcvrDtlsAddr>
+    <rcvrMailNo>360100</rcvrMailNo>
+    <rcvrMailNoSeq>011</rcvrMailNoSeq>
+    <rcvrNm>홍길동</rcvrNm>
+    <rcvrPrtblNo>010-9999-9999</rcvrPrtblNo>
+    <rcvrTlphn>070-9999-9999</rcvrTlphn>
+    <selPrc>19000</selPrc>
+    <sellerDscPrc>2280</sellerDscPrc>
+    <sellerPrdCd>000000000133275</sellerPrdCd>
+    <slctPrdOptNm>사이즈/색상:사이즈 - S(66)/색상 - 아이보리 [0000346774]-1개</slctPrdOptNm>
+    <tmallDscPrc>410</tmallDscPrc>
+    <gifeser>1</gifeser>
+    <typeAdd>01</typeAdd>
+    <typeBilNo/>
+    <lstTmallDscPrc>0</lstTmallDscPrc>
+    <lstSellerDscPrc>0</lstSellerDscPrc>
+    <referSeq>455221112</referSeq>
+    <sellerStockCd>43434232</sellerStockCd>
+    <appmtDdDlvDy>20170420</appmtDdDlvDy>
+    <appmtEltRefuseYn/>
+    <appmtselStockCd/>
+    <engNm>CHULSU KIM</engNm>
+    <psnCscUniqNo>P000000000000</psnCscUniqNo>
+    <dlvSndDue>2019-05-30 04:07:11</dlvSndDue>
+    <delaySendDt>2019-05-30 04:07:11</delaySendDt>
+    <visitDlvYn/>
+    </ns2order>
+</ns2orders>
+XML;
+//$xml = simplexml_load_string($result);
+$result = mb_convert_encoding ($result, 'EUC-KR', 'UTF-8') ;
+        $xml = new SimpleXMLElement($result);
+        //$xml = simplexml_load_string($result);
+        //$retData = $xml->xpath('//ns2:order');authmessage
+
+
+        $retData = [];
+        if(isset($xml->AuthMessage)){
+            
+            $retData = $xml->xpath('//AuthMessage');
+        }else{
+            
+            $retData = $xml->xpath('//ns2order');
+        }
+        $arrOrderInfos = $retData;//json_decode(json_encode((array)$retData), TRUE);
+        return $arrOrderInfos;
     }
 
 }

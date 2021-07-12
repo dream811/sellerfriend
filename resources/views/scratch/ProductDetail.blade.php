@@ -51,7 +51,13 @@
             </div><!-- /.col -->
             <div class="col-sm-6 float-right text-right" >
                 <div style="position: fixed; z-index: 99; padding: 4px; right: 20px; background-color: lightgray; border-radius: 0.5rem;">
-                    <button type="submit" class="btn btn-primary btn-xs btnUpdateProduct">상품수정</button>
+                    <button type="button" class="btn btn-primary btn-xs btnUpdateProduct">상품수정</button>
+                    @if ($editType == 1)
+                        <button type="button" data-id="{{$product->nIdx}}" class="btn btn-primary btn-xs btnSaveStoppedProduct">판매중지</button>
+                    @elseif($editType == 2)
+                        <button type="button" data-id="{{$product->nIdx}}" class="btn btn-primary btn-xs btnSaveSellProduct">판매중</button>
+                    @endif
+                    
                     <button type="button" class="btn bg-indigo btn-xs btnClose">닫기</button>
                 </div>
             </div><!-- /.col -->
@@ -61,6 +67,7 @@
     <div class="container-fluid">
         <div class="row">
             <form method="POST" id="frmScrap" action="{{route('scratch.SellPrepareCheck.update', $product->nIdx)}}">
+                <input type="hidden" name="txtEditType" value="{{$editType}}">
             @csrf
             <div class="col-12">
                 <div class="card">
@@ -83,7 +90,7 @@
                                     <span class="badge badge-success mt-2 ml-1">비비크</span>
                                     <span class="badge badge-primary mt-2 ml-1">1688 (정액제전용)</span>
                                 </div>
-                                <span class="text-success ml-1"> 수집완료 후 주소수정하여 저장 가능</span>
+                                <span class="text-success ml-1">수집완료 후 주소수정하여 저장 가능</span>
                             </div>
                         </div>
                     </div>
@@ -924,7 +931,7 @@
             </form>
         </div>
     </div>
-    <!-- //==Modal==// -->
+    {{-- <!-- //==Modal==// -->
     <div class="modal fade"  id="modal-id_image">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
@@ -977,15 +984,85 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
+    <!-- /.modal --> --}}
+    <!-- //==Modal==// -->
+    <div class="modal fade"  id="modal-id">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title text-sm" style="font-weight: 700">판매중지내용 작성</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form id="manageStopInfo" method="post" action="{{ route('product.RegisteredProductManage.saveStopInfo', $product->nIdx) }}"> 
+                <div class="modal-body">
+                    <div id="divForm">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="txtProductId" id="txtProductId" value="{{$product->nIdx}}">
+                        {{-- <div class="form-group row">
+                            <label for="txtAccountPwd" class="col-sm-2 col-form-label lb-sm" style="font-size:12px;">구분</label>
+                            <div class="input-group col-sm-10">
+                                <select class="custom-select form-control-border custom-select-sm" name="selImageType" id="selImageType">
+                                    <option value="">=선택=</option>
+                                    <option value="TOP">상단</option>
+                                    <option value="DOWN">하단</option>
+                                    <option value="OTHER">기타</option>
+                                </select>
+                            </div>
+                        </div> --}}
+                        <div class="form-group row" >
+                            <label for="txtAccountPwd" class="col-sm-2 col-form-label lb-sm" style="font-size:12px;">중지사유</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control form-control-sm" name="txtStopReason" id="txtStopReason" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group row" id="divVendorId">
+                            <label  class="col-sm-2 col-form-label lb-sm" style="font-size:12px;">이미지</label>
+                            <div class="row m-1">
+                                <div class="col-sm-4">
+                                    <div class="bg-gray border border-danger divViewImage" data-id="0" style="height: 120px;" name="divPrevImage[]" id="divPrevImage0">
+                                        <img name="imgPreview[]" id="imgPreview0" data-id="0" src="https://via.placeholder.com/300/FFFFFF?text=%20" style="width:100%; height:100%;" alt="">
+                                    </div>
+                                    <input type="file" name="fileImage[]" id="fileImage0" data-id="0">
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="bg-gray border border-danger divViewImage" data-id="1" style="height: 120px;" name="divPrevImage[]" id="divPrevImage1">
+                                        <img name="imgPreview[]" id="imgPreview" data-id="1" src="https://via.placeholder.com/300/FFFFFF?text=%20" style="width:100%; height:100%;" alt="">
+                                        
+                                    </div>
+                                    <input type="file" name="fileImage[]" id="fileImage1" data-id="1">
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="bg-gray border border-danger divViewImage" data-id="2" style="height: 120px;" name="divPrevImage[]" id="divPrevImage2">
+                                        <img name="imgPreview[]" id="imgPreview2" data-id="2" src="https://via.placeholder.com/300/FFFFFF?text=%20" style="width:100%; height:100%;" alt="">
+                                        
+                                    </div>
+                                    <input type="file" name="fileImage[]" id="fileImage2" data-id="2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer justify-content-between">
+                    <button type="sumbit" class="btn btn-primary btn-sm float-left btnSaveStopInfo">보관</button>
+                    <button type="button" class="btn btn-default btn-sm float-right" data-dismiss="modal">취소</button>
+                </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
     <!-- /.modal -->
     <script>
-           $(document).on({
+    $(document).on({
         ajaxStart: function(){
             $("body").addClass("loading"); 
         },
         ajaxStop: function(){ 
             $("body").removeClass("loading"); 
-        }    
+        }
     });
     $(document).ready(function () {
         $.ajaxSetup({
@@ -993,18 +1070,39 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        
-        $('body').on('click', '.btnEdit', function (e) {
-            var image_id = $(this).attr('data-id');
-            $('#hidImageId').val(image_id);
-            $.get('operationTopDownImageManage/' + image_id +'/edit', function ({status, data}) {
-                $('#selImageType').val(data.strImageType);
-                $('#txtImageName').val(data.strImageName);
-                $('#fileImage').val(null);
-                $('#imgPreview').attr('src', data.strImageURL);
-                $('#modal-id_image').modal('show');
+        //판매중지버튼 클릭시 
+        $('body').on('click', '.btnSaveStoppedProduct', function (e) {
+            var itemId = $(this).attr('data-id');
+            $.get('/productRegisteredProductManage/' + itemId +'/getStopInfo', function ({status, data}) {
+                $('#txtStopReason').val(data.strStopReason);
+                $('#modal-id').modal('show');
                 
-            })
+            });
+        });
+        
+        $('.divViewImage').on('click', function (e) {
+            var itemId = $(this).attr('data-id');
+            //console.log(itemId);
+            //$('#fileImage'+ itemId).trigger('click'); 
+        });
+        //판매중지상태를 판매중상태로 바꿀때
+        $('body').on('click', '.btnSaveSellProduct', function (e) {
+            var productId = $('#txtProductId').val();
+            var action = '/productStoppedProductManage/'+ productId +'/saveSellInfo';
+            $.ajax({
+                url: action,
+                type: "POST",
+                dataType: 'JSON',
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function ({status, data}) {
+                    window.opener.location.reload();
+                    window.close();
+                },
+                error: function (data) {
+                }
+            });
         });
 
         $( "#selBrandName" ).change(function() {
